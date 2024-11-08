@@ -1,0 +1,16 @@
+[user]
+	email = AnzenKodo@users.noreply.github.com
+	name = AnzenKodo
+[core]
+	autocrlf = false
+	editor = focus
+[credential "helperselector"]
+	selected = manager
+[init]
+	defaultBranch = main
+[color]
+	ui = auto
+[pull]
+	rebase = true
+[push]
+    autoSetupRemote = true

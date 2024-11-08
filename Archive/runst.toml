@@ -1,0 +1,33 @@
+[global]
+    log_verbosity = "info"
+    startup_notification = false
+    geometry = "3000x250+0+1260"
+    wrap_content = false
+    font = "Monospace 10"
+    template = """
+    [{{app_name}}] <b>{{summary}}</b>\
+    {% if body %} {{body}}{% endif %} \
+    {% if now(timestamp=true) - timestamp > 60 %} \
+        ({{ (now(timestamp=true) - timestamp) | humantime }} ago)\
+    {% endif %}\
+    {% if unread_count > 1 %} ({{unread_count}}){% endif %}
+    """
+
+[urgency_low]
+    background = "#32302F"
+    foreground = "#D4BE98"
+    timeout = 10
+    text = "low"
+
+[urgency_normal]
+    background = "#D4BE98"
+    foreground = "#32302F"
+    timeout = 20
+    auto_clear = true
+    text = "normal"
+
+[urgency_critical]
+    background = "#FABD2F"
+    foreground = "#32302F"
+    timeout = 0
+    text = "critical"

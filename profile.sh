@@ -1,0 +1,255 @@
+PROMPT_COMMAND='PS1_CMD1=$(__git_ps1 " (%s)")'
+PS1='\[\e[38;2;251;73;52m\]\h\[\e[0m\]@\[\e[38;2;250;189;47m\]\u\[\e[0m\]:\[\e[38;2;125;174;163m\]\w\[\e[38;2;184;187;38m\]${PS1_CMD1}\n\[\e[0m\]\\$ '
+PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
+
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_CACHE_HOME="$HOME/.cache"
+export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_STATE_HOME="$HOME/.local/state"
+export XDG_DOWNLOAD_DIR="$HOME/Downloads"
+export XDG_DOCUMENTS_DIR="$HOME/Documents"
+export XDG_MUSIC_DIR="$HOME/Music"
+export XDG_PICTURES_DIR="$HOME/Pictures"
+export XDG_VIDEOS_DIR="$HOME/Videos"
+export USR_APPLICATIONS_DIR="$HOME/Applications"
+export TERM="alacritty"
+
+export DOTFILES="$HOME/Dotfiles"
+export NOTES="$HOME/Online/Notes"
+
+export PATH="$USR_APPLICATIONS_DIR/AppImages:$USR_APPLICATIONS_DIR/bin"\
+":$USR_APPLICATIONS_DIR/ffmpeg:$USR_APPLICATIONS_DIR/jdk-23/bin"\
+":~/Code/miniapps:~/Code/miniapps/bin"\
+":$XDG_DATA_HOME/python/bin:$CARGO_HOME/bin:$PATH"
+
+export HISTFILE=$XDG_STATE_HOME/bash/history
+export HISTCONTROL=ignoreboth:erasedups:ignorespace
+export HISTFILESIZE=
+export HISTSIZE=
+export HISTTIMEFORMAT="[%F %T] "
+
+export GTK2_RC_FILES=$DOTFILES/gtk2rc
+export ICEAUTHORITY=$XDG_CACHE_HOME/ICEauthority
+# export XAUTHORITY=$XDG_RUNTIME_DIR/Xauthority
+export ERRFILE="$XDG_CACHE_HOME/X11/xsession-errors"
+export GNUPGHOME="$XDG_DATA_HOME"/gnupg
+export CALCHISTFILE="$XDG_CACHE_HOME"/calc_history
+export FCEUX_HOME="$XDG_CONFIG_HOME"/fceux
+export ASPELL_CONF="personal $DOTFILES/en.pws; repl $XDG_DATA_HOME/aspell.en.prepl"
+export RUNST_CONFIG=$DOTFILES/runst.toml
+
+export GOPATH="$XDG_DATA_HOME"/go
+export GOMODCACHE="$XDG_CACHE_HOME"/go/mod
+export CPATH=/usr/include/freetype2/:$CPATH
+export PYTHON_HISTORY=$XDG_STATE_HOME/python/history
+export PYTHONPYCACHEPREFIX=$XDG_CACHE_HOME/python
+export PYTHONUSERBASE=$XDG_DATA_HOME/python
+export CARGO_HOME="$XDG_DATA_HOME"/cargo
+export RUSTUP_HOME="$XDG_DATA_HOME"/rustup
+
+source /etc/bash_completion
+source <(trash completions bash)
+eval "$(zoxide init bash)"
+
+eval "$(fzf --bash)"
+export FZF_DEFAULT_OPTS="
+  --bind 'tab:down'
+  --bind 'shift-tab:up'
+"
+
+
+_open_complete() {
+    local cur="${COMP_WORDS[COMP_CWORD]}"
+    COMPREPLY=( $(compgen -c "$cur") )
+}
+
+alias btm="btm --color gruvbox"
+alias bat="bat --theme=gruvbox-dark --style=numbers"
+
+alias ..="cd .."
+alias ~="cd ~"
+alias ls="ls -a --color=always --group-directories-first"
+alias ln="ln -i"
+alias mkdir="mkdir -vp"
+alias mv="mv -vi"
+alias cp="cp -vi"
+alias dir="dir --color=always"
+alias rm="trash"
+alias ln="ln -v"
+alias cp="cp -r"
+# alias cd="z"
+alias cat="bat --style=plain --pager=none"
+alias grep="rg"
+alias diff="bat --style=plain -d"
+alias top="btm --battery --enable_cache_memory --enable_gpu_memory --network_use_bytes --network_use_binary_prefix --mem_as_value --show_table_scroll_position"
+alias xclip="xclip -selection clipboard"
+# alias wget="curl -OLJ"
+alias zip="zip -r"
+alias tar="tar -v"
+
+alias icat="timg -p s"
+alias refresh="source $DOTFILES/profile.sh"
+
+ask_and_run() {
+    read -p "Do you want to proceed? (y/n): " ans
+    case $ans in
+        [Yy]* )
+            eval "$@" ;;
+        * )
+            echo "Operation cancelled." ;;
+    esac
+}
+
+alias poweroff="ask_and_run sudo poweroff"
+alias reboot="ask_and_run sudo reboot"
+alias suspend="sudo pm-suspend"
+alias hibernate="sudo pm-hibernate"
+alias quit="ask_and_run i3-msg exit"
+alias lock="i3lock -n -f -c 32302F -i $DOTFILES/Images/'Lockscreen Wallpaper.png'"
+
+o() {
+    "$@" > /dev/null 2>&1 & disown
+}
+oe() {
+    "$@" > /dev/null 2>&1 & disown
+    exit
+}
+complete -F _open_complete o
+complete -F _open_complete oe
+
+alias focus="o focus"
+alias micro="micro --config-dir $DOTFILES/micro"
+alias todo="micro $NOTES/Todo.md"
+alias feed="micro $NOTES/Feed.md"
+alias xcolor="xcolor | xclip"
+alias yt="yt-dlp --ffmpeg-location $USR_APPLICATIONS_DIR/ffmpeg/"
+alias yta="yt --extract-audio --audio-format"
+
+cd() {
+    z "$@"
+    pwd > $XDG_CACHE_HOME/last-dir.txt
+}
+
+len() {
+    str=$@
+    echo ${#str}
+}
+
+push() {
+    git add .
+    git commit -m "$1"
+    git pull
+    git push
+}
+
+wget() {
+    if [ $# -eq 1 ]; then
+        # If only URL is provided, use -OLJ
+        curl -OLJ "$1"
+    elif [ $# -eq 2 ]; then
+        # If URL and filename are provided, use -LJ -o
+        curl -LJ -o "$2" "$1"
+    else
+        echo "Usage: wget <URL> [filename]"
+        return 1
+    fi
+}
+
+backup() {
+    opml_to_feed $DOTFILES/podcast.opml $NOTES/Feed.md
+
+    # files=($XDG_DOWNLOAD_DIR/tampermonkey-backup-chrome*.txt)
+    # if [ -f $file ]; then
+    #     if [[ ${#files[@]} -gt 0 ]]; then
+    #         mv "${files[0]}" $DOTFILES/tampermonkey.json
+    #     fi
+    #     rm $XDG_DOWNLOAD_DIR/tampermonkey-backup-chrome*.txt
+    # fi
+
+    rclone bisync $HOME/Online Personal: \
+        --config="$HOME/Online/Dotfiles/rclone.conf" \
+        --exclude buffers/** \
+        --check-first --metadata --checksum --download-hash --verbose \
+        --resync --resync-mode newer --conflict-resolve newer --copy-links \
+        --compare 'size,modtime,checksum'
+
+    sudo timeshift --create --verbose
+}
+
+build-notes() {
+    cd $HOME/Code/AnzenKodo.github.io/src
+    ./run.sh
+    if [ "$@" = "open" ]; then
+        brave-browser ../site/index.html
+    fi
+    cd -
+}
+
+i3-o() {
+    app_name=$1
+    workspace=$2
+    width=$3
+    height=$4
+    move=$5
+    alias i3-msg="i3-msg -q"
+
+    # Use i3-msg to move and resize the window
+
+    i3-msg "[class=\"$app_name\"] move container to workspace \"$workspace\""
+    if [ $height ]; then
+        i3-msg "[class=\"$app_name\"] resize set height $height px"
+    fi
+    if [ $width ]; then
+        i3-msg "[class=\"$app_name\"] resize set width $width px"
+    fi
+    i3-msg "[class=\"$app_name\"] move $move"
+}
+
+project() {
+    proj=~/Code/drift
+    cd $proj
+
+    o focus
+    sleep 1
+    i3-o "dev.focus-editor.focus" "2" '' '' up
+    i3-o "Alacritty" "2" '' 250 down
+}
+
+compress-vods() {
+    ffmpeg -i $1 -vcodec libx264 -crf 23 $2
+}
+
+bind '"\x08":backward-kill-word'
+bind 'set completion-ignore-case on'
+bind "TAB:menu-complete"
+bind "set show-all-if-ambiguous on"
+bind "set menu-complete-display-prefix on"
+bind '"\e[Z": menu-complete-backward'
+bind "set colored-stats On"
+bind 'set mark-symlinked-directories On'
+bind 'set show-all-if-ambiguous On'
+bind 'set show-all-if-unmodified On'
+bind 'set visible-stats On'
+
+if [ "$PWD" = "$HOME" ]; then
+    cd "$(cat $XDG_CACHE_HOME/last-dir.txt)"
+fi
+
+if [ -x /usr/lib/command-not-found -o -x /usr/share/command-not-found/command-not-found ]; then
+	function command_not_found_handle {
+        if [ -x /usr/lib/command-not-found ]; then
+		   /usr/lib/command-not-found -- "$1"
+           return $?
+        elif [ -x /usr/share/command-not-found/command-not-found ]; then
+		   /usr/share/command-not-found/command-not-found -- "$1"
+           return $?
+		else
+		   printf "%s: command not found\n" "$1" >&2
+		   return 127
+		fi
+	}
+fi
+
+export NVM_DIR="$HOME/.config/nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion

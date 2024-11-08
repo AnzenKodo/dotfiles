@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<channel name="pointers" version="1.0">
+  <property name="Lite-On_Technology_Corp_USB_Keyboard_Consumer_Control" type="empty">
+    <property name="RightHanded" type="bool" value="true"/>
+    <property name="Threshold" type="int" value="8"/>
+    <property name="Acceleration" type="double" value="10"/>
+  </property>
+</channel>

@@ -1,0 +1,11 @@
+[12]  # Version number. Do not delete.
+
+[[workspace]]
+/home/ramen/Code/AnzenKodo.github.io/
+
+[ignore]
+libs/
+.git/
+.github/
+site/
+assets/

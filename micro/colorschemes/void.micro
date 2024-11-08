@@ -1,0 +1,96 @@
+# Background        #000
+# Foreground        #FFF
+# Info Background   #00000F
+# Info Foreground   #AAA
+
+# Red               #F92672
+# Light Red         #EB606B
+
+# Yellow            #FFD242
+
+# Light Blue        #59C2FF
+# Dark Blue         #008DF8
+
+# Light Green       #94FA36
+# Dark Green        #4DCA27
+
+# Gray              #989A9C
+# Light Gray        #808080
+
+# Purple            #9A5FEB
+# Light Purple      #A277FF
+# Dark Purple       #7A7AB8
+
+# Pink              #D94085
+# Pink Light        #DA6BAC
+# Pink Dark         #FF55FF
+
+# Cyan              #59E3E3
+
+# Cream             #DDC265
+
+# Orange            #FF9566
+# Light Orange      #FFBC51
+# Dark Orange       #FF9149
+
+# Brown             #A8757B
+
+color-link default "#FFF,#1D0000" # Default
+color-link todo "bold #F92672" # Red
+color-link hlsearch "#1D0000,#FFD242" # Yellow
+color-link selection "#FFF,#008DF8" # Dark Blue
+color-link ignore "#FFD242" # Light Gray
+color-link cursor-line "#323232" # Unique
+color-link color-column "#00000F" # Info
+color-link scrollbar "#AAA,#00000F" # Info
+color-link special "#EB606B" # Light Red
+color-link divider "#AAA,#00000F" # Info
+color-link message "#FFF" # Default
+color-link underlined "underline" # Default
+color-link statement "#DDC265" # Cream
+color-link tabbar "#AAA,#00000F" # Info
+color-link indent-char "#AAA,#00000F" # Info
+color-link preproc "#A5FFE1" # Unique
+
+color-link error "bold #F92672" # Red
+color-link error-message "#F92672" # Red
+
+color-link statusline "#AAA,#00000F" # Info
+color-link line-number "#AAA,#00000F" # Info
+color-link current-line-number "#AAA,#113333" # Info
+
+color-link diff-added "#4DCA27" # Dark Green
+color-link diff-modified "#FFD242" # Yellow
+color-link diff-deleted "#F92672" # Red
+
+color-link gutter-error "#F92672" # Red
+color-link gutter-warning "#FFD242" # Yellow
+
+
+color-link comment "#989A9C" # Gray
+color-link comment.bright "#808080" # Light Gray
+
+color-link constant "#59E3E3" # Cyan
+color-link constant.string "#94FA36" # Light Green
+color-link constant.string.char "#4DCA27" # Dark Green
+color-link constant.bool "#FFD242" # Yellow
+color-link constant.bool.true "#4DCA27" # Dark Green
+color-link constant.bool.false "#F92672" # Red
+color-link constant.number "#59C2FF" # Light Blue
+color-link constant.specialChar "#EB606B" # Light Red
+color-link constant.string.url "#008DF8" # Dark Blue
+
+color-link identifier "#FF9566" # Orange
+color-link identifier.class "#FFBC51" # Light Orange
+color-link identifier.macro "#FF9149" # Dark Orange
+# color-link identifier.var ""
+
+color-link symbol.brackets "#FF55FF" # Pink Dark
+color-link symbol.operator "#D94085,#000" # Pink
+color-link symbol.tag "#DA6BAC,#000" # Pink Light
+
+color-link type "#A277FF" # Light Purple
+color-link type.keyword "#9A5FEB" # Purple
+color-link type.extended "#7A7AB8" # Dark Purple
+
+color-link preproc.shebang "#808080" # Light Gray

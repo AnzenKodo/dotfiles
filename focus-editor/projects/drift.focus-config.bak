@@ -1,0 +1,33 @@
+[5]  # Version number. Do not delete.
+
+[[workspace]]
+/home/ramen/Code/drift
+
+[ignore]
+libs/
+.git/
+assets/
+view/
+
+[[build commands]]
+build_working_dir:      /home/ramen/Code/drift
+open_panel_on_build:    true
+
+[Debug Build And Run]
+build_command:          go build .
+# build_working_dir:      <build working dir for this command only>
+# timeout_in_seconds:     5             # if you don't want a timeout, don't specify it
+# run_command:            test.exe      # will be run if build succeeds
+# run_working_dir:        W:/focus      # working dir for the run command
+key_binding:            F5
+
+# [Run]
+# run_command:            test.exe
+# run_working_dir:        /home/user/test
+# key_binding:            Ctrl-F5
+
+# [Release]
+# build_command:          jai first.jai - release
+# key_binding:            F9
+
+

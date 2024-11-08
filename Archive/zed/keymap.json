@@ -1,0 +1,68 @@
+[
+    {
+        "context": "Global",
+        "bindings": {
+            "ctrl-q": null
+        }
+    },
+    {
+        "context": "Editor",
+        "bindings": {
+            "ctrl-up": "editor::MoveToStartOfParagraph",
+            "ctrl-down": "editor::MoveToEndOfParagraph",
+            "shift-backspace": "editor::DeleteToBeginningOfLine",
+            "shift-delete": "editor::DeleteToEndOfLine",
+            "ctrl-shift-backspace": "editor::DeleteLine",
+            "shift-enter": "editor::NewlineAbove",
+            "alt-v": "pane::SplitRight",
+            "alt-h": "pane::SplitDown",
+            "alt-n": "workspace::ActivateNextPane",
+            "ctrl-alt-up": "editor::AddSelectionAbove",
+            "ctrl-alt-down": "editor::AddSelectionBelow",
+            "ctrl-y": "editor::Redo",
+            "ctrl-q": null
+        }
+    },
+    {
+        "context": "Workspace",
+        "bindings": {
+            "ctrl-shift-e": "project_panel::ToggleFocus",
+            "ctrl-/": ["workspace::ActivatePaneInDirection", "Left"],
+            "ctrl-alt-shift-right": ["workspace::ActivatePaneInDirection", "Right"],
+            // "ctrl-alt-up": ["workspace::ActivatePaneInDirection", "Up"],
+            // "ctrl-alt-down": ["workspace::ActivatePaneInDirection", "Down"],
+            "ctrl-alt-left": ["workspace::SwapPaneInDirection", "Left"],
+            "ctrl-alt-right": ["workspace::SwapPaneInDirection", "Right"],
+            "ctrl-alt-up": ["workspace::SwapPaneInDirection", "Up"],
+            "ctrl-alt-down": ["workspace::SwapPaneInDirection", "Down"]
+        }
+    },
+    {
+        "context": "Pane",
+        "bindings": {
+            "ctrl-shift-w": "pane::CloseInactiveItems"
+        }
+    },
+    {
+        "context": "ProjectPanel && not_editing",
+        "bindings": {
+            "alt-1": ["pane::ActivateItem", 0],
+            "alt-2": ["pane::ActivateItem", 1],
+            "alt-3": ["pane::ActivateItem", 2],
+            "alt-4": ["pane::ActivateItem", 3],
+            "alt-5": ["pane::ActivateItem", 4],
+            "alt-6": ["pane::ActivateItem", 5],
+            "alt-7": ["pane::ActivateItem", 6],
+            "alt-8": ["pane::ActivateItem", 7],
+            "alt-9": ["pane::ActivateItem", 8],
+            "enter": "project_panel::Open",
+            "ctrl-d": "project_panel::NewDirectory"
+        }
+    },
+    {
+        "context": "Terminal",
+        "bindings": {
+            "ctrl-q": null
+        }
+    }
+]

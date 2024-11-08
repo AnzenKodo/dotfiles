@@ -1,0 +1,34 @@
+{
+    "*.odin": {
+        "commenttype": "// %s"
+    },
+    "aspell.check": "off",
+    "autoclose": false,
+    "autosu": true,
+    "backupdir": "~/.cache/micro/backup",
+    "colorcolumn": 80,
+    "colorscheme": "gruvbox",
+    "diffgutter": true,
+    "ft:asm": {
+        "commenttype": "; %s"
+    },
+    "ft:makefile": {
+        "tabstospaces": false
+    },
+    "ft:markdown": {
+        "aspell.check": "on"
+    },
+    "ftoptions": false,
+    "matchbracestyle": "highlight",
+    "mkparents": true,
+    "rmtrailingws": true,
+    "savecursor": true,
+    "saveundo": true,
+    "scrollbar": true,
+    "softwrap": true,
+    "statusformatl": " $(filename):$(line):$(col) $(modified)| $(opt:filetype) | $(opt:fileformat) | $(opt:encoding)",
+    "statusformatr": "",
+    "tabhighlight": true,
+    "tabmovement": true,
+    "tabstospaces": true
+}
