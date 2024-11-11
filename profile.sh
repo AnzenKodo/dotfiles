@@ -166,6 +166,10 @@ backup() {
     #     rm $XDG_DOWNLOAD_DIR/tampermonkey-backup-chrome*.txt
     # fi
 
+    cd $DOTFILES
+    push "Backup from Desktop"
+    cd -
+
     rclone bisync $HOME/Online Personal: \
         --config="$HOME/Online/Dotfiles/rclone.conf" \
         --exclude buffers/** \
