@@ -156,7 +156,7 @@ wget() {
 }
 
 backup() {
-    opml_to_feed ~/Online/Dotfiles/podcast.opml $NOTES/Feed.md
+    opml_to_feed $HOME/Online/Dotfiles/podcast.opml $NOTES/Feed.md
 
     # files=($XDG_DOWNLOAD_DIR/tampermonkey-backup-chrome*.txt)
     # if [ -f $file ]; then
