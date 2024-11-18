@@ -30,4 +30,5 @@
     <property name="hide-on-read" type="bool" value="false"/>
   </property>
   <property name="expire-timeout" type="int" value="20"/>
+  <property name="do-not-disturb" type="bool" value="false"/>
 </channel>

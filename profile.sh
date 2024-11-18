@@ -1,6 +1,7 @@
-PROMPT_COMMAND='PS1_CMD1=$(__git_ps1 " (%s)")'
-PS1='\[\e[38;2;251;73;52m\]\h\[\e[0m\]@\[\e[38;2;250;189;47m\]\u\[\e[0m\]:\[\e[38;2;125;174;163m\]\w\[\e[38;2;184;187;38m\]${PS1_CMD1}\n\[\e[0m\]\\$ '
-PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
+PROMPT_COMMAND=''
+PS1='\n\[\e[38;2;251;73;52m\]\h\[\e[0m\]@\[\e[38;2;250;189;47m\]\u\[\e[0m\]:\[\e[38;2;125;174;163m\]\w\[\e[38;2;184;187;38m\]${PS1_CMD1}\n\[\e[0m\]\\$ '
+
+PROMPT_COMMAND='PS1_CMD1=$(__git_ps1 " (%s)");history -a'
 
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_CACHE_HOME="$HOME/.cache"
@@ -36,7 +37,6 @@ export GNUPGHOME="$XDG_DATA_HOME"/gnupg
 export CALCHISTFILE="$XDG_CACHE_HOME"/calc_history
 export FCEUX_HOME="$XDG_CONFIG_HOME"/fceux
 export ASPELL_CONF="personal $DOTFILES/en.pws; repl $XDG_DATA_HOME/aspell.en.prepl"
-export RUNST_CONFIG=$DOTFILES/runst.toml
 
 export GOPATH="$XDG_DATA_HOME"/go
 export GOMODCACHE="$XDG_CACHE_HOME"/go/mod
@@ -83,7 +83,6 @@ alias grep="rg"
 alias diff="bat --style=plain -d"
 alias top="btm --battery --enable_cache_memory --enable_gpu_memory --network_use_bytes --network_use_binary_prefix --mem_as_value --show_table_scroll_position"
 alias xclip="xclip -selection clipboard"
-# alias wget="curl -OLJ"
 alias zip="zip -r"
 alias tar="tar -v"
 
@@ -106,7 +105,6 @@ alias suspend="sudo pm-suspend"
 alias hibernate="sudo pm-hibernate"
 alias quit="ask_and_run i3-msg exit"
 alias lock="i3lock -n -f -c 32302F -i $DOTFILES/Images/'Lockscreen Wallpaper.png'"
-
 o() {
     "$@" > /dev/null 2>&1 & disown
 }
@@ -124,6 +122,7 @@ alias feed="micro $NOTES/Feed.md"
 alias xcolor="xcolor | xclip"
 alias yt="yt-dlp --ffmpeg-location $USR_APPLICATIONS_DIR/ffmpeg/"
 alias yta="yt --extract-audio --audio-format"
+alias tldr="tldr -c"
 
 cd() {
     z "$@"
@@ -140,19 +139,6 @@ push() {
     git commit -m "$1"
     git pull
     git push
-}
-
-wget() {
-    if [ $# -eq 1 ]; then
-        # If only URL is provided, use -OLJ
-        curl -OLJ "$1"
-    elif [ $# -eq 2 ]; then
-        # If URL and filename are provided, use -LJ -o
-        curl -LJ -o "$2" "$1"
-    else
-        echo "Usage: wget <URL> [filename]"
-        return 1
-    fi
 }
 
 backup() {
@@ -257,3 +243,5 @@ fi
 export NVM_DIR="$HOME/.config/nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+trap 'echo -ne "\033]0;$(history 1 | cut -d " " -f 6) ${PWD/#$HOME/\~}\007"' DEBUG

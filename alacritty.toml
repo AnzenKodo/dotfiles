@@ -30,6 +30,7 @@ mods = "Shift"
 [window]
 padding = { x = 3, y = 0 }
 dimensions = { columns = 86, lines = 24 }
+dynamic_title = true
 
 [font]
 size = 6.5

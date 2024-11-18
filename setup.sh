@@ -1,7 +1,7 @@
 rm -rf ~/Public ~/Desktop ~/Templates
 mkdir ~/Online ~/Apps ~/Apps/bin ~/Code ~/Pictures/Screenshots
 
-sudo apt purge xf* node* vim* firefox-esr gimp* libreoffice* refracta* \
+sudo apt purge xf* node* firefox-esr gimp* libreoffice* refracta* \
 atril exfalso htop system-config-printer synaptic xscan mutt desktop-base \
 mousepad slim gparted
 
