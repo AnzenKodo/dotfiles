@@ -11,7 +11,7 @@ sudo apt install git unzip xclip unar \
 thunar thunar-archive-plugin \ # File Manager
 feh \ # Image Viewer
 timeshift \ # Backup
-dmenu \ # Menu
+rofi \ # Menu
 alacritty \ # Terminal
 scrot \ # Screenshot
 calc \ # Calculator

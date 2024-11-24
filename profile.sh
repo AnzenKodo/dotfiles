@@ -46,6 +46,7 @@ export PYTHONPYCACHEPREFIX=$XDG_CACHE_HOME/python
 export PYTHONUSERBASE=$XDG_DATA_HOME/python
 export CARGO_HOME="$XDG_DATA_HOME"/cargo
 export RUSTUP_HOME="$XDG_DATA_HOME"/rustup
+export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 
 source /etc/bash_completion
 source <(trash completions bash)
@@ -63,8 +64,9 @@ _open_complete() {
     COMPREPLY=( $(compgen -c "$cur") )
 }
 
-alias btm="btm --color gruvbox"
+
 alias bat="bat --theme=gruvbox-dark --style=numbers"
+alias btm="btm --color gruvbox"
 
 alias ..="cd .."
 alias ~="cd ~"
@@ -85,6 +87,7 @@ alias top="btm --battery --enable_cache_memory --enable_gpu_memory --network_use
 alias xclip="xclip -selection clipboard"
 alias zip="zip -r"
 alias tar="tar -v"
+alias wget="wget --hsts-file=\"$XDG_CACHE_HOME/wget-hsts\""
 
 alias icat="timg -p s"
 alias refresh="source $DOTFILES/profile.sh"

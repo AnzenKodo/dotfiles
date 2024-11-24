@@ -77,7 +77,7 @@ window_height:                                 -1
 insert_final_newline_on_save:                  true
 status_bar_position:                           bottom
 
-load_most_recent_project_on_start:             true
+load_most_recent_project_on_start:             false
 color_preview_popup:                           enabled  # options: enabled, minimized, disabled
 highlight_matching_brackets:                   true
 
