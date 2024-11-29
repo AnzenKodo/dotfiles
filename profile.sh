@@ -208,8 +208,9 @@ project() {
     i3-o "Alacritty" "2" '' 250 down
 }
 
-compress-vods() {
-    ffmpeg -i $1 -vcodec libx264 -crf 23 $2
+compress-mp4() {
+    echo ffmpeg -i "$1" -vcodec h264 -acodec mp2 "$2"
+    ffmpeg -i "$1" -vcodec h264 -acodec mp2 "$2"
 }
 
 bind '"\x08":backward-kill-word'

@@ -6,4 +6,9 @@
     <property name="Threshold" type="int" value="8"/>
     <property name="Acceleration" type="double" value="10"/>
   </property>
+  <property name="Wacom_HID_48CC_Finger_touch" type="empty">
+    <property name="RightHanded" type="bool" value="true"/>
+    <property name="Threshold" type="int" value="30"/>
+    <property name="Acceleration" type="double" value="10"/>
+  </property>
 </channel>
