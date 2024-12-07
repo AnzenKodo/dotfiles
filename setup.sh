@@ -55,6 +55,9 @@ ln -sf $DOTFILES/xfce4/ $XDG_CONFIG_HOME
 
 ln -sf $DOTFILES/gtk-4.0/ $XDG_CONFIG_HOME
 
+ln -srf $DOTFILES/activitywatch $XDG_CONFIG_HOME
+ln -srf ~/Online/Dotfiles/activitywatch $XDG_DATA_HOME
+
 # sudo rm /usr/local/bin
 # sudo ln -srf $USR_APPLICATIONS_DIR/bin /usr/local/bin
 
