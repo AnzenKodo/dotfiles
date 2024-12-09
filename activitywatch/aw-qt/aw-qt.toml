@@ -1,5 +1,12 @@
 [aw-qt]
-#autostart_modules = ["aw-server", "aw-watcher-afk", "aw-watcher-window"]
+autostart_modules = [
+    "aw-server-rust",
+    "aw-watcher-window",
+    "aw-watcher-input",
+    "aw-watcher-afk",
+    "aw-sync",
+    # "aw-notify",
+]
 
 [aw-qt-testing]
 #autostart_modules = ["aw-server", "aw-watcher-afk", "aw-watcher-window"]

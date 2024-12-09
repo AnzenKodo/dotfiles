@@ -37,6 +37,8 @@ export GNUPGHOME="$XDG_DATA_HOME"/gnupg
 export CALCHISTFILE="$XDG_CACHE_HOME"/calc_history
 export FCEUX_HOME="$XDG_CONFIG_HOME"/fceux
 export ASPELL_CONF="personal $DOTFILES/en.pws; repl $XDG_DATA_HOME/aspell.en.prepl"
+export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+export AW_SYNC_DIR="$HOME/Online/Dotfiles/ActivityWatch"
 
 export GOPATH="$XDG_DATA_HOME"/go
 export GOMODCACHE="$XDG_CACHE_HOME"/go/mod
@@ -46,7 +48,6 @@ export PYTHONPYCACHEPREFIX=$XDG_CACHE_HOME/python
 export PYTHONUSERBASE=$XDG_DATA_HOME/python
 export CARGO_HOME="$XDG_DATA_HOME"/cargo
 export RUSTUP_HOME="$XDG_DATA_HOME"/rustup
-export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 
 source /etc/bash_completion
 source <(trash completions bash)
