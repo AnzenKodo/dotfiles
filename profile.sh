@@ -147,7 +147,7 @@ push() {
 
 backup() {
     opml_to_feed $HOME/Online/Dotfiles/podcast.opml $NOTES/Feed.md
-
+    cp $XDG_DATA_HOME/activitywatch ~/Online/Dotfiles/
     # files=($XDG_DOWNLOAD_DIR/tampermonkey-backup-chrome*.txt)
     # if [ -f $file ]; then
     #     if [[ ${#files[@]} -gt 0 ]]; then
