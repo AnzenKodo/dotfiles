@@ -1,4 +1,4 @@
-[5]  # Version number. Do not delete
+[13]  # Version number. Do not delete.
 
 # Based on the gruber darker theme by Jason Blevins
 # https://github.com/rexim/gruber-darker-theme
@@ -89,3 +89,8 @@ code_header3:                           E4E4EFFF
 code_header4:                           E4E4EFFF
 code_header5:                           E4E4EFFF
 code_header6:                           E4E4EFFF
+
+# Added after migration to version [13]
+ruler:                                  FFDD3311
+bracket_highlight:                      FCEDFC26
+indent_guide:                           FCEDFC26

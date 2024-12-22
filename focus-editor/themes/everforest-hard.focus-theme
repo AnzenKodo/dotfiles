@@ -1,4 +1,4 @@
-[5]  # Version number. Do not delete
+[13]  # Version number. Do not delete.
 
 # Based on the https://github.com/sainnhe/everforest Hard colors
 [colors]
@@ -88,3 +88,8 @@ code_header3:                           7A8478FF
 code_header4:                           7A8478FF
 code_header5:                           7A8478FF
 code_header6:                           7A8478FF
+
+# Added after migration to version [13]
+ruler:                                  A7C080FF
+bracket_highlight:                      A7C08022
+indent_guide:                           A7C08022

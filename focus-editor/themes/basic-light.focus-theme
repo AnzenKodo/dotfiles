@@ -1,4 +1,4 @@
-[5]  # Version number. Do not delete
+[13]  # Version number. Do not delete.
 
 [colors]
 background0:                            FFFFFFFF
@@ -88,3 +88,8 @@ code_header3:                           181818FF
 code_header4:                           181818FF
 code_header5:                           181818FF
 code_header6:                           181818FF
+
+# Added after migration to version [13]
+ruler:                                  196666FF
+bracket_highlight:                      E6FEFE26
+indent_guide:                           E6FEFE26

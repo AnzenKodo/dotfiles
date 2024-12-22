@@ -315,6 +315,8 @@ Ctrl-M                      jump_to_matching_bracket
 
 [[style]]
 
+theme: gruvbox-flat
+
 [fonts]
 font:       0xProto
 font_size:  18
