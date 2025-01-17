@@ -61,7 +61,6 @@
       <property name="override" type="bool" value="true"/>
       <property name="&lt;Super&gt;v" type="string" value="xfce4-popup-clipman"/>
       <property name="&lt;Super&gt;c" type="string" value="gpick -s"/>
-      <property name="&lt;Primary&gt;&lt;Alt&gt;t" type="string" value="alacritty"/>
       <property name="&lt;Super&gt;a" type="string" value="menu"/>
       <property name="&lt;Super&gt;i" type="string" value="xfce4-settings-manager"/>
       <property name="&lt;Super&gt;period" type="string" value="bash -c &quot;~/Applications/emoji&quot;"/>
@@ -69,6 +68,7 @@
       <property name="&lt;Shift&gt;&lt;Super&gt;greater" type="string" value="bash -c &quot;~/Applications/symbols-all&quot;"/>
       <property name="&lt;Super&gt;AudioRaiseVolume" type="string" value="brightnessctl s +5%"/>
       <property name="&lt;Super&gt;AudioLowerVolume" type="string" value="brightnessctl s 5%-"/>
+      <property name="&lt;Primary&gt;&lt;Alt&gt;t" type="string" value="ghostty"/>
     </property>
   </property>
   <property name="xfwm4" type="empty">

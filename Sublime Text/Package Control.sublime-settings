@@ -1,0 +1,14 @@
+{
+	"bootstrapped": true,
+	"installed_packages":
+	[
+		"FileIcons Mono",
+		"Gruvbox Dark",
+		"Gruvbox Material Theme",
+		"Package Control",
+		"Sync Settings",
+	],
+	"in_process_packages":
+	[
+	],
+}

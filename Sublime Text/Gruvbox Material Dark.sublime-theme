@@ -1,0 +1,51 @@
+// Documentation at https://www.sublimetext.com/docs/themes.html
+{
+	"variables":
+	{
+		"font_size_sm": 13,
+		"font_size": 14,
+		"font_size_lg": 15,
+		"font_size_title": 24,
+		"medium_dark_bg": "#32302F",
+		"medium_bg": "#32302F",
+	},
+	"rules":
+	[
+		{
+		    "class": "icon_file_type",
+		    "layer0.tint": [255, 255, 255],
+		    "layer0.opacity": 0.75,
+		    "content_margin": [8, 8]
+  		},
+		{
+			"class": "quick_panel_label",
+			"font.face": "var(font_face)",
+			"font.size": "var(font_size_lg)",
+			"fg": "#d4be98",
+			"match_fg": "color(var(--background) blend(#d4be98 20%))",
+			"selected_fg": "color(var(--background) blend(#d4be98 20%))",
+			"selected_match_fg": "#d4be98"
+		},
+		{
+			"class": "quick_panel_path_label",
+			"font.size": "var(font_size_sm)",
+			"fg": "#d4be98",
+			"match_fg": "color(var(--background) blend(#d4be98 40%))",
+			"selected_fg": "color(var(--background) blend(#d4be98 50%))",
+			"selected_match_fg": "color(var(--background) blend(#d4be98 20%))",
+		},
+		{
+			"class": "quick_panel_path_label",
+			"parents": [{"class": "window", "attributes": ["file_light"]}],
+			"fg": "#d4be98",
+			"match_fg": "color(var(--background) blend(black 40%))",
+			"selected_fg": "color(var(--background) blend(black 50%))",
+			"selected_match_fg": "color(var(--background) blend(black 20%))"
+		},
+		{
+			"class": "mini_quick_panel_row",
+			"attributes": ["selected"],
+			"layer0.opacity": 0.11
+		},
+	]
+}

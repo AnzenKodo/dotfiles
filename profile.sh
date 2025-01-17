@@ -29,6 +29,7 @@ export HISTFILESIZE=
 export HISTSIZE=
 export HISTTIMEFORMAT="[%F %T] "
 
+export LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libgtk3-nocsd.so.0
 export GTK2_RC_FILES=$DOTFILES/gtk2rc
 export ICEAUTHORITY=$XDG_CACHE_HOME/ICEauthority
 # export XAUTHORITY=$XDG_RUNTIME_DIR/Xauthority
@@ -39,6 +40,7 @@ export FCEUX_HOME="$XDG_CONFIG_HOME"/fceux
 export ASPELL_CONF="personal $DOTFILES/en.pws; repl $XDG_DATA_HOME/aspell.en.prepl"
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 export AW_SYNC_DIR="$HOME/Online/Dotfiles/ActivityWatch"
+export WINEPREFIX="$XDG_DATA_HOME"/wineprefixes/default
 
 export GOPATH="$XDG_DATA_HOME"/go
 export GOMODCACHE="$XDG_CACHE_HOME"/go/mod
@@ -50,6 +52,7 @@ export CARGO_HOME="$XDG_DATA_HOME"/cargo
 export RUSTUP_HOME="$XDG_DATA_HOME"/rustup
 
 source /etc/bash_completion
+source ~/Applications/ghostty/zig-out/share/bash-completion/completions/ghostty.bash
 source <(trash completions bash)
 eval "$(zoxide init bash)"
 
@@ -124,8 +127,8 @@ alias micro="micro --config-dir $DOTFILES/micro"
 alias todo="micro $NOTES/Todo.md"
 alias feed="micro $NOTES/Feed.md"
 alias xcolor="xcolor | xclip"
-alias yt="yt-dlp --ffmpeg-location $USR_APPLICATIONS_DIR/ffmpeg/"
-alias yta="yt --extract-audio --audio-format"
+alias yt="yt-dlp --ffmpeg-location $USR_APPLICATIONS_DIR/ffmpeg/ -S ext"
+alias yta="yt-dlp --ffmpeg-location $USR_APPLICATIONS_DIR/ffmpeg/ --extract-audio --audio-format"
 alias tldr="tldr -c"
 
 cd() {
@@ -200,13 +203,12 @@ i3-o() {
 }
 
 project() {
-    proj=~/Code/drift
-    cd $proj
+    local proj_path=~/Code/Scuttle
+    cd $proj_path
 
-    o focus
-    sleep 1
-    i3-o "dev.focus-editor.focus" "2" '' '' up
-    i3-o "Alacritty" "2" '' 250 down
+    o subl
+    o vscode
+    o brave-browser --profile-directory="Profile 1"
 }
 
 compress-mp4() {

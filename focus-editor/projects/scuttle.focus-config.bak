@@ -1,20 +1,16 @@
-[12]  # Version number. Do not delete.
+[13]  # Version number. Do not delete.
 
 [[workspace]]
-/home/ramen/Code/drift
+/home/ramen/Code/Scuttle
 
 [ignore]
-libs/
-.git/
-assets/
-view/
 
 [[build commands]]
 build_working_dir:      /home/ramen/Code/drift
 open_panel_on_build:    true
 
 [Debug Build And Run]
-build_command:          go build .
+# build_command:          go build .
 # build_working_dir:      <build working dir for this command only>
 # timeout_in_seconds:     5             # if you don't want a timeout, don't specify it
 # run_command:            test.exe      # will be run if build succeeds

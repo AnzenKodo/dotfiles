@@ -1,4 +1,4 @@
-[12]  # Version number. Do not delete.
+[13]  # Version number. Do not delete.
 
 [[workspace]]
 # These directories and files will be scanned when a workspace is opened so that search etc. works.
@@ -17,6 +17,9 @@ node_modules
 *woff?
 *so.*
 venv
+.vscode
+.gitignore
+build
 
 [allow]
 # Files and directories matching the wildcards in this section will be loaded, even if they are ignored in the previous section.
@@ -34,7 +37,7 @@ venv
 maximize_on_start:                      false
 open_on_the_biggest_monitor:            false
 cursor_as_block:                        true
-cursor_blink_time_in_seconds:           5
+cursor_blink_time_in_seconds:           0.1
 highlight_selection_occurrences:        true
 show_paste_effect:                      true
 disable_file_open_close_animations:     false
@@ -85,8 +88,7 @@ search_is_case_sensitive_when_uppercase_present: false
 projects_sorting_order:                          most_recent_first  #options: most_recent_first, alphabetical, alphabetical_no_case
 show_ruler_at_column:                            80
 
-# Added after migration to version [12]
-detect_indentation:                              true  # if true, existing files will be scanned to detect indentation, new files will use the `indent_using` and `tab_size` settings
+detect_indentation:                              true
 status_bar_show_indentation:                     true
 status_bar_show_line_col:                        true
 
@@ -195,11 +197,9 @@ Alt-A                       align_cursors
 Alt-W                       toggle_line_wrap
 Alt-N                       toggle_line_numbers
 
-# Added after migration to version [10]
 Ctrl-U                      change_case_cycle
 Ctrl-R                      revert_select_word_or_create_another_cursor
 
-# Added after migration to version [12]
 {Shift}-Meta-ArrowLeft      move_left_through_word
 {Shift}-Meta-ArrowRight     move_right_through_word
 {Shift}-Meta-Backspace      delete_left_through_word
@@ -230,7 +230,6 @@ Alt-C                       toggle_case_sensitive
 Alt-W                       toggle_whole_word
 Alt-R                       toggle_regex_search
 
-# Added after migration to version [10]
 Tab                         go_to_next_input
 Shift-Tab                   go_to_previous_input
 
@@ -270,7 +269,7 @@ Escape                      escape
 
 Ctrl-Shift-L                toggle_expand
 
-Ctrl-B                      toggle_build_panel
+Ctrl-B                      build_panel_toggle
 
 F11                         toggle_fullscreen
 
@@ -318,6 +317,8 @@ Shift-Ctrl-F8               go_to_previous_build_error_on_the_side
 Ctrl-M                      jump_to_matching_bracket
 
 [[style]]
+
+theme: gruvbox-flat
 
 [fonts]
 font:       0xProto

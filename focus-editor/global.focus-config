@@ -1,4 +1,4 @@
-[13]  # Version number. Do not delete.
+[16]  # Version number. Do not delete.
 
 [[workspace]]
 # These directories and files will be scanned when a workspace is opened so that search etc. works.
@@ -17,6 +17,9 @@ node_modules
 *woff?
 *so.*
 venv
+.vscode
+.gitignore
+build
 
 [allow]
 # Files and directories matching the wildcards in this section will be loaded, even if they are ignored in the previous section.
@@ -31,7 +34,7 @@ venv
 
 [[settings]]
 
-maximize_on_start:                      true
+maximize_on_start:                      false
 open_on_the_biggest_monitor:            false
 cursor_as_block:                        true
 cursor_blink_time_in_seconds:           0.1
@@ -78,7 +81,7 @@ insert_final_newline_on_save:                  true
 status_bar_position:                           bottom
 
 load_most_recent_project_on_start:             false
-color_preview_popup:                           enabled  # options: enabled, minimized, disabled
+color_preview_popup:                           enabled
 highlight_matching_brackets:                   true
 
 search_is_case_sensitive_when_uppercase_present: false
@@ -88,6 +91,13 @@ show_ruler_at_column:                            80
 detect_indentation:                              true
 status_bar_show_indentation:                     true
 status_bar_show_line_col:                        true
+
+show_scrollbar_marks:                            true
+scrollbar_width_scale:                           1.0
+scrollbar_min_opacity:                           0.0   # if you want the scrollbar to be always visible, set this to 1.0
+scrollbar_max_opacity:                           1.0
+scrollbar_fade_in_sensitivity:                   10.0  # controls when the scrollbar appears as the mouse pointer gets close
+scrollbar_fade_out_delay_seconds:                2.0
 
 [[build commands]]
 # build_working_dir:      <build working dir for all commands>
@@ -227,8 +237,8 @@ Alt-C                       toggle_case_sensitive
 Alt-W                       toggle_whole_word
 Alt-R                       toggle_regex_search
 
-Tab                         go_to_next_input
-Shift-Tab                   go_to_previous_input
+Tab                         focus_next_ui_element
+Shift-Tab                   focus_previous_ui_element
 
 [common]
 
@@ -312,6 +322,10 @@ Shift-F8                    go_to_previous_build_error
 Shift-Ctrl-F8               go_to_previous_build_error_on_the_side
 
 Ctrl-M                      jump_to_matching_bracket
+
+Enter                       open_entry_in_place
+Tab                         focus_next_ui_element
+Shift-Tab                   focus_previous_ui_element
 
 [[style]]
 
