@@ -47,5 +47,15 @@
 			"attributes": ["selected"],
 			"layer0.opacity": 0.11
 		},
+		{
+    		"class": "tab_label",
+    		"attributes": ["inactive"],
+    		"fg": [212, 190, 152]  // Change this RGB value to your desired color
+		},
+    	{
+        	"class": "status_bar",
+        	"layer0.tint": "#32302F", // Set background color (white)
+        	"layer0.opacity": 1.0,
+    	},
 	]
 }

@@ -6,16 +6,16 @@
 [ignore]
 
 [[build commands]]
-build_working_dir:      /home/ramen/Code/drift
+build_working_dir:      /home/ramen/Code/Scuttle
 open_panel_on_build:    true
 
 [Debug Build And Run]
-# build_command:          go build .
+build_command:          cc build.c
+run_command:            ./a.out build-run
+key_binding:            F5
 # build_working_dir:      <build working dir for this command only>
 # timeout_in_seconds:     5             # if you don't want a timeout, don't specify it
-# run_command:            test.exe      # will be run if build succeeds
 # run_working_dir:        W:/focus      # working dir for the run command
-key_binding:            F5
 
 # [Run]
 # run_command:            test.exe

@@ -1,0 +1,5 @@
+{
+    "shell_cmd": "cc build.c && ./a.out build-run",
+	"file_regex": "^(...*?):([0-9]*):?([0-9]*)",
+	"working_dir": "/home/ramen/Code/Scuttle",
+}

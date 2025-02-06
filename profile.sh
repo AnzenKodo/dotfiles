@@ -122,7 +122,6 @@ oe() {
 complete -F _open_complete o
 complete -F _open_complete oe
 
-alias focus="o focus"
 alias micro="micro --config-dir $DOTFILES/micro"
 alias todo="micro $NOTES/Todo.md"
 alias feed="micro $NOTES/Feed.md"
@@ -206,7 +205,7 @@ project() {
     local proj_path=~/Code/Scuttle
     cd $proj_path
 
-    o subl
+    o focus
     o vscode
     o brave-browser --profile-directory="Profile 1"
 }
