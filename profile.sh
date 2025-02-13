@@ -208,6 +208,8 @@ project() {
     o focus
     o vscode
     o brave-browser --profile-directory="Profile 1"
+    o brave-browser --profile-directory="Default"
+    o obs
 }
 
 compress-mp4() {
