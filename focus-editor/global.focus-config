@@ -332,7 +332,7 @@ Shift-Tab                   focus_previous_ui_element
 theme: gruvbox-flat
 
 [fonts]
-font:       0xProto
+# font:       0xProto
 font_size:  18
 
 [colors]

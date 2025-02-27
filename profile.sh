@@ -53,9 +53,8 @@ export RUSTUP_HOME="$XDG_DATA_HOME"/rustup
 
 source /etc/bash_completion
 source ~/Applications/ghostty/zig-out/share/bash-completion/completions/ghostty.bash
-source <(trash completions bash)
+eval "$(gtrash completion bash)"
 eval "$(zoxide init bash)"
-
 eval "$(fzf --bash)"
 export FZF_DEFAULT_OPTS="
   --bind 'tab:down'
@@ -80,7 +79,6 @@ alias mkdir="mkdir -vp"
 alias mv="mv -vi"
 alias cp="cp -vi"
 alias dir="dir --color=always"
-alias rm="trash"
 alias ln="ln -v"
 alias cp="cp -r"
 # alias cd="z"
@@ -92,8 +90,11 @@ alias xclip="xclip -selection clipboard"
 alias zip="zip -r"
 alias tar="tar -v"
 alias wget="wget --hsts-file=\"$XDG_CACHE_HOME/wget-hsts\""
+alias rm="gtrash put"
+alias rmr="gtrash restore"
+alias rme="gtrash find --rm ."
 
-alias icat="timg -p s"
+alias icat="timg"
 alias refresh="source $DOTFILES/profile.sh"
 
 ask_and_run() {
@@ -207,9 +208,7 @@ project() {
 
     o focus
     o vscode
-    o brave-browser --profile-directory="Profile 1"
     o brave-browser --profile-directory="Default"
-    o obs
 }
 
 compress-mp4() {
