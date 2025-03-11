@@ -56,6 +56,7 @@ source ~/Applications/ghostty/zig-out/share/bash-completion/completions/ghostty.
 eval "$(gtrash completion bash)"
 eval "$(zoxide init bash)"
 eval "$(fzf --bash)"
+eval "$(pip completion --bash)"
 export FZF_DEFAULT_OPTS="
   --bind 'tab:down'
   --bind 'shift-tab:up'

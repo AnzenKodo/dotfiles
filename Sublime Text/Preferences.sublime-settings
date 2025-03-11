@@ -6,6 +6,6 @@
 		"Vintage",
 	],
 	"index_files": true,
-	"font_size": 15,
+	"font_size": 14,
 	"rulers": [80, 100, 120],
 }
