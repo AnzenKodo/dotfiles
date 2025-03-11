@@ -164,7 +164,7 @@ backup() {
     push "Backup from Desktop"
     cd -
 
-    rclone bisync $HOME/Online Personal: \
+    rclone sync $HOME/Online Personal: \
         --config="$HOME/Online/Dotfiles/rclone.conf" \
         --exclude buffers/** --exclude sqlite.db \
         --check-first --metadata --checksum --download-hash --verbose \
