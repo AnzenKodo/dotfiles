@@ -9,11 +9,10 @@ sudo rm /usr/lib/python3.11/EXTERNALLY-MANAGED
 
 sudo apt install git unzip xclip unar \
 thunar thunar-archive-plugin \ # File Manager
-feh \ # Image Viewer
+ristretto \ # Image Viewer
+qpdfview \ # Pdf Viewer
 timeshift \ # Backup
 rofi \ # Menu
-alacritty \ # Terminal
-scrot \ # Screenshot
 calc \ # Calculator
 keepassxc \ # Password
 xtodo \ # For typeing

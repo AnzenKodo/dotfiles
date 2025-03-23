@@ -1,0 +1,31 @@
+{
+	"name": "Gruvbox Flat",
+	"l10n": {},
+	"id": "theme-custom",
+	"type": "dark",
+	"colors": {
+		"background-normal": "#32302F",
+		"background-toolbar": "#32302F",
+		"background-toolbar-additional": "#292828",
+		"background-primary-dialog-button": "#D79921",
+		"background-accent-button": "#D79921",
+		"background-tab-underline": "#D79921",
+		"background-notification-badge": "#FB4934",
+		"background-contrast-popover": "#32302F",
+		"background-loader": "#32302F",
+
+		"text-normal": "#D4BE98",
+		"text-secondary": "#7C6F64",
+		"text-link": "#689D6A",
+		"text-link-hover": "#7DAEA3",
+		"text-link-active": "#83A598",
+		"text-link-visited": "#458588",
+		"text-inverse": "#32302F",
+		"text-contrast-background": "#D4BE98",
+
+		"icon-normal": "rgba(212, 190, 152, 0.8)",
+		"icon-normal-pressed": "rgba(212, 190, 152, 1)",
+		"icon-inverse": "#32302F",
+		"icon-notification-badge": "#FB4934"
+	}
+}
