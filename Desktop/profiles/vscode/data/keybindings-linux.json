@@ -1,0 +1,26 @@
+// Place your key bindings in this file to override the defaults
+[
+    {
+        "key": "ctrl+alt+down",
+        "command": "cursorMove",
+        "args": {
+          "to": "nextBlankLine",
+          "by": "wrappedLine"
+        },
+        "when": "editorTextFocus"
+      },
+      {
+        "key": "ctrl+alt+up",
+        "command": "cursorMove",
+        "args": {
+          "to": "prevBlankLine",
+          "by": "wrappedLine"
+        },
+        "when": "editorTextFocus"
+      },
+      {
+        "key": "F5",
+        "command": "workbench.action.tasks.runTask",
+        "args": "build"
+      }
+]

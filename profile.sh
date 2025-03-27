@@ -30,14 +30,14 @@ export HISTSIZE=
 export HISTTIMEFORMAT="[%F %T] "
 
 # export LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libgtk3-nocsd.so.0
-export GTK2_RC_FILES=$DOTFILES/gtk2rc
+export GTK2_RC_FILES=$DOTFILES/Desktop/gtk2rc
 export ICEAUTHORITY=$XDG_CACHE_HOME/ICEauthority
 # export XAUTHORITY=$XDG_RUNTIME_DIR/Xauthority
 export ERRFILE="$XDG_CACHE_HOME/X11/xsession-errors"
 export GNUPGHOME="$XDG_DATA_HOME"/gnupg
 export CALCHISTFILE="$XDG_CACHE_HOME"/calc_history
 export FCEUX_HOME="$XDG_CONFIG_HOME"/fceux
-export ASPELL_CONF="personal $DOTFILES/en.pws; repl $XDG_DATA_HOME/aspell.en.prepl"
+export ASPELL_CONF="personal $DOTFILES/Desktop/en.pws; repl $XDG_DATA_HOME/aspell.en.prepl"
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 export AW_SYNC_DIR="$HOME/Online/Dotfiles/ActivityWatch"
 export WINEPREFIX="$XDG_DATA_HOME"/wineprefixes/default
@@ -92,7 +92,7 @@ alias rm="gtrash put"
 alias rmr="gtrash restore"
 alias rme="gtrash find --rm ."
 
-alias refresh="source $DOTFILES/profile.sh"
+alias refresh="source ~/.bashrc"
 alias brave="brave-browser --disable-features=OutdatedBuildDetector"
 
 ask_and_run() {
@@ -121,7 +121,7 @@ oe() {
 complete -F _open_complete o
 complete -F _open_complete oe
 
-alias micro="micro --config-dir $DOTFILES/micro"
+alias micro="micro --config-dir $DOTFILES/Desktop/micro"
 alias todo="micro $NOTES/Todo.md"
 alias feed="micro $NOTES/Feed.md"
 alias xcolor="xcolor | xclip"
@@ -185,7 +185,7 @@ project() {
     cd $proj_path
 
     o focus
-    o vscode
+    o vscodium
     o brave-browser --disable-features=OutdatedBuildDetector
 }
 

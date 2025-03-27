@@ -1,0 +1,31 @@
+{
+    "workbench.colorTheme": "Default Dark+",
+    "security.workspace.trust.enabled": false,
+    "workbench.activityBar.location": "bottom",
+    "chat.commandCenter.enabled": false,
+    "window.commandCenter": false,
+    "editor.minimap.showSlider": "always",
+    "editor.minimap.renderCharacters": false,
+    "editor.minimap.enabled": false,
+    "editor.smoothScrolling": false,
+    "workbench.layoutControl.enabled": false,
+    "git.openRepositoryInParentFolders": "always",
+    "hexeditor.columnWidth": 18,
+    "hexeditor.showDecodedText": false,
+    "hexeditor.defaultEndianness": "little",
+    "hexeditor.inspectorType": "aside",
+    "security.workspace.trust.banner": "never",
+    "extensions.autoCheckUpdates": false,
+    "extensions.autoUpdate": false,
+    "workbench.trustedDomains.promptInTrustedWorkspace": true,
+    "workbench.editorAssociations": {
+        "{hexdiff}:/**/*.*": "hexEditor.hexedit",
+        "*.ppm": "default"
+    },
+    "update.mode": "manual",
+    "syncSettings.crons": {
+        "upload": "0 6 * * *"
+    },
+    "clangd.path": "/home/ramen/.config/VSCodium/User/globalStorage/llvm-vs-code-extensions.vscode-clangd/install/19.1.2/clangd_19.1.2/bin/clangd",
+    "explorer.confirmDelete": false,
+}

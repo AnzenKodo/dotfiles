@@ -1,0 +1,114 @@
+workbench.activity.pinnedViewlets2: '[{"id":"workbench.view.explorer","pinned":true,"visible":false,"order":0},{"id":"workbench.view.search","pinned":true,"visible":false,"order":1},{"id":"workbench.view.scm","pinned":true,"visible":false,"order":2},{"id":"workbench.view.remote","pinned":true,"visible":false,"order":4},{"id":"workbench.view.extensions","pinned":true,"visible":false,"order":4},{"id":"workbench.view.extension.test","pinned":true,"visible":false,"order":6},{"id":"workbench.view.extension.references-view","pinned":true,"visible":false,"order":7},{"id":"workbench.view.extension.hexExplorer","pinned":true,"visible":false,"order":8}]'
+workbench.activity.placeholderViewlets: "[{\"id\":\"workbench.view.explorer\",\
+  \"themeIcon\":{\"id\":\"explorer-view-icon\"},\"name\":\"Explorer\",\"isBuilt\
+  in\":true,\"views\":[{},{},{},{\"when\":\"timelineHasProvider\"},{\"when\":\"\
+  npm:showScriptExplorer\"},{\"when\":\"clangd.typeHierarchyVisible\"},{\"when\
+  \":\"clangd.memoryUsage.hasData\"},{\"when\":\"clangd.ast.hasData\"}]},{\"id\
+  \":\"workbench.view.search\",\"themeIcon\":{\"id\":\"search-view-icon\"},\"na\
+  me\":\"Search\",\"isBuiltin\":true,\"views\":[{}]},{\"id\":\"workbench.view.s\
+  cm\",\"themeIcon\":{\"id\":\"source-control-view-icon\"},\"name\":\"Source
+  Control\",\"isBuiltin\":true,\"views\":[{\"when\":\"scm.providerCount &&
+  scm.providerCount != '0'\"},{},{\"when\":\"scm.historyProviderCount &&
+  scm.historyProviderCount !=
+  '0'\"}]},{\"id\":\"workbench.view.remote\",\"themeIcon\":{\"id\":\"remote-exp\
+  lorer-view-icon\"},\"name\":\"Remote
+  Explorer\",\"isBuiltin\":true,\"views\":[]},{\"id\":\"workbench.view.extensio\
+  ns\",\"themeIcon\":{\"id\":\"extensions-view-icon\"},\"name\":\"Extensions\",\
+  \"isBuiltin\":true,\"views\":[{\"when\":\"defaultExtensionViews\"},{\"when\":\
+  \"searchExtensionUpdates ||
+  searchOutdatedExtensions\"},{\"when\":\"recommendedExtensions &&
+  workbenchState != 'empty'\"},{\"when\":\"defaultExtensionViews && hasGallery
+  && !hasInstalledExtensions\"},{\"when\":\"searchExtensionUpdates ||
+  searchRecentlyUpdatedExtensions\"},{\"when\":\"recommendedExtensions\"},{\"wh\
+  en\":\"defaultExtensionViews && hasGallery &&
+  !config.extensions.showRecommendationsOnlyOnDemand &&
+  !sortByUpdateDate\"},{\"when\":\"defaultExtensionViews &&
+  hasInstalledExtensions\"},{\"when\":\"defaultExtensionViews &&
+  hasInstalledExtensions\"},{\"when\":\"searchMarketplaceExtensions\"},{\"when\
+  \":\"installedExtensions ||
+  searchInstalledExtensions\"},{\"when\":\"searchEnabledExtensions\"},{\"when\":\
+  \"searchDisabledExtensions\"},{\"when\":\"searchBuiltInExtensions\"},{\"when\
+  \":\"searchWorkspaceUnsupportedExtensions\"},{\"when\":\"builtInExtensions\"}\
+  ,{\"when\":\"builtInExtensions\"},{\"when\":\"builtInExtensions\"},{\"when\":\
+  \"searchUnsupportedWorkspaceExtensions\"},{\"when\":\"searchUnsupportedWorksp\
+  aceExtensions\"},{\"when\":\"searchUnsupportedWorkspaceExtensions &&
+  virtualWorkspace\"},{\"when\":\"searchUnsupportedWorkspaceExtensions &&
+  virtualWorkspace\"},{\"when\":\"searchDeprecatedExtensions\"}]},{\"id\":\"wor\
+  kbench.view.extension.test\",\"themeIcon\":{\"id\":\"test-view-icon\"},\"name\
+  \":\"Testing\",\"isBuiltin\":true,\"views\":[{\"when\":\"testing.providerCount
+  >
+  0\"},{\"when\":\"testing.isTestCoverageOpen\"}]},{\"id\":\"workbench.view.ext\
+  ension.references-view\",\"themeIcon\":{\"id\":\"references\"},\"name\":\"Ref\
+  erences\",\"isBuiltin\":false,\"views\":[{\"when\":\"reference-list.isActive\
+  \"}]},{\"id\":\"workbench.view.extension.hexExplorer\",\"iconUrl\":{\"$mid\":\
+  1,\"path\":\"%%EXTENSION_DATA_PATH%%/ms-vscode.hexeditor-1.11.1-universal/pan\
+  el-icon.svg\",\"scheme\":\"file\"},\"name\":\"Hex
+  Editor\",\"isBuiltin\":false,\"views\":[{\"when\":\"hexEditor:showSidebarInsp\
+  ector\"}]}]"
+workbench.activityBar.location: bottom
+workbench.auxiliarybar.pinnedPanels: '[{"id":"workbench.panel.chat","pinned":false,"visible":false,"order":100},{"id":"workbench.view.debug","pinned":true,"visible":false,"order":3},{"id":"workbench.panel.chatEditing","pinned":false,"visible":false,"order":101}]'
+workbench.auxiliarybar.placeholderPanels: "[{\"id\":\"workbench.panel.chat\",\"\
+  themeIcon\":{\"id\":\"comment-discussion\"},\"name\":\"Chat\",\"isBuiltin\":t\
+  rue,\"views\":[{\"when\":\"chatExtensionInvalid ||
+  chatPanelParticipantRegistered || chatSetupInstalled ||
+  !chatSetupHidden\"}]},{\"id\":\"workbench.view.debug\",\"themeIcon\":{\"id\":\
+  \"run-view-icon\"},\"name\":\"Run and
+  Debug\",\"isBuiltin\":true,\"views\":[{\"when\":\"debugUx ==
+  'simple'\"},{\"when\":\"debugUx == 'default'\"},{\"when\":\"debugUx ==
+  'default'\"},{\"when\":\"debugUx ==
+  'default'\"},{\"when\":\"loadedScriptsSupported && debugUx ==
+  'default'\"},{\"when\":\"breakpointsExist || hasDebugged || debugUx ==
+  'default'\"},{\"when\":\"debugType == 'pwa-chrome' || debugType ==
+  'pwa-msedge'\"},{\"when\":\"jsDebugHasExcludedCallers && debugType ==
+  'node-terminal' || jsDebugHasExcludedCallers && debugType == 'pwa-chrome' ||
+  jsDebugHasExcludedCallers && debugType == 'pwa-extensionHost' ||
+  jsDebugHasExcludedCallers && debugType == 'pwa-msedge' ||
+  jsDebugHasExcludedCallers && debugType ==
+  'pwa-node'\"},{\"when\":\"jsDebugNetworkAvailable\"}]},{\"id\":\"workbench.pa\
+  nel.chatEditing\",\"themeIcon\":{\"id\":\"edit-session\"},\"name\":\"Copilot
+  Edits\",\"isBuiltin\":true,\"views\":[{\"when\":\"chatEditingParticipantRegis\
+  tered || chatSetupInstalled || !chatSetupHidden\"}]}]"
+workbench.auxiliaryBar.size: "400"
+workbench.editor.languageDetectionOpenedLanguages.global: '[["yaml",true],["json",true],["jsonc",true],["html",true],["cpp",true],["plaintext",true]]'
+workbench.explorer.views.state.hidden: '[{"id":"outline","isHidden":false},{"id":"timeline","isHidden":false},{"id":"workbench.explorer.openEditorsView","isHidden":true},{"id":"workbench.explorer.emptyView","isHidden":false},{"id":"workbench.explorer.fileView","isHidden":false},{"id":"npm","isHidden":true},{"id":"clangd.typeHierarchyView","isHidden":false},{"id":"clangd.memoryUsage","isHidden":false},{"id":"clangd.ast","isHidden":false}]'
+workbench.panel.alignment: center
+workbench.panel.chat.hidden: '[{"id":"workbench.panel.chat.view.copilot","isHidden":false}]'
+workbench.panel.chatEditing.hidden: '[{"id":"workbench.panel.chat.view.edits","isHidden":false}]'
+workbench.panel.lastNonMaximizedHeight: "300"
+workbench.panel.lastNonMaximizedWidth: "300"
+workbench.panel.markers.hidden: '[{"id":"workbench.panel.markers.view","isHidden":false}]'
+workbench.panel.output.hidden: '[{"id":"workbench.panel.output","isHidden":false}]'
+workbench.panel.pinnedPanels: '[{"id":"workbench.panel.markers","pinned":true,"visible":false,"order":0},{"id":"workbench.panel.output","pinned":true,"visible":false,"order":1},{"id":"workbench.panel.repl","pinned":true,"visible":false,"order":2},{"id":"terminal","pinned":true,"visible":false,"order":3},{"id":"workbench.panel.testResults","pinned":true,"visible":false,"order":3},{"id":"~remote.forwardedPortsContainer","pinned":true,"visible":false,"order":5},{"id":"workbench.view.extension.memory-view","pinned":true,"visible":false,"order":6},{"id":"refactorPreview","pinned":true,"visible":false}]'
+workbench.panel.placeholderPanels: "[{\"id\":\"workbench.panel.markers\",\"them\
+  eIcon\":{\"id\":\"markers-view-icon\"},\"name\":\"Problems\",\"isBuiltin\":tr\
+  ue,\"views\":[{}]},{\"id\":\"workbench.panel.output\",\"themeIcon\":{\"id\":\
+  \"output-view-icon\"},\"name\":\"Output\",\"isBuiltin\":true,\"views\":[{}]},{\
+  \"id\":\"workbench.panel.repl\",\"themeIcon\":{\"id\":\"debug-console-view-ic\
+  on\"},\"name\":\"Debug
+  Console\",\"isBuiltin\":true,\"views\":[{\"when\":\"debuggersAvailable\"}]},{\
+  \"id\":\"terminal\",\"themeIcon\":{\"id\":\"terminal-view-icon\"},\"name\":\"\
+  Terminal\",\"isBuiltin\":true,\"views\":[{}]},{\"id\":\"workbench.panel.testR\
+  esults\",\"themeIcon\":{\"id\":\"test-results-icon\"},\"name\":\"Test
+  Results\",\"isBuiltin\":true,\"views\":[{\"when\":\"testing.hasAnyResults\"}]\
+  },{\"id\":\"~remote.forwardedPortsContainer\",\"themeIcon\":{\"id\":\"ports-v\
+  iew-icon\"},\"name\":\"Ports\",\"isBuiltin\":true,\"views\":[{}]},{\"id\":\"w\
+  orkbench.view.extension.memory-view\",\"iconUrl\":{\"$mid\":1,\"fsPath\":\"%%\
+  EXTENSION_DATA_PATH%%/mcu-debug.memory-view-0.0.25-universal\",\"external\":\
+  \"file://%%EXTENSION_DATA_PATH%%/mcu-debug.memory-view-0.0.25-universal\",\"p\
+  ath\":\"%%EXTENSION_DATA_PATH%%/mcu-debug.memory-view-0.0.25-universal\",\"sc\
+  heme\":\"file\"},\"name\":\"MEMORY\",\"isBuiltin\":false,\"views\":[{\"when\":\
+  \"memory-view:showMemoryPanel && memory-view:memoryPanelLocation ==
+  'panel'\"}]},{\"id\":\"refactorPreview\",\"themeIcon\":{\"id\":\"refactor-pre\
+  view-view-icon\"},\"name\":\"Refactor
+  Preview\",\"isBuiltin\":true,\"views\":[{\"when\":\"refactorPreview.enabled\"\
+  }]}]"
+workbench.panel.repl.hidden: '[{"id":"workbench.panel.repl.view","isHidden":false}]'
+workbench.panel.size: "266"
+workbench.scm.views.state.hidden: '[{"id":"workbench.scm.repositories","isHidden":true},{"id":"workbench.scm","isHidden":false},{"id":"workbench.scm.history","isHidden":false}]'
+workbench.sideBar.size: "300"
+workbench.view.debug.state.hidden: '[{"id":"workbench.debug.welcome","isHidden":false},{"id":"workbench.debug.variablesView","isHidden":false},{"id":"workbench.debug.watchExpressionsView","isHidden":false},{"id":"workbench.debug.callStackView","isHidden":false},{"id":"workbench.debug.loadedScriptsView","isHidden":false},{"id":"workbench.debug.breakPointsView","isHidden":false},{"id":"jsBrowserBreakpoints","isHidden":false},{"id":"jsExcludedCallers","isHidden":false},{"id":"jsDebugNetworkTree","isHidden":false}]'
+workbench.view.extension.memory-view.state.hidden: '[{"id":"memory-view.memoryView","isHidden":false}]'
+workbench.view.extensions.state.hidden: '[{"id":"workbench.views.extensions.installed","isHidden":false},{"id":"workbench.views.extensions.searchOutdated","isHidden":false},{"id":"workbench.views.extensions.workspaceRecommendations","isHidden":false},{"id":"workbench.views.extensions.popular","isHidden":false},{"id":"workbench.views.extensions.searchRecentlyUpdated","isHidden":false},{"id":"workbench.views.extensions.otherRecommendations","isHidden":false},{"id":"extensions.recommendedList","isHidden":false},{"id":"workbench.views.extensions.enabled","isHidden":true},{"id":"workbench.views.extensions.disabled","isHidden":true},{"id":"workbench.views.extensions.marketplace","isHidden":false},{"id":"workbench.views.extensions.searchInstalled","isHidden":false},{"id":"workbench.views.extensions.searchEnabled","isHidden":false},{"id":"workbench.views.extensions.searchDisabled","isHidden":false},{"id":"workbench.views.extensions.searchBuiltin","isHidden":false},{"id":"workbench.views.extensions.searchWorkspaceUnsupported","isHidden":false},{"id":"workbench.views.extensions.builtinFeatureExtensions","isHidden":false},{"id":"workbench.views.extensions.builtinThemeExtensions","isHidden":false},{"id":"workbench.views.extensions.builtinProgrammingLanguageExtensions","isHidden":false},{"id":"workbench.views.extensions.untrustedUnsupportedExtensions","isHidden":false},{"id":"workbench.views.extensions.untrustedPartiallySupportedExtensions","isHidden":false},{"id":"workbench.views.extensions.virtualUnsupportedExtensions","isHidden":false},{"id":"workbench.views.extensions.virtualPartiallySupportedExtensions","isHidden":false},{"id":"workbench.views.extensions.deprecatedExtensions","isHidden":false}]'
+workbench.view.search.state.hidden: '[{"id":"workbench.view.search","isHidden":false}]'
+workbench.views.extensions.installed.size: "5"
+zokugun.cron-tasks: '{"version":"0.2.0"}'

@@ -1,0 +1,17 @@
+# theme = GruvboxDark
+# background = 32302F
+# foreground = BFB79A
+mouse-hide-while-typing = true
+window-padding-x = 3
+window-padding-y = 0
+window-vsync = false
+window-save-state = always
+gtk-wide-tabs = false
+auto-update = check
+auto-update-channel = tip
+window-theme = system
+gtk-titlebar = true
+confirm-close-surface = false
+
+keybind = ctrl+a=select_all
+keybind = ctrl+t=new_tab

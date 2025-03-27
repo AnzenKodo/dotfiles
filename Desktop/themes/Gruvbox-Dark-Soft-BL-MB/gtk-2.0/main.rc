@@ -132,7 +132,7 @@ style "default" {
 
   # For succinctness, all reasonable pixmap options remain here
 
-  # Draw frame around menu in a non-compositied environment
+  # Draw frame around menu in a non-composite environment
   # This needs to go before pixmap because we need to override some stuff
   engine "adwaita" {}
 
@@ -1167,7 +1167,7 @@ style "default" {
     # Scales #
     ##########
 
-    # Troughs, overrided later on. We set them here too because some widgets
+    # Troughs, overridden later on. We set them here too because some widgets
     # don't specify their orientation.
 
     image {
@@ -1696,7 +1696,7 @@ style "menu_item" {
   text[PRELIGHT] = @fg_color
 
   # Unfortunately we can't tell regular and menu checks/radios apart
-  # Without the heirarchy
+  # Without the hierarchy
   engine "pixmap" {
 
     #################

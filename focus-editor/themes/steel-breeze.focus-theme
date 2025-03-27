@@ -24,10 +24,10 @@ background3:                            000000aa # Dialog background
 background4:                            ffffff02 # Status bar
 selection_active:                       4000ff80 # Selection and file dialog current directory
 selection_inactive:                     3e02b580 # Background of selection on other side
-selection_highlight:                    ffffff20 # Background of other occurences of selection
+selection_highlight:                    ffffff20 # Background of other occurrences of selection
 paste_animation:                        4000ffc0 # Background colour during paste animation
-search_result_active:                   4000ff80 # Background of highlighted occurence
-search_result_inactive:                 ffffff30 # Background of unhighlighted occurences
+search_result_active:                   4000ff80 # Background of highlighted occurrence
+search_result_inactive:                 ffffff30 # Background of unhighlighted occurrences
 scrollbar:                              ffffff40 # Actual scrollbar
 scrollbar_background:                   ffffff20 # Scrollbar curb
 scrollbar_hover:                        ffffff30 # Whole scrollbar groove when hovered

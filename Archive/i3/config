@@ -76,7 +76,7 @@ bindsym $mod+space      exec menu
 
 bindsym $mod+q kill
 
-# Layout Modifieres
+# Layout Modifiers
 
 bindsym $mod+Left   focus left
 bindsym $mod+Down   focus down
