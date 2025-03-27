@@ -56,12 +56,10 @@ source ~/Applications/ghostty/zig-out/share/bash-completion/completions/ghostty.
 eval "$(gtrash completion bash)"
 eval "$(zoxide init bash)"
 eval "$(fzf --bash)"
-eval "$(pip completion --bash)"
 export FZF_DEFAULT_OPTS="
   --bind 'tab:down'
   --bind 'shift-tab:up'
 "
-
 
 _open_complete() {
     local cur="${COMP_WORDS[COMP_CWORD]}"
@@ -82,7 +80,6 @@ alias cp="cp -vi"
 alias dir="dir --color=always"
 alias ln="ln -v"
 alias cp="cp -r"
-# alias cd="z"
 alias cat="bat --style=plain --pager=none"
 alias grep="rg"
 alias diff="bat --style=plain -d"
@@ -95,8 +92,8 @@ alias rm="gtrash put"
 alias rmr="gtrash restore"
 alias rme="gtrash find --rm ."
 
-alias icat="timg"
 alias refresh="source $DOTFILES/profile.sh"
+alias brave="brave-browser --disable-features=OutdatedBuildDetector"
 
 ask_and_run() {
     read -p "Do you want to proceed? (y/n): " ans
@@ -183,33 +180,13 @@ build-notes() {
     cd -
 }
 
-i3-o() {
-    app_name=$1
-    workspace=$2
-    width=$3
-    height=$4
-    move=$5
-    alias i3-msg="i3-msg -q"
-
-    # Use i3-msg to move and resize the window
-
-    i3-msg "[class=\"$app_name\"] move container to workspace \"$workspace\""
-    if [ $height ]; then
-        i3-msg "[class=\"$app_name\"] resize set height $height px"
-    fi
-    if [ $width ]; then
-        i3-msg "[class=\"$app_name\"] resize set width $width px"
-    fi
-    i3-msg "[class=\"$app_name\"] move $move"
-}
-
 project() {
     local proj_path=~/Code/Scuttle
     cd $proj_path
 
     o focus
     o vscode
-    o brave-browser --profile-directory="Default"
+    o brave-browser --disable-features=OutdatedBuildDetector
 }
 
 compress-mp4() {
@@ -247,9 +224,3 @@ if [ -x /usr/lib/command-not-found -o -x /usr/share/command-not-found/command-no
 		fi
 	}
 fi
-
-export NVM_DIR="$HOME/.config/nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
-trap 'echo -ne "\033]0;$(history 1 | cut -d " " -f 6) ${PWD/#$HOME/\~}\007"' DEBUG

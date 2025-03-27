@@ -24,7 +24,7 @@
         <value type="int" value="1"/>
         <value type="int" value="14"/>
       </property>
-      <property name="background-style" type="uint" value="1"/>
+      <property name="background-style" type="uint" value="0"/>
       <property name="mode" type="uint" value="0"/>
       <property name="nrows" type="uint" value="1"/>
       <property name="length-adjust" type="bool" value="false"/>

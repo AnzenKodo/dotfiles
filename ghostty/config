@@ -1,6 +1,6 @@
-theme = GruvboxDark
-background = 32302F
-foreground = BFB79A
+# theme = GruvboxDark
+# background = 32302F
+# foreground = BFB79A
 mouse-hide-while-typing = true
 window-padding-x = 3
 window-padding-y = 0
