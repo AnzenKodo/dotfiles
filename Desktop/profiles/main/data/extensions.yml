@@ -1,0 +1,14 @@
+disabled: []
+enabled:
+  - id: KylinIdeTeam.cppdebug
+    uuid: 990e1ff7-cc55-4a01-ae62-39bb4ca3136e
+  - id: llvm-vs-code-extensions.vscode-clangd
+    uuid: 103154cb-b81d-4e1b-8281-c5f4fa563d37
+  - id: mcu-debug.debug-tracker-vscode
+    uuid: bd8507f9-4b21-4877-b045-1f20471fe96e
+  - id: mcu-debug.memory-view
+    uuid: f319e29a-19e8-43fb-8e3e-e264b6144083
+  - id: ms-vscode.hexeditor
+    uuid: cc7d2112-5178-4472-8e0e-25dced95e7f0
+  - id: zokugun.cron-tasks
+    uuid: b7bbbbd5-7a39-4312-87aa-ef6a41de67fb
