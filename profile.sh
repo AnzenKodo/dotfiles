@@ -29,7 +29,8 @@ export HISTFILESIZE=
 export HISTSIZE=
 export HISTTIMEFORMAT="[%F %T] "
 
-# export LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libgtk3-nocsd.so.0
+# export LD_PRELOAD="/usr/lib/x86_64-linux-gnu/libgtk3-nocsd.so.0"
+unset LD_PRELOAD
 export GTK2_RC_FILES=$DOTFILES/Desktop/gtk2rc
 export ICEAUTHORITY=$XDG_CACHE_HOME/ICEauthority
 # export XAUTHORITY=$XDG_RUNTIME_DIR/Xauthority

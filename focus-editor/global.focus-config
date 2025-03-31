@@ -329,6 +329,8 @@ Shift-Tab                   focus_previous_ui_element
 
 [[style]]
 
+theme: default
+
 [fonts]
 # font:       0xProto
 font_size:  18
