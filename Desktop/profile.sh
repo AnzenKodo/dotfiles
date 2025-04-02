@@ -152,6 +152,7 @@ push() {
     git push
 }
 
+alias rclone="rclone --config=$HOME/Online/Dotfiles/rclone.conf"
 backup() {
     opml_to_feed $HOME/Online/Dotfiles/podcast.opml $NOTES/Feed.md
     # files=($XDG_DOWNLOAD_DIR/tampermonkey-backup-chrome*.txt)
@@ -167,7 +168,6 @@ backup() {
     cd -
 
     rclone \
-        --config="$HOME/Online/Dotfiles/rclone.conf" \
         bisync $HOME/Online Personal: \
         --exclude buffers/** \
         --check-first --metadata --checksum --download-hash --verbose \
