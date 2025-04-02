@@ -7,10 +7,37 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "notification_panel": {
+    "dock": "left"
+  },
+  "assistant": {
+    "dock": "left",
+    "version": "2"
+  },
+  "terminal": {
+    "dock": "left"
+  },
+  "outline_panel": {
+    "dock": "right"
+  },
+  "git_panel": {
+    "dock": "right"
+  },
+  "project_panel": {
+    "dock": "right"
+  },
+  "edit_predictions": {
+    "mode": "subtle",
+    "copilot": {
+      "proxy": null,
+      "proxy_no_verify": null
+    },
+    "enabled_in_assistant": false
+  },
   "icon_theme": "Catppuccin Frappé",
   "theme": "One Dark",
   "collaboration_panel": {
-    "dock": "right"
+    "dock": "left"
   },
   "features": {
     "edit_prediction_provider": "zed"
@@ -27,7 +54,7 @@
   "wrap_guides": [ 80 ],
   "show_wrap_guides": true,
   "autosave": "on_focus_change",
-  "unnecessary_code_fade": 0.8,
+  "unnecessary_code_fade": 0.6,
   "indent_guides": {
     "show": "always"
   },
@@ -48,5 +75,16 @@
   },
   "editor_gutter": {
     "padding": 1
+  },
+  "buffer_font_features": {
+    "calt": false
+  },
+  "buffer_font_family": "0xProto",
+  "soft_wrap": "editor_width",
+  "gutter": {
+    "folds": true,
+    "code_actions": false,
+    "runnables": false,
+    "breakpoints": false
   }
 }

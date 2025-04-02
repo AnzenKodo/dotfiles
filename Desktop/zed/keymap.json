@@ -9,6 +9,9 @@
   {
     "context": "Workspace",
     "bindings": {
+      "ctrl-\\": "workspace::ActivateNextPane",
+      "ctrl-b": "workspace::ToggleRightDock",
+      "ctrl-shift-b": "workspace::ToggleLeftDock"
     }
   },
   {
@@ -17,14 +20,19 @@
       "ctrl-\\": "workspace::ActivateNextPane",
       "ctrl-down": "editor::MoveToEndOfParagraph",
       "ctrl-up": "editor::MoveToStartOfParagraph",
-      "ctrl-j": "editor::JoinLines"
+      "ctrl-j": "editor::JoinLines",
+      "alt-right": "editor::MoveToNextSubwordEnd",
+      "alt-left": "editor::MoveToPreviousSubwordStart",
+      "alt-backspace": "editor::DeleteToPreviousSubwordStart",
+      "alt-delete": "editor::DeleteToNextSubwordEnd",
+      "ctrl-shift-delete": "editor::DeleteToEndOfLine",
+      "ctrl-shift-backspace": "editor::DeleteToBeginningOfLine"
       // "j k": ["workspace::SendKeystrokes", "escape"]
     }
   },
   {
     "context": "Terminal",
     "bindings": {
-      "ctrl-\\": "workspace::ActivateNextPane"
     }
   }
 ]

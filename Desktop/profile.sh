@@ -13,7 +13,13 @@ export XDG_MUSIC_DIR="$HOME/Music"
 export XDG_PICTURES_DIR="$HOME/Pictures"
 export XDG_VIDEOS_DIR="$HOME/Videos"
 export USR_APPLICATIONS_DIR="$HOME/Applications"
-export TERM="alacritty"
+
+export TERM="ghostty"
+export EDITOR="zed"
+export BROWSER="brave-browser --disable-features=OutdatedBuildDetector"
+export FILE_MANAGER="thunar"
+export PASSWORD_MANAGER="keepassxc"
+export OFFICE="onlyoffice"
 
 export DOTFILES="$HOME/Dotfiles"
 export NOTES="$HOME/Online/Notes"
@@ -94,7 +100,6 @@ alias rmr="gtrash restore"
 alias rme="gtrash find --rm ."
 
 alias refresh="source ~/.bashrc"
-alias brave="brave-browser --disable-features=OutdatedBuildDetector"
 
 ask_and_run() {
     read -p "Do you want to proceed? (y/n): " ans
@@ -172,22 +177,17 @@ backup() {
     sudo timeshift --create --verbose
 }
 
-build-notes() {
-    cd $HOME/Code/AnzenKodo.github.io/src
-    ./run.sh
-    if [ "$@" = "open" ]; then
-        brave-browser ../site/index.html
-    fi
-    cd -
-}
-
 project() {
     local proj_path=~/Code/Scuttle
     cd $proj_path
 
-    o focus
+    o $EDITOR
     o vscodium
-    o brave-browser --disable-features=OutdatedBuildDetector
+    o $BROWSER
+}
+
+dotfile_link() {
+    ln -sf $DOTFILES/Desktop/$1 $XDG_CONFIG_HOME
 }
 
 compress-mp4() {
