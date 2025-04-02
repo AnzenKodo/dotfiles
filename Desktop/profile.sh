@@ -169,12 +169,18 @@ backup() {
 
     rclone bisync $HOME/Online Personal: \
         --config="$HOME/Online/Dotfiles/rclone.conf" \
-        --exclude buffers/** --exclude sqlite.db \
+        --exclude buffers/** --exclude sqlite.db --exclude aw-client \
         --check-first --metadata --checksum --download-hash --verbose \
         --resync --resync-mode newer --conflict-resolve newer --copy-links \
         --compare 'size,modtime,checksum'
 
     sudo timeshift --create --verbose
+}
+
+backup-force() {
+    rclone sync $HOME/Online Personal: \
+        --config="$HOME/Online/Dotfiles/rclone.conf" \
+        --exclude buffers/** --exclude sqlite.db
 }
 
 project() {
