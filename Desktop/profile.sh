@@ -176,11 +176,6 @@ backup() {
     sudo timeshift --create --verbose
 }
 
-backup-force() {
-    rclone sync $HOME/Online Personal: \
-        --config="$HOME/Online/Dotfiles/rclone.conf" \
-}
-
 project() {
     local proj_path=~/Code/Scuttle
     cd $proj_path
