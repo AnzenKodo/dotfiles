@@ -172,7 +172,7 @@ backup() {
         bisync $HOME/Online Personal: \
         --exclude buffers/** \
         --check-first --metadata --checksum --download-hash --verbose \
-        --compare 'size,modtime,checksum' \
+        --compare size,modtime,checksum \
         --conflict-resolve newer
         # --resync --resync-mode newer \
 
