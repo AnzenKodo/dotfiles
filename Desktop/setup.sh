@@ -3,7 +3,7 @@ mkdir ~/Online ~/Applications ~/Applications/bin ~/Code ~/Pictures/Screenshots
 
 sudo apt purge xf* node* firefox-esr gimp* libreoffice* refracta* \
 atril exfalso htop system-config-printer synaptic xscan mutt desktop-base \
-mousepad slim lynx
+mousepad slim lynx gnome-keyring
 
 sudo rm /usr/lib/python3.11/EXTERNALLY-MANAGED
 
@@ -21,6 +21,7 @@ gparted \ # Disk Manger
 pm-utils xfce4-power-manager \ # Power Management tools
 playerctl \ # Media Controller
 brightnessctl \ # Brightness Controller
+gvfs-backends \ # FTP support for thunar
 gnome-themes-extra-data python-is-python3 command-not-found xdg-desktop-portal-gtk
 
 sudo apt autopurge
