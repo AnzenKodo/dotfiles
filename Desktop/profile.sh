@@ -57,6 +57,7 @@ export PYTHONPYCACHEPREFIX=$XDG_CACHE_HOME/python
 export PYTHONUSERBASE=$XDG_DATA_HOME/python
 export CARGO_HOME="$XDG_DATA_HOME"/cargo
 export RUSTUP_HOME="$XDG_DATA_HOME"/rustup
+export WGETRC="$XDG_CONFIG_HOME/wgetrc"
 
 source /etc/bash_completion
 source ~/Applications/ghostty/zig-out/share/bash-completion/completions/ghostty.bash
@@ -79,7 +80,7 @@ alias btm="btm --color gruvbox"
 
 alias ..="cd .."
 alias ~="cd ~"
-alias ls="ls -a --color=always --group-directories-first"
+alias ls="ls -lha --color=always --group-directories-first"
 alias ln="ln -i"
 alias mkdir="mkdir -vp"
 alias mv="mv -vi"
@@ -181,8 +182,8 @@ project() {
     local proj_path=~/Code/Scuttle
     cd $proj_path
 
-    o $EDITOR
-    o vscodium
+    o $EDITOR .
+    o vscodium .
     o $BROWSER
 }
 

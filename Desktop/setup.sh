@@ -39,14 +39,13 @@ ln -sf $DOTFILES/Desktop/themes $XDG_DATA_HOME
 ln -sf $DOTFILES/Desktop/icons $XDG_DATA_HOME
 
 ln -srf $DOTFILES/Desktop/activitywatch $XDG_CONFIG_HOME
-ln -srf ~/Online/Dotfiles/activitywatch $XDG_DATA_HOME
 
-ln -sf $DOTFILES/Desktop/keepassxc $XDG_CONFIG_HOME
 ln -sf $DOTFILES/Desktop/xfce4 $XDG_CONFIG_HOME
 ln -sf $DOTFILES/Desktop/ghostty $XDG_CONFIG_HOME
 ln -sf $DOTFILES/Desktop/zed $XDG_CONFIG_HOME
 ln -sf $DOTFILES/Desktop/git $XDG_CONFIG_HOME
 ln -sf $DOTFILES/Desktop/rofi $XDG_CONFIG_HOME
+ln -sf ~/Online/Dotfiles/keepassxc $XDG_CONFIG_HOME
 
 # sudo rm /usr/local/bin
 # sudo ln -srf $USR_APPLICATIONS_DIR/bin /usr/local/bin
