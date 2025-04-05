@@ -172,7 +172,8 @@ backup() {
         bisync $HOME/Online Personal: \
         --exclude buffers/** \
         --check-first --metadata --checksum --download-hash --verbose \
-        --resync --resync-mode newer --conflict-resolve newer --copy-links \
+        --conflict-resolve newer --copy-links \
+        # --resync --resync-mode newer \
         --compare 'size,modtime,checksum'
 
     sudo timeshift --create --verbose
