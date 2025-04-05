@@ -173,7 +173,7 @@ backup() {
         --exclude buffers/** \
         --check-first --metadata --checksum --download-hash --verbose \
         --compare size,modtime,checksum \
-        --resync --resync-mode newer \
+        # --resync --resync-mode newer \
         --conflict-resolve newer
 
     sudo timeshift --create --verbose
