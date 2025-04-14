@@ -26,7 +26,8 @@
       "alt-backspace": "editor::DeleteToPreviousSubwordStart",
       "alt-delete": "editor::DeleteToNextSubwordEnd",
       "ctrl-shift-delete": "editor::DeleteToEndOfLine",
-      "ctrl-shift-backspace": "editor::DeleteToBeginningOfLine"
+      "ctrl-shift-backspace": "editor::DeleteToBeginningOfLine",
+      "alt-d": "editor::Hover"
       // "j k": ["workspace::SendKeystrokes", "escape"]
     }
   },

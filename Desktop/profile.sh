@@ -15,11 +15,11 @@ export XDG_VIDEOS_DIR="$HOME/Videos"
 export USR_APPLICATIONS_DIR="$HOME/Applications"
 
 export TERM="ghostty"
-export EDITOR="zed"
+export EDITOR="mousepad"
 export BROWSER="brave-browser --disable-features=OutdatedBuildDetector"
-export FILE_MANAGER="thunar"
-export PASSWORD_MANAGER="keepassxc"
+export FILES="thunar"
 export OFFICE="onlyoffice"
+export PASSWORD_MANAGER="keepassxc"
 
 export DOTFILES="$HOME/Dotfiles"
 export NOTES="$HOME/Online/Notes"
@@ -183,7 +183,7 @@ project() {
     local proj_path=~/Code/Scuttle
     cd $proj_path
 
-    o $EDITOR .
+    o zed .
     o vscodium .
     o $BROWSER
 }

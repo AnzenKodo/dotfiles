@@ -1,5 +1,7 @@
 disabled: []
 enabled:
+  - id: activitywatch.aw-watcher-vscode
+    uuid: 4f400159-99b2-491a-85e5-c885e46d057a
   - id: KylinIdeTeam.cppdebug
     uuid: 990e1ff7-cc55-4a01-ae62-39bb4ca3136e
   - id: llvm-vs-code-extensions.vscode-clangd

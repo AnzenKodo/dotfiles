@@ -3,12 +3,13 @@ mkdir ~/Online ~/Applications ~/Applications/bin ~/Code ~/Pictures/Screenshots
 
 sudo apt purge xf* node* firefox-esr gimp* libreoffice* refracta* \
 atril exfalso htop system-config-printer synaptic xscan mutt desktop-base \
-mousepad slim lynx gnome-keyring
+slim lynx gnome-keyring
 
 sudo rm /usr/lib/python3.11/EXTERNALLY-MANAGED
 
 sudo apt install git unzip xclip unar \
-thunar thunar-archive-plugin \ # File Manager
+thunar thunar-archive-plugin \ # Files
+mousepad \ # Editor
 ristretto \ # Image Viewer
 qpdfview \ # Pdf Viewer
 timeshift \ # Backup
