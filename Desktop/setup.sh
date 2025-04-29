@@ -27,6 +27,19 @@ gnome-themes-extra-data python-is-python3 command-not-found xdg-desktop-portal-g
 
 sudo apt autopurge
 
+sudo update-rc.d -f alsa-utils defaults
+sudo update-rc.d -f acpi-fakekey disable
+sudo update-rc.d -f bluetooth disable
+sudo update-rc.d -f exim4 disable
+sudo update-rc.d -f gdomap disable
+sudo update-rc.d -f live-config disable
+sudo update-rc.d -f live-tools disable
+sudo update-rc.d -f rsync disable
+sudo update-rc.d -f speech-dispatcher disable
+sudo update-rc.d -f ssh disable
+sudo update-rc.d -f tor disable
+sudo update-rc.d -f vsftpd disable
+
 ln -sf $DOTFILES/Desktop/profile.sh $HOME/.bashrc
 ln -sf $DOTFILES/Desktop/profile.sh $HOME/.profile
 

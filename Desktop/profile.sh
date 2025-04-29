@@ -129,7 +129,7 @@ complete -F _open_complete o
 complete -F _open_complete oe
 
 alias micro="micro --config-dir $DOTFILES/Desktop/micro"
-alias todo="micro $NOTES/Todo.md"
+alias todo="o $EDITOR $NOTES/Online/Todo.md"
 alias feed="micro $NOTES/Feed.md"
 alias xcolor="xcolor | xclip"
 alias yt="yt-dlp --ffmpeg-location $USR_APPLICATIONS_DIR/ffmpeg/ -S ext"
@@ -179,6 +179,10 @@ backup() {
     sudo timeshift --create --verbose
 }
 
+clean() {
+    sudo fstrim -a -v
+}
+
 project() {
     local proj_path=~/Code/Scuttle
     cd $proj_path
@@ -186,6 +190,7 @@ project() {
     o zed .
     o vscodium .
     o $BROWSER
+    o vlc ~/Music/Focus
 }
 
 dotfile_link() {
@@ -195,6 +200,10 @@ dotfile_link() {
 compress-mp4() {
     echo ffmpeg -i "$1" -vcodec h264 -acodec mp2 "$2"
     ffmpeg -i "$1" -vcodec h264 -acodec mp2 "$2"
+}
+
+download-music() {
+    yta $1 --embed-thumbnail --embed-metadata --parse-metadata "title:%(title)s" --parse-metadata "uploader:%(artist)s" --parse-metadata "playlist_title:%(album)s" --parse-metadata "playlist_index:%(track_number)s" --output "%(artist)s - %(title)s.%(ext)s" "$2"
 }
 
 bind '"\x08":backward-kill-word'
