@@ -1,5 +1,5 @@
 rm -rf ~/Public ~/Desktop ~/Templates
-mkdir ~/Online ~/Applications ~/Applications/bin ~/Code ~/Pictures/Screenshots
+mkdir ~/Drive ~/Applications ~/Applications/bin ~/Code ~/Pictures/Screenshots
 
 sudo apt purge xf* node* firefox-esr gimp* libreoffice* refracta* \
 atril exfalso htop system-config-printer synaptic xscan mutt desktop-base \
@@ -60,13 +60,12 @@ ln -sf $DOTFILES/Desktop/ghostty $XDG_CONFIG_HOME
 ln -sf $DOTFILES/Desktop/zed $XDG_CONFIG_HOME
 ln -sf $DOTFILES/Desktop/git $XDG_CONFIG_HOME
 ln -sf $DOTFILES/Desktop/rofi $XDG_CONFIG_HOME
-ln -sf ~/Online/Dotfiles/keepassxc $XDG_CONFIG_HOME
+ln -sf ~/Drive/Dotfiles/keepassxc $XDG_CONFIG_HOME
 
 # sudo rm /usr/local/bin
 # sudo ln -srf $USR_APPLICATIONS_DIR/bin /usr/local/bin
 
 # Archive ======================================================================
-
 
 # ln -sf $DOTFILES/Desktop/focus-editor $XDG_CONFIG_HOME
 

@@ -1,7 +1,60 @@
-PROMPT_COMMAND=''
-PS1='\n\[\e[38;2;251;73;52m\]\h\[\e[0m\]@\[\e[38;2;250;189;47m\]\u\[\e[0m\]:\[\e[38;2;125;174;163m\]\w\[\e[38;2;184;187;38m\]${PS1_CMD1}\n\[\e[0m\]\\$ '
+# ~/.bashrc: executed by bash(1) for non-login shells.
+# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
+# for examples
 
-PROMPT_COMMAND='PS1_CMD1=$(__git_ps1 " (%s)");history -a'
+# If not running interactively, don't do anything
+case $- in
+    *i*) ;;
+      *) return;;
+esac
+
+# set variable identifying the chroot you work in (used in the prompt below)
+if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
+    debian_chroot=$(cat /etc/debian_chroot)
+fi
+
+# set a fancy prompt (non-color, unless we know we "want" color)
+case "$TERM" in
+    xterm-color|*-256color) color_prompt=yes;;
+esac
+
+# uncomment for a colored prompt, if the terminal has the capability; turned
+# off by default to not distract the user: the focus in a terminal window
+# should be on the output of commands, not on the prompt
+#force_color_prompt=yes
+
+if [ -n "$force_color_prompt" ]; then
+    if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
+        # We have color support; assume it's compliant with Ecma-48
+        # (ISO/IEC-6429). (Lack of such support is extremely rare, and such
+        # a case would tend to support setf rather than setaf.)
+        color_prompt=yes
+    else
+        color_prompt=
+    fi
+fi
+
+if [ "$color_prompt" = yes ]; then
+    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+else
+    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+fi
+unset color_prompt force_color_prompt
+
+# If this is an xterm set the title to user@host:dir
+case "$TERM" in
+xterm*|rxvt*)
+    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
+    ;;
+*)
+    ;;
+esac
+
+if [ -f ~/.bash_aliases ]; then
+    . ~/.bash_aliases
+fi
+
+# ========================================================================
 
 HISTFILE=$XDG_STATE_HOME/bash/history
 HISTCONTROL=ignoreboth:erasedups:ignorespace
@@ -24,31 +77,12 @@ export DOTFILES="$HOME/Dotfiles"
 export DRIVE="$HOME/Drive"
 export NOTES="$DRIVE/Notes"
 
-export TERM="ghostty"
-export EDITOR="mousepad"
-export BROWSER="brave-browser --disable-features=OutdatedBuildDetector"
-export FILES="thunar"
-export OFFICE="onlyoffice"
-export PASSWORD_MANAGER="keepassxc"
+export EDITOR="micro"
 
 export PATH="$USR_APPLICATIONS_DIR/AppImages:$USR_APPLICATIONS_DIR/bin"\
 ":$USR_APPLICATIONS_DIR/ffmpeg:$USR_APPLICATIONS_DIR/jdk-23/bin"\
 ":~/Code/miniapps:~/Code/miniapps/bin"\
 ":$XDG_DATA_HOME/python/bin:$CARGO_HOME/bin:$PATH"
-
-# export LD_PRELOAD="/usr/lib/x86_64-linux-gnu/libgtk3-nocsd.so.0"
-unset LD_PRELOAD
-export GTK2_RC_FILES=$DOTFILES/Desktop/gtk2rc
-export ICEAUTHORITY=$XDG_CACHE_HOME/ICEauthority
-# export XAUTHORITY=$XDG_RUNTIME_DIR/Xauthority
-export ERRFILE="$XDG_CACHE_HOME/X11/xsession-errors"
-export GNUPGHOME="$XDG_DATA_HOME"/gnupg
-export CALCHISTFILE="$XDG_CACHE_HOME"/calc_history
-export FCEUX_HOME="$XDG_CONFIG_HOME"/fceux
-export ASPELL_CONF="personal $DOTFILES/Desktop/en.pws; repl $XDG_DATA_HOME/aspell.en.prepl"
-export MANPAGER="sh -c 'col -bx | bat -l man -p'"
-export AW_SYNC_DIR="$DRIVE/Dotfiles/ActivityWatch"
-export WINEPREFIX="$XDG_DATA_HOME"/wineprefixes/default
 
 export GOPATH="$XDG_DATA_HOME"/go
 export GOMODCACHE="$XDG_CACHE_HOME"/go/mod
@@ -60,7 +94,6 @@ export CARGO_HOME="$XDG_DATA_HOME"/cargo
 export RUSTUP_HOME="$XDG_DATA_HOME"/rustup
 export WGETRC="$XDG_CONFIG_HOME/wgetrc"
 
-source ~/Applications/ghostty/zig-out/share/bash-completion/completions/ghostty.bash
 eval "$(gtrash completion bash)"
 eval "$(zoxide init bash)"
 eval "$(fzf --bash)"
@@ -73,6 +106,7 @@ _open_complete() {
     local cur="${COMP_WORDS[COMP_CWORD]}"
     COMPREPLY=( $(compgen -c "$cur") )
 }
+
 
 alias bat="bat --theme=gruvbox-dark --style=numbers"
 alias btm="btm --color gruvbox"
@@ -100,37 +134,10 @@ alias rmr="gtrash restore"
 alias rme="gtrash find --rm ."
 
 alias refresh="source ~/.bashrc"
-alias dir_size="du -sh -- * | sort -hr"
-
-ask_and_run() {
-    read -p "Do you want to proceed? (y/n): " ans
-    case $ans in
-        [Yy]* )
-            eval "$@" ;;
-        * )
-            echo "Operation cancelled." ;;
-    esac
-}
-
-alias poweroff="ask_and_run sudo poweroff"
-alias reboot="ask_and_run sudo reboot"
-alias suspend="sudo pm-suspend"
-alias hibernate="sudo pm-hibernate"
-alias quit="ask_and_run i3-msg exit"
-alias lock="i3lock -n -f -c 32302F -i $DOTFILES/Images/'Lockscreen Wallpaper.png'"
-o() {
-    "$@" > /dev/null 2>&1 & disown
-}
-oe() {
-    "$@" > /dev/null 2>&1 & disown
-    exit
-}
-complete -F _open_complete o
-complete -F _open_complete oe
 
 alias micro="micro --config-dir $DOTFILES/Desktop/micro"
-alias todo="o $EDITOR $DRIVE/Notes/Online/Todo.md"
-alias feed="micro $NOTES/Feed.md"
+alias todo="o $EDITOR $DRIVE/Todo.md"
+alias feed="$EDITOR $NOTES/Feed.md"
 alias xcolor="xcolor | xclip"
 alias yt="yt-dlp --ffmpeg-location $USR_APPLICATIONS_DIR/ffmpeg/ -S ext"
 alias yta="yt-dlp --ffmpeg-location $USR_APPLICATIONS_DIR/ffmpeg/ --extract-audio --audio-format"
@@ -154,66 +161,6 @@ push() {
     git commit -m "$1"
     git pull
     git push
-}
-
-alias rclone="rclone --config=$DRIVE/Dotfiles/rclone.conf"
-backup() {
-    opml_to_feed $DRIVE/Dotfiles/podcast.opml $NOTES/Feed.md
-    # files=($XDG_DOWNLOAD_DIR/tampermonkey-backup-chrome*.txt)
-    # if [ -f $file ]; then
-    #     if [[ ${#files[@]} -gt 0 ]]; then
-    #         mv "${files[0]}" $DOTFILES/tampermonkey.json
-    #     fi
-    #     rm $XDG_DOWNLOAD_DIR/tampermonkey-backup-chrome*.txt
-    # fi
-
-    cd $DOTFILES
-    push "Backup from Desktop"
-    cd -
-
-    rclone \
-        bisync $DRIVE Personal: \
-        --exclude buffers/** \
-        --check-first --metadata --checksum --download-hash --verbose \
-        --compare size,modtime,checksum \
-        # --resync --resync-mode newer \
-        --conflict-resolve newer
-
-    sudo timeshift --create --verbose
-}
-
-server_backup() {
-    rsync_git ~/Code Gangnam@34.41.58.206:~/
-    rsync_git ~/Drive Gangnam@34.41.58.206:~/
-    rsync_git ~/Dotfiles Gangnam@34.41.58.206:~/
-    rsync --exclude="Archive" --exclude="Deb" --exclude="AppImages" --delete ~/Applications Gangnam@34.41.58.206:~/
-}
-
-clean() {
-    sudo fstrim -a -v
-}
-
-project() {
-    local proj_path=~/Code/Scuttle
-    cd $proj_path
-
-    o zed .
-    o vscodium .
-    o $BROWSER
-    o vlc ~/Music/Focus
-}
-
-dotfile_link() {
-    ln -sf $DOTFILES/Desktop/$1 $XDG_CONFIG_HOME
-}
-
-compress-mp4() {
-    echo ffmpeg -i "$1" -vcodec h264 -acodec mp2 "$2"
-    ffmpeg -i "$1" -vcodec h264 -acodec mp2 "$2"
-}
-
-download-music() {
-    yta $1 --embed-thumbnail --embed-metadata --parse-metadata "title:%(title)s" --parse-metadata "uploader:%(artist)s" --parse-metadata "playlist_title:%(album)s" --parse-metadata "playlist_index:%(track_number)s" --output "%(artist)s - %(title)s.%(ext)s" "$2"
 }
 
 bind '"\x08":backward-kill-word'
