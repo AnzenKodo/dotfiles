@@ -158,7 +158,7 @@ push() {
 
 alias rclone="rclone --config=$DRIVE/Dotfiles/rclone.conf"
 backup() {
-    opml_to_feed $DRIVE/Dotfiles/podcast.opml $NOTES/Feed.md
+    opml_to_feed ~/Drive/Dotfiles/podcast.opml $NOTES/Feed.md
     # files=($XDG_DOWNLOAD_DIR/tampermonkey-backup-chrome*.txt)
     # if [ -f $file ]; then
     #     if [[ ${#files[@]} -gt 0 ]]; then
@@ -167,12 +167,12 @@ backup() {
     #     rm $XDG_DOWNLOAD_DIR/tampermonkey-backup-chrome*.txt
     # fi
 
-    cd $DOTFILES
+    cd ~/Dotfiles
     push "Backup from Desktop"
     cd -
 
     rclone \
-        bisync $DRIVE Personal: \
+        bisync ~/Drive Personal: \
         --exclude buffers/** \
         --check-first --metadata --checksum --download-hash --verbose \
         --compare size,modtime,checksum \
