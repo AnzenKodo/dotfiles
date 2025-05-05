@@ -39,4 +39,7 @@
   <property name="chooser" type="empty">
     <property name="AlwaysDisplay" type="bool" value="false"/>
   </property>
+  <property name="security" type="empty">
+    <property name="EnableTcp" type="bool" value="false"/>
+  </property>
 </channel>

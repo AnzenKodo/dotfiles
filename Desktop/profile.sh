@@ -34,7 +34,7 @@ export PASSWORD_MANAGER="keepassxc"
 export PATH="$USR_APPLICATIONS_DIR/AppImages:$USR_APPLICATIONS_DIR/bin"\
 ":$USR_APPLICATIONS_DIR/ffmpeg:$USR_APPLICATIONS_DIR/jdk-23/bin"\
 ":~/Code/miniapps:~/Code/miniapps/bin"\
-":$XDG_DATA_HOME/python/bin:$CARGO_HOME/bin:$PATH"
+":$XDG_DATA_HOME/python/bin:$CARGO_HOME/bin:~/Applications/clang/bin:$PATH"
 
 # export LD_PRELOAD="/usr/lib/x86_64-linux-gnu/libgtk3-nocsd.so.0"
 unset LD_PRELOAD
@@ -186,7 +186,7 @@ server_backup() {
     rsync_git ~/Code Gangnam@34.41.58.206:~/
     rsync_git ~/Drive Gangnam@34.41.58.206:~/
     rsync_git ~/Dotfiles Gangnam@34.41.58.206:~/
-    rsync --exclude="Archive" --exclude="Deb" --exclude="AppImages" --delete ~/Applications Gangnam@34.41.58.206:~/
+    rsync --exclude="Archive" --exclude="Deb" --exclude="AppImages" --exclude="clang" --delete ~/Applications Gangnam@34.41.58.206:~/
 }
 
 clean() {

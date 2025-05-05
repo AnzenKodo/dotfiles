@@ -3,7 +3,7 @@
 <channel name="xsettings" version="1.0">
   <property name="Net" type="empty">
     <property name="ThemeName" type="string" value="Adwaita-dark"/>
-    <property name="IconThemeName" type="string" value="gnome"/>
+    <property name="IconThemeName" type="string" value="Adwaita"/>
     <property name="DoubleClickTime" type="int" value="619"/>
     <property name="DoubleClickDistance" type="int" value="20"/>
     <property name="DndDragThreshold" type="int" value="1"/>
@@ -32,7 +32,7 @@
     <property name="MenuImages" type="bool" value="true"/>
     <property name="ButtonImages" type="bool" value="true"/>
     <property name="MenuBarAccel" type="empty"/>
-    <property name="CursorThemeName" type="string" value="DMZ-Black"/>
+    <property name="CursorThemeName" type="string" value="Adwaita"/>
     <property name="CursorThemeSize" type="int" value="16"/>
     <property name="DecorationLayout" type="empty"/>
     <property name="DialogsUseHeader" type="bool" value="true"/>
