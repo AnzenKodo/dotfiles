@@ -69,6 +69,9 @@
       <property name="&lt;Super&gt;AudioRaiseVolume" type="string" value="brightnessctl s +5%"/>
       <property name="&lt;Super&gt;AudioLowerVolume" type="string" value="brightnessctl s 5%-"/>
       <property name="&lt;Primary&gt;&lt;Alt&gt;t" type="string" value="ghostty"/>
+      <property name="&lt;Primary&gt;&lt;Super&gt;AudioLowerVolume" type="string" value="playerctl play-pause"/>
+      <property name="&lt;Primary&gt;&lt;Super&gt;AudioRaiseVolume" type="string" value="playerctl next"/>
+      <property name="&lt;Primary&gt;&lt;Super&gt;AudioMute" type="string" value="playerctl previous"/>
     </property>
   </property>
   <property name="xfwm4" type="empty">

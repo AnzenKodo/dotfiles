@@ -10,7 +10,7 @@
   "notification_panel": {
     "dock": "left"
   },
-  "agent": {
+  "assistant": {
     "dock": "left",
     "version": "2"
   },
@@ -43,11 +43,14 @@
       "proxy": null,
       "proxy_no_verify": null
     },
-    "enabled_in_text_threads": true
+    "enabled_in_assistant": true
   },
   "show_edit_predictions": false,
   "collaboration_panel": {
     "dock": "left"
+  },
+  "features": {
+    "edit_prediction_provider": "zed"
   },
   "format_on_save": "off",
   "use_autoclose": false,
@@ -56,7 +59,14 @@
   "show_wrap_guides": true,
   "autosave": "off",
   "unnecessary_code_fade": 0.6,
-  "indent_guides.show": "always",
+  "indent_guides": {
+    "show": "always"
+  },
+  "telemetry": {
+    "diagnostics": false,
+    "metrics": false
+  },
+  "auto_update": false,
   "show_whitespaces": "selection",
   "remove_trailing_whitespace_on_save": true,
   "ensure_final_newline_on_save": true,
@@ -69,26 +79,11 @@
       "enabled": false
     }
   },
-  "languages": {
-    "C++": {
-      "enable_language_server": false
-    },
-    "C": {
-      "enable_language_server": false
-    }
+  "editor_gutter": {
+    "padding": 1
   },
-  "buffer_font_features.calt": false,
-  "soft_wrap": "editor_width",
-  "diagnostics": {
-    "include_warnings": false,
-    "inline": {
-      "enabled": false,
-    }
+  "buffer_font_features": {
+    "calt": false
   },
-  // Useless
-  "auto_update": false,
-  "telemetry": {
-    "diagnostics": false,
-    "metrics": false
-  },
+  "soft_wrap": "editor_width"
 }

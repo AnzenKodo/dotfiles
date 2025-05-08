@@ -9,7 +9,6 @@ sudo rm /usr/lib/python3.11/EXTERNALLY-MANAGED
 
 sudo apt install git unzip xclip unar \
 thunar thunar-archive-plugin \ # Files
-mousepad \ # Editor
 ristretto \ # Image Viewer
 qpdfview \ # Pdf Viewer
 timeshift \ # Backup
@@ -60,6 +59,7 @@ ln -sf $DOTFILES/Desktop/ghostty $XDG_CONFIG_HOME
 ln -sf $DOTFILES/Desktop/zed $XDG_CONFIG_HOME
 ln -sf $DOTFILES/Desktop/git $XDG_CONFIG_HOME
 ln -sf $DOTFILES/Desktop/rofi $XDG_CONFIG_HOME
+ln -sf $DOTFILES/Desktop/focus-editor $XDG_CONFIG_HOME
 ln -sf ~/Drive/Dotfiles/keepassxc $XDG_CONFIG_HOME
 
 # sudo rm /usr/local/bin
@@ -67,7 +67,6 @@ ln -sf ~/Drive/Dotfiles/keepassxc $XDG_CONFIG_HOME
 
 # Archive ======================================================================
 
-# ln -sf $DOTFILES/Desktop/focus-editor $XDG_CONFIG_HOME
 
 # mkdir $XDG_CONFIG_HOME/alacritty
 # ln -sf $DOTFILES/alacritty.toml $XDG_CONFIG_HOME/alacritty/alacritty.toml

@@ -22,10 +22,9 @@ export USR_APPLICATIONS_DIR="$HOME/Applications"
 
 export DOTFILES="$HOME/Dotfiles"
 export DRIVE="$HOME/Drive"
-export NOTES="$DRIVE/Notes"
 
 export TERM="ghostty"
-export EDITOR="mousepad"
+export EDITOR="focus"
 export BROWSER="brave-browser --disable-features=OutdatedBuildDetector"
 export FILES="thunar"
 export OFFICE="onlyoffice"
@@ -60,7 +59,6 @@ export CARGO_HOME="$XDG_DATA_HOME"/cargo
 export RUSTUP_HOME="$XDG_DATA_HOME"/rustup
 export WGETRC="$XDG_CONFIG_HOME/wgetrc"
 
-source ~/Applications/ghostty/zig-out/share/bash-completion/completions/ghostty.bash
 eval "$(gtrash completion bash)"
 eval "$(zoxide init bash)"
 eval "$(fzf --bash)"
@@ -129,8 +127,8 @@ complete -F _open_complete o
 complete -F _open_complete oe
 
 alias micro="micro --config-dir $DOTFILES/Desktop/micro"
-alias todo="o $EDITOR $DRIVE/Notes/Online/Todo.md"
-alias feed="micro $NOTES/Feed.md"
+alias todo="o $EDITOR ~/Drive/Notes/Online/Todo.md"
+alias feed="micro ~/Drive/Notes/Feed.md"
 alias xcolor="xcolor | xclip"
 alias yt="yt-dlp --ffmpeg-location $USR_APPLICATIONS_DIR/ffmpeg/ -S ext"
 alias yta="yt-dlp --ffmpeg-location $USR_APPLICATIONS_DIR/ffmpeg/ --extract-audio --audio-format"
@@ -158,7 +156,7 @@ push() {
 
 alias rclone="rclone --config=$DRIVE/Dotfiles/rclone.conf"
 backup() {
-    opml_to_feed ~/Drive/Dotfiles/podcast.opml $NOTES/Feed.md
+    opml_to_feed ~/Drive/Dotfiles/podcast.opml ~/Drive/Notes/Feed.md
     # files=($XDG_DOWNLOAD_DIR/tampermonkey-backup-chrome*.txt)
     # if [ -f $file ]; then
     #     if [[ ${#files[@]} -gt 0 ]]; then
@@ -197,10 +195,9 @@ project() {
     local proj_path=~/Code/Scuttle
     cd $proj_path
 
-    o zed .
+    o focus .
     o vscodium .
     o $BROWSER
-    o vlc ~/Music/Focus
 }
 
 dotfile_link() {
