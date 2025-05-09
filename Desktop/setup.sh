@@ -42,9 +42,6 @@ sudo update-rc.d -f vsftpd disable
 ln -sf $DOTFILES/Desktop/profile.sh $HOME/.bashrc
 ln -sf $DOTFILES/Desktop/profile.sh $HOME/.profile
 
-mkdir $XDG_CONFIG_HOME/fontconfig
-ln -sf $DOTFILES/fonts.conf $XDG_CONFIG_HOME/fontconfig/
-
 mkdir $XDG_STATE_HOME/bash
 mkdir $XDG_CACHE_HOME/X11
 
