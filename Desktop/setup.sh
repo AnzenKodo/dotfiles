@@ -39,18 +39,21 @@ sudo update-rc.d -f ssh disable
 sudo update-rc.d -f tor disable
 sudo update-rc.d -f vsftpd disable
 
-ln -sf $DOTFILES/Desktop/profile.sh $HOME/.bashrc
-ln -sf $DOTFILES/Desktop/profile.sh $HOME/.profile
-
 mkdir $XDG_STATE_HOME/bash
 mkdir $XDG_CACHE_HOME/X11
 
+ln -sf $DOTFILES/Desktop/profile.sh $HOME/.bashrc
+ln -sf $DOTFILES/Desktop/profile.sh $HOME/.profile
+
+rm $XDG_DATA_HOME/applications
+ln -sf ~/Applications/Mime $XDG_DATA_HOME/applications
+ln -sf ~/Applications/Mime/icons $XDG_DATA_HOME/icons
 ln -sf $DOTFILES/fonts $XDG_DATA_HOME
 ln -sf $DOTFILES/Desktop/themes $XDG_DATA_HOME
 ln -sf $DOTFILES/Desktop/icons $XDG_DATA_HOME
 
+ln -sf ~/Applications/Mime/mimeapps.list $XDG_CONFIG_HOME/mimeapps.list
 ln -srf $DOTFILES/Desktop/activitywatch $XDG_CONFIG_HOME
-
 ln -sf $DOTFILES/Desktop/xfce4 $XDG_CONFIG_HOME
 ln -sf $DOTFILES/Desktop/ghostty $XDG_CONFIG_HOME
 ln -sf $DOTFILES/Desktop/zed $XDG_CONFIG_HOME
@@ -62,8 +65,8 @@ ln -sf ~/Drive/Dotfiles/keepassxc $XDG_CONFIG_HOME
 # sudo rm /usr/local/bin
 # sudo ln -srf $USR_APPLICATIONS_DIR/bin /usr/local/bin
 
-# Archive ======================================================================
-
+# Archive
+#===============================================================================
 
 # mkdir $XDG_CONFIG_HOME/alacritty
 # ln -sf $DOTFILES/alacritty.toml $XDG_CONFIG_HOME/alacritty/alacritty.toml
