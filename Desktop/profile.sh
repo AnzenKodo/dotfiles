@@ -3,12 +3,6 @@ PS1='\n\[\e[38;2;251;73;52m\]\h\[\e[0m\]@\[\e[38;2;250;189;47m\]\u\[\e[0m\]:\[\e
 
 PROMPT_COMMAND='PS1_CMD1=$(__git_ps1 " (%s)");history -a'
 
-HISTFILE=$XDG_STATE_HOME/bash/history
-HISTCONTROL=ignoreboth:erasedups:ignorespace
-HISTFILESIZE=
-HISTSIZE=
-HISTTIMEFORMAT="[%F %T] "
-
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_DATA_HOME="$HOME/.local/share"
@@ -23,7 +17,8 @@ export USR_APPLICATIONS_DIR="$HOME/Applications"
 export DOTFILES="$HOME/Dotfiles"
 export DRIVE="$HOME/Drive"
 
-export TERM="ghostty"
+# export TERM="ghostty"
+export TERMINAL="ghostty"
 export EDITOR="focus"
 export BROWSER="brave-browser --disable-features=OutdatedBuildDetector"
 export FILES="thunar"
@@ -58,6 +53,12 @@ export PYTHONUSERBASE=$XDG_DATA_HOME/python
 export CARGO_HOME="$XDG_DATA_HOME"/cargo
 export RUSTUP_HOME="$XDG_DATA_HOME"/rustup
 export WGETRC="$XDG_CONFIG_HOME/wgetrc"
+
+HISTFILE=$XDG_STATE_HOME/bash/history
+HISTCONTROL=ignoreboth:erasedups:ignorespace
+HISTFILESIZE=
+HISTSIZE=
+HISTTIMEFORMAT="[%F %T] "
 
 eval "$(gtrash completion bash)"
 eval "$(zoxide init bash)"
@@ -211,6 +212,22 @@ compress-mp4() {
 
 download-music() {
     yta $1 --embed-thumbnail --embed-metadata --parse-metadata "title:%(title)s" --parse-metadata "uploader:%(artist)s" --parse-metadata "playlist_title:%(album)s" --parse-metadata "playlist_index:%(track_number)s" --output "%(artist)s - %(title)s.%(ext)s" "$2"
+}
+
+pastebin()
+{
+    local url='https://paste.c-net.org/'
+    if (( $# )); then
+        local file
+        for file; do
+            curl -s \
+                --data-binary @"$file" \
+                --header "X-FileName: ${file##*/}" \
+                "$url"
+        done
+    else
+        curl -s --data-binary @- "$url"
+    fi
 }
 
 bind '"\x08":backward-kill-word'
