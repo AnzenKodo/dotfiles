@@ -1,0 +1,159 @@
+{
+    "createdBy": "Redirector v3.5.3",
+    "createdAt": "2025-05-11T23:51:34.250Z",
+    "redirects": [
+        {
+            "description": "X",
+            "exampleUrl": "https://x.com/elonmusk",
+            "exampleResult": "https://xcancel.com/elonmusk",
+            "error": null,
+            "includePattern": "https://x.com/*",
+            "excludePattern": "",
+            "patternDesc": "",
+            "redirectUrl": "https://xcancel.com/$1",
+            "patternType": "W",
+            "processMatches": "noProcessing",
+            "disabled": false,
+            "grouped": false,
+            "appliesTo": [
+                "main_frame"
+            ]
+        },
+        {
+            "description": "Reddit",
+            "exampleUrl": "https://reddit.com/r/Asmongold",
+            "exampleResult": "https://old.reddit.com/r/Asmongold",
+            "error": null,
+            "includePattern": "https://reddit.com/*",
+            "excludePattern": "",
+            "patternDesc": "",
+            "redirectUrl": "https://old.reddit.com/$1",
+            "patternType": "W",
+            "processMatches": "noProcessing",
+            "disabled": false,
+            "grouped": false,
+            "appliesTo": [
+                "main_frame"
+            ]
+        },
+        {
+            "description": "Instagram",
+            "exampleUrl": "https://instagram.com/skotox",
+            "exampleResult": "https://imginn.com/skotox",
+            "error": null,
+            "includePattern": "https://instagram.com/*",
+            "excludePattern": "",
+            "patternDesc": "",
+            "redirectUrl": "https://imginn.com/$1",
+            "patternType": "W",
+            "processMatches": "noProcessing",
+            "disabled": false,
+            "grouped": false,
+            "appliesTo": [
+                "main_frame"
+            ]
+        },
+        {
+            "description": "YouTube",
+            "exampleUrl": "https://youtube.com/@PewDiePie",
+            "exampleResult": "https://yewtu.be/@PewDiePie",
+            "error": null,
+            "includePattern": "https://youtube.com/*",
+            "excludePattern": "",
+            "patternDesc": "",
+            "redirectUrl": "https://yewtu.be/$1",
+            "patternType": "W",
+            "processMatches": "noProcessing",
+            "disabled": false,
+            "grouped": false,
+            "appliesTo": [
+                "main_frame"
+            ]
+        },
+        {
+            "description": "YouTube Music",
+            "exampleUrl": "https://music.youtube.com/@Music",
+            "exampleResult": "https://beatbump.io/@Music",
+            "error": null,
+            "includePattern": "https://music.youtube.com/*",
+            "excludePattern": "",
+            "patternDesc": "",
+            "redirectUrl": "https://beatbump.io/$1",
+            "patternType": "W",
+            "processMatches": "noProcessing",
+            "disabled": true,
+            "grouped": false,
+            "appliesTo": [
+                "main_frame"
+            ]
+        },
+        {
+            "description": "Medium",
+            "exampleUrl": "https://medium.com/@elon",
+            "exampleResult": "https://scribe.rip/@elon",
+            "error": null,
+            "includePattern": "https://medium.com/*",
+            "excludePattern": "",
+            "patternDesc": "",
+            "redirectUrl": "https://scribe.rip/$1",
+            "patternType": "W",
+            "processMatches": "noProcessing",
+            "disabled": false,
+            "grouped": false,
+            "appliesTo": [
+                "main_frame"
+            ]
+        },
+        {
+            "description": "TikTok",
+            "exampleUrl": "https://www.tiktok.com/foryou",
+            "exampleResult": "https://proxitok.pabloferreiro.es/foryou",
+            "error": null,
+            "includePattern": "https://www.tiktok.com/*",
+            "excludePattern": "",
+            "patternDesc": "",
+            "redirectUrl": "https://proxitok.pabloferreiro.es/$1",
+            "patternType": "W",
+            "processMatches": "noProcessing",
+            "disabled": true,
+            "grouped": false,
+            "appliesTo": [
+                "main_frame"
+            ]
+        },
+        {
+            "description": "Quora",
+            "exampleUrl": "https://www.quora.com/How-to-do?",
+            "exampleResult": "https://quetre.pussthecat.org/How-to-do?",
+            "error": null,
+            "includePattern": "https://www.quora.com/*",
+            "excludePattern": "",
+            "patternDesc": "",
+            "redirectUrl": "https://quetre.pussthecat.org/$1",
+            "patternType": "W",
+            "processMatches": "noProcessing",
+            "disabled": false,
+            "grouped": false,
+            "appliesTo": [
+                "main_frame"
+            ]
+        },
+        {
+            "description": "IMDb",
+            "exampleUrl": "https://www.imdb.com/title/tt0168366",
+            "exampleResult": "https://libremdb.iket.me/title/tt0168366",
+            "error": null,
+            "includePattern": "https://www.imdb.com/*",
+            "excludePattern": "",
+            "patternDesc": "",
+            "redirectUrl": "https://libremdb.iket.me/$1",
+            "patternType": "W",
+            "processMatches": "noProcessing",
+            "disabled": false,
+            "grouped": false,
+            "appliesTo": [
+                "main_frame"
+            ]
+        }
+    ]
+}

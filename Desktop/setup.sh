@@ -3,11 +3,11 @@ mkdir ~/Drive ~/Applications ~/Applications/bin ~/Code ~/Pictures/Screenshots
 
 sudo apt purge xf* node* firefox-esr gimp* libreoffice* refracta* \
 atril exfalso htop system-config-printer synaptic xscan mutt desktop-base \
-slim lynx gnome-keyring
+slim lynx gnome-keyring p7zip-full
 
 sudo rm /usr/lib/python3.11/EXTERNALLY-MANAGED
 
-sudo apt install git unzip xclip unar \
+sudo apt install git xclip \
 thunar thunar-archive-plugin \ # Files
 ristretto \ # Image Viewer
 qpdfview \ # Pdf Viewer
