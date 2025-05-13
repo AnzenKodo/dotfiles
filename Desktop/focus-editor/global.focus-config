@@ -168,10 +168,10 @@ Ctrl-L                      select_line
 Ctrl-Alt-Shift-ArrowUp      scroll_viewport_up_fast
 Ctrl-Alt-Shift-ArrowDown    scroll_viewport_down_fast
 
-Alt-Shift-ArrowUp           scroll_viewport_up
-Alt-Shift-ArrowDown         scroll_viewport_down
-Alt-Shift-ArrowLeft         scroll_viewport_left
-Alt-Shift-ArrowRight        scroll_viewport_right
+Ctrl-Alt-ArrowUp           scroll_viewport_up
+Ctrl-Alt-ArrowDown         scroll_viewport_down
+Ctrl-Alt-ArrowLeft         scroll_viewport_left
+Ctrl-Alt-ArrowRight        scroll_viewport_right
 
 Alt-V                       move_cursor_to_viewport_center
 
@@ -196,8 +196,8 @@ Ctrl-Shift-|                duplicate_editor
 Ctrl-N                      create_new_file
 Ctrl-Shift-N                create_new_file_in_side_pane
 
-Ctrl-Alt-ArrowUp            create_cursor_above
-Ctrl-Alt-ArrowDown          create_cursor_below
+Alt-Shift-ArrowUp            create_cursor_above
+Alt-Shift-ArrowDown          create_cursor_below
 Alt-A                       align_cursors
 
 Alt-W                       toggle_line_wrap

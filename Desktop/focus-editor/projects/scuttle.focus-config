@@ -6,7 +6,7 @@
 [ignore]
 
 [[build commands]]
-build_working_dir:      /home/ramen/Code/Scuttle
+build_working_dir:      /home/ramen/Code/scuttle
 open_panel_on_build:    true
 
 [Debug Build And Run]
