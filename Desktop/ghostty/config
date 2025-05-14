@@ -9,8 +9,7 @@ window-save-state = always
 gtk-wide-tabs = false
 auto-update = check
 auto-update-channel = tip
-window-theme = system
-gtk-titlebar = true
+# window-theme = system
 confirm-close-surface = false
 
 keybind = ctrl+a=select_all

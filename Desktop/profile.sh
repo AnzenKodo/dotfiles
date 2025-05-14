@@ -79,13 +79,11 @@ alias btm="btm --color gruvbox"
 alias ..="cd .."
 alias ~="cd ~"
 alias ls="ls -lha --color=always --group-directories-first"
-alias ln="ln -i"
 alias mkdir="mkdir -vp"
 alias mv="mv -vi"
-alias cp="cp -vi"
+alias cp="cp -vir"
 alias dir="dir --color=always"
-alias ln="ln -v"
-alias cp="cp -r"
+alias ln="ln -vi"
 alias cat="bat --style=plain --pager=none"
 alias grep="rg"
 alias diff="bat --style=plain -d"
@@ -95,11 +93,12 @@ alias zip="zip -r"
 alias tar="tar -v"
 alias wget="wget --hsts-file=\"$XDG_CACHE_HOME/wget-hsts\""
 alias rm="gtrash put"
+
 alias rmr="gtrash restore"
 alias rme="gtrash find --rm ."
-
 alias refresh="source ~/.bashrc"
 alias dir_size="du -sh -- * | sort -hr"
+alias download="axel --verbose -n"
 
 ask_and_run() {
     read -p "Do you want to proceed? (y/n): " ans
@@ -197,8 +196,7 @@ project() {
     cd $proj_path
 
     o focus .
-    o vscodium .
-    o $BROWSER
+    o vlc --one-instance ~/Music/Focus
 }
 
 dotfile_link() {
@@ -228,6 +226,15 @@ pastebin()
     else
         curl -s --data-binary @- "$url"
     fi
+}
+
+net_temp_on()
+{
+    nmcli networking on
+    # Wait for 5 minutes (300 seconds)
+    sleep 300
+    # Disable internet
+    nmcli networking off
 }
 
 bind '"\x08":backward-kill-word'
