@@ -196,7 +196,7 @@ project() {
     cd $proj_path
 
     o focus .
-    o vlc --one-instance ~/Music/Focus
+    o vlc --one-instance --qt-start-minimized ~/Music/Focus
 }
 
 dotfile_link() {
