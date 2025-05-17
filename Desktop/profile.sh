@@ -177,6 +177,11 @@ backup() {
         # --resync --resync-mode newer \
         --conflict-resolve newer
 
+    cd ~/Code/anzenkodo.github.io
+    echo $RANDOM > site_checksum.txt
+    push "Updated Notes"
+    cd -
+
     sudo timeshift --create --verbose
 }
 
