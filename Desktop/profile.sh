@@ -193,7 +193,7 @@ pastebin()
     fi
 }
 
-alias rclone="rclone --config=~/Drive/Dotfiles/rclone.conf"
+alias rclone="rclone --config=$HOME/Drive/Dotfiles/rclone.conf"
 backup() {
     opml_to_feed ~/Drive/Dotfiles/podcast.opml ~/Drive/Notes/Feed.md
     # files=($XDG_DOWNLOAD_DIR/tampermonkey-backup-chrome*.txt)
