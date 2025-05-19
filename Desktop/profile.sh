@@ -1,7 +1,7 @@
-PROMPT_COMMAND=''
-PS1='\n\[\e[38;2;251;73;52m\]\h\[\e[0m\]@\[\e[38;2;250;189;47m\]\u\[\e[0m\]:\[\e[38;2;125;174;163m\]\w\[\e[38;2;184;187;38m\]${PS1_CMD1}\n\[\e[0m\]\\$ '
+# Set Varibales
+#===============================================================================
 
-PROMPT_COMMAND='PS1_CMD1=$(__git_ps1 " (%s)");history -a'
+# Support XDG Base Directory ===================================================
 
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_CACHE_HOME="$HOME/.cache"
@@ -12,12 +12,16 @@ export XDG_DOCUMENTS_DIR="$HOME/Documents"
 export XDG_MUSIC_DIR="$HOME/Music"
 export XDG_PICTURES_DIR="$HOME/Pictures"
 export XDG_VIDEOS_DIR="$HOME/Videos"
-export USR_APPLICATIONS_DIR="$HOME/Applications"
 
-export DOTFILES="$HOME/Dotfiles"
-export DRIVE="$HOME/Drive"
+# Path =========================================================================
 
-# export TERM="ghostty"
+export PATH="~/Applications/AppImages:~/Applications/bin"\
+":~/Code/miniapps/bin"\
+":~/Applications/ffmpeg:~/Applications/jdk-23/bin"\
+":$XDG_DATA_HOME/python/bin:$CARGO_HOME/bin:~/Applications/clang/bin:$PATH"
+
+# Custom Application Varibales =================================================
+
 export TERMINAL="ghostty"
 export EDITOR="focus"
 export BROWSER="brave --disable-features=OutdatedBuildDetector"
@@ -25,23 +29,18 @@ export FILES="thunar"
 export OFFICE="onlyoffice"
 export PASSWORD_MANAGER="keepassxc"
 
-export PATH="$USR_APPLICATIONS_DIR/AppImages:$USR_APPLICATIONS_DIR/bin"\
-":$USR_APPLICATIONS_DIR/ffmpeg:$USR_APPLICATIONS_DIR/jdk-23/bin"\
-":~/Code/miniapps:~/Code/miniapps/bin"\
-":$XDG_DATA_HOME/python/bin:$CARGO_HOME/bin:~/Applications/clang/bin:$PATH"
+# Application Variables ========================================================
 
-# export LD_PRELOAD="/usr/lib/x86_64-linux-gnu/libgtk3-nocsd.so.0"
-unset LD_PRELOAD
-export GTK2_RC_FILES=$DOTFILES/Desktop/gtk2rc
+export GTK2_RC_FILES=~/Dotfiles/Desktop/gtk2rc
 export ICEAUTHORITY=$XDG_CACHE_HOME/ICEauthority
 # export XAUTHORITY=$XDG_RUNTIME_DIR/Xauthority
 export ERRFILE="$XDG_CACHE_HOME/X11/xsession-errors"
 export GNUPGHOME="$XDG_DATA_HOME"/gnupg
 export CALCHISTFILE="$XDG_CACHE_HOME"/calc_history
 export FCEUX_HOME="$XDG_CONFIG_HOME"/fceux
-export ASPELL_CONF="personal $DOTFILES/Desktop/en.pws; repl $XDG_DATA_HOME/aspell.en.prepl"
+export ASPELL_CONF="personal $HOME/Dotfiles/Desktop/en.pws; repl $XDG_DATA_HOME/aspell.en.prepl"
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
-export AW_SYNC_DIR="$DRIVE/Dotfiles/ActivityWatch"
+export AW_SYNC_DIR="~/Drive/Dotfiles/ActivityWatch"
 export WINEPREFIX="$XDG_DATA_HOME"/wineprefixes/default
 
 export GOPATH="$XDG_DATA_HOME"/go
@@ -54,11 +53,24 @@ export CARGO_HOME="$XDG_DATA_HOME"/cargo
 export RUSTUP_HOME="$XDG_DATA_HOME"/rustup
 export WGETRC="$XDG_CONFIG_HOME/wgetrc"
 
+# Shell Variables
+#===============================================================================
+
+# Prompt =======================================================================
+
+PS1='\n\[\e[38;2;251;73;52m\]\h\[\e[0m\]@\[\e[38;2;250;189;47m\]\u\[\e[0m\]:\[\e[38;2;125;174;163m\]\w\[\e[38;2;184;187;38m\]${PS1_CMD1}\n\[\e[0m\]\\$ '
+PROMPT_COMMAND='PS1_CMD1=$(__git_ps1 " (%s)");history -a'
+
+# History ======================================================================
+
 HISTFILE=$XDG_STATE_HOME/bash/history
 HISTCONTROL=ignoreboth:erasedups:ignorespace
 HISTFILESIZE=
 HISTSIZE=
 HISTTIMEFORMAT="[%F %T] "
+
+# Source Files
+#===============================================================================
 
 eval "$(gtrash completion bash)"
 eval "$(zoxide init bash)"
@@ -68,10 +80,35 @@ export FZF_DEFAULT_OPTS="
   --bind 'shift-tab:up'
 "
 
+# Alias
+#===============================================================================
+
+# Alias Functions ==============================================================
+
 _open_complete() {
     local cur="${COMP_WORDS[COMP_CWORD]}"
     COMPREPLY=( $(compgen -c "$cur") )
 }
+
+ask_and_run() {
+    read -p "Do you want to proceed? (y/n): " ans
+    case $ans in
+        [Yy]* )
+            eval "$@" ;;
+        * )
+            echo "Operation cancelled." ;;
+    esac
+}
+
+o() {
+    "$@" > /dev/null 2>&1 & disown
+}
+oe() {
+    "$@" > /dev/null 2>&1 & disown
+    exit
+}
+complete -F _open_complete o
+complete -F _open_complete oe
 
 alias bat="bat --theme=gruvbox-dark --style=numbers"
 alias btm="btm --color gruvbox"
@@ -94,48 +131,34 @@ alias tar="tar -v"
 alias wget="wget --hsts-file=\"$XDG_CACHE_HOME/wget-hsts\""
 alias rm="gtrash put"
 
+# Power Management =============================================================
+
+alias poweroff="ask_and_run sudo poweroff"
+alias reboot="ask_and_run sudo reboot"
+alias suspend="sudo pm-suspend"
+alias hibernate="sudo pm-hibernate"
+#alias quit
+#alias lock
+
 alias rmr="gtrash restore"
 alias rme="gtrash find --rm ."
 alias refresh="source ~/.bashrc"
 alias dir_size="du -sh -- * | sort -hr"
 alias download="axel --verbose -n"
 
-ask_and_run() {
-    read -p "Do you want to proceed? (y/n): " ans
-    case $ans in
-        [Yy]* )
-            eval "$@" ;;
-        * )
-            echo "Operation cancelled." ;;
-    esac
-}
-
-alias poweroff="ask_and_run sudo poweroff"
-alias reboot="ask_and_run sudo reboot"
-alias suspend="sudo pm-suspend"
-alias hibernate="sudo pm-hibernate"
-alias quit="ask_and_run i3-msg exit"
-alias lock="i3lock -n -f -c 32302F -i $DOTFILES/Images/'Lockscreen Wallpaper.png'"
-o() {
-    "$@" > /dev/null 2>&1 & disown
-}
-oe() {
-    "$@" > /dev/null 2>&1 & disown
-    exit
-}
-complete -F _open_complete o
-complete -F _open_complete oe
-
-alias micro="micro --config-dir $DOTFILES/Desktop/micro"
+alias micro="micro --config-dir $HOME/Dotfiles/Desktop/micro"
 alias todo="o $EDITOR ~/Drive/Notes/Online/Todo.md"
 alias feed="micro ~/Drive/Notes/Feed.md"
 alias xcolor="xcolor | xclip"
-alias yt="yt-dlp --ffmpeg-location $USR_APPLICATIONS_DIR/ffmpeg/ -S ext"
-alias yta="yt-dlp --ffmpeg-location $USR_APPLICATIONS_DIR/ffmpeg/ --extract-audio --audio-format"
+alias yt="yt-dlp --ffmpeg-location ~/Applications/ffmpeg/ -S ext"
+alias yta="yt-dlp --ffmpeg-location ~/Applications/ffmpeg/ --extract-audio --audio-format"
 alias tldr="tldr -c"
 alias rsync="rsync --hard-links --archive --recursive --update --executability \
     --verbose --human-readable --progress"
 alias rsync_git="rsync --filter='dir-merge,- .gitignore' --delete"
+
+# Functions
+#===============================================================================
 
 cd() {
     z "$@"
@@ -154,7 +177,23 @@ push() {
     git push
 }
 
-alias rclone="rclone --config=$DRIVE/Dotfiles/rclone.conf"
+pastebin()
+{
+    local url='https://paste.c-net.org/'
+    if (( $# )); then
+        local file
+        for file; do
+            curl -s \
+                --data-binary @"$file" \
+                --header "X-FileName: ${file##*/}" \
+                "$url"
+        done
+    else
+        curl -s --data-binary @- "$url"
+    fi
+}
+
+alias rclone="rclone --config=~/Drive/Dotfiles/rclone.conf"
 backup() {
     opml_to_feed ~/Drive/Dotfiles/podcast.opml ~/Drive/Notes/Feed.md
     # files=($XDG_DOWNLOAD_DIR/tampermonkey-backup-chrome*.txt)
@@ -205,7 +244,7 @@ project() {
 }
 
 dotfile_link() {
-    ln -sf $DOTFILES/Desktop/$1 $XDG_CONFIG_HOME
+    ln -sf $HOME/Dotfiles/Desktop/$1 $XDG_CONFIG_HOME
 }
 
 compress-mp4() {
@@ -217,22 +256,6 @@ download-music() {
     yta $1 --embed-thumbnail --embed-metadata --parse-metadata "title:%(title)s" --parse-metadata "uploader:%(artist)s" --parse-metadata "playlist_title:%(album)s" --parse-metadata "playlist_index:%(track_number)s" --output "%(artist)s - %(title)s.%(ext)s" "$2"
 }
 
-pastebin()
-{
-    local url='https://paste.c-net.org/'
-    if (( $# )); then
-        local file
-        for file; do
-            curl -s \
-                --data-binary @"$file" \
-                --header "X-FileName: ${file##*/}" \
-                "$url"
-        done
-    else
-        curl -s --data-binary @- "$url"
-    fi
-}
-
 net_temp_on()
 {
     nmcli networking on
@@ -241,6 +264,9 @@ net_temp_on()
     # Disable internet
     nmcli networking off
 }
+
+# Bind
+#===============================================================================
 
 bind '"\x08":backward-kill-word'
 bind 'set completion-ignore-case on'
@@ -256,6 +282,9 @@ bind 'set visible-stats On'
 
 shopt -s checkwinsize
 shopt -s globstar
+
+# Add Terminal Functions
+#===============================================================================
 
 if [ "$PWD" = "$HOME" ]; then
     cd "$(cat $XDG_CACHE_HOME/last-dir.txt)"
