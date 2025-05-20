@@ -196,13 +196,6 @@ pastebin()
 alias rclone="rclone --config=$HOME/Drive/Dotfiles/rclone.conf"
 backup() {
     opml_to_feed ~/Drive/Dotfiles/podcast.opml ~/Drive/Notes/Feed.md
-    # files=($XDG_DOWNLOAD_DIR/tampermonkey-backup-chrome*.txt)
-    # if [ -f $file ]; then
-    #     if [[ ${#files[@]} -gt 0 ]]; then
-    #         mv "${files[0]}" $DOTFILES/tampermonkey.json
-    #     fi
-    #     rm $XDG_DOWNLOAD_DIR/tampermonkey-backup-chrome*.txt
-    # fi
 
     cd ~/Dotfiles
     push "Backup from Desktop"
@@ -253,7 +246,12 @@ compress-mp4() {
 }
 
 download-music() {
-    yta $1 --embed-thumbnail --embed-metadata --parse-metadata "title:%(title)s" --parse-metadata "uploader:%(artist)s" --parse-metadata "playlist_title:%(album)s" --parse-metadata "playlist_index:%(track_number)s" --output "%(artist)s - %(title)s.%(ext)s" "$2"
+    yta $1 --embed-thumbnail --embed-metadata \
+    --parse-metadata "title:%(title)s" \
+    --parse-metadata "uploader:%(artist)s" \
+    --parse-metadata "playlist_title:%(album)s" \
+    --parse-metadata "playlist_index:%(track_number)s" \
+    --output "%(artist)s - %(title)s.%(ext)s" "$2"
 }
 
 net_temp_on()
