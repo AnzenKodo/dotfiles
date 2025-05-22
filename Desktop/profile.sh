@@ -79,6 +79,9 @@ export FZF_DEFAULT_OPTS="
   --bind 'tab:down'
   --bind 'shift-tab:up'
 "
+if [ -n "${GHOSTTY_RESOURCES_DIR}" ]; then
+    builtin source "${GHOSTTY_RESOURCES_DIR}/shell-integration/bash/ghostty.bash"
+fi
 
 # Alias
 #===============================================================================
@@ -135,6 +138,7 @@ alias rm="gtrash put"
 
 alias poweroff="ask_and_run sudo poweroff"
 alias reboot="ask_and_run sudo reboot"
+alias logout="ask_and_run pkill xfce4-session"
 alias suspend="sudo pm-suspend"
 alias hibernate="sudo pm-hibernate"
 #alias quit
@@ -233,7 +237,6 @@ project() {
     cd $proj_path
 
     o focus .
-    o vlc --one-instance --qt-start-minimized ~/Music/Focus
 }
 
 dotfile_link() {
