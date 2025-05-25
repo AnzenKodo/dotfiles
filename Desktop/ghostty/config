@@ -17,7 +17,7 @@ confirm-close-surface = false
 keybind = ctrl+shift+r=reload_config
 keybind = ctrl+j=write_screen_file:open
 keybind = ctrl+shift+j=write_screen_file:paste
-keybind = ctrl+n=new_window
+keybind = unconsumed:ctrl+n=new_window
 keybind = f11=toggle_fullscreen
 keybind = ctrl+insert=paste_from_selection
 

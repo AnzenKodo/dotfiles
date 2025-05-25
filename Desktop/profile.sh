@@ -232,12 +232,21 @@ clean() {
     sudo fstrim -a -v
 }
 
+project_org() {
+    wmctrl -x -r Focus -t 0
+    wmctrl -x -r ghostty -t 1
+    wmctrl -x -r vscodium -t 1
+    wmctrl -x -r brave-browser -t 2
+}
+
 project() {
     local proj_path=~/Code/Scuttle
     cd $proj_path
 
     o focus .
+    project_org
 }
+
 
 dotfile_link() {
     ln -sf $HOME/Dotfiles/Desktop/$1 $XDG_CONFIG_HOME

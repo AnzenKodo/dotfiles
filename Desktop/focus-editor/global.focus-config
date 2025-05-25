@@ -1,4 +1,4 @@
-[18]  # Version number. Do not delete.
+[16]  # Version number. Do not delete.
 
 [[workspace]]
 # These directories and files will be scanned when a workspace is opened so that search etc. works.
@@ -51,8 +51,9 @@ line_height_scale_percent:              120
 max_editor_width:                       -1
 can_cancel_go_to_line:                  true
 copy_whole_line_without_selection:      true
+editor_history_size:                    1024
 line_wrap_is_on_by_default:             true
-show_line_numbers:                      false
+show_line_numbers:                      true
 colored_titlebar:                       true  # Windows 11+ only
 dark_titlebar:                          true  # Windows only
 hide_mouse_when_typing:                 true
@@ -97,10 +98,6 @@ scrollbar_min_opacity:                           0.0   # if you want the scrollb
 scrollbar_max_opacity:                           1.0
 scrollbar_fade_in_sensitivity:                   10.0  # controls when the scrollbar appears as the mouse pointer gets close
 scrollbar_fade_out_delay_seconds:                2.0
-
-# Added after migration to version [18]
-active_pane_border_width:                        1.0   # set the width to 0.0 to disable
-inactive_pane_dim_overlay_opacity:               0.1   # controls how dim the inactive panes should be
 
 [[build commands]]
 # build_working_dir:      <build working dir for all commands>
@@ -156,11 +153,11 @@ Shift-Tab                   unindent
 Ctrl-S                      save
 Ctrl-Shift-S                save_as
 
-Alt-Minus                   cursor_go_back
-Alt-=                       cursor_go_forward
+Alt-Minus                   move_to_previous_editor_history
+Alt-=                       move_to_next_editor_history
 
-Alt-PageUp                  go_to_previous_buffer
-Alt-PageDown                go_to_next_buffer
+Alt-PageUp                  move_to_previous_buffer
+Alt-PageDown                move_to_next_buffer
 
 Ctrl-/                      toggle_comment
 Ctrl-L                      select_line
@@ -189,12 +186,16 @@ NumpadEnter                 break_line
 Ctrl-NumpadEnter            new_line_below_without_breaking
 Ctrl-Shift-NumpadEnter      new_line_above_without_breaking
 
-Ctrl-\                      switch_to_side_pane
+Ctrl-1                      switch_to_left_editor
+Ctrl-2                      switch_to_right_editor
+Ctrl-\                      switch_to_other_editor
 Ctrl-Shift-|                duplicate_editor
 
+Ctrl-Alt-Shift-ArrowLeft    move_editor_to_the_left
+Ctrl-Alt-Shift-ArrowRight   move_editor_to_the_right
 
 Ctrl-N                      create_new_file
-Ctrl-Shift-N                create_new_file_in_side_pane
+Ctrl-Shift-N                create_new_file_on_the_side
 
 Alt-Shift-ArrowUp            create_cursor_above
 Alt-Shift-ArrowDown          create_cursor_below
@@ -211,25 +212,12 @@ Ctrl-R                      revert_select_word_or_create_another_cursor
 {Shift}-Meta-Backspace      delete_left_through_word
 {Shift}-Meta-Delete         delete_right_through_word
 
-# Added after migration to version [18]
-Ctrl-Alt-S ArrowLeft        move_editor_left
-Ctrl-Alt-S ArrowRight       move_editor_right
-Ctrl-Alt-S ArrowUp          move_editor_top
-Ctrl-Alt-S ArrowDown        move_editor_bottom
-Ctrl-Alt-X ArrowLeft        split_left
-Ctrl-Alt-X ArrowRight       split_right
-Ctrl-Alt-X ArrowUp          split_top
-Ctrl-Alt-X ArrowDown        split_bottom
-Ctrl-Alt-D ArrowLeft        duplicate_editor_left
-Ctrl-Alt-D ArrowRight       duplicate_editor_right
-Ctrl-Alt-D ArrowUp          duplicate_editor_top
-Ctrl-Alt-D ArrowDown        duplicate_editor_bottom
-Ctrl-Shift-T                reopen_closed_editor
-
 [open file dialog]
 
-Enter                       open_entry
-Ctrl-Enter                  open_entry_in_side_pane
+Enter                       open_entry_in_place
+Ctrl-Enter                  open_entry_on_the_side
+Ctrl-1                      open_entry_on_the_left
+Ctrl-2                      open_entry_on_the_right
 Shift-Enter                 open_entry_in_explorer
 
 Tab                         open_directory
@@ -238,8 +226,10 @@ Backspace                   pop_directory
 
 [search dialog]
 
-Enter                       open_entry
-Ctrl-Enter                  open_entry_in_side_pane
+Enter                       open_entry_in_place
+Ctrl-Enter                  open_entry_on_the_side
+Ctrl-1                      open_entry_on_the_left
+Ctrl-2                      open_entry_on_the_right
 
 Shift-Enter                 move_up  # an alternative way to move
 
@@ -279,7 +269,8 @@ Ctrl-Y                      redo
 Ctrl-D                      select_word
 Ctrl-A                      select_all
 
-Ctrl-W                      close_editor
+Ctrl-W                      close_current_editor
+Ctrl-Shift-W                close_other_editor
 
 Escape                      escape
 
@@ -326,42 +317,19 @@ Ctrl-MouseMiddle            reset_font_size_to_default
 
 Ctrl-Shift-Alt-N            open_another_editor_instance
 F8                          go_to_next_build_error
-Ctrl-F8                     go_to_next_build_error_in_side_pane
+Ctrl-F8                     go_to_next_build_error_on_the_side
 Shift-F8                    go_to_previous_build_error
-Shift-Ctrl-F8               go_to_previous_build_error_in_side_pane
+Shift-Ctrl-F8               go_to_previous_build_error_on_the_side
 
 Ctrl-M                      jump_to_matching_bracket
 
-Enter                       open_entry
+Enter                       open_entry_in_place
 Tab                         focus_next_ui_element
 Shift-Tab                   focus_previous_ui_element
 
-# Added after migration to version [18]
-Ctrl-Shift-W                close_pane
-Ctrl-Alt-W ArrowLeft        close_left_pane
-Ctrl-Alt-W ArrowRight       close_right_pane
-Ctrl-Alt-W ArrowUp          close_top_pane
-Ctrl-Alt-W ArrowDown        close_bottom_pane
-Ctrl-Shift-Alt-W            close_other_panes
-Ctrl-Shift-1                switch_to_top_pane
-Ctrl-Shift-2                switch_to_bottom_pane
-Ctrl-Alt-Shift-ArrowLeft    switch_to_left_pane
-Ctrl-Alt-Shift-ArrowRight   switch_to_right_pane
-Ctrl-Alt-Shift-ArrowUp      switch_to_top_pane
-Ctrl-Alt-Shift-ArrowDown    switch_to_bottom_pane
-Ctrl-1                      switch_to_pane_1
-Ctrl-2                      switch_to_pane_2
-Ctrl-3                      switch_to_pane_3
-Ctrl-4                      switch_to_pane_4
-Ctrl-5                      switch_to_pane_5
-Ctrl-6                      switch_to_pane_6
-Ctrl-7                      switch_to_pane_7
-Ctrl-8                      switch_to_pane_8
-Ctrl-9                      switch_to_pane_9
-
 [[style]]
 
-theme: everforest-hard
+theme: default
 
 [fonts]
 # font:       0xProto
@@ -397,7 +365,7 @@ scrollbar_background:                   10191F4C
 cursor:                                 26B2B2FF
 cursor_inactive:                        196666FF
 paste_animation:                        1C4449FF
-splitter:                               10191FFF
+splitter:                               21333FFF
 splitter_hover:                         1C4449FF
 ruler:                                  FCEDFC26
 indent_guide:                           FCEDFC26
@@ -469,7 +437,3 @@ code_header3:                           E0AD82FF
 code_header4:                           E0AD82FF
 code_header5:                           E0AD82FF
 code_header6:                           E0AD82FF
-
-# Added after migration to version [18]
-active_pane_border:                     196666FF
-inactive_pane_dim_overlay:              050505FF

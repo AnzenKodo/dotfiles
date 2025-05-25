@@ -51,9 +51,8 @@ line_height_scale_percent:              120
 max_editor_width:                       -1
 can_cancel_go_to_line:                  true
 copy_whole_line_without_selection:      true
-editor_history_size:                    1024
 line_wrap_is_on_by_default:             true
-show_line_numbers:                      true
+show_line_numbers:                      false
 colored_titlebar:                       true  # Windows 11+ only
 dark_titlebar:                          true  # Windows only
 hide_mouse_when_typing:                 true
@@ -80,7 +79,7 @@ window_height:                                 -1
 insert_final_newline_on_save:                  true
 status_bar_position:                           bottom
 
-load_most_recent_project_on_start:             true
+load_most_recent_project_on_start:             false
 color_preview_popup:                           enabled
 highlight_matching_brackets:                   true
 
@@ -153,22 +152,16 @@ Shift-Tab                   unindent
 Ctrl-S                      save
 Ctrl-Shift-S                save_as
 
-Alt-Minus                   move_to_previous_editor_history
-Alt-=                       move_to_next_editor_history
-
-Alt-PageUp                  move_to_previous_buffer
-Alt-PageDown                move_to_next_buffer
-
 Ctrl-/                      toggle_comment
 Ctrl-L                      select_line
 
 Ctrl-Alt-Shift-ArrowUp      scroll_viewport_up_fast
 Ctrl-Alt-Shift-ArrowDown    scroll_viewport_down_fast
 
-Alt-Shift-ArrowUp           scroll_viewport_up
-Alt-Shift-ArrowDown         scroll_viewport_down
-Alt-Shift-ArrowLeft         scroll_viewport_left
-Alt-Shift-ArrowRight        scroll_viewport_right
+Ctrl-Alt-ArrowUp           scroll_viewport_up
+Ctrl-Alt-ArrowDown         scroll_viewport_down
+Ctrl-Alt-ArrowLeft         scroll_viewport_left
+Ctrl-Alt-ArrowRight        scroll_viewport_right
 
 Alt-V                       move_cursor_to_viewport_center
 
@@ -186,19 +179,13 @@ NumpadEnter                 break_line
 Ctrl-NumpadEnter            new_line_below_without_breaking
 Ctrl-Shift-NumpadEnter      new_line_above_without_breaking
 
-Ctrl-1                      switch_to_left_editor
-Ctrl-2                      switch_to_right_editor
-Ctrl-\                      switch_to_other_editor
 Ctrl-Shift-|                duplicate_editor
 
-Ctrl-Alt-Shift-ArrowLeft    move_editor_to_the_left
-Ctrl-Alt-Shift-ArrowRight   move_editor_to_the_right
 
 Ctrl-N                      create_new_file
-Ctrl-Shift-N                create_new_file_on_the_side
 
-Ctrl-Alt-ArrowUp            create_cursor_above
-Ctrl-Alt-ArrowDown          create_cursor_below
+Alt-Shift-ArrowUp            create_cursor_above
+Alt-Shift-ArrowDown          create_cursor_below
 Alt-A                       align_cursors
 
 Alt-W                       toggle_line_wrap
@@ -212,12 +199,9 @@ Ctrl-R                      revert_select_word_or_create_another_cursor
 {Shift}-Meta-Backspace      delete_left_through_word
 {Shift}-Meta-Delete         delete_right_through_word
 
+
 [open file dialog]
 
-Enter                       open_entry_in_place
-Ctrl-Enter                  open_entry_on_the_side
-Ctrl-1                      open_entry_on_the_left
-Ctrl-2                      open_entry_on_the_right
 Shift-Enter                 open_entry_in_explorer
 
 Tab                         open_directory
@@ -225,11 +209,6 @@ Tab                         open_directory
 Backspace                   pop_directory
 
 [search dialog]
-
-Enter                       open_entry_in_place
-Ctrl-Enter                  open_entry_on_the_side
-Ctrl-1                      open_entry_on_the_left
-Ctrl-2                      open_entry_on_the_right
 
 Shift-Enter                 move_up  # an alternative way to move
 
@@ -268,9 +247,6 @@ Ctrl-Y                      redo
 
 Ctrl-D                      select_word
 Ctrl-A                      select_all
-
-Ctrl-W                      close_current_editor
-Ctrl-Shift-W                close_other_editor
 
 Escape                      escape
 
@@ -317,19 +293,16 @@ Ctrl-MouseMiddle            reset_font_size_to_default
 
 Ctrl-Shift-Alt-N            open_another_editor_instance
 F8                          go_to_next_build_error
-Ctrl-F8                     go_to_next_build_error_on_the_side
 Shift-F8                    go_to_previous_build_error
-Shift-Ctrl-F8               go_to_previous_build_error_on_the_side
 
 Ctrl-M                      jump_to_matching_bracket
 
-Enter                       open_entry_in_place
 Tab                         focus_next_ui_element
 Shift-Tab                   focus_previous_ui_element
 
 [[style]]
 
-theme: default
+theme: catppuccin-latte
 
 [fonts]
 # font:       0xProto
@@ -365,7 +338,7 @@ scrollbar_background:                   10191F4C
 cursor:                                 26B2B2FF
 cursor_inactive:                        196666FF
 paste_animation:                        1C4449FF
-splitter:                               21333FFF
+splitter:                               10191FFF
 splitter_hover:                         1C4449FF
 ruler:                                  FCEDFC26
 indent_guide:                           FCEDFC26
@@ -437,3 +410,7 @@ code_header3:                           E0AD82FF
 code_header4:                           E0AD82FF
 code_header5:                           E0AD82FF
 code_header6:                           E0AD82FF
+
+# Added after migration to version [18]
+active_pane_border:                     196666FF
+inactive_pane_dim_overlay:              050505FF
