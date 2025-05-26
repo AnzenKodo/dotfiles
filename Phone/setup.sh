@@ -1,4 +1,4 @@
-pkg install root-repo x11-repo git rsync
+pkg install root-repo x11-repo git rclone
 
 git config --global user.email "AnzenKodo@users.noreply.github.com"
 git config --global user.name "AnzenKodo"
