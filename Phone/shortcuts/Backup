@@ -1,0 +1,5 @@
+cd $HOME/Dotfiles
+
+git add .
+git commit -m "Backup from Phone"
+git push
