@@ -217,8 +217,6 @@ backup() {
     echo $RANDOM > site_checksum.txt
     push "Updated Notes"
     cd -
-
-    sudo timeshift --create --verbose
 }
 
 server_backup() {
