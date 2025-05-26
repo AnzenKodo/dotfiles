@@ -4,7 +4,7 @@ git add .
 git commit -m "Backup from Phone"
 git push
 
-rclone bisync $HOME/storage/shared/Drive Personal: \
+rclone bisync $HOME/storage/shared/Drive Personal:\
     --config=$HOME/storage/shared/Drive/Dotfiles/rclone.conf \        
     --check-first --metadata --checksum --download-hash --verbose \
     --compare size,modtime,checksum \
