@@ -321,4 +321,8 @@ if ! shopt -oq posix; then
   fi
 fi
 
-tmux a
+# Start Shell with Tmux ========================================================
+
+if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
+    tmux attach || tmux new
+fi

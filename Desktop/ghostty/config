@@ -17,7 +17,7 @@ confirm-close-surface = false
 keybind = ctrl+shift+r=reload_config
 keybind = ctrl+j=write_screen_file:open
 keybind = ctrl+shift+j=write_screen_file:paste
-keybind = unconsumed:ctrl+n=new_window
+# keybind = unconsumed:ctrl+n=new_window
 keybind = f11=toggle_fullscreen
 keybind = ctrl+insert=paste_from_selection
 
@@ -37,7 +37,7 @@ keybind = alt+2=goto_split:next
 
 # Tabs =========================================================================
 
-keybind = ctrl+t=new_tab
+# keybind = ctrl+t=new_tab
 keybind = ctrl+one=goto_tab:1
 keybind = ctrl+two=goto_tab:2
 keybind = ctrl+three=goto_tab:3
