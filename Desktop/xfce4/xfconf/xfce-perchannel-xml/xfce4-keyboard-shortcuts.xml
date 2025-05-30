@@ -59,7 +59,6 @@
       <property name="HomePage" type="string" value="exo-open --launch WebBrowser"/>
       <property name="XF86Display" type="string" value="xfce4-display-settings --minimal"/>
       <property name="override" type="bool" value="true"/>
-      <property name="&lt;Super&gt;v" type="string" value="xfce4-popup-clipman"/>
       <property name="&lt;Super&gt;c" type="string" value="gpick -s"/>
       <property name="&lt;Super&gt;a" type="string" value="menu"/>
       <property name="&lt;Super&gt;i" type="string" value="xfce4-settings-manager"/>
@@ -74,6 +73,7 @@
       <property name="&lt;Super&gt;period" type="string" value="emoji">
         <property name="startup-notify" type="bool" value="true"/>
       </property>
+      <property name="&lt;Super&gt;v" type="string" value="xfce4-clipman-history"/>
     </property>
   </property>
   <property name="xfwm4" type="empty">

@@ -149,10 +149,11 @@ alias rme="gtrash find --rm ."
 alias refresh="source ~/.bashrc"
 alias dir_size="du -sh -- * | sort -hr"
 alias download="axel --verbose -n"
+alias timg="timg -p kitty --title='%b (%wx%h)'"
 
 alias micro="micro --config-dir $HOME/Dotfiles/Desktop/micro"
 alias todo="o $EDITOR ~/Drive/Notes/Online/Todo.md"
-alias feed="micro ~/Drive/Notes/Feed.md"
+alias feed="o $EDITOR ~/Drive/Notes/Feed.md"
 alias xcolor="xcolor | xclip"
 alias yt="yt-dlp --ffmpeg-location ~/Applications/ffmpeg/ -S ext"
 alias yta="yt-dlp --ffmpeg-location ~/Applications/ffmpeg/ --extract-audio --audio-format"
@@ -319,10 +320,4 @@ if ! shopt -oq posix; then
   elif [ -f /etc/bash_completion ]; then
     . /etc/bash_completion
   fi
-fi
-
-# Start Shell with Tmux ========================================================
-
-if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
-    tmux attach || tmux new
 fi

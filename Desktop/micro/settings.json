@@ -7,7 +7,6 @@
     "autosu": true,
     "backupdir": "~/.cache/micro/backup",
     "colorcolumn": 80,
-    "colorscheme": "gruvbox",
     "diffgutter": true,
     "ft:asm": {
         "commenttype": "; %s"

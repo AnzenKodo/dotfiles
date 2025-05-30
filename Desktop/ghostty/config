@@ -1,49 +1,8 @@
-# theme = GruvboxDark
-# background = 32302F
-# foreground = BFB79A
+theme = Espresso
 mouse-hide-while-typing = true
-window-padding-x = 3
-window-padding-y = 0
 window-vsync = false
 window-save-state = always
-gtk-wide-tabs = false
 auto-update = off
 auto-update-channel = tip
 confirm-close-surface = false
-
-# Keybinds
-#===============================================================================
-
 keybind = ctrl+shift+r=reload_config
-keybind = ctrl+j=write_screen_file:open
-keybind = ctrl+shift+j=write_screen_file:paste
-# keybind = unconsumed:ctrl+n=new_window
-keybind = f11=toggle_fullscreen
-keybind = ctrl+insert=paste_from_selection
-
-# Scroll =======================================================================
-
-# keybind = ctrl+page_up=jump_to_prompt:-1
-# keybind = ctrl+page_down=jump_to_prompt:1
-# keybind = unconsumed:ctrl+home=scroll_to_top
-# keybind = unconsumed:ctrl+end=scroll_to_bottom
-
-# Splits =======================================================================
-
-keybind = ctrl+\=new_split:right
-keybind = ctrl+shift+\=toggle_split_zoom
-keybind = alt+1=goto_split:previous
-keybind = alt+2=goto_split:next
-
-# Tabs =========================================================================
-
-# keybind = ctrl+t=new_tab
-keybind = ctrl+one=goto_tab:1
-keybind = ctrl+two=goto_tab:2
-keybind = ctrl+three=goto_tab:3
-keybind = ctrl+four=goto_tab:4
-keybind = ctrl+five=goto_tab:5
-keybind = ctrl+six=goto_tab:6
-keybind = ctrl+seven=goto_tab:7
-keybind = ctrl+eight=goto_tab:8
-keybind = ctrl+nine=goto_tab:9

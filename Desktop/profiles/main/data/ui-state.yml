@@ -14,9 +14,29 @@ workbench.activity.placeholderViewlets: "[{\"id\":\"workbench.view.explorer\",\
   lorer-view-icon\"},\"name\":\"Remote
   Explorer\",\"isBuiltin\":true,\"views\":[]},{\"id\":\"workbench.view.extensio\
   ns\",\"themeIcon\":{\"id\":\"extensions-view-icon\"},\"name\":\"Extensions\",\
-  \"isBuiltin\":true,\"views\":[]},{\"id\":\"workbench.view.extension.test\",\"\
-  themeIcon\":{\"id\":\"test-view-icon\"},\"name\":\"Testing\",\"isBuiltin\":tr\
-  ue,\"views\":[{\"when\":\"testing.providerCount >
+  \"isBuiltin\":true,\"views\":[{\"when\":\"defaultExtensionViews\"},{\"when\":\
+  \"searchExtensionUpdates ||
+  searchOutdatedExtensions\"},{\"when\":\"recommendedExtensions &&
+  workbenchState != 'empty'\"},{\"when\":\"defaultExtensionViews && hasGallery
+  && !hasInstalledExtensions\"},{\"when\":\"searchExtensionUpdates ||
+  searchRecentlyUpdatedExtensions\"},{\"when\":\"recommendedExtensions\"},{\"wh\
+  en\":\"defaultExtensionViews && hasGallery &&
+  !config.extensions.showRecommendationsOnlyOnDemand &&
+  !sortByUpdateDate\"},{\"when\":\"defaultExtensionViews &&
+  hasInstalledExtensions\"},{\"when\":\"defaultExtensionViews &&
+  hasInstalledExtensions\"},{\"when\":\"searchMarketplaceExtensions\"},{\"when\
+  \":\"installedExtensions ||
+  searchInstalledExtensions\"},{\"when\":\"searchEnabledExtensions\"},{\"when\":\
+  \"searchDisabledExtensions\"},{\"when\":\"searchBuiltInExtensions\"},{\"when\
+  \":\"searchWorkspaceUnsupportedExtensions\"},{\"when\":\"builtInExtensions\"}\
+  ,{\"when\":\"builtInExtensions\"},{\"when\":\"builtInExtensions\"},{\"when\":\
+  \"searchUnsupportedWorkspaceExtensions\"},{\"when\":\"searchUnsupportedWorksp\
+  aceExtensions\"},{\"when\":\"searchUnsupportedWorkspaceExtensions &&
+  virtualWorkspace\"},{\"when\":\"searchUnsupportedWorkspaceExtensions &&
+  virtualWorkspace\"},{\"when\":\"searchDeprecatedExtensions\"}]},{\"id\":\"wor\
+  kbench.view.extension.test\",\"themeIcon\":{\"id\":\"test-view-icon\"},\"name\
+  \":\"Testing\",\"isBuiltin\":true,\"views\":[{\"when\":\"testing.providerCount
+  >
   0\"},{\"when\":\"testing.isTestCoverageOpen\"}]},{\"id\":\"workbench.view.ext\
   ension.references-view\",\"themeIcon\":{\"id\":\"references\"},\"name\":\"Ref\
   erences\",\"isBuiltin\":false,\"views\":[{\"when\":\"reference-list.isActive\
@@ -49,14 +69,14 @@ workbench.auxiliarybar.placeholderPanels: "[{\"id\":\"workbench.panel.chat\",\"\
   nel.chatEditing\",\"themeIcon\":{\"id\":\"edit-session\"},\"name\":\"Copilot
   Edits\",\"isBuiltin\":true,\"views\":[{\"when\":\"chatEditingParticipantRegis\
   tered || chatSetupInstalled || !chatSetupHidden\"}]}]"
-workbench.auxiliaryBar.size: "503"
-workbench.editor.languageDetectionOpenedLanguages.global: '[["json",true],["html",true],["yaml",true],["ignore",true],["jsonc",true],["cpp",true],["plaintext",true],["c",true]]'
+workbench.auxiliaryBar.size: "404"
+workbench.editor.languageDetectionOpenedLanguages.global: '[["html",true],["yaml",true],["ignore",true],["json",true],["jsonc",true],["plaintext",true],["cpp",true],["c",true]]'
 workbench.explorer.views.state.hidden: '[{"id":"outline","isHidden":false},{"id":"timeline","isHidden":false},{"id":"workbench.explorer.openEditorsView","isHidden":true},{"id":"workbench.explorer.emptyView","isHidden":false},{"id":"workbench.explorer.fileView","isHidden":false},{"id":"npm","isHidden":true},{"id":"clangd.typeHierarchyView","isHidden":false},{"id":"clangd.memoryUsage","isHidden":false},{"id":"clangd.ast","isHidden":false}]'
 workbench.panel.alignment: center
 workbench.panel.chat.hidden: '[{"id":"workbench.panel.chat.view.copilot","isHidden":false}]'
 workbench.panel.chatEditing.hidden: '[{"id":"workbench.panel.chat.view.edits","isHidden":false}]'
 workbench.panel.lastNonMaximizedHeight: "300"
-workbench.panel.lastNonMaximizedWidth: "300"
+workbench.panel.lastNonMaximizedWidth: "1246"
 workbench.panel.markers.hidden: '[{"id":"workbench.panel.markers.view","isHidden":false}]'
 workbench.panel.output.hidden: '[{"id":"workbench.panel.output","isHidden":false}]'
 workbench.panel.pinnedPanels: '[{"id":"workbench.panel.markers","pinned":true,"visible":false,"order":0},{"id":"workbench.panel.output","pinned":true,"visible":false,"order":1},{"id":"workbench.panel.repl","pinned":true,"visible":false,"order":2},{"id":"terminal","pinned":true,"visible":false,"order":3},{"id":"workbench.panel.testResults","pinned":true,"visible":false,"order":3},{"id":"~remote.forwardedPortsContainer","pinned":true,"visible":false,"order":5},{"id":"workbench.view.extension.memory-view","pinned":true,"visible":false,"order":6},{"id":"refactorPreview","pinned":true,"visible":false}]'
@@ -86,11 +106,12 @@ workbench.panel.placeholderPanels: "[{\"id\":\"workbench.panel.markers\",\"them\
 workbench.panel.repl.hidden: '[{"id":"workbench.panel.repl.view","isHidden":false}]'
 workbench.panel.size: "266"
 workbench.scm.views.state.hidden: '[{"id":"workbench.scm.repositories","isHidden":true},{"id":"workbench.scm","isHidden":false},{"id":"workbench.scm.history","isHidden":false}]'
-workbench.sideBar.size: "171"
+workbench.sideBar.size: "227"
 workbench.statusbar.hidden: '["llvm-vs-code-extensions.vscode-clangd","vscode.git.git.blame"]'
 workbench.view.debug.state.hidden: '[{"id":"workbench.debug.welcome","isHidden":false,"order":0},{"id":"workbench.debug.variablesView","isHidden":false,"order":1},{"id":"workbench.debug.watchExpressionsView","isHidden":false,"order":2},{"id":"workbench.debug.callStackView","isHidden":false,"order":4},{"id":"workbench.debug.loadedScriptsView","isHidden":false,"order":5},{"id":"workbench.debug.breakPointsView","isHidden":false,"order":3},{"id":"jsBrowserBreakpoints","isHidden":false,"order":6},{"id":"jsExcludedCallers","isHidden":false,"order":7},{"id":"jsDebugNetworkTree","isHidden":false,"order":8}]'
 workbench.view.extension.memory-view.state.hidden: '[{"id":"memory-view.memoryView","isHidden":false}]'
+workbench.view.extension.references-view.state.hidden: '[{"id":"references-view.tree","isHidden":false}]'
 workbench.view.extensions.state.hidden: '[{"id":"workbench.views.extensions.installed","isHidden":false},{"id":"workbench.views.extensions.searchOutdated","isHidden":false},{"id":"workbench.views.extensions.workspaceRecommendations","isHidden":false},{"id":"workbench.views.extensions.popular","isHidden":false},{"id":"workbench.views.extensions.searchRecentlyUpdated","isHidden":false},{"id":"workbench.views.extensions.otherRecommendations","isHidden":false},{"id":"extensions.recommendedList","isHidden":false},{"id":"workbench.views.extensions.enabled","isHidden":true},{"id":"workbench.views.extensions.disabled","isHidden":true},{"id":"workbench.views.extensions.marketplace","isHidden":false},{"id":"workbench.views.extensions.searchInstalled","isHidden":false},{"id":"workbench.views.extensions.searchEnabled","isHidden":false},{"id":"workbench.views.extensions.searchDisabled","isHidden":false},{"id":"workbench.views.extensions.searchBuiltin","isHidden":false},{"id":"workbench.views.extensions.searchWorkspaceUnsupported","isHidden":false},{"id":"workbench.views.extensions.builtinFeatureExtensions","isHidden":false},{"id":"workbench.views.extensions.builtinThemeExtensions","isHidden":false},{"id":"workbench.views.extensions.builtinProgrammingLanguageExtensions","isHidden":false},{"id":"workbench.views.extensions.untrustedUnsupportedExtensions","isHidden":false},{"id":"workbench.views.extensions.untrustedPartiallySupportedExtensions","isHidden":false},{"id":"workbench.views.extensions.virtualUnsupportedExtensions","isHidden":false},{"id":"workbench.views.extensions.virtualPartiallySupportedExtensions","isHidden":false},{"id":"workbench.views.extensions.deprecatedExtensions","isHidden":false}]'
 workbench.view.search.state.hidden: '[{"id":"workbench.view.search","isHidden":false}]'
-workbench.views.extensions.installed.size: "7"
+workbench.views.extensions.installed.size: "8"
 zokugun.cron-tasks: '{"version":"0.2.0"}'
