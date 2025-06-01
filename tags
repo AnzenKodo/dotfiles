@@ -633,6 +633,7 @@ Argument	Desktop/Archive/Windows/winget.json	/^				"Argument" : "https:\/\/cdn.w
 Aspell plugin	Desktop/micro/plug/aspell/help/aspell.md	/^# Aspell plugin$/;"	c
 AssetContract	Desktop/micro/buffers/%home%ramen%Downloads%Hyperleger%asset-contract.js	/^class AssetContract extends Contract {$/;"	c
 Asynchronous testing	Desktop/nvim/plugins/plenary.nvim/TESTS_README.md	/^# Asynchronous testing$/;"	c
+Author	Desktop/nvim/plugins/undotree/README.md	/^### Author$/;"	S
 Auto-updates from CI	Desktop/nvim/plugins/telescope.nvim/CONTRIBUTING.md	/^## Auto-updates from CI$/;"	s	chapter:Contributing
 Autocmds	Desktop/nvim/plugins/telescope.nvim/README.md	/^## Autocmds$/;"	s	chapter:telescope.nvim
 Available modules	Desktop/nvim/plugins/nvim-treesitter/README.md	/^# Available modules$/;"	c
@@ -942,6 +943,7 @@ Comments	Desktop/nvim/plugins/nvim-treesitter/CONTRIBUTING.md	/^#### Comments$/;
 CommonType	Desktop/nvim/plugins/nvim-treesitter/tests/query/highlights/cpp/concepts.cpp	/^ typename CommonType<T, U>; \/\/ CommonType<T, U> is valid and names a type$/;"	v	typeref:meta:typename
 Conceal	Desktop/nvim/plugins/nvim-treesitter/CONTRIBUTING.md	/^#### Conceal$/;"	t	subsection:Contributing to `nvim-treesitter`""Parser configurations""Highlights
 Configuration	Desktop/nvim/plugins/aw-watcher-vim/README.md	/^### Configuration$/;"	S	chapter:aw-watcher-vim
+Configuration	Desktop/nvim/plugins/undotree/README.md	/^#### Configuration$/;"	t	subsection:Usage
 Contract	Desktop/micro/buffers/%home%ramen%Downloads%Hyperleger%asset-contract.js	/^const { Contract } = require('fabric-contract-api');$/;"	C
 Contributing	Desktop/nvim/plugins/telescope.nvim/CONTRIBUTING.md	/^# Contributing$/;"	c
 Contributing	Desktop/nvim/plugins/telescope.nvim/README.md	/^## Contributing$/;"	s	chapter:telescope.nvim
@@ -977,11 +979,13 @@ DEF_RANDOM_COUNT	Desktop/micro/buffers/%home%ramen%Code%scuttle%floor.c	/^#defin
 DO_NOT_OPTIMIZE	Desktop/micro/buffers/%home%ramen%Code%ccore%test%test_floor.c	/^#define DO_NOT_OPTIMIZE(/;"	d	file:
 DO_NOT_OPTIMIZE	Desktop/micro/buffers/%home%ramen%Code%game%floor.c	/^#define DO_NOT_OPTIMIZE(/;"	d	file:
 Data	Desktop/nvim/plugins/nvim-treesitter/tests/query/highlights/python/decorators.py	/^class Data:$/;"	c
+Debug	Desktop/nvim/plugins/undotree/README.md	/^#### Debug$/;"	t	subsection:Usage
 Default Mappings	Desktop/nvim/plugins/telescope.nvim/README.md	/^## Default Mappings$/;"	s	chapter:telescope.nvim
 Definition Scope	Desktop/nvim/plugins/nvim-treesitter/CONTRIBUTING.md	/^#### Definition Scope$/;"	t	subsection:Contributing to `nvim-treesitter`""Parser configurations""Locals
 Demo	Desktop/micro/plug/manipulator/help/manipulator.md	/^## Demo$/;"	s	chapter:Manipulator Plugin
 Description	Desktop/nvim/plugins/lazy.nvim/.github/PULL_REQUEST_TEMPLATE.md	/^## Description$/;"	s
 Description	Desktop/nvim/plugins/telescope.nvim/.github/PULL_REQUEST_TEMPLATE.md	/^# Description$/;"	c
+Description	Desktop/nvim/plugins/undotree/README.md	/^### Description$/;"	S
 Description	Desktop/nvim/plugins/which-key.nvim/.github/PULL_REQUEST_TEMPLATE.md	/^## Description$/;"	s
 Developer Interface	Desktop/nvim/plugins/telescope-fzf-native.nvim/README.md	/^## Developer Interface$/;"	s	chapter:telescope-fzf-native.nvim
 Developers	Desktop/nvim/plugins/telescope.nvim/developers.md	/^# Developers$/;"	c
@@ -990,6 +994,7 @@ Documentation with treesitter	Desktop/nvim/plugins/telescope.nvim/CONTRIBUTING.m
 DoneParseArgs	Desktop/nvim/plugins/vim-gutentags/plat/win32/update_gtags.cmd	/^:DoneParseArgs$/;"	l
 DoneParseArgs	Desktop/nvim/plugins/vim-gutentags/plat/win32/update_scopedb.cmd	/^:DoneParseArgs$/;"	l
 DoneParseArgs	Desktop/nvim/plugins/vim-gutentags/plat/win32/update_tags.cmd	/^:DoneParseArgs$/;"	l
+Download and Install	Desktop/nvim/plugins/undotree/README.md	/^### Download and Install$/;"	S
 DumpMemorySnapshot	Desktop/nvim/plugins/plenary.nvim/lua/plenary/profile/memory_profiler.lua	/^local function DumpMemorySnapshot(strSavePath, strExtraFileName, nMaxRescords, strRootObjectName/;"	f
 DumpMemorySnapshotCompared	Desktop/nvim/plugins/plenary.nvim/lua/plenary/profile/memory_profiler.lua	/^local function DumpMemorySnapshotCompared(strSavePath, strExtraFileName, nMaxRescords, cResultBe/;"	f
 DumpMemorySnapshotComparedFile	Desktop/nvim/plugins/plenary.nvim/lua/plenary/profile/memory_profiler.lua	/^local function DumpMemorySnapshotComparedFile(strSavePath, strExtraFileName, nMaxRescords, strRe/;"	f
@@ -1235,6 +1240,7 @@ Home	Desktop/nvim/plugins/nvim-treesitter/tests/indent/jsx/element_attributes.js
 Home	Desktop/nvim/plugins/nvim-treesitter/tests/indent/jsx/issue-3986.jsx	/^export default function Home() {$/;"	c
 Home	Desktop/nvim/plugins/nvim-treesitter/tests/indent/jsx/jsx_expression.jsx	/^export default function Home() {$/;"	c
 How Has This Been Tested?	Desktop/nvim/plugins/telescope.nvim/.github/PULL_REQUEST_TEMPLATE.md	/^# How Has This Been Tested?$/;"	c
+How it works	Desktop/nvim/plugins/undotree/README.md	/^### How it works$/;"	S
 How?	Desktop/nvim/plugins/vim-gutentags/README.md	/^## How?$/;"	s	chapter:Gutentags
 I experience bugs when using `nvim-treesitter`'s `foldexpr` similar to [#194](https://github.com/nvim-treesitter/nvim-treesitter/issues/194)	Desktop/nvim/plugins/nvim-treesitter/README.md	/^#### I experience bugs when using `nvim-treesitter`'s `foldexpr` similar to [#194](https:\/\/git/;"	t	chapter:Troubleshooting
 I experience weird highlighting issues similar to [#78](https://github.com/nvim-treesitter/nvim-treesitter/issues/78)	Desktop/nvim/plugins/nvim-treesitter/README.md	/^#### I experience weird highlighting issues similar to [#78](https:\/\/github.com\/nvim-treesitt/;"	t	chapter:Troubleshooting
@@ -1286,6 +1292,7 @@ LUALS_VERSION	Desktop/nvim/plugins/gitsigns.nvim/Makefile	/^LUALS_VERSION := 3.1
 LUA_FILES	Desktop/nvim/plugins/gitsigns.nvim/Makefile	/^LUA_FILES := $(shell git ls-files lua test)$/;"	m
 Language parsers	Desktop/nvim/plugins/nvim-treesitter/README.md	/^## Language parsers$/;"	s	chapter:Quickstart
 Layout (display)	Desktop/nvim/plugins/telescope.nvim/README.md	/^## Layout (display)$/;"	s	chapter:telescope.nvim
+License	Desktop/nvim/plugins/undotree/README.md	/^### License$/;"	S
 LicenseWindowKiller	Desktop/Archive/sublime-text/auto-remove-sublime-license-popup.py	/^class LicenseWindowKiller(sublime_plugin.EventListener):$/;"	c
 List of Neovim Features Required:	Desktop/nvim/plugins/plenary.nvim/POPUP.md	/^## List of Neovim Features Required:$/;"	s	chapter:Popup tracking
 Lists Picker	Desktop/nvim/plugins/telescope.nvim/README.md	/^### Lists Picker$/;"	S	section:telescope.nvim""Pickers
@@ -1402,6 +1409,7 @@ Performance Improvements	Desktop/nvim/plugins/which-key.nvim/CHANGELOG.md	/^### 
 Performance Improvements	Desktop/nvim/plugins/which-key.nvim/CHANGELOG.md	/^### Performance Improvements$/;"	S	section:Changelog""[3.11.0](https://github.com/folke/which-key.nvim/compare/v3.10.0...v3.11.0) (2024-07-20)
 Performance Improvements	Desktop/nvim/plugins/which-key.nvim/CHANGELOG.md	/^### Performance Improvements$/;"	S	section:Changelog""[3.14.0](https://github.com/folke/which-key.nvim/compare/v3.13.3...v3.14.0) (2024-11-28)
 Performance Improvements	Desktop/nvim/plugins/which-key.nvim/CHANGELOG.md	/^### Performance Improvements$/;"	S	section:Changelog""[3.5.0](https://github.com/folke/which-key.nvim/compare/v3.4.0...v3.5.0) (2024-07-15)
+Persisting the undo history	Desktop/nvim/plugins/undotree/README.md	/^### Persisting the undo history$/;"	S
 Phone	README.md	/^### Phone$/;"	S	section:AK#Dotfiles""Screenshots
 Picker	Desktop/nvim/plugins/telescope.nvim/developers.md	/^### Picker$/;"	S	section:Developers""Technical
 Pickers	Desktop/nvim/plugins/telescope.nvim/README.md	/^## Pickers$/;"	s	chapter:telescope.nvim
@@ -1456,6 +1464,7 @@ ScoreGapStart	Desktop/nvim/plugins/telescope-fzf-native.nvim/src/fzf.c	/^  Score
 ScoreGapStart	Desktop/nvim/plugins/telescope-fzf-native.nvim/test/test.c	/^  ScoreGapStart = -3,$/;"	e	enum:__anond054b94a0103	file:
 ScoreMatch	Desktop/nvim/plugins/telescope-fzf-native.nvim/src/fzf.c	/^  ScoreMatch = 16,$/;"	e	enum:__anon6d93c8f80103	file:
 ScoreMatch	Desktop/nvim/plugins/telescope-fzf-native.nvim/test/test.c	/^  ScoreMatch = 16,$/;"	e	enum:__anond054b94a0103	file:
+Screenshot	Desktop/nvim/plugins/undotree/README.md	/^### Screenshot$/;"	S
 Screenshots	Desktop/nvim/plugins/lazy.nvim/.github/PULL_REQUEST_TEMPLATE.md	/^## Screenshots$/;"	s
 Screenshots	Desktop/nvim/plugins/which-key.nvim/.github/PULL_REQUEST_TEMPLATE.md	/^## Screenshots$/;"	s
 Screenshots	Desktop/nvim/plugins/which-key.nvim/NEWS.md	/^## Screenshots$/;"	s	chapter:ðŸ’¥ What's New in 3.0?
@@ -1549,6 +1558,7 @@ THING_A	Desktop/nvim/plugins/nvim-treesitter/tests/indent/java/enum.java	/^  THI
 THING_C	Desktop/nvim/plugins/nvim-treesitter/tests/indent/java/enum.java	/^  THING_C;$/;"	e	enum:Foo	file:
 TODO	Desktop/nvim/plugins/telescope-fzf-native.nvim/README.md	/^### TODO$/;"	S	section:telescope-fzf-native.nvim""Disclaimer
 Tab	Desktop/micro/bindings.json	/^    "Tab": "Autocomplete|lua:aspell.acceptsug|IndentSelection|InsertTab"$/;"	s
+Table of Contents	Desktop/nvim/plugins/undotree/README.md	/^### Table of Contents$/;"	S
 Table of contents	Desktop/nvim/plugins/nvim-treesitter/README.md	/^### Table of contents$/;"	S
 Technical	Desktop/nvim/plugins/telescope.nvim/developers.md	/^## Technical$/;"	s	chapter:Developers
 Telescope Setup and Configuration	Desktop/nvim/plugins/telescope-fzf-native.nvim/README.md	/^## Telescope Setup and Configuration$/;"	s	chapter:telescope-fzf-native.nvim
@@ -1580,10 +1590,22 @@ UNAME	Desktop/nvim/plugins/gitsigns.nvim/Makefile	/^    UNAME ?= MACOS$/;"	m
 UNICODE_MAXASCII	Desktop/nvim/plugins/telescope-fzf-native.nvim/src/fzf.c	/^#define UNICODE_MAXASCII /;"	d	file:
 UPDATED_SOURCE	Desktop/nvim/plugins/vim-gutentags/plat/win32/update_tags.cmd	/^    set UPDATED_SOURCE=%~2$/;"	v
 UPDATED_SOURCE	Desktop/nvim/plugins/vim-gutentags/plat/win32/update_tags.cmd	/^set UPDATED_SOURCE=$/;"	v
+Undotree	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^        augroup Undotree$/;"	a
+UndotreeFocus	Desktop/nvim/plugins/undotree/plugin/undotree.vim	/^command! -nargs=0 -bar UndotreeFocus       :call undotree#UndotreeFocus()$/;"	c
+UndotreeHide	Desktop/nvim/plugins/undotree/plugin/undotree.vim	/^command! -nargs=0 -bar UndotreeHide        :call undotree#UndotreeHide()$/;"	c
+UndotreePersistUndo	Desktop/nvim/plugins/undotree/plugin/undotree.vim	/^command! -nargs=0 -bar UndotreePersistUndo :call undotree#UndotreePersistUndo(1)$/;"	c
+UndotreeShow	Desktop/nvim/plugins/undotree/plugin/undotree.vim	/^command! -nargs=0 -bar UndotreeShow        :call undotree#UndotreeShow()$/;"	c
+UndotreeToggle	Desktop/nvim/plugins/undotree/plugin/undotree.vim	/^    command! -nargs=0 -bar UndotreeToggle :echoerr "undotree.vim needs Vim version >= 7.3"$/;"	c
+UndotreeToggle	Desktop/nvim/plugins/undotree/plugin/undotree.vim	/^    command! -nargs=0 -bar UndotreeToggle :echoerr "undotree.vim needs vim7.3 with patch005 appl/;"	c
+UndotreeToggle	Desktop/nvim/plugins/undotree/plugin/undotree.vim	/^command! -nargs=0 -bar UndotreeToggle      :call undotree#UndotreeToggle()$/;"	c
+Undotree_Diff	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^    augroup Undotree_Diff$/;"	a
+Undotree_Main	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^    augroup Undotree_Main$/;"	a
+Undotree_OptionsObserver	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^    augroup Undotree_OptionsObserver$/;"	a
 Unlock	Desktop/nvim/plugins/vim-gutentags/plat/win32/update_tags.cmd	/^:Unlock$/;"	l
 Usage	Desktop/micro/plug/bookmark/README.md	/^## Usage$/;"	s	chapter:Bookmarks for micro
 Usage	Desktop/nvim/plugins/aw-watcher-vim/README.md	/^### Usage$/;"	S	chapter:aw-watcher-vim
 Usage	Desktop/nvim/plugins/telescope.nvim/README.md	/^## Usage$/;"	s	chapter:telescope.nvim
+Usage	Desktop/nvim/plugins/undotree/README.md	/^### Usage$/;"	S
 Usage	Desktop/nvim/plugins/vim-gutentags/plat/win32/update_gtags.cmd	/^:Usage$/;"	l
 Usage	Desktop/nvim/plugins/vim-gutentags/plat/win32/update_scopedb.cmd	/^:Usage$/;"	l
 Usage	Desktop/nvim/plugins/vim-gutentags/plat/win32/update_tags.cmd	/^:Usage$/;"	l
@@ -1863,6 +1885,7 @@ Z	Desktop/nvim/plugins/nvim-treesitter/tests/indent/rust/enum.rs	/^    Z {$/;"	e
 [9.8.4](https://github.com/folke/lazy.nvim/compare/v9.8.3...v9.8.4) (2023-02-17)	Desktop/nvim/plugins/lazy.nvim/CHANGELOG.md	/^## [9.8.4](https:\/\/github.com\/folke\/lazy.nvim\/compare\/v9.8.3...v9.8.4) (2023-02-17)$/;"	s	chapter:Changelog
 [9.8.5](https://github.com/folke/lazy.nvim/compare/v9.8.4...v9.8.5) (2023-02-20)	Desktop/nvim/plugins/lazy.nvim/CHANGELOG.md	/^## [9.8.5](https:\/\/github.com\/folke\/lazy.nvim\/compare\/v9.8.4...v9.8.5) (2023-02-20)$/;"	s	chapter:Changelog
 [9.9.0](https://github.com/folke/lazy.nvim/compare/v9.8.5...v9.9.0) (2023-02-28)	Desktop/nvim/plugins/lazy.nvim/CHANGELOG.md	/^## [9.9.0](https:\/\/github.com\/folke\/lazy.nvim\/compare\/v9.8.5...v9.9.0) (2023-02-28)$/;"	s	chapter:Changelog
+[Project on Vim.org](http://www.vim.org/scripts/script.php?script_id=4177)	Desktop/nvim/plugins/undotree/README.md	/^### [Project on Vim.org](http:\/\/www.vim.org\/scripts\/script.php?script_id=4177)$/;"	S
 [commit_pattern]	Desktop/nvim/plugins/lazy.nvim/lua/lazy/view/init.lua	/^    [commit_pattern] = function(hash)$/;"	f
 [lazy.nvim](https://github.com/folke/lazy.nvim)	Desktop/nvim/plugins/which-key.nvim/README.md	/^### [lazy.nvim](https:\/\/github.com\/folke\/lazy.nvim)$/;"	S	section:ðŸ’¥ Which Key""ðŸ“¦ Installation
 [trouble.nvim]	Desktop/nvim/plugins/gitsigns.nvim/README.md	/^### [trouble.nvim]$/;"	S	section:gitsigns.nvim""ðŸ”— Plugin Integrations
@@ -2521,6 +2544,7 @@ branch	Desktop/nvim/lazy-lock.json	/^  "plenary.nvim": { "branch": "master", "co
 branch	Desktop/nvim/lazy-lock.json	/^  "telescope-fzf-native.nvim": { "branch": "main", "commit": "1f08ed60cafc8f6168b72b80be2b2ea149/;"	s	object:telescope-fzf-native.nvim
 branch	Desktop/nvim/lazy-lock.json	/^  "telescope-ui-select.nvim": { "branch": "master", "commit": "6e51d7da30bd139a6950adf2a47fda6df/;"	s	object:telescope-ui-select.nvim
 branch	Desktop/nvim/lazy-lock.json	/^  "telescope.nvim": { "branch": "master", "commit": "b4da76be54691e854d3e0e02c36b0245f945c2c7" }/;"	s	object:telescope.nvim
+branch	Desktop/nvim/lazy-lock.json	/^  "undotree": { "branch": "master", "commit": "b951b87b46c34356d44aa71886aecf9dd7f5788a" },$/;"	s	object:undotree
 branch	Desktop/nvim/lazy-lock.json	/^  "vim-gutentags": { "branch": "master", "commit": "aa47c5e29c37c52176c44e61c780032dfacef3dd" },$/;"	s	object:vim-gutentags
 branch	Desktop/nvim/lazy-lock.json	/^  "which-key.nvim": { "branch": "main", "commit": "370ec46f710e058c9c1646273e6b225acf47cbed" }$/;"	s	object:which-key.nvim
 branches	Desktop/nvim/plugins/telescope.nvim/lua/telescope/builtin/__git.lua	/^git.branches = function(opts)$/;"	f	unknown:git
@@ -2902,6 +2926,7 @@ commit	Desktop/nvim/lazy-lock.json	/^  "plenary.nvim": { "branch": "master", "co
 commit	Desktop/nvim/lazy-lock.json	/^  "telescope-fzf-native.nvim": { "branch": "main", "commit": "1f08ed60cafc8f6168b72b80be2b2ea149/;"	s	object:telescope-fzf-native.nvim
 commit	Desktop/nvim/lazy-lock.json	/^  "telescope-ui-select.nvim": { "branch": "master", "commit": "6e51d7da30bd139a6950adf2a47fda6df/;"	s	object:telescope-ui-select.nvim
 commit	Desktop/nvim/lazy-lock.json	/^  "telescope.nvim": { "branch": "master", "commit": "b4da76be54691e854d3e0e02c36b0245f945c2c7" }/;"	s	object:telescope.nvim
+commit	Desktop/nvim/lazy-lock.json	/^  "undotree": { "branch": "master", "commit": "b951b87b46c34356d44aa71886aecf9dd7f5788a" },$/;"	s	object:undotree
 commit	Desktop/nvim/lazy-lock.json	/^  "vim-gutentags": { "branch": "master", "commit": "aa47c5e29c37c52176c44e61c780032dfacef3dd" },$/;"	s	object:vim-gutentags
 commit	Desktop/nvim/lazy-lock.json	/^  "which-key.nvim": { "branch": "main", "commit": "370ec46f710e058c9c1646273e6b225acf47cbed" }$/;"	s	object:which-key.nvim
 commits	Desktop/nvim/plugins/telescope.nvim/lua/telescope/builtin/__git.lua	/^git.commits = function(opts)$/;"	f	unknown:git
@@ -3866,6 +3891,7 @@ fzf_term_t	Desktop/nvim/plugins/telescope-fzf-native.nvim/src/fzf.h	/^} fzf_term
 g:	Desktop/nvim/plugins/vim-gutentags/autoload/gutentags/ctags.vim	/^            let g:[newname] = g:[key]$/;"	v
 g:__gutentags_vim_is_leaving	Desktop/nvim/plugins/vim-gutentags/autoload/gutentags.vim	/^    let g:__gutentags_vim_is_leaving = 1$/;"	v
 g:__gutentags_vim_is_leaving	Desktop/nvim/plugins/vim-gutentags/plugin/gutentags.vim	/^let g:__gutentags_vim_is_leaving = 0$/;"	v
+g:autoloaded_undotree	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^let g:autoloaded_undotree = 0$/;"	v
 g:cscope_maps_db_file	Desktop/nvim/plugins/vim-gutentags/autoload/gutentags/cscope_maps.vim	/^        let g:cscope_maps_db_file = a:tags_file$/;"	v
 g:gutentags_add_ctrlp_root_markers	Desktop/nvim/plugins/vim-gutentags/plugin/gutentags.vim	/^let g:gutentags_add_ctrlp_root_markers = get(g:, 'gutentags_add_ctrlp_root_markers', 1)$/;"	v
 g:gutentags_add_default_project_roots	Desktop/nvim/plugins/vim-gutentags/plugin/gutentags.vim	/^let g:gutentags_add_default_project_roots = get(g:, 'gutentags_add_default_project_roots', 1)$/;"	v
@@ -3934,7 +3960,32 @@ g:gutentags_trace	Desktop/nvim/plugins/vim-gutentags/plugin/gutentags.vim	/^let 
 g:gutentags_use_jobs	Desktop/nvim/plugins/vim-gutentags/plugin/gutentags.vim	/^let g:gutentags_use_jobs = get(g:, 'gutentags_use_jobs', has('job'))$/;"	v
 g:loaded_activitywatch	Desktop/nvim/plugins/aw-watcher-vim/plugin/activitywatch.vim	/^let g:loaded_activitywatch = 1$/;"	v
 g:loaded_gutentags	Desktop/nvim/plugins/vim-gutentags/plugin/gutentags.vim	/^let g:loaded_gutentags = 1$/;"	v
+g:loaded_undotree	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^let g:loaded_undotree = 1   " Signal plugin availability with a value of 1.$/;"	v
+g:loaded_undotree	Desktop/nvim/plugins/undotree/plugin/undotree.vim	/^let g:loaded_undotree = 0$/;"	v
+g:loaded_undotree	Desktop/nvim/plugins/undotree/plugin/undotree.vim	/^let g:loaded_undotree = 1   " Signal plugin availability with a value of 1.$/;"	v
 g:telescope_test_delay	Desktop/nvim/plugins/telescope.nvim/scripts/minimal_init.vim	/^let g:telescope_test_delay = 100$/;"	v
+g:undotree_CursorLine	Desktop/nvim/plugins/undotree/plugin/undotree.vim	/^    let g:undotree_CursorLine = 1$/;"	v
+g:undotree_DiffAutoOpen	Desktop/nvim/plugins/undotree/plugin/undotree.vim	/^    let g:undotree_DiffAutoOpen = 1$/;"	v
+g:undotree_DiffCommand	Desktop/nvim/plugins/undotree/plugin/undotree.vim	/^    let g:undotree_DiffCommand = "diff"$/;"	v
+g:undotree_DiffpanelHeight	Desktop/nvim/plugins/undotree/plugin/undotree.vim	/^    let g:undotree_DiffpanelHeight = 10$/;"	v
+g:undotree_HelpLine	Desktop/nvim/plugins/undotree/plugin/undotree.vim	/^    let g:undotree_HelpLine = 1$/;"	v
+g:undotree_HighlightChangedText	Desktop/nvim/plugins/undotree/plugin/undotree.vim	/^    let g:undotree_HighlightChangedText = 1$/;"	v
+g:undotree_HighlightChangedWithSign	Desktop/nvim/plugins/undotree/plugin/undotree.vim	/^    let g:undotree_HighlightChangedWithSign = 1$/;"	v
+g:undotree_HighlightSyntaxAdd	Desktop/nvim/plugins/undotree/plugin/undotree.vim	/^    let g:undotree_HighlightSyntaxAdd = "DiffAdd"$/;"	v
+g:undotree_HighlightSyntaxChange	Desktop/nvim/plugins/undotree/plugin/undotree.vim	/^    let g:undotree_HighlightSyntaxChange = "DiffChange"$/;"	v
+g:undotree_HighlightSyntaxDel	Desktop/nvim/plugins/undotree/plugin/undotree.vim	/^    let g:undotree_HighlightSyntaxDel = "DiffDelete"$/;"	v
+g:undotree_RelativeTimestamp	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^    let g:undotree_RelativeTimestamp = !g:undotree_RelativeTimestamp$/;"	v
+g:undotree_RelativeTimestamp	Desktop/nvim/plugins/undotree/plugin/undotree.vim	/^    let g:undotree_RelativeTimestamp = 1$/;"	v
+g:undotree_SetFocusWhenToggle	Desktop/nvim/plugins/undotree/plugin/undotree.vim	/^    let g:undotree_SetFocusWhenToggle = 0$/;"	v
+g:undotree_ShortIndicators	Desktop/nvim/plugins/undotree/plugin/undotree.vim	/^    let g:undotree_ShortIndicators = 0$/;"	v
+g:undotree_SplitWidth	Desktop/nvim/plugins/undotree/plugin/undotree.vim	/^        let g:undotree_SplitWidth = 24$/;"	v
+g:undotree_SplitWidth	Desktop/nvim/plugins/undotree/plugin/undotree.vim	/^        let g:undotree_SplitWidth = 30$/;"	v
+g:undotree_TreeNodeShape	Desktop/nvim/plugins/undotree/plugin/undotree.vim	/^    let g:undotree_TreeNodeShape = '*'$/;"	v
+g:undotree_TreeReturnShape	Desktop/nvim/plugins/undotree/plugin/undotree.vim	/^    let g:undotree_TreeReturnShape = '\\'$/;"	v
+g:undotree_TreeSplitShape	Desktop/nvim/plugins/undotree/plugin/undotree.vim	/^    let g:undotree_TreeSplitShape = '\/'$/;"	v
+g:undotree_TreeVertShape	Desktop/nvim/plugins/undotree/plugin/undotree.vim	/^    let g:undotree_TreeVertShape = '|'$/;"	v
+g:undotree_UndoDir	Desktop/nvim/plugins/undotree/plugin/undotree.vim	/^    let g:undotree_UndoDir = s:undoDir$/;"	v
+g:undotree_WindowLayout	Desktop/nvim/plugins/undotree/plugin/undotree.vim	/^    let g:undotree_WindowLayout = 1$/;"	v
 g_seed	Desktop/micro/buffers/%home%ramen%Code%scuttle%floor.c	/^static unsigned long long g_seed;$/;"	v	typeref:typename:H\x7F\x03\x01\x01\x10SerializedBuffer\x01ÿ€\x01\x01\x02\x01ÿº#include<stdio.h> unsigned long long	file:
 gap	Desktop/nvim/plugins/nvim-treesitter/lockfile.json	/^  "gap": {$/;"	o
 gaptst	Desktop/nvim/plugins/nvim-treesitter/lockfile.json	/^  "gaptst": {$/;"	o
@@ -6548,6 +6599,7 @@ s	Desktop/nvim/plugins/plenary.nvim/lua/luassert/stub.lua	/^  local s = spy.on(o
 s2	Desktop/nvim/plugins/nvim-treesitter/tests/indent/python/error_state_set.py	/^s2 = {1,$/;"	v
 s:CreateBucket	Desktop/nvim/plugins/aw-watcher-vim/plugin/activitywatch.vim	/^function! s:CreateBucket()$/;"	f
 s:Heartbeat	Desktop/nvim/plugins/aw-watcher-vim/plugin/activitywatch.vim	/^function! s:Heartbeat()$/;"	f
+s:ObserveOptions	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! s:ObserveOptions()$/;"	f
 s:_handleOldOptions	Desktop/nvim/plugins/vim-gutentags/autoload/gutentags/ctags.vim	/^function! s:_handleOldOptions() abort$/;"	f
 s:add_db	Desktop/nvim/plugins/vim-gutentags/autoload/gutentags/gtags_cscope.vim	/^function! s:add_db(db_file) abort$/;"	f
 s:added_db_files	Desktop/nvim/plugins/vim-gutentags/autoload/gutentags/gtags_cscope.vim	/^let s:added_db_files = {}$/;"	v
@@ -6561,23 +6613,72 @@ s:base_apiurl	Desktop/nvim/plugins/aw-watcher-vim/plugin/activitywatch.vim	/^let
 s:bucket_apiurl	Desktop/nvim/plugins/aw-watcher-vim/plugin/activitywatch.vim	/^let s:bucket_apiurl = printf('%s\/buckets\/%s', s:base_apiurl, s:bucketname)$/;"	v
 s:bucketname	Desktop/nvim/plugins/aw-watcher-vim/plugin/activitywatch.vim	/^let s:bucketname = printf('aw-watcher-vim_%s', s:hostname)$/;"	v
 s:cache_project_root	Desktop/nvim/plugins/vim-gutentags/autoload/gutentags.vim	/^function! s:cache_project_root(path) abort$/;"	f
+s:cntr	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^let s:cntr = 0$/;"	v
 s:connected	Desktop/nvim/plugins/aw-watcher-vim/plugin/activitywatch.vim	/^let s:connected = 0$/;"	v
+s:debug	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^    let s:debug = 1$/;"	v
+s:debug	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^let s:debug = 0$/;"	v
+s:debugfile	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^let s:debugfile = $HOME.'\/undotree_debug.log'$/;"	v
 s:did_check_exe	Desktop/nvim/plugins/vim-gutentags/autoload/gutentags/ctags.vim	/^let s:did_check_exe = 0$/;"	v
+s:diffpanel	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^let s:diffpanel = s:new(s:panel)$/;"	v
+s:diffpanel.BindAu	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! s:diffpanel.BindAu() abort$/;"	f
+s:diffpanel.CleanUpHighlight	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! s:diffpanel.CleanUpHighlight() abort$/;"	f
+s:diffpanel.GetStatusLine	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! s:diffpanel.GetStatusLine() abort$/;"	f
+s:diffpanel.Hide	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! s:diffpanel.Hide() abort$/;"	f
+s:diffpanel.Init	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! s:diffpanel.Init() abort$/;"	f
+s:diffpanel.ParseDiff	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! s:diffpanel.ParseDiff(diffresult, targetBufnr) abort$/;"	f
+s:diffpanel.Show	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! s:diffpanel.Show() abort$/;"	f
+s:diffpanel.Toggle	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! s:diffpanel.Toggle() abort$/;"	f
+s:diffpanel.Update	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! s:diffpanel.Update(seq,targetBufnr,targetid,diffmark) abort$/;"	f
+s:exec	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! s:exec(cmd) abort$/;"	f
+s:exec_silent	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! s:exec_silent(cmd) abort$/;"	f
+s:exitIfLast	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! s:exitIfLast() abort$/;"	f
 s:file	Desktop/nvim/plugins/aw-watcher-vim/plugin/activitywatch.vim	/^let s:file = ''$/;"	v
 s:generate_wildignore_options	Desktop/nvim/plugins/vim-gutentags/autoload/gutentags/ctags.vim	/^function! s:generate_wildignore_options() abort$/;"	f
+s:getUniqueID	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! s:getUniqueID() abort$/;"	f
 s:get_ctags_executable	Desktop/nvim/plugins/vim-gutentags/autoload/gutentags/ctags.vim	/^function! s:get_ctags_executable(proj_dir) abort$/;"	f
+s:gettime	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! s:gettime(time) abort$/;"	f
 s:heartbeat_apiurl	Desktop/nvim/plugins/aw-watcher-vim/plugin/activitywatch.vim	/^let s:heartbeat_apiurl = printf('%s\/heartbeat?pulsetime=30', s:bucket_apiurl)$/;"	v
+s:helpless	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^    let s:helpless = ['" Press ? for help.']$/;"	v
+s:helpless	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^    let s:helpless = []$/;"	v
+s:helpmore	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^let s:helpmore = ['"    ===== Marks ===== ',$/;"	v
 s:hostname	Desktop/nvim/plugins/aw-watcher-vim/plugin/activitywatch.vim	/^let s:hostname = get(g:, 'aw_hostname', hostname())$/;"	v
 s:http_response_code	Desktop/nvim/plugins/aw-watcher-vim/plugin/activitywatch.vim	/^let s:http_response_code = {}$/;"	v
+s:keymap	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^let s:keymap += [['ClearDiffMark','M','Clear the diff marker']]$/;"	v
+s:keymap	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^let s:keymap += [['ClearHistory','C','Clear undo history (with confirmation)']]$/;"	v
+s:keymap	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^let s:keymap += [['Close','q','Close undotree panel']]$/;"	v
+s:keymap	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^let s:keymap += [['DiffMark','=','Set the diff marker']]$/;"	v
+s:keymap	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^let s:keymap += [['DiffToggle','D','Toggle the diff panel']]$/;"	v
+s:keymap	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^let s:keymap += [['Enter','<2-LeftMouse>','Move to the current state']]$/;"	v
+s:keymap	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^let s:keymap += [['Enter','<cr>','Move to the current state']]$/;"	v
+s:keymap	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^let s:keymap += [['FocusTarget','<tab>','Set Focus back to the editor']]$/;"	v
+s:keymap	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^let s:keymap += [['Help','?','Toggle quick help']]$/;"	v
+s:keymap	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^let s:keymap += [['NextSavedState','>','Move to the next saved state']]$/;"	v
+s:keymap	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^let s:keymap += [['NextState','K','Move to the next undo state']]$/;"	v
+s:keymap	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^let s:keymap += [['PreviousSavedState','<','Move to the previous saved state']]$/;"	v
+s:keymap	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^let s:keymap += [['PreviousState','J','Move to the previous undo state']]$/;"	v
+s:keymap	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^let s:keymap += [['Redo','<c-r>','Redo']]$/;"	v
+s:keymap	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^let s:keymap += [['TimestampToggle','T','Toggle relative timestamp']]$/;"	v
+s:keymap	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^let s:keymap += [['Undo','u','Undo']]$/;"	v
+s:keymap	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^let s:keymap = []$/;"	v
 s:known_files	Desktop/nvim/plugins/vim-gutentags/autoload/gutentags.vim	/^let s:known_files = []$/;"	v
 s:known_projects	Desktop/nvim/plugins/vim-gutentags/autoload/gutentags.vim	/^let s:known_projects = {}$/;"	v
 s:language	Desktop/nvim/plugins/aw-watcher-vim/plugin/activitywatch.vim	/^let s:language = ''$/;"	v
 s:last_heartbeat	Desktop/nvim/plugins/aw-watcher-vim/plugin/activitywatch.vim	/^let s:last_heartbeat = localtime()$/;"	v
 s:last_wildignores	Desktop/nvim/plugins/vim-gutentags/autoload/gutentags/ctags.vim	/^let s:last_wildignores = ''$/;"	v
+s:log	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! s:log(msg) abort$/;"	f
 s:manual_update_tags	Desktop/nvim/plugins/vim-gutentags/autoload/gutentags.vim	/^function! s:manual_update_tags(bang) abort$/;"	f
+s:new	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! s:new(obj) abort$/;"	f
+s:node	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^let s:node = {}$/;"	v
+s:node.Init	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! s:node.Init() abort$/;"	f
 s:nvim	Desktop/nvim/plugins/aw-watcher-vim/plugin/activitywatch.vim	/^let s:nvim = has('nvim')$/;"	v
 s:nvim_job_exit_wrapper	Desktop/nvim/plugins/vim-gutentags/autoload/gutentags.vim	/^    function! s:nvim_job_exit_wrapper(real_cb, job, exit_code, event_type) abort$/;"	f
 s:nvim_job_out_wrapper	Desktop/nvim/plugins/vim-gutentags/autoload/gutentags.vim	/^    function! s:nvim_job_out_wrapper(real_cb, job, lines, event_type) abort$/;"	f
+s:open_folds	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^let s:open_folds = 1$/;"	v
+s:panel	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^let s:panel = {}$/;"	v
+s:panel.Hide	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! s:panel.Hide() abort$/;"	f
+s:panel.Init	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! s:panel.Init() abort$/;"	f
+s:panel.IsVisible	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! s:panel.IsVisible() abort$/;"	f
+s:panel.SetFocus	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! s:panel.SetFocus() abort$/;"	f
 s:process_options_file	Desktop/nvim/plugins/vim-gutentags/autoload/gutentags/ctags.vim	/^function! s:process_options_file(proj_dir, path) abort$/;"	f
 s:project	Desktop/nvim/plugins/aw-watcher-vim/plugin/activitywatch.vim	/^let s:project = ''$/;"	v
 s:runner_exe	Desktop/nvim/plugins/vim-gutentags/autoload/gutentags/cscope.vim	/^let s:runner_exe = gutentags#get_plat_file('update_scopedb')$/;"	v
@@ -6586,6 +6687,64 @@ s:runner_exe	Desktop/nvim/plugins/vim-gutentags/autoload/gutentags/ctags.vim	/^l
 s:runner_exe	Desktop/nvim/plugins/vim-gutentags/autoload/gutentags/gtags_cscope.vim	/^let s:runner_exe = gutentags#get_plat_file('update_gtags')$/;"	v
 s:runner_exe	Desktop/nvim/plugins/vim-gutentags/autoload/gutentags/pycscope.vim	/^let s:runner_exe = gutentags#get_plat_file('update_pyscopedb')$/;"	v
 s:save_cpo	Desktop/nvim/plugins/aw-watcher-vim/plugin/activitywatch.vim	/^let s:save_cpo = &cpo$/;"	v
+s:signId	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^let s:signId = 2123654789$/;"	v
+s:subdir	Desktop/nvim/plugins/undotree/plugin/undotree.vim	/^    let s:subdir = has('nvim') ? 'nvim' : 'vim'$/;"	v
+s:timeDay	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^    let s:timeDay  = '1 d'$/;"	v
+s:timeDay	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^    let s:timeDay  = '1 day ago'$/;"	v
+s:timeDays	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^    let s:timeDays = ' d'$/;"	v
+s:timeDays	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^    let s:timeDays = ' days ago'$/;"	v
+s:timeHour	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^    let s:timeHour  = '1 h'$/;"	v
+s:timeHour	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^    let s:timeHour  = '1 hour ago'$/;"	v
+s:timeHours	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^    let s:timeHours = ' h'$/;"	v
+s:timeHours	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^    let s:timeHours = ' hours ago'$/;"	v
+s:timeMinute	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^    let s:timeMinute  = '1 m'$/;"	v
+s:timeMinute	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^    let s:timeMinute  = '1 minute ago'$/;"	v
+s:timeMinutes	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^    let s:timeMinutes = ' m'$/;"	v
+s:timeMinutes	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^    let s:timeMinutes = ' minutes ago'$/;"	v
+s:timeOriginal	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^    let s:timeOriginal = 'Orig'$/;"	v
+s:timeOriginal	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^    let s:timeOriginal = 'Original'$/;"	v
+s:timeSecond	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^    let s:timeSecond  = '1 s'$/;"	v
+s:timeSecond	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^    let s:timeSecond = '1 second ago'$/;"	v
+s:timeSeconds	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^    let s:timeSeconds = ' s'$/;"	v
+s:timeSeconds	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^    let s:timeSeconds = ' seconds ago'$/;"	v
+s:undoDir	Desktop/nvim/plugins/undotree/plugin/undotree.vim	/^        let s:undoDir = $HOME . '\/.local\/state\/' . s:subdir . '\/undo\/'$/;"	v
+s:undoDir	Desktop/nvim/plugins/undotree/plugin/undotree.vim	/^    let s:undoDir = &undodir$/;"	v
+s:undotree	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^let s:undotree = s:new(s:panel)$/;"	v
+s:undotree.Action	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! s:undotree.Action(action) abort$/;"	f
+s:undotree.ActionClearDiffMark	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! s:undotree.ActionClearDiffMark() abort$/;"	f
+s:undotree.ActionClearHistory	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! s:undotree.ActionClearHistory() abort$/;"	f
+s:undotree.ActionClose	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! s:undotree.ActionClose() abort$/;"	f
+s:undotree.ActionDiffMark	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! s:undotree.ActionDiffMark() abort$/;"	f
+s:undotree.ActionDiffToggle	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! s:undotree.ActionDiffToggle() abort$/;"	f
+s:undotree.ActionEnter	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! s:undotree.ActionEnter() abort$/;"	f
+s:undotree.ActionFocusTarget	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! s:undotree.ActionFocusTarget() abort$/;"	f
+s:undotree.ActionHelp	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! s:undotree.ActionHelp() abort$/;"	f
+s:undotree.ActionInTarget	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! s:undotree.ActionInTarget(cmd) abort$/;"	f
+s:undotree.ActionNextSavedState	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! s:undotree.ActionNextSavedState() abort$/;"	f
+s:undotree.ActionNextState	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! s:undotree.ActionNextState() abort$/;"	f
+s:undotree.ActionPreviousSavedState	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! s:undotree.ActionPreviousSavedState() abort$/;"	f
+s:undotree.ActionPreviousState	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! s:undotree.ActionPreviousState() abort$/;"	f
+s:undotree.ActionRedo	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! s:undotree.ActionRedo() abort$/;"	f
+s:undotree.ActionTimestampToggle	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! s:undotree.ActionTimestampToggle() abort$/;"	f
+s:undotree.ActionUndo	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! s:undotree.ActionUndo() abort$/;"	f
+s:undotree.AppendHelp	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! s:undotree.AppendHelp() abort$/;"	f
+s:undotree.BindAu	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! s:undotree.BindAu() abort$/;"	f
+s:undotree.BindKey	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! s:undotree.BindKey() abort$/;"	f
+s:undotree.ConvertInput	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! s:undotree.ConvertInput(updatetree) abort$/;"	f
+s:undotree.Draw	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! s:undotree.Draw() abort$/;"	f
+s:undotree.GetStatusLine	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! s:undotree.GetStatusLine() abort$/;"	f
+s:undotree.Index2Screen	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! s:undotree.Index2Screen(index) abort$/;"	f
+s:undotree.Init	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! s:undotree.Init() abort$/;"	f
+s:undotree.MarkSeqs	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! s:undotree.MarkSeqs(move_cursor) abort$/;"	f
+s:undotree.Render	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! s:undotree.Render() abort$/;"	f
+s:undotree.Screen2Index	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! s:undotree.Screen2Index(line) abort$/;"	f
+s:undotree.SetTargetFocus	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! s:undotree.SetTargetFocus() abort$/;"	f
+s:undotree.Show	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! s:undotree.Show() abort$/;"	f
+s:undotree.Toggle	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! s:undotree.Toggle() abort$/;"	f
+s:undotree.Update	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! s:undotree.Update() abort$/;"	f
+s:undotree.UpdateDiff	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! s:undotree.UpdateDiff() abort$/;"	f
+s:undotree._parseNode	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! s:undotree._parseNode(in,out) abort$/;"	f
+s:undotreeAction	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! s:undotreeAction(action) abort$/;"	f
 s:unix_redir	Desktop/nvim/plugins/vim-gutentags/autoload/gutentags/cscope.vim	/^let s:unix_redir = (&shellredir =~# '%s') ? &shellredir : &shellredir . ' %s'$/;"	v
 s:unix_redir	Desktop/nvim/plugins/vim-gutentags/autoload/gutentags/cscope_maps.vim	/^let s:unix_redir = (&shellredir =~# '%s') ? &shellredir : &shellredir . ' %s'$/;"	v
 s:unix_redir	Desktop/nvim/plugins/vim-gutentags/autoload/gutentags/ctags.vim	/^let s:unix_redir = (&shellredir =~# '%s') ? &shellredir : &shellredir . ' %s'$/;"	v
@@ -7323,6 +7482,15 @@ udev	Desktop/nvim/plugins/nvim-treesitter/lockfile.json	/^  "udev": {$/;"	o
 unbalanced	Desktop/nvim/plugins/gitsigns.nvim/.luarc.json	/^      "unbalanced" : "Opened",$/;"	s	object:diagnostics.groupFileStatus
 undefinedFun	Desktop/nvim/plugins/nvim-treesitter/tests/query/highlights/haskell/test.hs	/^undefinedFun = undefined$/;"	f
 undo_stage_hunk	Desktop/nvim/plugins/gitsigns.nvim/lua/gitsigns/actions.lua	/^M.undo_stage_hunk = async.create(0, function()$/;"	f	unknown:M
+undotree	Desktop/nvim/lazy-lock.json	/^  "undotree": { "branch": "master", "commit": "b951b87b46c34356d44aa71886aecf9dd7f5788a" },$/;"	o
+undotree#UndotreeFocus	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! undotree#UndotreeFocus() abort$/;"	f
+undotree#UndotreeHide	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! undotree#UndotreeHide() abort$/;"	f
+undotree#UndotreeIsVisible	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! undotree#UndotreeIsVisible() abort$/;"	f
+undotree#UndotreePersistUndo	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! undotree#UndotreePersistUndo(goSetUndofile) abort$/;"	f
+undotree#UndotreeShow	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! undotree#UndotreeShow() abort$/;"	f
+undotree#UndotreeToggle	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! undotree#UndotreeToggle() abort$/;"	f
+undotree#UndotreeUpdate	Desktop/nvim/plugins/undotree/autoload/undotree.vim	/^function! undotree#UndotreeUpdate() abort$/;"	f
+undotreeDetectPersistenceUndo	Desktop/nvim/plugins/undotree/plugin/undotree.vim	/^augroup undotreeDetectPersistenceUndo$/;"	a
 unescape_single_quote	Desktop/nvim/plugins/telescope.nvim/lua/telescope/builtin/__git.lua	/^  local unescape_single_quote = function(v)$/;"	f
 ungrammar	Desktop/nvim/plugins/nvim-treesitter/lockfile.json	/^  "ungrammar": {$/;"	o
 uninstall	Desktop/nvim/plugins/nvim-treesitter/lua/nvim-treesitter/install.lua	/^function M.uninstall(...)$/;"	f	unknown:M

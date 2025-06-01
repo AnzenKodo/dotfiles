@@ -50,8 +50,8 @@ vim.o.backup = false
 
 -- Keybindings
 -- ============================================================================
-
-vim.keymap.set('n', '<leader>r', ':source %<CR>:luafile %<CR>', { desc = 'Reload config' })
+--
+vim.keymap.set("n", "<leader>r", ":checktime<CR>", { desc = "Reload file" })
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>', { desc = "Clear Search Highlight" })
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
@@ -65,6 +65,13 @@ vim.keymap.set('i', '<A-o>', '<C-x><C-o>', { noremap = true }, { desc = 'Omni-co
 vim.keymap.set('i', '<A-d>', '<C-x><C-k>', { noremap = true }, { desc = 'Dictionary completion' })
 vim.keymap.set('i', '<A-f>', '<C-x><C-f>', { noremap = true }, { desc = 'Filename completion' })
 vim.keymap.set('i', '<A-l>', '<C-x><C-l>', { noremap = true }, { desc = 'Whole line completion' })
+
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "c",
+  callback = function()
+    vim.keymap.set('n', '<F5>', ":term cc build.c && ./a.out build-run<CR>", { desc = "Run build command" })
+  end,
+})
 
 -- Functions
 -- ============================================================================
@@ -214,9 +221,10 @@ require('lazy').setup({
             vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
             vim.keymap.set('n', '<leader>sT', builtin.tags, { desc = '[S]earch [T]ags' })
             vim.keymap.set('n', '<leader>st', builtin.current_buffer_tags, { desc = '[S]earch [T]ags' })
+            vim.keymap.set('n', '<leader>sb', builtin.buffers, { desc = '[ ] [S]earch [B]uffers' })
             vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
             vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
-            vim.keymap.set('n', '<leader>:', builtin.command_history, { desc = '[ ] Find existing buffers' })
+            vim.keymap.set('n', '<leader>s:', builtin.command_history, { desc = '[ ] Command History' })
             vim.keymap.set('n', '<leader>/', function()
                 builtin.current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
                     winblend = 10,
@@ -245,6 +253,12 @@ require('lazy').setup({
             indent = { enable = true, disable = { 'ruby' } },
         },
     },
+    {
+        'mbbill/undotree',
+        config = function()
+            vim.keymap.set('n', '<leader><F5>', vim.cmd.UndotreeToggle)
+        end,
+    }
 }, { 
     root = vim.fn.stdpath("config") .. "/plugins"
 })
