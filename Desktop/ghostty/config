@@ -1,5 +1,8 @@
 theme = Espresso
 mouse-hide-while-typing = true
+cursor-opacity = 0.7
+cursor-style = block
+cursor-style-blink = true
 window-vsync = false
 window-save-state = always
 auto-update = off

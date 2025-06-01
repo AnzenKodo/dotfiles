@@ -29,10 +29,9 @@
   <property name="misc-image-preview-mode" type="string" value="THUNAR_IMAGE_PREVIEW_MODE_EMBEDDED"/>
   <property name="tree-icon-emblems" type="bool" value="true"/>
   <property name="last-tabs-left" type="array">
-    <value type="string" value="file:///home/ramen/Drive/Documents"/>
     <value type="string" value="file:///home/ramen/Downloads"/>
   </property>
-  <property name="last-focused-tab-left" type="int" value="1"/>
+  <property name="last-focused-tab-left" type="int" value="0"/>
   <property name="last-focused-tab-right" type="int" value="0"/>
   <property name="misc-confirm-close-multiple-tabs" type="bool" value="false"/>
 </channel>

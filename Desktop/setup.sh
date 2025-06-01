@@ -61,7 +61,7 @@ ln -sf $DOTFILES/Desktop/git $XDG_CONFIG_HOME
 ln -sf $DOTFILES/Desktop/rofi $XDG_CONFIG_HOME
 ln -sf $DOTFILES/Desktop/focus-editor $XDG_CONFIG_HOME
 ln -sf ~/Drive/Dotfiles/Desktop/keepassxc $XDG_CONFIG_HOME
-
+ ln -sf ~/Dotfiles/Desktop/nvim $XDG_CONFIG_HOME
 # sudo rm /usr/local/bin
 # sudo ln -srf $USR_APPLICATIONS_DIR/bin /usr/local/bin
 
