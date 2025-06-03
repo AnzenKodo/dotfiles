@@ -18,12 +18,14 @@ export XDG_VIDEOS_DIR="$HOME/Videos"
 export PATH="~/Applications/AppImages:~/Applications/bin"\
 ":~/Code/miniapps/bin"\
 ":~/Applications/ffmpeg:~/Applications/jdk-23/bin"\
-":$XDG_DATA_HOME/python/bin:$CARGO_HOME/bin:~/Applications/clang/bin:$PATH"
+":$XDG_DATA_HOME/python/bin:$CARGO_HOME/bin:~/Applications/clang/bin"\
+":~/Applications/codelldb/adapter/codelldb"\
+":$PATH"
 
 # Custom Application Varibales =================================================
 
 export TERMINAL="ghostty"
-export EDITOR="focus"
+export EDITOR="nvim"
 export BROWSER="brave --disable-features=OutdatedBuildDetector"
 export FILES="thunar"
 export OFFICE="onlyoffice"
@@ -151,7 +153,7 @@ alias dir_size="du -sh -- * | sort -hr"
 alias download="axel --verbose -n"
 alias timg="timg -p kitty --title='%b (%wx%h)'"
 
-alias micro="micro --config-dir $HOME/Dotfiles/Desktop/micro"
+# alias micro="micro --config-dir $HOME/Dotfiles/Desktop/micro"
 alias todo="o $EDITOR ~/Drive/Notes/Online/Todo.md"
 alias feed="o $EDITOR ~/Drive/Notes/Feed.md"
 alias xcolor="xcolor | xclip"

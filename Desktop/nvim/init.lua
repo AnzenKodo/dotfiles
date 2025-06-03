@@ -12,6 +12,8 @@ vim.o.colorcolumn = "80"
 vim.o.cursorline = true
 vim.o.confirm = true
 vim.o.tags = "tags"
+vim.o.endofline = true
+vim.o.fixendofline = true
 
 -- Scroll
 vim.o.scrolloff = 10        -- Number of screen lines keep above and below the cursor.
@@ -50,7 +52,7 @@ vim.o.backup = false
 
 -- Keybindings
 -- ============================================================================
---
+
 vim.keymap.set("n", "<leader>r", ":checktime<CR>", { desc = "Reload file" })
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>', { desc = "Clear Search Highlight" })
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
@@ -65,6 +67,7 @@ vim.keymap.set('i', '<A-o>', '<C-x><C-o>', { noremap = true }, { desc = 'Omni-co
 vim.keymap.set('i', '<A-d>', '<C-x><C-k>', { noremap = true }, { desc = 'Dictionary completion' })
 vim.keymap.set('i', '<A-f>', '<C-x><C-f>', { noremap = true }, { desc = 'Filename completion' })
 vim.keymap.set('i', '<A-l>', '<C-x><C-l>', { noremap = true }, { desc = 'Whole line completion' })
+vim.keymap.set('i', '<A-e>', '<C-e>',      { noremap = true }, { desc = 'Cancel completion' })
 
 vim.api.nvim_create_autocmd("FileType", {
   pattern = "c",
@@ -75,6 +78,14 @@ vim.api.nvim_create_autocmd("FileType", {
 
 -- Functions
 -- ============================================================================
+
+-- Trim Trailing Whitespace
+vim.api.nvim_create_autocmd('BufWritePre', {
+  pattern = '*.rb',
+  callback = function()
+    vim.cmd('%s/\\s\\+$//e')
+  end,
+})
 
 -- Highlight when yanking (copying) text
 vim.api.nvim_create_autocmd('TextYankPost', {
@@ -122,13 +133,18 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require('lazy').setup({
-    'ActivityWatch/aw-watcher-vim',
-    { 
+    -- Smooth Scrolling
+    "karb94/neoscroll.nvim",                               
+    -- Time Tracker
+    'ActivityWatch/aw-watcher-vim',                         
+
+    { -- Tags Manager 
         'ludovicchabant/vim-gutentags',
         config = function()
             vim.g.gutentags_ctags_extra_args = { '--c-kinds=+p' }
         end
     },
+
     {
         'lewis6991/gitsigns.nvim',
         opts = {
@@ -141,6 +157,7 @@ require('lazy').setup({
             },
         },
     },
+
     {
         'folke/which-key.nvim',
         event = 'VimEnter', -- Sets the loading event to 'VimEnter'
@@ -186,6 +203,7 @@ require('lazy').setup({
             },
         },
     },
+
     { -- Fuzzy Finder (files, lsp, etc)
         'nvim-telescope/telescope.nvim',
         event = 'VimEnter',
@@ -211,7 +229,7 @@ require('lazy').setup({
             -- Enable Telescope extensions if they are installed
             pcall(require('telescope').load_extension, 'fzf')
             pcall(require('telescope').load_extension, 'ui-select')
-            -- See `:help telescope.builtin`
+            -- Keymaps
             local builtin = require 'telescope.builtin'
             vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
             vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
@@ -231,7 +249,6 @@ require('lazy').setup({
                     previewer = false,
                 })
             end, { desc = '[/] Fuzzily search in current buffer' })
-            --  See `:help telescope.builtin.live_grep()` for information about particular keys
             vim.keymap.set('n', '<leader>s/', function()
                 builtin.live_grep {
                     grep_open_files = true,
@@ -240,6 +257,7 @@ require('lazy').setup({
             end, { desc = '[S]earch [/] in Open Files' })
         end,
     },
+
     { -- Highlight, edit, and navigate code
         'nvim-treesitter/nvim-treesitter',
         build = ':TSUpdate',
@@ -253,6 +271,7 @@ require('lazy').setup({
             indent = { enable = true, disable = { 'ruby' } },
         },
     },
+
     {
         'mbbill/undotree',
         config = function()
