@@ -142,6 +142,7 @@ require('lazy').setup({
         'ludovicchabant/vim-gutentags',
         config = function()
             vim.g.gutentags_ctags_extra_args = { '--c-kinds=+p' }
+            vim.g.gutentags_project_root = { 'tags' }
         end
     },
 
