@@ -1,8 +1,0 @@
-cd $HOME/Dotfiles
-
-git add .
-git commit -m "Backup from Phone"
-git push
-
-rclone --config=$HOME/storage/shared/Drive/Dotfiles/rclone.conf bisync $HOME/storage/shared/Drive Personal:/ --verbose --conflict-resolve newer
-
