@@ -161,7 +161,6 @@ require('lazy').setup({
     "karb94/neoscroll.nvim",                               
     -- Time Tracker
     'ActivityWatch/aw-watcher-vim',                         
-    
     { -- Session Manager
         'rmagatti/auto-session',
         lazy = false,

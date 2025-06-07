@@ -153,7 +153,6 @@ alias dir_size="du -sh -- * | sort -hr"
 alias download="axel --verbose -n"
 alias timg="timg -p kitty --title='%b (%wx%h)'"
 
-# alias micro="micro --config-dir $HOME/Dotfiles/Desktop/micro"
 alias todo="$EDITOR ~/Drive/Notes/Online/Todo.md"
 alias feed="$EDITOR ~/Drive/Notes/Feed.md"
 alias xcolor="xcolor | xclip"
