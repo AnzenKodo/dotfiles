@@ -65,6 +65,21 @@ vim.o.backup = false
 vim.keymap.set("n", "<leader>r", ":checktime<CR>",  { desc = "[R]eload" })
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>', { desc = "Clear Search Highlight" })
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>',    { desc = 'Exit terminal mode' })
+vim.keymap.set({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save File" })
+
+-- Move Lines
+vim.keymap.set("n", "<A-j>", "<cmd>execute 'move .+' . v:count1<cr>==",                   { desc = "Move Down" })
+vim.keymap.set("n", "<A-k>", "<cmd>execute 'move .-' . (v:count1 + 1)<cr>==",             { desc = "Move Up" })
+vim.keymap.set("i", "<A-j>", "<esc><cmd>m .+1<cr>==gi",                                   { desc = "Move Down" })
+vim.keymap.set("i", "<A-k>", "<esc><cmd>m .-2<cr>==gi",                                   { desc = "Move Up" })
+vim.keymap.set("v", "<A-j>", ":<C-u>execute \"'<,'>move '>+\" . v:count1<cr>gv=gv",       { desc = "Move Down" })
+vim.keymap.set("v", "<A-k>", ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<cr>gv=gv", { desc = "Move Up" })
+
+-- Buffers
+vim.keymap.set("n", "b[", "<cmd>bprevious<cr>",    { desc = "Prev Buffer" })
+vim.keymap.set("n", "b]", "<cmd>bnext<cr>",        { desc = "Next Buffer" })
+vim.keymap.set("n", "<leader>bb", "<cmd>e #<cr>",  { desc = "Switch to Other Buffer" })
+vim.keymap.set('n', '<leader>wd', ':bn | bd#<CR>', { desc = 'Delete Split' })
 
 -- Tag Jumps
 vim.keymap.set('n', 'g]', '<C-]>', { desc = 'Jump to definition' })
@@ -74,7 +89,7 @@ vim.keymap.set('n', 'g[', '<C-t>', { desc = 'Return from jump' })
 -- Auto complete 
 vim.keymap.set('i', '<A-o>', '<C-x><C-o>', { noremap = true }, { desc = 'Omni-completion (context-aware)' })
 vim.keymap.set('i', '<A-n>', '<C-x><C-n>', { noremap = true }, { desc = 'Completion from current file.' })
-vim.keymap.set('i', '<A-i>', '<C-x><C-i>', { noremap = true }, { desc = 'Completion fomr include file.' })
+vim.keymap.set('i', '<A-i>', '<C-x><C-i>', { noremap = true }, { desc = 'Completion from include file.' })
 vim.keymap.set('i', '<A-d>', '<C-x><C-k>', { noremap = true }, { desc = 'Dictionary completion' })
 vim.keymap.set('i', '<A-f>', '<C-x><C-f>', { noremap = true }, { desc = 'Filename completion' })
 vim.keymap.set('i', '<A-l>', '<C-x><C-l>', { noremap = true }, { desc = 'Whole line completion' })
@@ -86,11 +101,22 @@ vim.keymap.set('n', '<leader>dn', vim.diagnostic.goto_next,  { desc = '[D]iagnos
 vim.keymap.set('n', '<leader>dp', vim.diagnostic.goto_prev,  { desc = '[D]iagnostic [P]revious' })
 
 -- Split
-vim.keymap.set('n', '<leader>wv', '<C-w>v', { desc = 'Vertical Split' })
-vim.keymap.set('n', '<leader>ws', '<C-w>s', { desc = 'Horizontal Split' })
-vim.keymap.set('n', '<leader>wl', '<C-w>l', { desc = 'Go to Left Split' })
-vim.keymap.set('n', '<leader>wh', '<C-w>h', { desc = 'Go to Right Split' })
-vim.keymap.set('n', '<leader>wd', ':bn | bd#<CR>', { desc = 'Delete Split' })
+vim.keymap.set('n', '<leader>sv', '<C-w>v', { desc = '[S]plit Vertical' })
+vim.keymap.set('n', '<leader>ss', '<C-w>s', { desc = '[S]plit Horizontal' })
+vim.keymap.set('n', '<leader>sl', '<C-w>l', { desc = '[S]plit go [L]eft' })
+vim.keymap.set('n', '<leader>sh', '<C-w>h', { desc = '[S]plit go [R]ight' })
+
+-- Better Search Next 
+vim.keymap.set("n", "n", "'Nn'[v:searchforward].'zv'",  { expr = true, desc = "Next Search Result" })
+vim.keymap.set("x", "n", "'Nn'[v:searchforward]",       { expr = true, desc = "Next Search Result" })
+vim.keymap.set("o", "n", "'Nn'[v:searchforward]",       { expr = true, desc = "Next Search Result" })
+vim.keymap.set("n", "N", "'nN'[v:searchforward].'zv'",  { expr = true, desc = "Prev Search Result" })
+vim.keymap.set("x", "N", "'nN'[v:searchforward]",       { expr = true, desc = "Prev Search Result" })
+vim.keymap.set("o", "N", "'nN'[v:searchforward]",       { expr = true, desc = "Prev Search Result" })
+
+-- better indenting
+vim.keymap.set("v", "<", "<gv")
+vim.keymap.set("v", ">", ">gv")
 
 vim.api.nvim_create_autocmd("FileType", {
   pattern = "c",
@@ -130,17 +156,20 @@ vim.api.nvim_create_autocmd("BufReadPost", {
   end,
 })
 
-
--- Auto generate tags file with ctags
--- vim.api.nvim_create_autocmd("BufWritePost", {
---     pattern = {"*.c", "*.h"},
---     command = "silent! !ctags -R --kinds-c=+p . &",
--- })
+-- wrap and check for spell in text filetypes
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "text", "plaintex", "typst", "gitcommit", "markdown" },
+  callback = function()
+    vim.opt.wrap = true
+    vim.opt.spell = true
+  end,
+})
 
 -- Plugin Manger
 -- ============================================================================
 
-local lazypath = vim.fn.stdpath("config") .. "/plugins/lazy.nvim"
+local plugin_path = vim.fn.stdpath("config") .. "/plugins"
+local lazypath = plugin_path .. "/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
     local lazyrepo = "https://github.com/folke/lazy.nvim.git"
     local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
@@ -155,22 +184,25 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
     end
 end
 vim.opt.rtp:prepend(lazypath)
-
 require('lazy').setup({
-    -- Smooth Scrolling
-    "karb94/neoscroll.nvim",                               
-    -- Time Tracker
-    'ActivityWatch/aw-watcher-vim',                         
+    { -- Smooth Scrolling
+        dir = plugin_path .. "/neoscroll.nvim",
+    },
+
+    { -- Time Tracker
+        dir = plugin_path .. '/aw-watcher-vim',
+    }, 
+
     { -- Session Manager
-        'rmagatti/auto-session',
+        dir = plugin_path .. '/auto-session',
         lazy = false,
         config = function()
             require("auto-session").setup()
         end,
     },
 
-    {
-        'mfussenegger/nvim-lint',
+    { -- Linter
+        dir = plugin_path .. "/nvim-lint",
         event = "VeryLazy",
         config = function()
             require('lint').linters_by_ft = {
@@ -213,7 +245,7 @@ require('lazy').setup({
     },
 
     { -- Tags Manager 
-        'ludovicchabant/vim-gutentags',
+        dir = plugin_path .. "/vim-gutentags",
         config = function()
             vim.g.gutentags_ctags_extra_args = { '--c-kinds=+p' }
             vim.g.gutentags_project_root = { 'tags' }
@@ -221,7 +253,7 @@ require('lazy').setup({
     },
 
     {
-        'lewis6991/gitsigns.nvim',
+        dir = plugin_path .. "/gitsigns.nvim",
         opts = {
             signs = {
                 add = { text = '+' },
@@ -234,7 +266,7 @@ require('lazy').setup({
     },
 
     {
-        'folke/which-key.nvim',
+        dir = plugin_path .. "/which-key.nvim",
         event = 'VimEnter', -- Sets the loading event to 'VimEnter'
         opts = {
             delay = 0,
@@ -274,25 +306,31 @@ require('lazy').setup({
             spec = {
                 { '<leader>d', group = '[D]iagnostic' },
                 { '<leader>s', group = '[S]earch' },
+                { '<leader>b', group = '[B]uffer' },
                 { '<leader>t', group = '[T]oggle' },
+                { '<leader>s', group = '[S]plit' },
                 { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
             },
         },
     },
 
     { -- Fuzzy Finder
-        'nvim-telescope/telescope.nvim',
+        dir = plugin_path .. "/telescope/telescope.nvim",
         event = 'VimEnter',
         dependencies = {
-            'nvim-lua/plenary.nvim',
             {
-                'nvim-telescope/telescope-fzf-native.nvim',
+                dir = plugin_path .. "/telescope/plenary.nvim"
+            },
+            {
+                dir = plugin_path .. "/telescope/telescope-fzf-native.nvim",
                 build = 'make',
                 cond = function()
                     return vim.fn.executable 'make' == 1
                 end,
             },
-            { 'nvim-telescope/telescope-ui-select.nvim' },
+            {   
+                dir = plugin_path .. "/telescope/telescope-ui-select.nvim"
+            },
         },
         config = function()
             require('telescope').setup {
@@ -307,18 +345,17 @@ require('lazy').setup({
             pcall(require('telescope').load_extension, 'ui-select')
             -- Keymaps
             local builtin = require 'telescope.builtin'
-            vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
-            vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
-            vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S]earch [F]iles' })
-            vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
-            vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
-            vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
-            vim.keymap.set('n', '<leader>sT', builtin.tags, { desc = '[S]earch [T]ags' })
-            vim.keymap.set('n', '<leader>st', builtin.current_buffer_tags, { desc = '[S]earch [T]ags' })
-            vim.keymap.set('n', '<leader>sb', builtin.buffers, { desc = '[S]earch [B]uffers' })
-            vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
-            vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
-            vim.keymap.set('n', '<leader>s:', builtin.command_history, { desc = '[ ] Command History' })
+            vim.keymap.set('n', '<leader>sh', builtin.help_tags,            { desc = '[S]earch [H]elp' })
+            vim.keymap.set('n', '<leader>sk', builtin.keymaps,              { desc = '[S]earch [K]eymaps' })
+            vim.keymap.set('n', '<leader>sf', builtin.find_files,           { desc = '[S]earch [F]iles' })
+            vim.keymap.set('n', '<leader>ss', builtin.builtin,              { desc = '[S]earch [S]elect Telescope' })
+            vim.keymap.set('n', '<leader>sw', builtin.grep_string,          { desc = '[S]earch current [W]ord' })
+            vim.keymap.set('n', '<leader>sg', builtin.live_grep,            { desc = '[S]earch by [G]rep' })
+            vim.keymap.set('n', '<leader>sT', builtin.tags,                 { desc = '[S]earch [T]ags' })
+            vim.keymap.set('n', '<leader>st', builtin.current_buffer_tags,  { desc = '[S]earch [T]ags' })
+            vim.keymap.set('n', '<leader>so', builtin.oldfiles,             { desc = '[S]earch Recent Files ("." for repeat)' })
+            vim.keymap.set('n', '<leader><leader>', builtin.buffers,        { desc = 'Find existing buffers' })
+            vim.keymap.set('n', '<leader>s:', builtin.command_history,      { desc = 'Command History' })
             vim.keymap.set('n', '<leader>/', function()
                 builtin.current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
                     winblend = 10,
@@ -335,7 +372,7 @@ require('lazy').setup({
     },
 
     { -- Highlight, edit, and navigate code
-        'nvim-treesitter/nvim-treesitter',
+        dir = plugin_path .. "/nvim-treesitter",
         build = ':TSUpdate',
         main = 'nvim-treesitter.configs', -- Sets main module to use for opts
         opts = {
@@ -348,28 +385,30 @@ require('lazy').setup({
         },
     },
 
-    {
-        'mbbill/undotree',
-        config = function()
+    { -- Undo History
+       dir = plugin_path .. "/undotree",
+       config = function()
             vim.keymap.set('n', '<leader><F5>', vim.cmd.UndotreeToggle)
-        end,
+       end,
     },
 
     {
-        "lukas-reineke/indent-blankline.nvim",
-        main = "ibl",
-        opts = {},
-        config = function()
-            require("ibl").setup() 
-        end,
+       dir = plugin_path .. "/indent-blankline.nvim",
+       main = "ibl",
+       opts = {},
+       config = function()
+           require("ibl").setup() 
+       end,
     },
 
     { -- Theme
-        'rafamadriz/neon',
+        dir = plugin_path .. "/neon",
         config = function()
             vim.g.neon_style = "dark"
             vim.cmd[[colorscheme neon]]
         end,
     }
+}, {
+    root = plugin_path .. "/online",
 })
 

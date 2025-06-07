@@ -1,4 +1,4 @@
-# Set Varibales
+# Set Variables
 #===============================================================================
 
 # Support XDG Base Directory ===================================================
@@ -22,7 +22,7 @@ export PATH="~/Applications/AppImages:~/Applications/bin"\
 ":~/Applications/codelldb/adapter/codelldb"\
 ":$PATH"
 
-# Custom Application Varibales =================================================
+# Custom Application Variables =================================================
 
 export TERMINAL="ghostty"
 export EDITOR="nvim"
