@@ -14,6 +14,13 @@ vim.o.confirm = true
 vim.o.tags = "tags"
 vim.o.endofline = true
 vim.o.fixendofline = true
+vim.o.updatetime = 50
+vim.o.confirm = true
+vim.o.sessionoptions="blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
+
+-- Split
+vim.o.splitright = true
+vim.o.splitbelow = true
 
 -- Scroll
 vim.o.scrolloff = 10        -- Number of screen lines keep above and below the cursor.
@@ -26,17 +33,19 @@ vim.o.omnifunc = "syntaxcomplete#Compete"
 vim.opt.completeopt:append { "menuone", "preview" }
 
 -- Spell Check
-vim.o.spell = true
-vim.o.spelllang = "en_us"
+-- vim.o.spell = true
+-- vim.o.spelllang = "en_us"
 
 -- Tabs
 vim.o.tabstop = 4      -- Number of spaces a tab counts for
 vim.o.shiftwidth = 4   -- Spaces for each (auto)indent step
 vim.o.expandtab = true -- Convert tabs to spaces
+vim.o.softtabstop = 4
 
--- Search
-vim.o.ignorecase = true
+-- Search and Replace
+-- vim.o.ignorecase = true
 vim.o.smartcase = true
+vim.o.inccommand = 'split'
 
 vim.schedule(function()
     vim.o.clipboard = 'unnamedplus'
@@ -53,9 +62,9 @@ vim.o.backup = false
 -- Keybindings
 -- ============================================================================
 
-vim.keymap.set("n", "<leader>r", ":checktime<CR>", { desc = "Reload file" })
+vim.keymap.set("n", "<leader>r", ":checktime<CR>",  { desc = "[R]eload" })
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>', { desc = "Clear Search Highlight" })
-vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
+vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>',    { desc = 'Exit terminal mode' })
 
 -- Tag Jumps
 vim.keymap.set('n', 'g]', '<C-]>', { desc = 'Jump to definition' })
@@ -64,15 +73,29 @@ vim.keymap.set('n', 'g[', '<C-t>', { desc = 'Return from jump' })
 
 -- Auto complete 
 vim.keymap.set('i', '<A-o>', '<C-x><C-o>', { noremap = true }, { desc = 'Omni-completion (context-aware)' })
+vim.keymap.set('i', '<A-n>', '<C-x><C-n>', { noremap = true }, { desc = 'Completion from current file.' })
+vim.keymap.set('i', '<A-i>', '<C-x><C-i>', { noremap = true }, { desc = 'Completion fomr include file.' })
 vim.keymap.set('i', '<A-d>', '<C-x><C-k>', { noremap = true }, { desc = 'Dictionary completion' })
 vim.keymap.set('i', '<A-f>', '<C-x><C-f>', { noremap = true }, { desc = 'Filename completion' })
 vim.keymap.set('i', '<A-l>', '<C-x><C-l>', { noremap = true }, { desc = 'Whole line completion' })
 vim.keymap.set('i', '<A-e>', '<C-e>',      { noremap = true }, { desc = 'Cancel completion' })
 
+-- Diagnostics
+vim.keymap.set('n', '<leader>ds', vim.diagnostic.open_float, { desc = '[D]iagnostic [S]how' })
+vim.keymap.set('n', '<leader>dn', vim.diagnostic.goto_next,  { desc = '[D]iagnostic [N]ext' })
+vim.keymap.set('n', '<leader>dp', vim.diagnostic.goto_prev,  { desc = '[D]iagnostic [P]revious' })
+
+-- Split
+vim.keymap.set('n', '<leader>wv', '<C-w>v', { desc = 'Vertical Split' })
+vim.keymap.set('n', '<leader>ws', '<C-w>s', { desc = 'Horizontal Split' })
+vim.keymap.set('n', '<leader>wl', '<C-w>l', { desc = 'Go to Left Split' })
+vim.keymap.set('n', '<leader>wh', '<C-w>h', { desc = 'Go to Right Split' })
+vim.keymap.set('n', '<leader>wd', ':bn | bd#<CR>', { desc = 'Delete Split' })
+
 vim.api.nvim_create_autocmd("FileType", {
   pattern = "c",
   callback = function()
-    vim.keymap.set('n', '<F5>', ":term cc build.c && ./a.out build-run<CR>", { desc = "Run build command" })
+    vim.keymap.set('n', '<F5>', ":!cc build.c && ./a.out build-run<CR>", { desc = "Run build command" })
   end,
 })
 
@@ -107,11 +130,12 @@ vim.api.nvim_create_autocmd("BufReadPost", {
   end,
 })
 
+
 -- Auto generate tags file with ctags
-vim.api.nvim_create_autocmd("BufWritePost", {
-    pattern = {"*.c", "*.h"},
-    command = "silent! !ctags -R --kinds-c=+p . &",
-})
+-- vim.api.nvim_create_autocmd("BufWritePost", {
+--     pattern = {"*.c", "*.h"},
+--     command = "silent! !ctags -R --kinds-c=+p . &",
+-- })
 
 -- Plugin Manger
 -- ============================================================================
@@ -137,6 +161,57 @@ require('lazy').setup({
     "karb94/neoscroll.nvim",                               
     -- Time Tracker
     'ActivityWatch/aw-watcher-vim',                         
+    
+    { -- Session Manager
+        'rmagatti/auto-session',
+        lazy = false,
+        config = function()
+            require("auto-session").setup()
+        end,
+    },
+
+    {
+        'mfussenegger/nvim-lint',
+        event = "VeryLazy",
+        config = function()
+            require('lint').linters_by_ft = {
+                c = {'gcc'}
+            }
+
+            local pattern = [[^([^:]+):(%d+):(%d+):%s+([^:]+):%s+(.*)$]]
+            local groups = { 'file', 'lnum', 'col', 'severity', 'message' }
+            local severity_map = {
+                ['error'] = vim.diagnostic.severity.ERROR,
+                ['warning'] = vim.diagnostic.severity.WARN,
+                ['performance'] = vim.diagnostic.severity.WARN,
+                ['style'] = vim.diagnostic.severity.INFO,
+                ['information'] = vim.diagnostic.severity.INFO,
+            }
+
+            require('lint').linters.gcc = {
+                cmd = 'gcc',
+                stdin = false,
+                append_fname = true,
+                args = {'-Wall', '-Wextra', "-fsyntax-only", 
+                    "-Wno-incompatible-pointer-types", "-Wno-override-init",
+                    "-Wno-unused-variable", "-Wno-unused-parameter", 
+                    "-Wno-unused-function", "-Wno-unused-but-set-variable", 
+                    "-Wno-missing-braces"
+                }, 
+                stream = 'stderr',
+                ignore_exitcode = true,
+                env = nil,
+                parser = require('lint.parser').from_pattern(pattern, groups, severity_map, { ['source'] = 'gcc' }),
+            }
+            vim.api.nvim_create_autocmd({ "BufWritePost" }, {
+              callback = function()
+                  pattern = { '*.c', '*.h' },
+                  require("lint").try_lint()
+              end,
+            })
+
+        end,
+    },
 
     { -- Tags Manager 
         'ludovicchabant/vim-gutentags',
@@ -198,6 +273,7 @@ require('lazy').setup({
             },
             -- Document existing key chains
             spec = {
+                { '<leader>d', group = '[D]iagnostic' },
                 { '<leader>s', group = '[S]earch' },
                 { '<leader>t', group = '[T]oggle' },
                 { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
@@ -205,7 +281,7 @@ require('lazy').setup({
         },
     },
 
-    { -- Fuzzy Finder (files, lsp, etc)
+    { -- Fuzzy Finder
         'nvim-telescope/telescope.nvim',
         event = 'VimEnter',
         dependencies = {
@@ -240,7 +316,7 @@ require('lazy').setup({
             vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
             vim.keymap.set('n', '<leader>sT', builtin.tags, { desc = '[S]earch [T]ags' })
             vim.keymap.set('n', '<leader>st', builtin.current_buffer_tags, { desc = '[S]earch [T]ags' })
-            vim.keymap.set('n', '<leader>sb', builtin.buffers, { desc = '[ ] [S]earch [B]uffers' })
+            vim.keymap.set('n', '<leader>sb', builtin.buffers, { desc = '[S]earch [B]uffers' })
             vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
             vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
             vim.keymap.set('n', '<leader>s:', builtin.command_history, { desc = '[ ] Command History' })
@@ -278,7 +354,23 @@ require('lazy').setup({
         config = function()
             vim.keymap.set('n', '<leader><F5>', vim.cmd.UndotreeToggle)
         end,
+    },
+
+    {
+        "lukas-reineke/indent-blankline.nvim",
+        main = "ibl",
+        opts = {},
+        config = function()
+            require("ibl").setup() 
+        end,
+    },
+
+    { -- Theme
+        'rafamadriz/neon',
+        config = function()
+            vim.g.neon_style = "dark"
+            vim.cmd[[colorscheme neon]]
+        end,
     }
-}, { 
-    root = vim.fn.stdpath("config") .. "/plugins"
 })
+

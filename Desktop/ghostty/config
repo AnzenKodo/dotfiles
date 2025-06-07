@@ -9,3 +9,7 @@ auto-update = off
 auto-update-channel = tip
 confirm-close-surface = false
 keybind = ctrl+shift+r=reload_config
+window-theme = system
+gtk-single-instance = true
+window-decoration = client 
+gtk-adwaita = false
