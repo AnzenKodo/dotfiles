@@ -121,7 +121,7 @@ vim.keymap.set("v", ">", ">gv")
 
 vim.api.nvim_create_user_command("Reload", function()
     dofile(vim.env.MYVIMRC)
-    vim.cmd("Lazy reload neon")
+    vim.cmd("Lazy reload vim-moonfly-colors")
   vim.notify("Config reloaded!", vim.log.levels.INFO)
 end, {})
 
@@ -157,13 +157,77 @@ vim.api.nvim_create_autocmd("BufReadPost", {
 -- LSP
 -- ============================================================================
 
+local function open_definition_in_split()
+    -- Get the current buffer's LSP clients
+    local clients = vim.lsp.get_clients({ bufnr = 0 })
+    if #clients == 0 then
+        print("No LSP client attached to this buffer")
+        return
+    end
+
+    -- Use the first client to determine the position encoding
+    local first_client = clients[1]
+    local position_encoding = first_client.offset_encoding or "utf-16"
+
+    -- Create position parameters with the correct encoding
+    local params = vim.lsp.util.make_position_params(vim.api.nvim_get_current_win(), position_encoding)
+
+    -- Request the definition from the LSP
+    local result = vim.lsp.buf_request_sync(0, "textDocument/definition", params, 1000)
+
+    -- Handle errors or empty results
+    if not result or vim.tbl_isempty(result) then
+        print("No definition found")
+        return
+    end
+
+    -- Extract the first location from the LSP result
+    for _, client_result in pairs(result) do
+        if client_result.result and not vim.tbl_isempty(client_result.result) then
+            print(client_result.result)
+            local location = client_result.result[1]
+            local uri = location.targetUri or location.uri
+            local range = location.targetRange or location.range
+            local file = vim.uri_to_fname(uri)
+            local line = range.start.line + 1  -- LSP lines are 0-based, Neovim is 1-based
+            local col = range.start.character  -- 0-based columns
+
+            -- Get the current window and list of windows in the current tab
+            local current_win = vim.api.nvim_get_current_win()
+            local tab_wins = vim.api.nvim_tabpage_list_wins(0)
+            local other_wins = vim.tbl_filter(function(w) return w ~= current_win end, tab_wins)
+
+            -- If there’s an existing split, use it and move the cursor there; otherwise, use the current window
+            if #other_wins > 0 then
+                local target_win = other_wins[1]
+                vim.api.nvim_win_call(target_win, function()
+                    vim.cmd('edit ' .. file)
+                    vim.api.nvim_win_set_cursor(0, {line, col})
+                end)
+                vim.api.nvim_set_current_win(target_win)  -- Move cursor to the target split
+            else
+                vim.cmd('edit ' .. file)
+                vim.api.nvim_win_set_cursor(0, {line, col})
+            end
+            return  -- Exit after handling the first valid result
+        end
+    end
+    print("No definition found from any client")
+end
+
+vim.keymap.set('n', '<leader>sd', open_definition_in_split, { noremap = true, silent = true, desc = "Go to [S]plit [D]efinition" })
+-- vim.keymap.set('n', '<leader>sc', open_declaration_in_split, { noremap = true, silent = true, desc = "Go to [S]plit [D]efinition" })
+
 local group = vim.api.nvim_create_augroup("lsp_document_highlight", { clear = true })
 vim.api.nvim_create_autocmd('LspAttach', {
     callback = function(args)
         -- LSP Keymap
         vim.keymap.set('n', 'grr', require('telescope.builtin').lsp_references, { desc = '[G]oto [R]eferences' })
-        vim.keymap.set('n', 'grd', vim.lsp.buf.definition,                      { desc = '[G]oto [D]efinition' })
-        vim.keymap.set('n', 'grc', vim.lsp.buf.declaration,                     { desc = '[G]oto de[C]laration' })
+        vim.keymap.set('n', ']c', vim.lsp.buf.declaration,                      { desc = 'Jump to de[C]laration' })
+        vim.keymap.set('n', '<leader>sc', function()
+            vim.cmd('wincmd w')
+            vim.lsp.buf.declaration()
+        end, { desc = '[S]plit de[C]laration' })
         vim.keymap.set('n', '<leader>fs', require('telescope.builtin').lsp_document_symbols,          { desc = 'Open Document Symbols' })
         vim.keymap.set('n', '<leader>fw', require('telescope.builtin').lsp_dynamic_workspace_symbols, { desc = 'Open Workspace Symbols' })
 
