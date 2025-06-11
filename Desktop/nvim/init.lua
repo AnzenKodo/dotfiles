@@ -11,7 +11,7 @@ vim.o.wrap = true
 vim.o.colorcolumn = "80"
 vim.o.cursorline = true
 vim.o.confirm = true
-vim.o.tags = "tags"
+-- vim.o.tags = "tags"
 vim.o.endofline = true
 vim.o.fixendofline = true
 vim.o.updatetime = 50
@@ -84,7 +84,6 @@ vim.keymap.set('n', '<leader>bd', ':bn | bd#<CR>', { desc = 'Delete Split' })
 
 -- Tag Jumps
 vim.keymap.set('n', ']g', '<C-]>', { desc = 'Jump to definition' })
-vim.keymap.set('n', '<C-]>', 'g]', { desc = 'List all tags' })
 vim.keymap.set('n', '[g', '<C-t>', { desc = 'Return from jump' })
 
 -- Auto complete
@@ -95,11 +94,6 @@ vim.keymap.set('i', '<A-d>', '<C-x><C-k>', { noremap = true }, { desc = 'Diction
 vim.keymap.set('i', '<A-f>', '<C-x><C-f>', { noremap = true }, { desc = 'Filename completion' })
 vim.keymap.set('i', '<A-l>', '<C-x><C-l>', { noremap = true }, { desc = 'Whole line completion' })
 vim.keymap.set('i', '<A-e>', '<C-e>',      { noremap = true }, { desc = 'Cancel completion' })
-
--- Diagnostics
-vim.keymap.set('n', '<leader>ds', vim.diagnostic.open_float, { desc = '[D]iagnostic [S]how' })
-vim.keymap.set('n', '<leader>dn', vim.diagnostic.goto_next,  { desc = '[D]iagnostic [N]ext' })
-vim.keymap.set('n', '<leader>dp', vim.diagnostic.goto_prev,  { desc = '[D]iagnostic [P]revious' })
 
 -- Split
 vim.keymap.set('n', '<leader>sv', '<C-w>v', { desc = '[S]plit Vertical' })
@@ -159,6 +153,45 @@ vim.api.nvim_create_autocmd("BufReadPost", {
   end,
 })
 
+-- LSP
+-- ============================================================================
+
+local group = vim.api.nvim_create_augroup("lsp_document_highlight", { clear = true })
+vim.api.nvim_create_autocmd('LspAttach', {
+    callback = function(args)
+        -- Diagnostics
+        vim.keymap.set('n', 'L', vim.diagnostic.open_float, { desc = 'Diagnostic' })
+        vim.keymap.set('n', 'grd', vim.lsp.buf.definition,  { desc = '[G]oto [D]efinition'})
+        vim.keymap.set('n', 'grc', vim.lsp.buf.declaration, { desc = '[G]oto de[C]laration'})
+
+            vim.api.nvim_create_autocmd("CursorHold", {
+                group = group,
+                buffer = 0,
+                callback = vim.lsp.buf.document_highlight,
+                desc = "Highlight document symbols under cursor",
+            })
+            vim.api.nvim_create_autocmd("CursorHoldI", {
+                group = group,
+                buffer = 0,
+                callback = vim.lsp.buf.document_highlight,
+                desc = "Highlight document symbols under cursor (insert mode)",
+            })
+            vim.api.nvim_create_autocmd("CursorMoved", {
+                group = group,
+                buffer = 0,
+                callback = vim.lsp.buf.clear_references,
+                desc = "Clear document highlights on cursor move",
+            })
+    end,
+})
+
+vim.lsp.handlers["textDocument/publishDiagnostics"] = function() end
+vim.lsp.enable('clangd')
+vim.lsp.config('clangd', {
+    cmd = { vim.fn.expand("~/Code/Tools/clangd/bin/clangd") },
+    filetypes = { 'c', 'cpp' },
+    root_markers = { 'build.c' },
+})
 
 -- Plugin Manger
 -- ============================================================================
@@ -181,6 +214,13 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require('lazy').setup({
+    { -- Theme
+        'rebelot/kanagawa.nvim',
+        config = function()
+            vim.cmd[[colorscheme kanagawa-dragon]]
+        end,
+    },
+
     { -- Smooth Scrolling
         dir = plugin_path .. "/neoscroll.nvim",
     },
@@ -242,13 +282,13 @@ require('lazy').setup({
         end,
     },
 
-    { -- Tags Manager
-        dir = plugin_path .. "/vim-gutentags",
-        config = function()
-            vim.g.gutentags_ctags_extra_args = { '--c-kinds=+p' }
-            vim.g.gutentags_project_root = { 'tags' }
-        end
-    },
+    -- { -- Tags Manager
+    --     dir = plugin_path .. "/vim-gutentags",
+    --     config = function()
+    --         vim.g.gutentags_ctags_extra_args = { '--c-kinds=+p' }
+    --         vim.g.gutentags_project_root = { 'tags' }
+    --     end
+    -- },
 
     {
         dir = plugin_path .. "/gitsigns.nvim",
@@ -399,13 +439,32 @@ require('lazy').setup({
        end,
     },
 
-    { -- Theme
-        dir = plugin_path .. "/neon",
+    {
+        'NMAC427/guess-indent.nvim',
         config = function()
-            vim.g.neon_style = "dark"
-            vim.cmd[[colorscheme neon]]
+            require('guess-indent').setup {}
         end,
-    }
+    },
+
+    {
+        "otavioschwanck/arrow.nvim",
+        opts = {
+            show_icons = false,
+            leader_key = '<leader>m', -- Recommended to be a single key
+            buffer_leader_key = 'm', -- Per Buffer Mappings
+            mappings = {
+                edit = "e",
+                delete_mode = "d",
+                clear_all_items = "D",
+                toggle = "w", -- used as save if separate_save_and_remove is true
+                open_vertical = "v",
+                open_horizontal = "s",
+                quit = "q",
+                next_item = ".",
+                prev_item = ","
+            },
+        }
+    },
 }, {
     root = plugin_path .. "/online",
 })

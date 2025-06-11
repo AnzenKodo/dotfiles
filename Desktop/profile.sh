@@ -19,7 +19,7 @@ export PATH="~/Applications/AppImages:~/Applications/bin"\
 ":~/Code/miniapps/bin"\
 ":~/Applications/ffmpeg:~/Applications/jdk-23/bin"\
 ":$XDG_DATA_HOME/python/bin:$CARGO_HOME/bin:~/Applications/clang/bin"\
-":~/Applications/codelldb/adapter/codelldb"\
+":~/Code/Tools/clangd/bin"\
 ":$PATH"
 
 # Custom Application Variables =================================================

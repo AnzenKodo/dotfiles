@@ -70,7 +70,7 @@ workbench.auxiliarybar.placeholderPanels: "[{\"id\":\"workbench.panel.chat\",\"\
   Edits\",\"isBuiltin\":true,\"views\":[{\"when\":\"chatEditingParticipantRegis\
   tered || chatSetupInstalled || !chatSetupHidden\"}]}]"
 workbench.auxiliaryBar.size: "458"
-workbench.editor.languageDetectionOpenedLanguages.global: '[["html",true],["yaml",true],["ignore",true],["json",true],["jsonc",true],["plaintext",true],["c",true],["cpp",true]]'
+workbench.editor.languageDetectionOpenedLanguages.global: '[["html",true],["yaml",true],["ignore",true],["json",true],["plaintext",true],["cpp",true],["jsonc",true],["c",true]]'
 workbench.explorer.views.state.hidden: '[{"id":"outline","isHidden":false},{"id":"timeline","isHidden":false},{"id":"workbench.explorer.openEditorsView","isHidden":true},{"id":"workbench.explorer.emptyView","isHidden":false},{"id":"workbench.explorer.fileView","isHidden":false},{"id":"npm","isHidden":true},{"id":"clangd.typeHierarchyView","isHidden":false},{"id":"clangd.memoryUsage","isHidden":false},{"id":"clangd.ast","isHidden":false}]'
 workbench.panel.alignment: center
 workbench.panel.chat.hidden: '[{"id":"workbench.panel.chat.view.copilot","isHidden":false}]'
