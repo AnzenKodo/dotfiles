@@ -67,6 +67,7 @@ vim.keymap.set("n", "<leader>r", ":checktime<CR>",  { desc = "[R]eload" })
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>', { desc = "Clear Search Highlight" })
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>',    { desc = 'Exit terminal mode' })
 vim.keymap.set({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save File" })
+vim.keymap.set('n', 'L', vim.diagnostic.open_float, { desc = 'Diagnostic' })
 
 -- Move Lines
 vim.keymap.set("n", "<A-j>", "<cmd>execute 'move .+' . v:count1<cr>==",                   { desc = "Move Down" })
@@ -159,29 +160,32 @@ vim.api.nvim_create_autocmd("BufReadPost", {
 local group = vim.api.nvim_create_augroup("lsp_document_highlight", { clear = true })
 vim.api.nvim_create_autocmd('LspAttach', {
     callback = function(args)
-        -- Diagnostics
-        vim.keymap.set('n', 'L', vim.diagnostic.open_float, { desc = 'Diagnostic' })
-        vim.keymap.set('n', 'grd', vim.lsp.buf.definition,  { desc = '[G]oto [D]efinition'})
-        vim.keymap.set('n', 'grc', vim.lsp.buf.declaration, { desc = '[G]oto de[C]laration'})
+        -- LSP Keymap
+        vim.keymap.set('n', 'grr', require('telescope.builtin').lsp_references, { desc = '[G]oto [R]eferences' })
+        vim.keymap.set('n', 'grd', vim.lsp.buf.definition,                      { desc = '[G]oto [D]efinition' })
+        vim.keymap.set('n', 'grc', vim.lsp.buf.declaration,                     { desc = '[G]oto de[C]laration' })
+        vim.keymap.set('n', '<leader>fs', require('telescope.builtin').lsp_document_symbols,          { desc = 'Open Document Symbols' })
+        vim.keymap.set('n', '<leader>fw', require('telescope.builtin').lsp_dynamic_workspace_symbols, { desc = 'Open Workspace Symbols' })
 
-            vim.api.nvim_create_autocmd("CursorHold", {
-                group = group,
-                buffer = 0,
-                callback = vim.lsp.buf.document_highlight,
-                desc = "Highlight document symbols under cursor",
-            })
-            vim.api.nvim_create_autocmd("CursorHoldI", {
-                group = group,
-                buffer = 0,
-                callback = vim.lsp.buf.document_highlight,
-                desc = "Highlight document symbols under cursor (insert mode)",
-            })
-            vim.api.nvim_create_autocmd("CursorMoved", {
-                group = group,
-                buffer = 0,
-                callback = vim.lsp.buf.clear_references,
-                desc = "Clear document highlights on cursor move",
-            })
+        -- LSP Highlight
+        vim.api.nvim_create_autocmd("CursorHold", {
+            group = group,
+            buffer = 0,
+            callback = vim.lsp.buf.document_highlight,
+            desc = "Highlight document symbols under cursor",
+        })
+        vim.api.nvim_create_autocmd("CursorHoldI", {
+            group = group,
+            buffer = 0,
+            callback = vim.lsp.buf.document_highlight,
+            desc = "Highlight document symbols under cursor (insert mode)",
+        })
+        vim.api.nvim_create_autocmd("CursorMoved", {
+            group = group,
+            buffer = 0,
+            callback = vim.lsp.buf.clear_references,
+            desc = "Clear document highlights on cursor move",
+        })
     end,
 })
 
@@ -215,9 +219,10 @@ vim.opt.rtp:prepend(lazypath)
 
 require('lazy').setup({
     { -- Theme
-        'rebelot/kanagawa.nvim',
+        'bluz71/vim-moonfly-colors',
         config = function()
-            vim.cmd[[colorscheme kanagawa-dragon]]
+            -- vim.opt.background = "dark" -- set this to dark or light
+            vim.cmd.colorscheme "moonfly"
         end,
     },
 
