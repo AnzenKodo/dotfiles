@@ -4,20 +4,17 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
-vim.cmd 'colorscheme habamax'
 vim.o.nu = true
 vim.o.relativenumber = true
 vim.o.wrap = true
 vim.o.colorcolumn = "80"
 vim.o.cursorline = true
 vim.o.confirm = true
--- vim.o.tags = "tags"
-vim.o.endofline = true
-vim.o.fixendofline = true
 vim.o.updatetime = 50
 vim.o.confirm = true
 vim.o.sessionoptions="blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
 vim.o.exrc = true
+vim.o.laststatus = 3
 
 -- Split
 vim.o.splitright = true
@@ -68,6 +65,17 @@ vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>', { desc = "Clear Search Highl
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>',    { desc = 'Exit terminal mode' })
 vim.keymap.set({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save File" })
 vim.keymap.set('n', 'L', vim.diagnostic.open_float, { desc = 'Diagnostic' })
+vim.keymap.set('n', 'gf', function()
+    vim.cmd [[
+        let fileInfo = split(expand("<cWORD>"), ":")
+        let column = 0
+        normal! gF
+        if len(fileInfo) > 2
+            let column = fileInfo[2]
+            execute 'normal! ' . column . '|'
+        endif
+    ]]
+end, { desc = "[G]o to [F]ile", noremap = true })
 
 -- Move Lines
 vim.keymap.set("n", "<A-j>", "<cmd>execute 'move .+' . v:count1<cr>==",                   { desc = "Move Down" })
@@ -82,10 +90,13 @@ vim.keymap.set("n", "[b", "<cmd>bprevious<cr>",    { desc = "Prev Buffer" })
 vim.keymap.set("n", "]b", "<cmd>bnext<cr>",        { desc = "Next Buffer" })
 vim.keymap.set("n", "<leader>bb", "<cmd>e #<cr>",  { desc = "Switch to Other Buffer" })
 vim.keymap.set('n', '<leader>bd', ':bn | bd#<CR>', { desc = 'Delete Split' })
-
--- Tag Jumps
-vim.keymap.set('n', ']g', '<C-]>', { desc = 'Jump to definition' })
-vim.keymap.set('n', '[g', '<C-t>', { desc = 'Return from jump' })
+vim.keymap.set('n', '<leader>ba', function()
+    for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
+        if vim.api.nvim_buf_is_loaded(bufnr) and vim.api.nvim_buf_get_option(bufnr, 'buflisted') then
+          vim.api.nvim_buf_delete(bufnr, { force = true })
+        end
+    end
+end, { desc = 'Wipe all buffers', })
 
 -- Auto complete
 vim.keymap.set('i', '<A-o>', '<C-x><C-o>', { noremap = true }, { desc = 'Omni-completion (context-aware)' })
@@ -154,112 +165,32 @@ vim.api.nvim_create_autocmd("BufReadPost", {
   end,
 })
 
--- LSP
+-- Tags
 -- ============================================================================
 
-local function open_definition_in_split()
-    -- Get the current buffer's LSP clients
-    local clients = vim.lsp.get_clients({ bufnr = 0 })
-    if #clients == 0 then
-        print("No LSP client attached to this buffer")
-        return
+vim.o.tags = "tags,/home/ramen/.cache/ctags/system.tags"
+vim.keymap.set('n', ']g', '<C-]>', { desc = 'Jump to definition' })
+vim.keymap.set('n', '[g', '<C-t>', { desc = 'Return from jump' })
+
+function open_buffer_in_other_split()
+    local filename = vim.api.nvim_buf_get_name(0)
+    local win_count = #vim.api.nvim_list_wins()
+    local pos = vim.api.nvim_win_get_cursor(0)
+    local line = pos[1]
+    local col = pos[2] + 1  -- Neovim uses 0-based columns
+
+    if win_count == 1 then
+        vim.cmd('vsplit')
+    else
+        vim.cmd('wincmd w')
     end
 
-    -- Use the first client to determine the position encoding
-    local first_client = clients[1]
-    local position_encoding = first_client.offset_encoding or "utf-16"
-
-    -- Create position parameters with the correct encoding
-    local params = vim.lsp.util.make_position_params(vim.api.nvim_get_current_win(), position_encoding)
-
-    -- Request the definition from the LSP
-    local result = vim.lsp.buf_request_sync(0, "textDocument/definition", params, 1000)
-
-    -- Handle errors or empty results
-    if not result or vim.tbl_isempty(result) then
-        print("No definition found")
-        return
-    end
-
-    -- Extract the first location from the LSP result
-    for _, client_result in pairs(result) do
-        if client_result.result and not vim.tbl_isempty(client_result.result) then
-            print(client_result.result)
-            local location = client_result.result[1]
-            local uri = location.targetUri or location.uri
-            local range = location.targetRange or location.range
-            local file = vim.uri_to_fname(uri)
-            local line = range.start.line + 1  -- LSP lines are 0-based, Neovim is 1-based
-            local col = range.start.character  -- 0-based columns
-
-            -- Get the current window and list of windows in the current tab
-            local current_win = vim.api.nvim_get_current_win()
-            local tab_wins = vim.api.nvim_tabpage_list_wins(0)
-            local other_wins = vim.tbl_filter(function(w) return w ~= current_win end, tab_wins)
-
-            -- If there’s an existing split, use it and move the cursor there; otherwise, use the current window
-            if #other_wins > 0 then
-                local target_win = other_wins[1]
-                vim.api.nvim_win_call(target_win, function()
-                    vim.cmd('edit ' .. file)
-                    vim.api.nvim_win_set_cursor(0, {line, col})
-                end)
-                vim.api.nvim_set_current_win(target_win)  -- Move cursor to the target split
-            else
-                vim.cmd('edit ' .. file)
-                vim.api.nvim_win_set_cursor(0, {line, col})
-            end
-            return  -- Exit after handling the first valid result
-        end
-    end
-    print("No definition found from any client")
+    vim.cmd('edit ' .. filename)
+    vim.api.nvim_win_set_cursor(0, {line, col})
 end
 
-vim.keymap.set('n', '<leader>sd', open_definition_in_split, { noremap = true, silent = true, desc = "Go to [S]plit [D]efinition" })
--- vim.keymap.set('n', '<leader>sc', open_declaration_in_split, { noremap = true, silent = true, desc = "Go to [S]plit [D]efinition" })
-
-local group = vim.api.nvim_create_augroup("lsp_document_highlight", { clear = true })
-vim.api.nvim_create_autocmd('LspAttach', {
-    callback = function(args)
-        -- LSP Keymap
-        vim.keymap.set('n', 'grr', require('telescope.builtin').lsp_references, { desc = '[G]oto [R]eferences' })
-        vim.keymap.set('n', ']c', vim.lsp.buf.declaration,                      { desc = 'Jump to de[C]laration' })
-        vim.keymap.set('n', '<leader>sc', function()
-            vim.cmd('wincmd w')
-            vim.lsp.buf.declaration()
-        end, { desc = '[S]plit de[C]laration' })
-        vim.keymap.set('n', '<leader>fs', require('telescope.builtin').lsp_document_symbols,          { desc = 'Open Document Symbols' })
-        vim.keymap.set('n', '<leader>fw', require('telescope.builtin').lsp_dynamic_workspace_symbols, { desc = 'Open Workspace Symbols' })
-
-        -- LSP Highlight
-        vim.api.nvim_create_autocmd("CursorHold", {
-            group = group,
-            buffer = 0,
-            callback = vim.lsp.buf.document_highlight,
-            desc = "Highlight document symbols under cursor",
-        })
-        vim.api.nvim_create_autocmd("CursorHoldI", {
-            group = group,
-            buffer = 0,
-            callback = vim.lsp.buf.document_highlight,
-            desc = "Highlight document symbols under cursor (insert mode)",
-        })
-        vim.api.nvim_create_autocmd("CursorMoved", {
-            group = group,
-            buffer = 0,
-            callback = vim.lsp.buf.clear_references,
-            desc = "Clear document highlights on cursor move",
-        })
-    end,
-})
-
-vim.lsp.handlers["textDocument/publishDiagnostics"] = function() end
-vim.lsp.enable('clangd')
-vim.lsp.config('clangd', {
-    cmd = { vim.fn.expand("~/Code/Tools/clangd/bin/clangd") },
-    filetypes = { 'c', 'cpp' },
-    root_markers = { 'build.c' },
-})
+vim.keymap.set('n', '<leader>sd', '<cmd>lua open_buffer_in_other_split()<CR><C-]> ', { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>sg', '<cmd>lua open_buffer_in_other_split()<CR>g]', { noremap = true, silent = true })
 
 -- Plugin Manger
 -- ============================================================================
@@ -283,11 +214,118 @@ vim.opt.rtp:prepend(lazypath)
 
 require('lazy').setup({
     { -- Theme
-        'bluz71/vim-moonfly-colors',
+        dir = plugin_path .. "/gruvbox-material",
+        lazy = false,
+        priority = 1000,
         config = function()
-            -- vim.opt.background = "dark" -- set this to dark or light
-            vim.cmd.colorscheme "moonfly"
+            vim.g.gruvbox_material_background = 'mix'
+            vim.g.gruvbox_material_background = "hard"
+            vim.g.gruvbox_material_colors_override = {
+                bg0 = {'#323232', '234'},
+            }
+            vim.g.gruvbox_material_better_performance = true
+            vim.g.gruvbox_material_enable_italic = true
+            -- vim.g.gruvbox_material_enable_bold = true
+            vim.g.gruvbox_material_dim_inactive_windows = true
+            vim.cmd.colorscheme('gruvbox-material')
+            vim.cmd.highlight('IndentLineCurrent guifg=#928374')
+            vim.cmd.highlight('IndentLine guifg=#504945')
+        end
+    },
+
+    { -- Wildcard
+        dir = plugin_path .. "/wilder.nvim",
+        config = function()
+            require('wilder').setup({
+                modes = {':', '/', '?'}
+            })
         end,
+    },
+
+    { -- Status Line
+        dir = plugin_path .. "/lualine.nvim",
+        config = function()
+            require('lualine').setup({
+                options = {
+                    theme = 'gruvbox-material'
+                }
+            })
+        end,
+    },
+
+    { -- File Manager
+        dir = plugin_path .. "/oil-git-status.nvim",
+        config = function()
+            require("oil-git-status").setup()
+        end,
+        dependencies = {
+            {
+                dir = plugin_path .. "/oil.nvim",
+                lazy = false,
+                config = function()
+                    require("oil").setup({
+                        default_file_explorer = false,
+                        delete_to_trash = true,
+                        watch_for_changes = true,
+                        skip_confirm_for_simple_edits = true,
+                        prompt_save_on_select_new_entry = false,
+                        columns = {
+                            "icon",
+                            "permissions",
+                            "size",
+                            "birthtime",
+                            "mtime",
+                            "atime",
+                        },
+                        keymaps = {
+                            ["<CR>"] = "actions.select",
+                            ["<leader>sv"] = { "actions.select", opts = { vertical = true } },
+                            ["<leader>ss"] = { "actions.select", opts = { horizontal = true } },
+                            ["-"] = { "actions.parent", mode = "n" },
+                            ["_"] = { "actions.open_cwd", mode = "n" },
+                            ["g?"] = { "actions.show_help", mode = "n" },
+                            ["gp"] = "actions.preview",
+                            ["gr"] = "actions.refresh",
+                            ["gs"] = { "actions.change_sort", mode = "n" },
+                            ["gx"] = "actions.open_external",
+                            ["g."] = { "actions.toggle_hidden", mode = "n" },
+                            ["g\\"] = { "actions.toggle_trash", mode = "n" },
+                            ["gf"] = {
+                                function()
+                                    require("telescope.builtin").find_files({
+                                        cwd = require("oil").get_current_dir()
+                                    })
+                                end,
+                                mode = "n",
+                                nowait = true,
+                                desc = "Find files in the current directory"
+                            },
+                        },
+                        float = {
+                            preview_split = "auto",
+                        },
+                        win_options = {
+                            signcolumn = "yes:2",
+                        },
+                        view_options = {
+                            show_hidden = true,
+                            natural_order = "fast",
+                            case_insensitive = false,
+                            sort = {
+                                { "type", "asc" },
+                                { "name", "asc" },
+                            },
+                            highlight_filename = function(entry, is_hidden, is_link_target, is_link_orphan)
+                                return nil
+                            end,
+                            is_always_hidden = function(name, bufnr)
+                                return false
+                            end,
+                        },
+                    })
+                end,
+            },
+        },
     },
 
     { -- Smooth Scrolling
@@ -314,7 +352,6 @@ require('lazy').setup({
                 c = {'gcc'},
                 cpp = {'gcc'},
             }
-
             local pattern = [[^([^:]+):(%d+):(%d+):%s+([^:]+):%s+(.*)$]]
             local groups = { 'file', 'lnum', 'col', 'severity', 'message' }
             local severity_map = {
@@ -324,7 +361,6 @@ require('lazy').setup({
                 ['style'] = vim.diagnostic.severity.INFO,
                 ['information'] = vim.diagnostic.severity.INFO,
             }
-
             require('lint').linters.gcc = {
                 cmd = 'gcc',
                 stdin = false,
@@ -340,7 +376,6 @@ require('lazy').setup({
                 env = nil,
                 parser = require('lint.parser').from_pattern(pattern, groups, severity_map, { ['source'] = 'gcc' }),
             }
-
             vim.api.nvim_create_autocmd({ "BufWritePost" }, {
               callback = function()
                 require("lint").try_lint()
@@ -351,13 +386,13 @@ require('lazy').setup({
         end,
     },
 
-    -- { -- Tags Manager
-    --     dir = plugin_path .. "/vim-gutentags",
-    --     config = function()
-    --         vim.g.gutentags_ctags_extra_args = { '--c-kinds=+p' }
-    --         vim.g.gutentags_project_root = { 'tags' }
-    --     end
-    -- },
+    { -- Tags Manager
+        dir = plugin_path .. "/vim-gutentags",
+        config = function()
+            vim.g.gutentags_ctags_extra_args = { '--c-kinds=+p' }
+            vim.g.gutentags_project_root = { 'tags' }
+        end
+    },
 
     {
         dir = plugin_path .. "/gitsigns.nvim",
@@ -455,13 +490,13 @@ require('lazy').setup({
             vim.keymap.set('n', '<leader>fh', builtin.help_tags,            { desc = '[F]ind [H]elp' })
             vim.keymap.set('n', '<leader>fk', builtin.keymaps,              { desc = '[F]ind [K]eymaps' })
             vim.keymap.set('n', '<leader>ff', builtin.find_files,           { desc = '[F]ind [F]iles' })
-            vim.keymap.set('n', '<leader>fs', builtin.builtin,              { desc = '[F]ind [S]elect Telescope' })
+            vim.keymap.set('n', '<leader>fs', builtin.builtin,              { desc = '[F]ind builtin [S]earch' })
             vim.keymap.set('n', '<leader>fw', builtin.grep_string,          { desc = '[F]ind current [W]ord' })
             vim.keymap.set('n', '<leader>fg', builtin.live_grep,            { desc = '[F]ind by [G]rep' })
-            vim.keymap.set('n', '<leader>fT', builtin.tags,                 { desc = '[F]ind [T]ags' })
-            vim.keymap.set('n', '<leader>ft', builtin.current_buffer_tags,  { desc = '[F]ind [T]ags' })
+            vim.keymap.set('n', '<leader>ft', builtin.tags,                 { desc = '[F]ind  [T]ags' })
+            vim.keymap.set('n', '<leader>fc', builtin.current_buffer_tags,  { desc = '[F]ind [C]urrent tags' })
             vim.keymap.set('n', '<leader>fo', builtin.oldfiles,             { desc = '[F]ind Recent Files ("." for repeat)' })
-            vim.keymap.set('n', '<leader><leader>', builtin.buffers,        { desc = 'Find existing buffers' })
+            vim.keymap.set('n', '<leader>fb', builtin.buffers,              { desc = 'Find existing buffers' })
             vim.keymap.set('n', '<leader>f:', builtin.command_history,      { desc = 'Command History' })
             vim.keymap.set('n', '<leader>/', function()
                 builtin.current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
@@ -500,23 +535,21 @@ require('lazy').setup({
     },
 
     {
-       dir = plugin_path .. "/indent-blankline.nvim",
-       main = "ibl",
-       opts = {},
+       dir = plugin_path .. "/indentmini.nvim",
        config = function()
-           require("ibl").setup()
+            require("indentmini").setup()
        end,
     },
 
     {
-        'NMAC427/guess-indent.nvim',
+        dir = plugin_path .. "/guess-indent.nvim",
         config = function()
             require('guess-indent').setup {}
         end,
     },
 
-    {
-        "otavioschwanck/arrow.nvim",
+    { -- File Mark Manager
+        dir = plugin_path .. "/arrow.nvim",
         opts = {
             show_icons = false,
             leader_key = '<leader>m', -- Recommended to be a single key
@@ -535,6 +568,6 @@ require('lazy').setup({
         }
     },
 }, {
-    root = plugin_path .. "/online",
+    root = plugin_path .. "/Online",
 })
-
+-- vim.api.nvim_set_hl(0, 'WinSeparator', { bg = 'none' })

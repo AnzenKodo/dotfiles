@@ -1,12 +1,12 @@
-[16]  # Version number. Do not delete.
+[19]  # Version number. Do not delete.
 
 [[workspace]]
-/home/ramen/Code/game
+/home/ramen/Code/cmono
 
 [ignore]
 
 [[build commands]]
-build_working_dir:      /home/ramen/Code/game
+build_working_dir:      /home/ramen/Code/cmono
 open_panel_on_build:    true
 
 [Debug Build And Run]

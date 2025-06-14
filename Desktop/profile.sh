@@ -90,12 +90,14 @@ fi
 
 # Alias Functions ==============================================================
 
-_open_complete() {
+_open_complete()
+{
     local cur="${COMP_WORDS[COMP_CWORD]}"
     COMPREPLY=( $(compgen -c "$cur") )
 }
 
-ask_and_run() {
+ask_and_run()
+{
     read -p "Do you want to proceed? (y/n): " ans
     case $ans in
         [Yy]* )
@@ -105,10 +107,12 @@ ask_and_run() {
     esac
 }
 
-o() {
+o()
+{
     "$@" > /dev/null 2>&1 & disown
 }
-oe() {
+oe()
+{
     "$@" > /dev/null 2>&1 & disown
     exit
 }
@@ -167,17 +171,20 @@ alias ctags_system="ctags -R -f ~/Dotfiles/Desktop/nvim/system.tags /usr/include
 # Functions
 #===============================================================================
 
-cd() {
+cd()
+{
     z "$@"
     pwd > $XDG_CACHE_HOME/last-dir.txt
 }
 
-len() {
+len()
+{
     str=$@
     echo ${#str}
 }
 
-push() {
+push()
+{
     git add .
     git commit -m "$1"
     git pull
@@ -201,7 +208,8 @@ pastebin()
 }
 
 alias rclone="rclone --config=$HOME/Drive/Dotfiles/rclone.conf"
-backup() {
+backup()
+{
     opml_to_feed ~/Drive/Dotfiles/podcast.opml ~/Drive/Notes/Feed.md
 
     cd ~/Dotfiles
@@ -222,25 +230,29 @@ backup() {
     cd -
 }
 
-server_backup() {
+server_backup()
+{
     rsync_git ~/Code Gangnam@34.41.58.206:~/
     rsync_git ~/Drive Gangnam@34.41.58.206:~/
     rsync_git ~/Dotfiles Gangnam@34.41.58.206:~/
     rsync --exclude="Archive" --exclude="Deb" --exclude="AppImages" --exclude="clang" --delete ~/Applications Gangnam@34.41.58.206:~/
 }
 
-clean() {
+clean()
+{
     sudo fstrim -a -v
 }
 
-project_org() {
+project_org()
+{
     wmctrl -x -r Focus -t 0
     wmctrl -x -r ghostty -t 1
     wmctrl -x -r vscodium -t 1
     wmctrl -x -r brave-browser -t 2
 }
 
-project() {
+project()
+{
     local proj_path=~/Code/Scuttle
     cd $proj_path
 
@@ -249,16 +261,19 @@ project() {
 }
 
 
-dotfile_link() {
+dotfile_link()
+{
     ln -sf $HOME/Dotfiles/Desktop/$1 $XDG_CONFIG_HOME
 }
 
-compress-mp4() {
+compress-mp4()
+{
     echo ffmpeg -i "$1" -vcodec h264 -acodec mp2 "$2"
     ffmpeg -i "$1" -vcodec h264 -acodec mp2 "$2"
 }
 
-download-music() {
+download-music()
+{
     yta $1 --embed-thumbnail --embed-metadata \
     --parse-metadata "title:%(title)s" \
     --parse-metadata "uploader:%(artist)s" \
@@ -274,6 +289,14 @@ net_temp_on()
     sleep 300
     # Disable internet
     nmcli networking off
+}
+
+ctags-system()
+{
+    ctags --c-kinds=+p --fields=+l --sort=yes -f $XDG_CACHE_HOME/ctags/system.tags \
+        /usr/include/stdio.h /usr/include/stdlib.h /usr/include/stdint.h \
+        /usr/include/string.h /usr/include/time.h \
+        -R /usr/include/sys /usr/include/xcb /usr/include/GLES2/ /usr/include/EGL
 }
 
 # Bind
