@@ -56,6 +56,35 @@ vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 vim.o.swapfile = false
 vim.o.backup = false
 
+-- Functions for Keymaps
+-- ============================================================================
+
+local function get_visual_selection()
+    local s_start = vim.fn.getpos("'<")
+    local s_end = vim.fn.getpos("'>")
+    local lines = vim.api.nvim_buf_get_lines(0, s_start[2] - 1, s_end[2], false)
+    if #lines == 0 then return '' end
+    lines[1] = lines[1]:sub(s_start[3], -1)
+    lines[#lines] = lines[#lines]:sub(1, s_end[3])
+    return table.concat(lines, '\n')
+end
+
+function open_buffer_in_other_split()
+    local filename = vim.api.nvim_buf_get_name(0)
+    local win_count = #vim.api.nvim_list_wins()
+    local pos = vim.api.nvim_win_get_cursor(0)
+    local line = pos[1]
+    local col = pos[2] + 1  -- Neovim uses 0-based columns
+
+    if win_count == 1 then
+        vim.cmd('vsplit')
+    else
+        vim.cmd('wincmd w')
+    end
+
+    vim.cmd('edit ' .. filename)
+    vim.api.nvim_win_set_cursor(0, {line, col})
+end
 
 -- Keybindings
 -- ============================================================================
@@ -65,19 +94,29 @@ vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>', { desc = "Clear Search Highl
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>',    { desc = 'Exit terminal mode' })
 vim.keymap.set({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save File" })
 vim.keymap.set('n', 'L', vim.diagnostic.open_float, { desc = 'Diagnostic' })
-vim.keymap.set('n', 'gf', function()
-    vim.cmd [[
-        let fileInfo = split(expand("<cWORD>"), ":")
-        let column = 0
-        normal! gF
-        if len(fileInfo) > 2
-            let column = fileInfo[2]
-            execute 'normal! ' . column . '|'
-        endif
-    ]]
+vim.keymap.set({'n', 'v'}, 'gf', function()
+    local mode = vim.api.nvim_get_mode().mode
+    local file_spec
+    -- Check if in visual mode (v, V, or blockwise <C-v>)
+    if mode == 'v' or mode == 'V' or mode == '\22' then
+        file_spec = get_visual_selection()
+    else
+        file_spec = vim.fn.expand("<cWORD>")
+    end
+    -- Split the file specification into file, line, and column
+    local fileInfo = vim.fn.split(file_spec, ":")
+    local file = fileInfo[1]
+    local line = fileInfo[2] or 1    -- Default to line 1 if not specified
+    local column = fileInfo[3] or 1  -- Default to column 1 if not specified
+    -- Exit visual mode if necessary
+    if mode == 'v' or mode == 'V' or mode == '\22' then
+        vim.cmd('normal! \27')  -- Escape key to exit visual mode
+    end
+    -- Open the file and set the cursor position
+    vim.cmd('edit ' .. file)
+    vim.api.nvim_win_set_cursor(0, {tonumber(line), tonumber(column) - 1})
 end, { desc = "[G]o to [F]ile", noremap = true })
 
--- Move Lines
 vim.keymap.set("n", "<A-j>", "<cmd>execute 'move .+' . v:count1<cr>==",                   { desc = "Move Down" })
 vim.keymap.set("n", "<A-k>", "<cmd>execute 'move .-' . (v:count1 + 1)<cr>==",             { desc = "Move Up" })
 vim.keymap.set("i", "<A-j>", "<esc><cmd>m .+1<cr>==gi",                                   { desc = "Move Down" })
@@ -89,7 +128,7 @@ vim.keymap.set("v", "<A-k>", ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<c
 vim.keymap.set("n", "[b", "<cmd>bprevious<cr>",    { desc = "Prev Buffer" })
 vim.keymap.set("n", "]b", "<cmd>bnext<cr>",        { desc = "Next Buffer" })
 vim.keymap.set("n", "<leader>bb", "<cmd>e #<cr>",  { desc = "Switch to Other Buffer" })
-vim.keymap.set('n', '<leader>bd', ':bn | bd#<CR>', { desc = 'Delete Split' })
+vim.keymap.set('n', '<leader>bd', ':bn | bd#<CR>', { desc = '[D]elete [S]plit' })
 vim.keymap.set('n', '<leader>ba', function()
     for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
         if vim.api.nvim_buf_is_loaded(bufnr) and vim.api.nvim_buf_get_option(bufnr, 'buflisted') then
@@ -108,12 +147,52 @@ vim.keymap.set('i', '<A-l>', '<C-x><C-l>', { noremap = true }, { desc = 'Whole l
 vim.keymap.set('i', '<A-e>', '<C-e>',      { noremap = true }, { desc = 'Cancel completion' })
 
 -- Split
+vim.keymap.set('n', '<leader>so', '<cmd>lua open_buffer_in_other_split()<CR>', { desc = 'Duplicate [S]plit on [O]ther split' })
 vim.keymap.set('n', '<leader>sv', '<C-w>v', { desc = '[S]plit Vertical' })
 vim.keymap.set('n', '<leader>ss', '<C-w>s', { desc = '[S]plit Horizontal' })
 vim.keymap.set('n', '<leader>sl', '<C-w>l', { desc = '[S]plit go [L]eft' })
 vim.keymap.set('n', '<leader>sh', '<C-w>h', { desc = '[S]plit go [R]ight' })
 vim.keymap.set('n', '<leader>sj', '<C-w>j', { desc = '[S]plit go [D]own' })
 vim.keymap.set('n', '<leader>sk', '<C-w>k', { desc = '[S]plit go [U]p' })
+vim.keymap.set({'n', 'v'}, '<leader>sf', function()
+    local original_win = vim.api.nvim_get_current_win()
+    local mode = vim.api.nvim_get_mode().mode
+    local file_spec
+    if mode == 'v' or mode == 'V' or mode == '\22' then
+        file_spec = get_visual_selection():match("^[^\n]+")  -- Get first line of selection
+    else
+        file_spec = vim.fn.expand("<cWORD>")
+    end
+    local fileInfo = vim.fn.split(file_spec, ":")
+    local file = fileInfo[1]
+    local line = fileInfo[2] or '1'
+    local column = fileInfo[3] or '1'
+    if mode == 'v' or mode == 'V' or mode == '\22' then
+        vim.cmd('normal! \27')  -- Exit visual mode
+    end
+    local wins = vim.api.nvim_list_wins()
+    local target_win
+    if #wins == 1 then
+        vim.cmd('vsplit')
+        target_win = vim.api.nvim_get_current_win()
+        vim.api.nvim_win_call(target_win, function()
+            vim.cmd('edit ' .. vim.fn.fnameescape(file))
+        end)
+        vim.api.nvim_win_set_cursor(target_win, {tonumber(line), tonumber(column) - 1})
+        vim.api.nvim_set_current_win(original_win)
+    else
+        for _, win in ipairs(wins) do
+            if win ~= original_win then
+                target_win = win
+                break
+            end
+        end
+        vim.api.nvim_win_call(target_win, function()
+            vim.cmd('edit ' .. vim.fn.fnameescape(file))
+        end)
+        vim.api.nvim_win_set_cursor(target_win, {tonumber(line), tonumber(column) - 1})
+    end
+end, { desc = "[S]plit go to [F]ile", noremap = true })
 
 -- Better Search Next
 vim.keymap.set("n", "n", "'Nn'[v:searchforward].'zv'",  { expr = true, desc = "Next Search Result" })
@@ -172,24 +251,7 @@ vim.o.tags = "tags,/home/ramen/.cache/ctags/system.tags"
 vim.keymap.set('n', ']g', '<C-]>', { desc = 'Jump to definition' })
 vim.keymap.set('n', '[g', '<C-t>', { desc = 'Return from jump' })
 
-function open_buffer_in_other_split()
-    local filename = vim.api.nvim_buf_get_name(0)
-    local win_count = #vim.api.nvim_list_wins()
-    local pos = vim.api.nvim_win_get_cursor(0)
-    local line = pos[1]
-    local col = pos[2] + 1  -- Neovim uses 0-based columns
-
-    if win_count == 1 then
-        vim.cmd('vsplit')
-    else
-        vim.cmd('wincmd w')
-    end
-
-    vim.cmd('edit ' .. filename)
-    vim.api.nvim_win_set_cursor(0, {line, col})
-end
-
-vim.keymap.set('n', '<leader>sd', '<cmd>lua open_buffer_in_other_split()<CR><C-]> ', { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>s]', '<cmd>lua open_buffer_in_other_split()<CR><C-]> ', { noremap = true, silent = true })
 vim.keymap.set('n', '<leader>sg', '<cmd>lua open_buffer_in_other_split()<CR>g]', { noremap = true, silent = true })
 
 -- Plugin Manger
@@ -199,7 +261,10 @@ local plugin_path = vim.fn.stdpath("config") .. "/plugins"
 local lazypath = plugin_path .. "/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
     local lazyrepo = "https://github.com/folke/lazy.nvim.git"
-    local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
+    local out = vim.fn.system({
+        "git", "clone", "--filter=blob:none", "--branch=stable",
+        lazyrepo, lazypath
+    })
     if vim.v.shell_error ~= 0 then
         vim.api.nvim_echo({
             { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
@@ -395,6 +460,13 @@ require('lazy').setup({
     },
 
     {
+        "NeogitOrg/neogit",
+        dependencies = {
+            "nvim-lua/plenary.nvim",         -- required
+        }
+    },
+
+    {
         dir = plugin_path .. "/gitsigns.nvim",
         opts = {
             signs = {
@@ -405,6 +477,43 @@ require('lazy').setup({
                 changedelete = { text = '~' },
             },
         },
+        config = function()
+            require('gitsigns').setup({
+                on_attach = function(bufnr)
+                    -- Navigation
+                    vim.keymap.set('n', ']c', function()
+                      if vim.wo.diff then
+                        vim.cmd.normal({']c', bang = true})
+                      else
+                        require('gitsigns').nav_hunk('next')
+                      end
+                    end)
+                    vim.keymap.set('n', '[c', function()
+                      if vim.wo.diff then
+                        vim.cmd.normal({'[c', bang = true})
+                      else
+                        require('gitsigns').nav_hunk('prev')
+                      end
+                    end)
+                    -- Actions
+                    vim.keymap.set('n', '<leader>hs', require('gitsigns').stage_hunk)
+                    vim.keymap.set('n', '<leader>hr', require('gitsigns').reset_hunk)
+                    vim.keymap.set('v', '<leader>hs', function()
+                      require('gitsigns').stage_hunk({ vim.fn.line('.'), vim.fn.line('v') })
+                    end)
+                    vim.keymap.set('v', '<leader>hr', function()
+                      require('gitsigns').reset_hunk({ vim.fn.line('.'), vim.fn.line('v') })
+                    end)
+                    vim.keymap.set('n', '<leader>hS', require('gitsigns').stage_buffer)
+                    vim.keymap.set('n', '<leader>hR', require('gitsigns').reset_buffer)
+                    vim.keymap.set('n', '<leader>hp', require('gitsigns').preview_hunk)
+                    vim.keymap.set('n', '<leader>hi', require('gitsigns').preview_hunk_inline)
+                    vim.keymap.set('n', '<leader>hd', require('gitsigns').diffthis)
+                    vim.keymap.set('n', '<leader>hQ', function() require('gitsigns').setqflist('all') end)
+                    vim.keymap.set('n', '<leader>hq', require('gitsigns').setqflist)
+                end
+            })
+        end,
     },
 
     {
