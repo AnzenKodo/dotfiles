@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <channel name="thunar" version="1.0">
-  <property name="last-view" type="string" value="ThunarIconView"/>
+  <property name="last-view" type="string" value="ThunarDetailsView"/>
   <property name="last-icon-view-zoom-level" type="string" value="THUNAR_ZOOM_LEVEL_200_PERCENT"/>
   <property name="last-window-maximized" type="bool" value="true"/>
   <property name="last-separator-position" type="int" value="170"/>
@@ -11,7 +11,7 @@
   <property name="last-side-pane" type="string" value="ThunarShortcutsPane"/>
   <property name="last-image-preview-visible" type="bool" value="true"/>
   <property name="last-details-view-zoom-level" type="string" value="THUNAR_ZOOM_LEVEL_38_PERCENT"/>
-  <property name="last-details-view-column-widths" type="string" value="50,50,124,50,50,144,50,50,293,50,50,69,50,149"/>
+  <property name="last-details-view-column-widths" type="string" value="50,50,123,50,50,541,50,50,1358,50,50,71,50,197"/>
   <property name="last-toolbar-item-order" type="string" value="0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17"/>
   <property name="last-toolbar-visible-buttons" type="string" value="0,1,1,1,1,0,0,0,0,0,0,0,0,1,1,1,1,1"/>
   <property name="last-details-view-visible-columns" type="string" value="THUNAR_COLUMN_DATE_MODIFIED,THUNAR_COLUMN_NAME,THUNAR_COLUMN_SIZE,THUNAR_COLUMN_TYPE"/>
@@ -29,7 +29,7 @@
   <property name="misc-image-preview-mode" type="string" value="THUNAR_IMAGE_PREVIEW_MODE_EMBEDDED"/>
   <property name="tree-icon-emblems" type="bool" value="true"/>
   <property name="last-tabs-left" type="array">
-    <value type="string" value="file:///home/ramen/Applications/bin"/>
+    <value type="string" value="file:///home/ramen/Downloads"/>
   </property>
   <property name="last-focused-tab-left" type="int" value="0"/>
   <property name="last-focused-tab-right" type="int" value="0"/>

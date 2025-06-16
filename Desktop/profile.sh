@@ -41,6 +41,7 @@ export GNUPGHOME="$XDG_DATA_HOME"/gnupg
 export CALCHISTFILE="$XDG_CACHE_HOME"/calc_history
 export FCEUX_HOME="$XDG_CONFIG_HOME"/fceux
 export ASPELL_CONF="personal $HOME/Dotfiles/Desktop/en.pws; repl $XDG_DATA_HOME/aspell.en.prepl"
+export PAGER="bat"
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 export AW_SYNC_DIR="~/Drive/Dotfiles/ActivityWatch"
 export WINEPREFIX="$XDG_DATA_HOME"/wineprefixes/default
@@ -170,6 +171,10 @@ alias ctags_system="ctags -R -f ~/Dotfiles/Desktop/nvim/system.tags /usr/include
 
 # Functions
 #===============================================================================
+
+help() {
+    "$@" --help 2>&1 | bat --plain --language=help
+}
 
 cd()
 {

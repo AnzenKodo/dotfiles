@@ -463,7 +463,22 @@ require('lazy').setup({
         "NeogitOrg/neogit",
         dependencies = {
             "nvim-lua/plenary.nvim",         -- required
-        }
+            {
+                "sindrets/diffview.nvim",
+                config = function()
+                    require("diffview").setup({
+                        use_icons = true,         -- Requires nvim-web-devicons
+                    })
+                end
+            },
+            { dir = plugin_path .. "/telescope/telescope.nvim" }
+        },
+        config = function()
+            require("neogit").setup({
+                  kind = "replace",
+                  graph_style = "unicode",
+            })
+        end,
     },
 
     {
