@@ -75,13 +75,11 @@ function open_buffer_in_other_split()
     local pos = vim.api.nvim_win_get_cursor(0)
     local line = pos[1]
     local col = pos[2] + 1  -- Neovim uses 0-based columns
-
     if win_count == 1 then
         vim.cmd('vsplit')
     else
         vim.cmd('wincmd w')
     end
-
     vim.cmd('edit ' .. filename)
     vim.api.nvim_win_set_cursor(0, {line, col})
 end
@@ -91,38 +89,27 @@ end
 
 vim.keymap.set("n", "<leader>r", ":checktime<CR>",  { desc = "[R]eload" })
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>', { desc = "Clear Search Highlight" })
-vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>',    { desc = 'Exit terminal mode' })
+vim.keymap.set('t', '<Esc>', '<C-\\><C-n>',    { desc = 'Exit terminal mode' })
+vim.keymap.set('n', 'L', vim.diagnostic.open_float, { desc = 'Show Diagnostic' })
 vim.keymap.set({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save File" })
-vim.keymap.set('n', 'L', vim.diagnostic.open_float, { desc = 'Diagnostic' })
 vim.keymap.set({'n', 'v'}, 'gf', function()
-    local mode = vim.api.nvim_get_mode().mode
-    local file_spec
-    -- Check if in visual mode (v, V, or blockwise <C-v>)
-    if mode == 'v' or mode == 'V' or mode == '\22' then
-        file_spec = get_visual_selection()
-    else
-        file_spec = vim.fn.expand("<cWORD>")
-    end
-    -- Split the file specification into file, line, and column
-    local fileInfo = vim.fn.split(file_spec, ":")
-    local file = fileInfo[1]
-    local line = fileInfo[2] or 1    -- Default to line 1 if not specified
-    local column = fileInfo[3] or 1  -- Default to column 1 if not specified
-    -- Exit visual mode if necessary
-    if mode == 'v' or mode == 'V' or mode == '\22' then
-        vim.cmd('normal! \27')  -- Escape key to exit visual mode
-    end
-    -- Open the file and set the cursor position
-    vim.cmd('edit ' .. file)
-    vim.api.nvim_win_set_cursor(0, {tonumber(line), tonumber(column) - 1})
+    vim.cmd [[
+        let fileInfo = split(expand("<cWORD>"), ":")
+        let column = 0
+        normal! gF
+        if len(fileInfo) > 2
+            let column = fileInfo[2]
+            execute 'normal! ' . column . '|'
+        endif
+    ]]
 end, { desc = "[G]o to [F]ile", noremap = true })
 
-vim.keymap.set("n", "<A-j>", "<cmd>execute 'move .+' . v:count1<cr>==",                   { desc = "Move Down" })
-vim.keymap.set("n", "<A-k>", "<cmd>execute 'move .-' . (v:count1 + 1)<cr>==",             { desc = "Move Up" })
-vim.keymap.set("i", "<A-j>", "<esc><cmd>m .+1<cr>==gi",                                   { desc = "Move Down" })
-vim.keymap.set("i", "<A-k>", "<esc><cmd>m .-2<cr>==gi",                                   { desc = "Move Up" })
-vim.keymap.set("v", "<A-j>", ":<C-u>execute \"'<,'>move '>+\" . v:count1<cr>gv=gv",       { desc = "Move Down" })
-vim.keymap.set("v", "<A-k>", ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<cr>gv=gv", { desc = "Move Up" })
+vim.keymap.set("n", "<A-j>", "<cmd>execute 'move .+' . v:count1<cr>==",                   { desc = "Move Line Down" })
+vim.keymap.set("n", "<A-k>", "<cmd>execute 'move .-' . (v:count1 + 1)<cr>==",             { desc = "Move Line Up" })
+vim.keymap.set("i", "<A-j>", "<esc><cmd>m .+1<cr>==gi",                                   { desc = "Move Line Down" })
+vim.keymap.set("i", "<A-k>", "<esc><cmd>m .-2<cr>==gi",                                   { desc = "Move Line Up" })
+vim.keymap.set("v", "<A-j>", ":<C-u>execute \"'<,'>move '>+\" . v:count1<cr>gv=gv",       { desc = "Move Line Down" })
+vim.keymap.set("v", "<A-k>", ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<cr>gv=gv", { desc = "Move Line Up" })
 
 -- Buffers
 vim.keymap.set("n", "[b", "<cmd>bprevious<cr>",    { desc = "Prev Buffer" })
@@ -148,12 +135,12 @@ vim.keymap.set('i', '<A-e>', '<C-e>',      { noremap = true }, { desc = 'Cancel 
 
 -- Split
 vim.keymap.set('n', '<leader>so', '<cmd>lua open_buffer_in_other_split()<CR>', { desc = 'Duplicate [S]plit on [O]ther split' })
-vim.keymap.set('n', '<leader>sv', '<C-w>v', { desc = '[S]plit Vertical' })
+vim.keymap.set('n', '<leader>sv', '<C-w>v', { desc = '[S]plit [V]ertical' })
 vim.keymap.set('n', '<leader>ss', '<C-w>s', { desc = '[S]plit Horizontal' })
-vim.keymap.set('n', '<leader>sl', '<C-w>l', { desc = '[S]plit go [L]eft' })
-vim.keymap.set('n', '<leader>sh', '<C-w>h', { desc = '[S]plit go [R]ight' })
-vim.keymap.set('n', '<leader>sj', '<C-w>j', { desc = '[S]plit go [D]own' })
-vim.keymap.set('n', '<leader>sk', '<C-w>k', { desc = '[S]plit go [U]p' })
+vim.keymap.set('n', '<leader>sl', '<C-w>l', { desc = '[S]plit goto [L]eft' })
+vim.keymap.set('n', '<leader>sh', '<C-w>h', { desc = '[S]plit goto [R]ight' })
+vim.keymap.set('n', '<leader>sj', '<C-w>j', { desc = '[S]plit goto [D]own' })
+vim.keymap.set('n', '<leader>sk', '<C-w>k', { desc = '[S]plit goto [U]p' })
 vim.keymap.set({'n', 'v'}, '<leader>sf', function()
     local original_win = vim.api.nvim_get_current_win()
     local mode = vim.api.nvim_get_mode().mode
@@ -192,7 +179,7 @@ vim.keymap.set({'n', 'v'}, '<leader>sf', function()
         end)
         vim.api.nvim_win_set_cursor(target_win, {tonumber(line), tonumber(column) - 1})
     end
-end, { desc = "[S]plit go to [F]ile", noremap = true })
+end, { desc = "[S]plit goto [F]ile", noremap = true })
 
 -- Better Search Next
 vim.keymap.set("n", "n", "'Nn'[v:searchforward].'zv'",  { expr = true, desc = "Next Search Result" })
@@ -202,20 +189,20 @@ vim.keymap.set("n", "N", "'nN'[v:searchforward].'zv'",  { expr = true, desc = "P
 vim.keymap.set("x", "N", "'nN'[v:searchforward]",       { expr = true, desc = "Prev Search Result" })
 vim.keymap.set("o", "N", "'nN'[v:searchforward]",       { expr = true, desc = "Prev Search Result" })
 
--- better indenting
-vim.keymap.set("v", "<", "<gv")
-vim.keymap.set("v", ">", ">gv")
+-- Better indenting
+vim.keymap.set("v", "<", "<gv", { desc = "Indent left" })
+vim.keymap.set("v", ">", ">gv", { desc = "Indent right" })
 
 -- Commands
 -- ============================================================================
 
 vim.api.nvim_create_user_command("Reload", function()
     dofile(vim.env.MYVIMRC)
-    vim.cmd("Lazy reload vim-moonfly-colors")
-  vim.notify("Config reloaded!", vim.log.levels.INFO)
+    vim.cmd("Lazy reload gruvbox-material")
+    vim.notify("Config reloaded!", vim.log.levels.INFO)
 end, {})
 
--- Functions
+-- Autocommands
 -- ============================================================================
 
 -- Trim Trailing Whitespace
@@ -250,9 +237,8 @@ vim.api.nvim_create_autocmd("BufReadPost", {
 vim.o.tags = "tags,/home/ramen/.cache/ctags/system.tags"
 vim.keymap.set('n', ']g', '<C-]>', { desc = 'Jump to definition' })
 vim.keymap.set('n', '[g', '<C-t>', { desc = 'Return from jump' })
-
-vim.keymap.set('n', '<leader>s]', '<cmd>lua open_buffer_in_other_split()<CR><C-]> ', { noremap = true, silent = true })
-vim.keymap.set('n', '<leader>sg', '<cmd>lua open_buffer_in_other_split()<CR>g]', { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>s]', '<cmd>lua open_buffer_in_other_split()<CR><C-]> ', { desc = "[S]plit goto definition" })
+vim.keymap.set('n', '<leader>sg', '<cmd>lua open_buffer_in_other_split()<CR>g]',     { desc = "[S]plit [G]oto tag" })
 
 -- Plugin Manger
 -- ============================================================================
@@ -296,6 +282,14 @@ require('lazy').setup({
             vim.cmd.highlight('IndentLineCurrent guifg=#928374')
             vim.cmd.highlight('IndentLine guifg=#504945')
         end
+    },
+
+    { -- Terminal
+        'akinsho/toggleterm.nvim',
+        config = function()
+            require("toggleterm").setup{}
+            vim.keymap.set({'n', 't', 'i'}, '<c-`>', '<cmd>ToggleTerm name=toggle<CR>', { desc = '[T]oggle [T]erminal' })
+        end,
     },
 
     { -- Wildcard
@@ -393,10 +387,6 @@ require('lazy').setup({
         },
     },
 
-    { -- Smooth Scrolling
-        dir = plugin_path .. "/neoscroll.nvim",
-    },
-
     { -- Time Tracker
         dir = plugin_path .. '/aw-watcher-vim',
     },
@@ -460,28 +450,6 @@ require('lazy').setup({
     },
 
     {
-        "NeogitOrg/neogit",
-        dependencies = {
-            "nvim-lua/plenary.nvim",         -- required
-            {
-                "sindrets/diffview.nvim",
-                config = function()
-                    require("diffview").setup({
-                        use_icons = true,         -- Requires nvim-web-devicons
-                    })
-                end
-            },
-            { dir = plugin_path .. "/telescope/telescope.nvim" }
-        },
-        config = function()
-            require("neogit").setup({
-                  kind = "replace",
-                  graph_style = "unicode",
-            })
-        end,
-    },
-
-    {
         dir = plugin_path .. "/gitsigns.nvim",
         opts = {
             signs = {
@@ -497,36 +465,58 @@ require('lazy').setup({
                 on_attach = function(bufnr)
                     -- Navigation
                     vim.keymap.set('n', ']c', function()
-                      if vim.wo.diff then
-                        vim.cmd.normal({']c', bang = true})
-                      else
-                        require('gitsigns').nav_hunk('next')
-                      end
-                    end)
+                        if vim.wo.diff then
+                            vim.cmd.normal({']c', bang = true})
+                        else
+                            require('gitsigns').nav_hunk('next')
+                        end
+                    end, { desc = "Next hunk or diff" })
                     vim.keymap.set('n', '[c', function()
-                      if vim.wo.diff then
-                        vim.cmd.normal({'[c', bang = true})
-                      else
-                        require('gitsigns').nav_hunk('prev')
-                      end
-                    end)
+                        if vim.wo.diff then
+                            vim.cmd.normal({'[c', bang = true})
+                        else
+                            require('gitsigns').nav_hunk('prev')
+                        end
+                    end, { desc = "Previous hunk or diff" })
                     -- Actions
-                    vim.keymap.set('n', '<leader>hs', require('gitsigns').stage_hunk)
-                    vim.keymap.set('n', '<leader>hr', require('gitsigns').reset_hunk)
+                    vim.keymap.set('n', '<leader>hs', require('gitsigns').stage_hunk, { desc = "[S]tage [H]unk" })
+                    vim.keymap.set('n', '<leader>hr', require('gitsigns').reset_hunk, { desc = "[R]eset [H]unk" })
                     vim.keymap.set('v', '<leader>hs', function()
-                      require('gitsigns').stage_hunk({ vim.fn.line('.'), vim.fn.line('v') })
-                    end)
+                        require('gitsigns').stage_hunk({ vim.fn.line('.'), vim.fn.line('v') })
+                    end, { desc = "[S]tage [H]unk" })
                     vim.keymap.set('v', '<leader>hr', function()
-                      require('gitsigns').reset_hunk({ vim.fn.line('.'), vim.fn.line('v') })
-                    end)
-                    vim.keymap.set('n', '<leader>hS', require('gitsigns').stage_buffer)
-                    vim.keymap.set('n', '<leader>hR', require('gitsigns').reset_buffer)
-                    vim.keymap.set('n', '<leader>hp', require('gitsigns').preview_hunk)
-                    vim.keymap.set('n', '<leader>hi', require('gitsigns').preview_hunk_inline)
-                    vim.keymap.set('n', '<leader>hd', require('gitsigns').diffthis)
-                    vim.keymap.set('n', '<leader>hQ', function() require('gitsigns').setqflist('all') end)
-                    vim.keymap.set('n', '<leader>hq', require('gitsigns').setqflist)
+                        require('gitsigns').reset_hunk({ vim.fn.line('.'), vim.fn.line('v') })
+                    end, { desc = "[R]eset [H]unk" })
+                    vim.keymap.set('n', '<leader>hS', require('gitsigns').stage_buffer, { desc = "[H]unk entire buffer [S]tage" })
+                    vim.keymap.set('n', '<leader>hR', require('gitsigns').reset_buffer, { desc = "[H]unk entire buffer [R]eset" })
+                    vim.keymap.set('n', '<leader>hp', require('gitsigns').preview_hunk, { desc = "[H]unk Preview" })
+                    vim.keymap.set('n', '<leader>hi', require('gitsigns').preview_hunk_inline, { desc = "[H]unk [I]nline preview" })
+                    vim.keymap.set('n', '<leader>hd', require('gitsigns').diffthis, { desc = "[H]unk [D]iff" })
+                    vim.keymap.set('n', '<leader>hq', require('gitsigns').setqflist, { desc = "[H]unk [Q]uickfix" })
+                    vim.keymap.set('n', '<leader>hQ', function() require('gitsigns').setqflist('all') end, { desc = "[H]unk [Q]uickfix all" })
                 end
+            })
+        end,
+    },
+
+    {
+        "NeogitOrg/neogit",
+        dependencies = {
+            "nvim-lua/plenary.nvim",
+            {
+                "sindrets/diffview.nvim",
+                config = function()
+                    require("diffview").setup({
+                        use_icons = false,
+                    })
+                end
+            },
+            { dir = plugin_path .. "/telescope/telescope.nvim" }
+        },
+        config = function()
+            require("neogit").setup({
+                  kind = "replace",
+                  graph_style = "unicode",
             })
         end,
     },
@@ -575,6 +565,7 @@ require('lazy').setup({
                 { '<leader>b', group = '[B]uffer' },
                 { '<leader>t', group = '[T]oggle' },
                 { '<leader>s', group = '[S]plit' },
+                { '<leader>m', group = '[M]ark' },
                 { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
             },
         },
@@ -654,7 +645,7 @@ require('lazy').setup({
     { -- Undo History
        dir = plugin_path .. "/undotree",
        config = function()
-            vim.keymap.set('n', '<leader><F5>', vim.cmd.UndotreeToggle)
+            vim.keymap.set('n', '<leader><F5>', vim.cmd.UndotreeToggle, { desc = "Open Undotree" })
        end,
     },
 
@@ -672,24 +663,25 @@ require('lazy').setup({
         end,
     },
 
-    { -- File Mark Manager
-        dir = plugin_path .. "/arrow.nvim",
-        opts = {
-            show_icons = false,
-            leader_key = '<leader>m', -- Recommended to be a single key
-            buffer_leader_key = 'm', -- Per Buffer Mappings
-            mappings = {
-                edit = "e",
-                delete_mode = "d",
-                clear_all_items = "D",
-                toggle = "w", -- used as save if separate_save_and_remove is true
-                open_vertical = "v",
-                open_horizontal = "s",
-                quit = "q",
-                next_item = ".",
-                prev_item = ","
-            },
-        }
+    {
+        "ThePrimeagen/harpoon",
+        branch = "harpoon2",
+        dependencies = {
+            "nvim-lua/plenary.nvim",
+            { dir = plugin_path .. "/telescope/telescope.nvim" }
+        },
+        config = function()
+            local harpoon = require("harpoon")
+            harpoon:setup()
+            vim.keymap.set("n", "<leader>mm", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end, { desc = "[M]ark [M]enu" })
+            vim.keymap.set("n", "<leader>ma", function() harpoon:list():add() end,                         { desc = "[M]ark [A]dd"})
+            vim.keymap.set("n", "<leader>m1", function() harpoon:list():select(1) end,                     { desc = "[M]ark [1]"})
+            vim.keymap.set("n", "<leader>m2", function() harpoon:list():select(2) end,                     { desc = "[M]ark [2]"})
+            vim.keymap.set("n", "<leader>m3", function() harpoon:list():select(3) end,                     { desc = "[M]ark [3]"})
+            vim.keymap.set("n", "<leader>m4", function() harpoon:list():select(4) end,                     { desc = "[M]ark [4]"})
+            vim.keymap.set("n", "<leader>mp", function() harpoon:list():prev() end,                        { desc = "[M]ark [P]revious"})
+            vim.keymap.set("n", "<leader>mn", function() harpoon:list():next() end,                        { desc = "[M]ark [N]ext"})
+        end,
     },
 }, {
     root = plugin_path .. "/Online",
