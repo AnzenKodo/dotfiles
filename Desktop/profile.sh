@@ -78,6 +78,7 @@ HISTTIMEFORMAT="[%F %T] "
 eval "$(gtrash completion bash)"
 eval "$(zoxide init bash)"
 eval "$(fzf --bash)"
+eval "$(jj util completion bash)"
 export FZF_DEFAULT_OPTS="
   --bind 'tab:down'
   --bind 'shift-tab:up'

@@ -12,7 +12,7 @@ vim.o.cursorline = true
 vim.o.confirm = true
 vim.o.updatetime = 50
 vim.o.confirm = true
-vim.o.sessionoptions="blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
+vim.o.sessionoptions="blank,buffers,curdir,folds,help,tabpages,winsize,winpos,localoptions"
 vim.o.exrc = true
 vim.o.laststatus = 3
 
@@ -193,6 +193,16 @@ vim.keymap.set("o", "N", "'nN'[v:searchforward]",       { expr = true, desc = "P
 vim.keymap.set("v", "<", "<gv", { desc = "Indent left" })
 vim.keymap.set("v", ">", ">gv", { desc = "Indent right" })
 
+vim.keymap.set({'n', 't'}, '<leader>mt', function()
+    if vim.g.main_terminal_bufnr and vim.fn.bufexists(vim.g.main_terminal_bufnr) then
+        vim.cmd('buffer ' .. vim.g.main_terminal_bufnr)
+    else
+        vim.cmd('terminal')
+        vim.g.main_terminal_bufnr = vim.fn.bufnr('%')
+        vim.cmd('file Main Terminal')
+    end
+end, { desc = "[M]ark open [T]ermial" })
+
 -- Commands
 -- ============================================================================
 
@@ -237,7 +247,7 @@ vim.api.nvim_create_autocmd("BufReadPost", {
 vim.o.tags = "tags,/home/ramen/.cache/ctags/system.tags"
 vim.keymap.set('n', ']g', '<C-]>', { desc = 'Jump to definition' })
 vim.keymap.set('n', '[g', '<C-t>', { desc = 'Return from jump' })
-vim.keymap.set('n', '<leader>s]', '<cmd>lua open_buffer_in_other_split()<CR><C-]> ', { desc = "[S]plit goto definition" })
+vim.keymap.set('n', '<leader>sd', '<cmd>lua open_buffer_in_other_split()<CR><C-]> ', { desc = "[S]plit goto definition" })
 vim.keymap.set('n', '<leader>sg', '<cmd>lua open_buffer_in_other_split()<CR>g]',     { desc = "[S]plit [G]oto tag" })
 
 -- Plugin Manger
@@ -282,14 +292,6 @@ require('lazy').setup({
             vim.cmd.highlight('IndentLineCurrent guifg=#928374')
             vim.cmd.highlight('IndentLine guifg=#504945')
         end
-    },
-
-    { -- Terminal
-        'akinsho/toggleterm.nvim',
-        config = function()
-            require("toggleterm").setup{}
-            vim.keymap.set({'n', 't', 'i'}, '<c-`>', '<cmd>ToggleTerm name=toggle<CR>', { desc = '[T]oggle [T]erminal' })
-        end,
     },
 
     { -- Wildcard
