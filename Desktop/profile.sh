@@ -20,6 +20,8 @@ export PATH="~/Applications/AppImages:~/Applications/bin"\
 ":~/Applications/ffmpeg:~/Applications/jdk-23/bin"\
 ":$XDG_DATA_HOME/python/bin:$CARGO_HOME/bin:~/Applications/clang/bin"\
 ":~/Code/Tools/clangd/bin"\
+":~/Code/Tools/jdk-24.0.1/bin"\
+":~/Code/Tools/gradle-8.14.3/bin"\
 ":$PATH"
 
 # Custom Application Variables =================================================
@@ -55,6 +57,7 @@ export PYTHONUSERBASE=$XDG_DATA_HOME/python
 export CARGO_HOME="$XDG_DATA_HOME"/cargo
 export RUSTUP_HOME="$XDG_DATA_HOME"/rustup
 export WGETRC="$XDG_CONFIG_HOME/wgetrc"
+export JAVA_HOME="$HOME/Code/Tools/jdk-24.0.1"
 
 # Shell Variables
 #===============================================================================

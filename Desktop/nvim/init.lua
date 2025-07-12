@@ -193,16 +193,6 @@ vim.keymap.set("o", "N", "'nN'[v:searchforward]",       { expr = true, desc = "P
 vim.keymap.set("v", "<", "<gv", { desc = "Indent left" })
 vim.keymap.set("v", ">", ">gv", { desc = "Indent right" })
 
-vim.keymap.set({'n', 't'}, '<leader>mt', function()
-    if vim.g.main_terminal_bufnr and vim.fn.bufexists(vim.g.main_terminal_bufnr) then
-        vim.cmd('buffer ' .. vim.g.main_terminal_bufnr)
-    else
-        vim.cmd('terminal')
-        vim.g.main_terminal_bufnr = vim.fn.bufnr('%')
-        vim.cmd('file Main Terminal')
-    end
-end, { desc = "[M]ark open [T]ermial" })
-
 -- Commands
 -- ============================================================================
 
@@ -663,6 +653,17 @@ require('lazy').setup({
         config = function()
             require('guess-indent').setup {}
         end,
+    },
+
+    {
+        "akinsho/toggleterm.nvim",
+        config = function()
+            require("toggleterm").setup({
+                open_mapping = [[<C-`>]],
+                auto_scroll = false,
+                direction = 'horizontal',
+            })
+        end
     },
 
     {
