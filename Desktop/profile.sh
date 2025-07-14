@@ -22,6 +22,7 @@ export PATH="~/Applications/AppImages:~/Applications/bin"\
 ":~/Code/Tools/clangd/bin"\
 ":~/Code/Tools/jdk-24.0.1/bin"\
 ":~/Code/Tools/gradle-8.14.3/bin"\
+":~/Code/Tools/idea-IC-251.26927.53/bin"\
 ":$PATH"
 
 # Custom Application Variables =================================================

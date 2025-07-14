@@ -30,10 +30,6 @@ vim.opt.undofile = true     -- Undo
 vim.o.omnifunc = "syntaxcomplete#Compete"
 vim.opt.completeopt:append { "menuone", "preview" }
 
--- Spell Check
--- vim.o.spell = true
--- vim.o.spelllang = "en_us"
-
 -- Tabs
 vim.o.tabstop = 4      -- Number of spaces a tab counts for
 vim.o.shiftwidth = 4   -- Spaces for each (auto)indent step
@@ -269,11 +265,8 @@ require('lazy').setup({
         lazy = false,
         priority = 1000,
         config = function()
-            vim.g.gruvbox_material_background = 'mix'
-            vim.g.gruvbox_material_background = "hard"
-            vim.g.gruvbox_material_colors_override = {
-                bg0 = {'#323232', '234'},
-            }
+            vim.g.gruvbox_material_background = 'material'
+            vim.g.gruvbox_material_background = "soft"
             vim.g.gruvbox_material_better_performance = true
             vim.g.gruvbox_material_enable_italic = true
             -- vim.g.gruvbox_material_enable_bold = true
@@ -429,7 +422,6 @@ require('lazy').setup({
                 require("lint").try_lint("typos")
               end,
             })
-
         end,
     },
 
@@ -492,11 +484,11 @@ require('lazy').setup({
     },
 
     {
-        "NeogitOrg/neogit",
+        dir = plugin_path .. "/neogit",
         dependencies = {
-            "nvim-lua/plenary.nvim",
+            { dir = plugin_path .. "telescope/plenary.nvim" },
             {
-                "sindrets/diffview.nvim",
+                dir = plugin_path .. "/diffview.nvim",
                 config = function()
                     require("diffview").setup({
                         use_icons = false,
@@ -641,14 +633,14 @@ require('lazy').setup({
        end,
     },
 
-    {
+    { -- Shows Indent
        dir = plugin_path .. "/indentmini.nvim",
        config = function()
             require("indentmini").setup()
        end,
     },
 
-    {
+    { -- Smart Auto Indent
         dir = plugin_path .. "/guess-indent.nvim",
         config = function()
             require('guess-indent').setup {}
@@ -656,7 +648,7 @@ require('lazy').setup({
     },
 
     {
-        "akinsho/toggleterm.nvim",
+        dir = plugin_path .. "/toggleterm.nvim",
         config = function()
             require("toggleterm").setup({
                 open_mapping = [[<C-`>]],
@@ -667,7 +659,7 @@ require('lazy').setup({
     },
 
     {
-        "ThePrimeagen/harpoon",
+        dir = plugin_path .. "/harpoon",
         branch = "harpoon2",
         dependencies = {
             "nvim-lua/plenary.nvim",
@@ -689,4 +681,3 @@ require('lazy').setup({
 }, {
     root = plugin_path .. "/Online",
 })
--- vim.api.nvim_set_hl(0, 'WinSeparator', { bg = 'none' })

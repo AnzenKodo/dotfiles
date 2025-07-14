@@ -13,5 +13,7 @@ window-decoration = server
 gtk-titlebar = false
 gtk-adwaita = true
 gtk-single-instance = true
-
+window-padding-y=0
+window-padding-x=0
+window-padding-balance=false
 keybind = ctrl+shift+r=reload_config
