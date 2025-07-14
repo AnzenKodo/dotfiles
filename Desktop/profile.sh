@@ -234,10 +234,10 @@ backup()
         --resync --resync-mode newer \
         --conflict-resolve newer
 
-    cd ~/Code/anzenkodo.github.io
-    echo $RANDOM > ~/Code/anzenkodo.github.io/site_checksum.txt
-    push "Updated Notes"
-    cd -
+    # cd ~/Code/anzenkodo.github.io
+    # echo $RANDOM > ~/Code/anzenkodo.github.io/site_checksum.txt
+    # push "Updated Notes"
+    # cd -
 }
 
 server_backup()
