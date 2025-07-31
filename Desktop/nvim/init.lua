@@ -308,7 +308,7 @@ require('lazy').setup({
                 lazy = false,
                 config = function()
                     require("oil").setup({
-                        default_file_explorer = false,
+                        default_file_explorer = true,
                         delete_to_trash = true,
                         watch_for_changes = true,
                         skip_confirm_for_simple_edits = true,
@@ -367,6 +367,7 @@ require('lazy').setup({
                             end,
                         },
                     })
+                    vim.keymap.set("n", "<leader>-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
                 end,
             },
         },
@@ -613,7 +614,7 @@ require('lazy').setup({
     },
 
     { -- Highlight, edit, and navigate code
-        dir = plugin_path .. "/nvim-treesitter",
+        "nvim-treesitter/nvim-treesitter",
         build = ':TSUpdate',
         main = 'nvim-treesitter.configs', -- Sets main module to use for opts
         opts = {
