@@ -5,7 +5,7 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
 vim.o.nu = true
-vim.o.relativenumber = true
+vim.o.relativenumber = false
 vim.o.wrap = true
 vim.o.colorcolumn = "80"
 vim.o.cursorline = true
@@ -614,16 +614,15 @@ require('lazy').setup({
     },
 
     { -- Highlight, edit, and navigate code
-        "nvim-treesitter/nvim-treesitter",
+        dir = plugin_path .. "/nvim-treesitter",
         build = ':TSUpdate',
         main = 'nvim-treesitter.configs', -- Sets main module to use for opts
         opts = {
             auto_install = true,
             highlight = {
                 enable = true,
-                additional_vim_regex_highlighting = { 'ruby' },
             },
-            indent = { enable = true, disable = { 'ruby' } },
+            indent = { enable = true },
         },
     },
 
@@ -652,7 +651,7 @@ require('lazy').setup({
         dir = plugin_path .. "/toggleterm.nvim",
         config = function()
             require("toggleterm").setup({
-                open_mapping = [[<C-`>]],
+                open_mapping = [[<C-\>]],
                 auto_scroll = false,
                 direction = 'horizontal',
             })

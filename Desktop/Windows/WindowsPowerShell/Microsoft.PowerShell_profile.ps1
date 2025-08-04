@@ -1,3 +1,35 @@
+# Functions ===================================================================
+
+function ln {
+    param(
+        [Parameter(Mandatory=$true)]
+        [string]$Target,
+        [Parameter(Mandatory=$true)]
+        [string]$LinkPath
+    )
+    New-Item -ItemType SymbolicLink -Path $LinkPath -Value $Target
+}
+
+function push {
+    param (
+        [Parameter(Mandatory=$true)]
+        [string]$CommitMessage
+    )
+
+    git add .
+    git commit -m $CommitMessage
+    git pull
+    git push
+}
+
+function backup {
+    Set-Location -Path "$env:USERPROFILE\\Dotfiles"
+    push -CommitMessage "Backup from Windows Desktop"
+    Pop-Location
+}
+
+# Start Inits =================================================================
+
 Invoke-Expression (& { (zoxide init --cmd cd powershell | Out-String) })
 
 # Recycle Bin =================================================================
@@ -27,33 +59,3 @@ function Remove-ItemToRecycleBin {
 }
 
 Set-Alias rm Remove-ItemToRecycleBin -Option AllScope
-
-# Link File Function ==========================================================
-
-function ln {
-    param(
-        [Parameter(Mandatory=$true)]
-        [string]$Target,
-        [Parameter(Mandatory=$true)]
-        [string]$LinkPath
-    )
-    New-Item -ItemType SymbolicLink -Path $LinkPath -Value $Target
-}
-
-function push {
-    param (
-        [Parameter(Mandatory=$true)]
-        [string]$CommitMessage
-    )
-
-    git add .
-    git commit -m $CommitMessage
-    git pull
-    git push
-}
-
-function backup {
-    Set-Location -Path "$env:USERPROFILE\\Dotfiles"
-    push -CommitMessage "Backup from Windows Desktop"
-    Pop-Location
-}
