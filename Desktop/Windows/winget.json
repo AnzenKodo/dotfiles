@@ -1,0 +1,124 @@
+{
+	"$schema" : "https://aka.ms/winget-packages.schema.2.0.json",
+	"CreationDate" : "2025-08-04T14:06:41.019-00:00",
+	"Sources" : 
+	[
+		{
+			"Packages" : 
+			[
+				{
+					"PackageIdentifier" : "7zip.7zip",
+					"Version" : "25.00"
+				},
+				{
+					"PackageIdentifier" : "Git.Git",
+					"Version" : "2.50.1"
+				},
+				{
+					"PackageIdentifier" : "KeeWeb.KeeWeb",
+					"Version" : "1.18.7"
+				},
+				{
+					"PackageIdentifier" : "Fortinet.FortiClientVPN",
+					"Version" : "7.4.3.1790"
+				},
+				{
+					"PackageIdentifier" : "Google.GoogleDrive",
+					"Version" : "111.0.2.0"
+				},
+				{
+					"PackageIdentifier" : "Neovim.Neovim",
+					"Version" : "0.11.3"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.OpenJDK.17",
+					"Version" : "17.0.16.8"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.Edge",
+					"Version" : "138.0.3351.121"
+				},
+				{
+					"PackageIdentifier" : "Python.Launcher",
+					"Version" : "< 3.9.8"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.VCRedist.2015+.x86",
+					"Version" : "14.40.33810.0"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.VCRedist.2015+.x64",
+					"Version" : "14.40.33810.0"
+				},
+				{
+					"PackageIdentifier" : "Brave.Brave",
+					"Version" : "138.1.80.125"
+				},
+				{
+					"PackageIdentifier" : "BurntSushi.ripgrep.MSVC",
+					"Version" : "14.1.1"
+				},
+				{
+					"PackageIdentifier" : "MartinStorsjo.LLVM-MinGW.MSVCRT",
+					"Version" : "20.1.8-20250709"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.OneDrive",
+					"Version" : "25.127.0701.0006"
+				},
+				{
+					"PackageIdentifier" : "UniversalCtags.Ctags",
+					"Version" : "6.1.0"
+				},
+				{
+					"PackageIdentifier" : "ajeetdsouza.zoxide",
+					"Version" : "0.9.8"
+				},
+				{
+					"PackageIdentifier" : "Obsidian.Obsidian",
+					"Version" : "1.8.10"
+				},
+				{
+					"PackageIdentifier" : "ActivityWatch.ActivityWatch",
+					"Version" : "0.13.2"
+				},
+				{
+					"PackageIdentifier" : "Python.Python.3.9",
+					"Version" : "3.9.13"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.Teams",
+					"Version" : "25185.410.3812.8024"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.AppInstaller",
+					"Version" : "1.26.430.0"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.UI.Xaml.2.7",
+					"Version" : "7.2409.9001.0"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.UI.Xaml.2.8",
+					"Version" : "8.2501.31001.0"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.VCLibs.Desktop.14",
+					"Version" : "14.0.33728.0"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.WindowsTerminal",
+					"Version" : "1.22.11751.0"
+				}
+			],
+			"SourceDetails" : 
+			{
+				"Argument" : "https://cdn.winget.microsoft.com/cache",
+				"Identifier" : "Microsoft.Winget.Source_8wekyb3d8bbwe",
+				"Name" : "winget",
+				"Type" : "Microsoft.PreIndexed.Package"
+			}
+		}
+	],
+	"WinGetVersion" : "1.11.430"
+}
