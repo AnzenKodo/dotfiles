@@ -52,6 +52,20 @@ vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 vim.o.swapfile = false
 vim.o.backup = false
 
+if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
+    if vim.fn.executable('pwsh') == 1 then
+        vim.o.shell = 'pwsh -NoLogo'
+    else
+        vim.o.shell = 'powershell -NoLogo'
+    end
+
+    vim.o.shellcmdflag = '-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command'
+    vim.o.shellredir = '2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode'
+    vim.o.shellpipe = '2>&1 | Tee-Object %s; exit $LastExitCode'
+    vim.o.shellquote = ''
+    vim.o.shellxquote = ''
+end
+
 -- Functions for Keymaps
 -- ============================================================================
 
