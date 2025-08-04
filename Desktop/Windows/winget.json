@@ -1,6 +1,6 @@
 {
 	"$schema" : "https://aka.ms/winget-packages.schema.2.0.json",
-	"CreationDate" : "2025-08-04T14:06:41.019-00:00",
+	"CreationDate" : "2025-08-04T14:24:25.543-00:00",
 	"Sources" : 
 	[
 		{
@@ -55,24 +55,12 @@
 					"Version" : "138.1.80.125"
 				},
 				{
-					"PackageIdentifier" : "BurntSushi.ripgrep.MSVC",
-					"Version" : "14.1.1"
-				},
-				{
 					"PackageIdentifier" : "MartinStorsjo.LLVM-MinGW.MSVCRT",
 					"Version" : "20.1.8-20250709"
 				},
 				{
-					"PackageIdentifier" : "Microsoft.OneDrive",
-					"Version" : "25.127.0701.0006"
-				},
-				{
 					"PackageIdentifier" : "UniversalCtags.Ctags",
 					"Version" : "6.1.0"
-				},
-				{
-					"PackageIdentifier" : "ajeetdsouza.zoxide",
-					"Version" : "0.9.8"
 				},
 				{
 					"PackageIdentifier" : "Obsidian.Obsidian",

@@ -23,10 +23,10 @@ function push {
 }
 
 function backup {
+    winget export --include-versions -o $HOME/Dotfiles/Desktop/Windows/winget.json
     Set-Location -Path "$env:USERPROFILE\\Dotfiles"
     push -CommitMessage "Backup from Windows Desktop"
     Pop-Location
-    winget export --include-versions -o $HOME/Dotfiles/Desktop/Windows/winget.json
 }
 
 # Start Inits =================================================================
