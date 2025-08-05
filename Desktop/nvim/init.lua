@@ -14,7 +14,7 @@ vim.o.updatetime = 50
 vim.o.confirm = true
 vim.o.sessionoptions="blank,buffers,curdir,folds,help,tabpages,winsize,winpos,localoptions"
 vim.o.exrc = true
-vim.o.laststatus = 3
+-- vim.o.laststatus = 3
 
 -- Split
 vim.o.splitright = true
@@ -24,7 +24,7 @@ vim.o.splitbelow = true
 vim.o.scrolloff = 10        -- Number of screen lines keep above and below the cursor.
 vim.o.scrolloff = 999       -- Keep cursor centered vertically
 vim.o.sidescrolloff = 50    -- Keep cursor centered horizontally
-vim.opt.undofile = true     -- Undo
+vim.o.undofile = true       -- Undo
 
 -- Auto complete
 vim.o.omnifunc = "syntaxcomplete#Compete"
@@ -625,19 +625,6 @@ require('lazy').setup({
                 }
             end, { desc = '[F]ind [/] in Open Files' })
         end,
-    },
-
-    { -- Highlight, edit, and navigate code
-        dir = plugin_path .. "/nvim-treesitter",
-        build = ':TSUpdate',
-        main = 'nvim-treesitter.configs', -- Sets main module to use for opts
-        opts = {
-            auto_install = true,
-            highlight = {
-                enable = true,
-            },
-            indent = { enable = true },
-        },
     },
 
     { -- Undo History

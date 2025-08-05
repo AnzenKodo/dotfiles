@@ -1,6 +1,6 @@
 {
 	"$schema" : "https://aka.ms/winget-packages.schema.2.0.json",
-	"CreationDate" : "2025-08-04T14:26:11.179-00:00",
+	"CreationDate" : "2025-08-05T11:50:01.414-00:00",
 	"Sources" : 
 	[
 		{
@@ -96,7 +96,7 @@
 				},
 				{
 					"PackageIdentifier" : "Microsoft.WindowsTerminal",
-					"Version" : "1.22.11751.0"
+					"Version" : "1.22.12111.0"
 				}
 			],
 			"SourceDetails" : 
