@@ -144,13 +144,17 @@ vim.keymap.set('i', '<A-l>', '<C-x><C-l>', { noremap = true }, { desc = 'Whole l
 vim.keymap.set('i', '<A-e>', '<C-e>',      { noremap = true }, { desc = 'Cancel completion' })
 
 -- Split
-vim.keymap.set('n', '<leader>so', '<cmd>lua open_buffer_in_other_split()<CR>', { desc = 'Duplicate [S]plit on [O]ther split' })
 vim.keymap.set('n', '<leader>sv', '<C-w>v', { desc = '[S]plit [V]ertical' })
-vim.keymap.set('n', '<leader>ss', '<C-w>s', { desc = '[S]plit Horizontal' })
+vim.keymap.set('n', '<leader>ss', '<C-w>o', { desc = '[S]plit H[O]rizontal' })
 vim.keymap.set('n', '<leader>sl', '<C-w>l', { desc = '[S]plit goto [L]eft' })
 vim.keymap.set('n', '<leader>sh', '<C-w>h', { desc = '[S]plit goto [R]ight' })
 vim.keymap.set('n', '<leader>sj', '<C-w>j', { desc = '[S]plit goto [D]own' })
 vim.keymap.set('n', '<leader>sk', '<C-w>k', { desc = '[S]plit goto [U]p' })
+vim.keymap.set('n', '<leader>s=', '<C-w>=', { desc = '[S]plit equally [=]' })
+vim.keymap.set('n', '<leader>s>', '<C-w>>', { desc = '[S]plit increase [>] width' })
+vim.keymap.set('n', '<leader>s<', '<C-w>>', { desc = '[S]plit decrease [<] width' })
+vim.keymap.set('n', '<leader>sx', '<C-w>x', { desc = '[S]plit [X]wap sides' })
+vim.keymap.set('n', '<leader>ss', '<C-w>w', { desc = '[S]plit [S]witch' })
 vim.keymap.set({'n', 'v'}, '<leader>sf', function()
     local original_win = vim.api.nvim_get_current_win()
     local mode = vim.api.nvim_get_mode().mode
@@ -304,9 +308,18 @@ require('lazy').setup({
         dir = plugin_path .. "/lualine.nvim",
         config = function()
             require('lualine').setup({
+                sections = {
+                    lualine_c = {
+                        {
+                            'filename',
+                            path = 1, -- Show absolute path
+                            file_status = true, -- Show file status
+                        }
+                    }
+                },
                 options = {
-                    theme = 'gruvbox-material'
-                }
+                    theme = 'gruvbox-material',
+                },
             })
         end,
     },
@@ -648,6 +661,7 @@ require('lazy').setup({
         end,
     },
 
+    -- Terminal
     {
         dir = plugin_path .. "/toggleterm.nvim",
         config = function()
@@ -659,6 +673,7 @@ require('lazy').setup({
         end
     },
 
+    -- Marks
     {
         dir = plugin_path .. "/harpoon",
         branch = "harpoon2",
