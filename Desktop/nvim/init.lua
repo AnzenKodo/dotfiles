@@ -641,10 +641,12 @@ require('lazy').setup({
     },
 
     { -- Undo History
-       dir = plugin_path .. "/undotree",
-       config = function()
-            vim.keymap.set('n', '<leader><F5>', vim.cmd.UndotreeToggle, { desc = "Open Undotree" })
-       end,
+        "jiaoshijie/undotree",
+        dependencies = "nvim-lua/plenary.nvim",
+        config = true,
+        keys = { -- load the plugin only when using it's keybinding:
+            { "<leader>u", "<cmd>lua require('undotree').toggle()<cr>" },
+        },
     },
 
     { -- Shows Indent
@@ -666,7 +668,7 @@ require('lazy').setup({
         dir = plugin_path .. "/toggleterm.nvim",
         config = function()
             require("toggleterm").setup({
-                open_mapping = [[<C-\>]],
+                open_mapping = [[<C-q>]],
                 auto_scroll = false,
                 direction = 'horizontal',
             })
