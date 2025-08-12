@@ -98,8 +98,8 @@ end
 -- ============================================================================
 
 vim.keymap.set("n", "<leader>r", ":checktime<CR>",  { desc = "[R]eload" })
-vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>', { desc = "Clear Search Highlight" })
-vim.keymap.set('t', '<Esc>', '<C-\\><C-n>',    { desc = 'Exit terminal mode' })
+vim.keymap.set("n", '<Esc>', '<cmd>nohlsearch<CR>', { desc = "Clear Search Highlight" })
+vim.keymap.set("t", '<Esc>', '<C-\\><C-n>',    { desc = 'Exit terminal mode' })
 vim.keymap.set('n', 'L', vim.diagnostic.open_float, { desc = 'Show Diagnostic' })
 vim.keymap.set({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save File" })
 vim.keymap.set({'n', 'v'}, 'gf', function()
@@ -413,12 +413,13 @@ require('lazy').setup({
     },
 
     { -- Linter
-        dir = plugin_path .. "/nvim-lint",
+        "mfussenegger/nvim-lint",
         event = "VeryLazy",
         config = function()
             require('lint').linters_by_ft = {
                 c = {'gcc'},
                 cpp = {'gcc'},
+                java = { 'javac' },
             }
             local pattern = [[^([^:]+):(%d+):(%d+):%s+([^:]+):%s+(.*)$]]
             local groups = { 'file', 'lnum', 'col', 'severity', 'message' }
@@ -429,6 +430,7 @@ require('lazy').setup({
                 ['style'] = vim.diagnostic.severity.INFO,
                 ['information'] = vim.diagnostic.severity.INFO,
             }
+            -- C
             require('lint').linters.gcc = {
                 cmd = 'gcc',
                 stdin = false,
@@ -443,6 +445,15 @@ require('lazy').setup({
                 ignore_exitcode = true,
                 env = nil,
                 parser = require('lint.parser').from_pattern(pattern, groups, severity_map, { ['source'] = 'gcc' }),
+            }
+            -- Java
+            require('lint').linters.javac = {
+              cmd = 'javac',
+              stdin = false,
+              append_fname = true,
+              args = {'-Xlint:all'},
+              ignore_exitcode = true,
+              parser = require('lint.parser').from_errorformat('%A%f:%l:\\ %m,%-Z%p^,%-C%.%#'),
             }
             vim.api.nvim_create_autocmd({ "BufWritePost" }, {
               callback = function()
@@ -668,10 +679,15 @@ require('lazy').setup({
         dir = plugin_path .. "/toggleterm.nvim",
         config = function()
             require("toggleterm").setup({
-                open_mapping = [[<C-q>]],
+                open_mapping = [[<C-`>]],
                 auto_scroll = false,
                 direction = 'horizontal',
             })
+            if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
+                vim.keymap.set({"n", 't'}, "†", "<CMD>:ToggleTerm<CR>", { desc = "Toggle Terminal" })
+            else
+                vim.keymap.set("n", "<C-`>", "<CMD>:ToggleTerm<CR>", { desc = "Toggle Terminal" })
+            end
         end
     },
 

@@ -1,5 +1,35 @@
 # Functions ===================================================================
 
+function prompt {
+    # Get the current location (full path)
+    $currentPath = Get-Location
+
+    # Initialize git branch variable
+    $gitBranch = ""
+
+    # Check if current directory is a git repository
+    if (Test-Path ".git" -PathType Container) {
+        try {
+            # Get current git branch
+            $branch = git rev-parse --abbrev-ref HEAD 2>$null
+            if ($branch) {
+                $gitBranch = " (git:$branch)"
+            }
+        }
+        catch {
+            # Silently ignore git errors
+        }
+    }
+
+    # Build and return the prompt
+    Write-Host "`n$currentPath" -ForegroundColor Cyan -NoNewline
+    if ($gitBranch) {
+        Write-Host "$gitBranch" -ForegroundColor Yellow -NoNewline
+    }
+
+    return "> "
+}
+
 function ln {
     param(
         [Parameter(Mandatory=$true)]
