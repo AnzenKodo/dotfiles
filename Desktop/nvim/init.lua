@@ -144,6 +144,7 @@ vim.keymap.set('i', '<A-l>', '<C-x><C-l>', { noremap = true }, { desc = 'Whole l
 vim.keymap.set('i', '<A-e>', '<C-e>',      { noremap = true }, { desc = 'Cancel completion' })
 
 -- Split
+
 vim.keymap.set('n', '<leader>sv', '<C-w>v', { desc = '[S]plit [V]ertical' })
 vim.keymap.set('n', '<leader>ss', '<C-w>o', { desc = '[S]plit H[O]rizontal' })
 vim.keymap.set('n', '<leader>sl', '<C-w>l', { desc = '[S]plit goto [L]eft' })
@@ -206,6 +207,23 @@ vim.keymap.set("o", "N", "'nN'[v:searchforward]",       { expr = true, desc = "P
 -- Better indenting
 vim.keymap.set("v", "<", "<gv", { desc = "Indent left" })
 vim.keymap.set("v", ">", ">gv", { desc = "Indent right" })
+
+-- Terminal
+-- ============================================================================
+
+function open_split_terminal()
+    vim.cmd.new()
+    vim.cmd.wincmd "J"
+    vim.api.nvim_win_set_height(0, 12)
+    vim.wo.winfixheight = true
+    vim.cmd.term()
+end
+
+if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
+    vim.keymap.set({"i", "n"}, "†", open_split_terminal, { desc = "Open Split Termainl" })
+else
+    vim.keymap.set({"i", "n"}, "<C-`>", open_split_terminal, { desc = "Open Split Termainl" })
+end
 
 -- Commands
 -- ============================================================================
@@ -413,7 +431,7 @@ require('lazy').setup({
     },
 
     { -- Linter
-        "mfussenegger/nvim-lint",
+        dir = plugin_path .. "/nvim-lint",
         event = "VeryLazy",
         config = function()
             require('lint').linters_by_ft = {
@@ -529,9 +547,7 @@ require('lazy').setup({
             {
                 dir = plugin_path .. "/diffview.nvim",
                 config = function()
-                    require("diffview").setup({
-                        use_icons = false,
-                    })
+                    require("diffview").setup({ use_icons = false, })
                 end
             },
             { dir = plugin_path .. "/telescope/telescope.nvim" }
@@ -652,7 +668,7 @@ require('lazy').setup({
     },
 
     { -- Undo History
-        "jiaoshijie/undotree",
+        dir = plugin_path .. "/undotree",
         dependencies = "nvim-lua/plenary.nvim",
         config = true,
         keys = { -- load the plugin only when using it's keybinding:
@@ -674,25 +690,7 @@ require('lazy').setup({
         end,
     },
 
-    -- Terminal
-    {
-        dir = plugin_path .. "/toggleterm.nvim",
-        config = function()
-            require("toggleterm").setup({
-                open_mapping = [[<C-`>]],
-                auto_scroll = false,
-                direction = 'horizontal',
-            })
-            if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
-                vim.keymap.set({"n", 't'}, "†", "<CMD>:ToggleTerm<CR>", { desc = "Toggle Terminal" })
-            else
-                vim.keymap.set("n", "<C-`>", "<CMD>:ToggleTerm<CR>", { desc = "Toggle Terminal" })
-            end
-        end
-    },
-
-    -- Marks
-    {
+    { -- Marks
         dir = plugin_path .. "/harpoon",
         branch = "harpoon2",
         dependencies = {
@@ -712,6 +710,66 @@ require('lazy').setup({
             vim.keymap.set("n", "<leader>mn", function() harpoon:list():next() end,                        { desc = "[M]ark [N]ext"})
         end,
     },
+
+    { -- Debugger
+        "mfussenegger/nvim-dap",
+        dependencies = {
+            "leoluz/nvim-dap-go",
+            "rcarriga/nvim-dap-ui",
+            "theHamsta/nvim-dap-virtual-text",
+            "nvim-neotest/nvim-nio",
+            -- "williamboman/mason.nvim",
+        },
+        config = function()
+            require("dapui").setup()
+            require("dap-go").setup()
+            local dap = require("dap")
+            local ui = require "dapui"
+
+            dap.adapters.gdb = {
+              type = "executable",
+              command = "gdb",
+              args = { "--interpreter=dap", "--eval-command", "set print pretty on" }
+            }
+            dap.configurations.c = {
+              {
+                name = "Launch",
+                type = "gdb",
+                request = "launch",
+                program = function()
+                  return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/')
+                end,
+                cwd = "${workspaceFolder}",
+                stopAtBeginningOfMainSubprogram = false,
+              },
+            }
+
+            vim.keymap.set("n", "<space>b", dap.toggle_breakpoint)
+            vim.keymap.set("n", "<space>gb", dap.run_to_cursor)
+            vim.keymap.set("n", "<space>?", function()
+                require("dapui").eval(nil, { enter = true })
+            end)
+            vim.keymap.set("n", "<F1>", dap.continue)
+            vim.keymap.set("n", "<F2>", dap.step_into)
+            vim.keymap.set("n", "<F3>", dap.step_over)
+            vim.keymap.set("n", "<F4>", dap.step_out)
+            vim.keymap.set("n", "<F5>", dap.step_back)
+            vim.keymap.set("n", "<F13>", dap.restart)
+
+            dap.listeners.before.attach.dapui_config = function()
+                ui.open()
+            end
+            dap.listeners.before.launch.dapui_config = function()
+                ui.open()
+            end
+            dap.listeners.before.event_terminated.dapui_config = function()
+                ui.close()
+            end
+            dap.listeners.before.event_exited.dapui_config = function()
+                ui.close()
+            end
+        end
+    }
 }, {
     root = plugin_path .. "/Online",
 })

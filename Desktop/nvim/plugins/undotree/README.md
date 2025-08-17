@@ -1,129 +1,131 @@
-### [Project on Vim.org](http://www.vim.org/scripts/script.php?script_id=4177)
+# undotree
 
-[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/mbbill/undotree?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+A neovim undotree plugin written in lua.
 
-### Screenshot
+**Screenshot**
 
-![](doc/_static/undotree.png)
+![preview](https://user-images.githubusercontent.com/43605101/232043141-f4318a13-8a85-41ee-bbb5-6f86511b32fe.png)
 
-### Table of Contents
+Diff previewer window shows the difference between the current node and the node under the cursor.
 
-<!-- TOC -->
+### Requirements
 
-- [Description](#description)
-- [Download and Install](#download-and-install)
-- [Usage](#usage)
-    - [Configuration](#configuration)
-    - [Debug](#debug)
-- [License](#license)
-- [Author](#author)
-
-<!-- /TOC -->
-
-### Description
-
-Undotree visualizes the undo history and makes it easy to browse and switch between different undo branches. You may be wondering, _what are undo "branches" anyway?_ They're a feature of Vim that allow you to go back to a prior state even after it has been overwritten by later edits. For example: In most editors, if you make some change A, followed by change B, then go back to A and make another change C, normally you wouldn't be able to go back to change B because the undo history is linear. That's not the case with Vim, however. Vim internally stores the entire edit history for each file as a single, monolithic tree structure; this plug-in exposes that tree to you so that you can not only switch back and forth between older and more recent edits linearly but can also switch between diverging branches.
-
-> Note: use `:help 'undolevels'` in Vim for information on configuring the size of the undo history
-
-
-### How it works
-
-Some users may have questions about whether file contents change when switching between undo history states. With undotree, you don't need to worry about data loss or disk writes. The plugin will **never** save your data or write to disk. Instead, it modifies the current buffer temporarily, just like auto-completion plugins do. This means that any changes made by undotree are reversible with a single click, allowing you to easily revert to any prior state.
-
-Vim's undo/redo feature is a great way to protect your work from accidental changes or data loss. Unlike other editors, where undoing and then accidentally typing something can cause you to lose your edits, Vim allows you to revert to previous states without losing any data, as long as you keep the Vim session alive. If you want to keep your undo history permanently, Vim offers a persistent undo feature. This feature saves your undo history to a file on disk, allowing you to preserve your undo history across editing sessions. To enable persistent undo, refer to the instructions below. This can be a useful option for those who want to maintain a long-term undo history for a file or project.
-
-### Persisting the undo history
-
-Undo/redo functionality is a useful feature for most editors, including Vim. However, by default, Vim's undo history is only available during the current editing session, as it is stored in memory and lost once the process exits. While tools such as undotree can aid in accessing historical states, it does not offer a permanent solution. For some users, it may be safer or more convenient to persist the undo history across editing sessions, and that's where Vim's persistent undo feature comes in.
-
-Persistent undo saves the undo history in a file on disk, rather than in RAM. Whenever a change is made, Vim saves the edited file with its current state, while also saving the entire undo history to a separate file on disk that includes all states. This means that even after exiting Vim, the undo history is still available when you reopen the file, allowing you to continue to undo/redo changes. The undo history file is incremental and saves every change permanently, similar to Git.
-
-If you're worried about the potential storage space used by persistent undo files, undotree provides an option to clean them up. Additionally, undotree is written in pure Vim script, making it lightweight, simple, and fast, and only runs when needed. To enable persistent undo, simply type `:h persistent-undo` in Vim, or follow the instructions provided in the *Usage* section below.
+- nvim 0.7.0 or above
 
 ### Download and Install
 
 Using Vim's built-in package manager:
 
 ```sh
-mkdir -p ~/.vim/pack/mbbill/start
-cd ~/.vim/pack/mbbill/start
-git clone https://github.com/mbbill/undotree.git
-vim -u NONE -c "helptags undotree/doc" -c q
+mkdir -p ~/.config/nvim/pack/github/start/
+cd ~/.config/nvim/pack/github/start/
+git clone https://github.com/nvim-lua/plenary.nvim.git
+git clone https://github.com/jiaoshijie/undotree.git
 ```
 
-Use whatever plug-in manager to pull the master branch. I've included 2 examples of the most used:
+Using [vim-plug](https://github.com/junegunn/vim-plug)
 
-- *Vundle:* `Plugin 'mbbill/undotree'`
-- *Vim-Plug:* `Plug 'mbbill/undotree'`
-- *Packer:* `use 'mbbill/undotree'`
+```
+Plug 'nvim-lua/plenary.nvim'
+Plug 'jiaoshijie/undotree'
+```
 
-And install them with the following:
+Using [packer.nvim](https://github.com/wbthomason/packer.nvim)
 
-- *Vundle:* `:PluginInstall`
-- *Vim-Plug:* `:PlugInstall`
-- *Packer:* `:PackerSync`
+```lua
+use {
+  "jiaoshijie/undotree",
+  requires = {
+    "nvim-lua/plenary.nvim",
+  },
+}
+```
+
+Using [lazy.nvim](https://github.com/folke/lazy.nvim)
+
+```lua
+{
+  "jiaoshijie/undotree",
+  dependencies = "nvim-lua/plenary.nvim",
+  config = true,
+  keys = { -- load the plugin only when using it's keybinding:
+    { "<leader>u", "<cmd>lua require('undotree').toggle()<cr>" },
+  },
+}
+```
 
 ### Usage
 
-  1. Use `:UndotreeToggle` to toggle the undo-tree panel. 
-
-  You may want to map this command to whatever hotkey by adding the following line to your vimrc, take `F5` for example.
-
-```vim
-nnoremap <F5> :UndotreeToggle<CR>
-```
-
-  Or the equivalent mapping if using Neovim and Lua script.
+Basic setup
 
 ```lua
-vim.keymap.set('n', '<leader><F5>', vim.cmd.UndotreeToggle)
+require('undotree').setup()
 ```
 
-  2. Markers
-     * Every change has a sequence number and it is displayed before timestamps.
-     * The current state is marked as `> number <`.
-     * The next state which will be restored by `:redo` or `<ctrl-r>` is marked as `{ number }`.
-     * The `[ number ]` marks the most recent change.
-     * The undo history is sorted by timestamps.
-     * Saved changes are marked as `s` and the big `S` indicates the most recent saved change.
-  3. Press `?` in undotree window for quick help.
-  4. Persistent undo
-     * Usually, I would like to store the undo files in a separate place like below.
+If using [packer.nvim](https://github.com/wbthomason/packer.nvim) undotree can be setup directly in the plugin spec:
 
-```vim
-if has("persistent_undo")
-   let target_path = expand('~/.undodir')
-
-    " create the directory and any parent directories
-    " if the location does not exist.
-    if !isdirectory(target_path)
-        call mkdir(target_path, "p", 0700)
-    endif
-
-    let &undodir=target_path
-    set undofile
-endif
+```lua
+use {
+  "jiaoshijie/undotree",
+  config = function()
+    require('undotree').setup()
+  end,
+  requires = {
+    "nvim-lua/plenary.nvim",
+  },
+}
 ```
-     * Alternatively, if you wish to persist the undo history for a currently
-       open file only, you can use the `:UndotreePersistUndo` command.
 
-#### Configuration
+Configuration can be passed to the setup function. Here is an example with the default settings:
 
-[Here](https://github.com/mbbill/undotree/blob/master/plugin/undotree.vim#L27) is a list of options.
+```lua
+local undotree = require('undotree')
 
-#### Debug
+undotree.setup({
+  float_diff = true,  -- using float window previews diff, set this `true` will disable layout option
+  layout = "left_bottom", -- "left_bottom", "left_left_bottom"
+  position = "left", -- "right", "bottom"
+  ignore_filetype = { 'undotree', 'undotreeDiff', 'qf', 'TelescopePrompt', 'spectre_panel', 'tsplayground' },
+  window = {
+    winblend = 30,
+  },
+  keymaps = {
+    ['j'] = "move_next",
+    ['k'] = "move_prev",
+    ['gj'] = "move2parent",
+    ['J'] = "move_change_next",
+    ['K'] = "move_change_prev",
+    ['<cr>'] = "action_enter",
+    ['p'] = "enter_diffbuf",
+    ['q'] = "quit",
+  },
+})
+```
 
-  1. Create a file under $HOME with the name `undotree_debug.log`
-     * `$touch ~/undotree_debug.log`
-  2. Run vim, and the log will automatically be appended to the file, and you may watch it using `tail`:
-     * `$tail -F ~/undotree_debug.log`
-  3. If you want to disable debug, just delete that file.
+You can directly use `:lua require('undotree').toggle()` for toggling undotree panel, or set the following keymaps for convenient using.
+
+```lua
+vim.keymap.set('n', '<leader>u', require('undotree').toggle, { noremap = true, silent = true })
+
+-- or
+vim.keymap.set('n', '<leader>uo', require('undotree').open, { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>uc', require('undotree').close, { noremap = true, silent = true })
+```
+
+2. Some Mappings
+
+| Mappings         | Action                                               |
+| ----             | ----                                                 |
+| <kbd>j</kbd>     | jump to next undo node                               |
+| <kbd>gj</kbd>    | jump to the parent node of the node under the cursor |
+| <kbd>k</kbd>     | jump to prev undo node                               |
+| <kbd>J</kbd>     | jump to next undo node and undo to this state        |
+| <kbd>K</kbd>     | jump to prev undo node and undo to this state        |
+| <kbd>q</kbd>     | quit undotree                                        |
+| <kbd>p</kbd>     | jump into the undotree diff window                   |
+| <kbd>Enter</kbd> | undo to this state                                   |
+
 
 ### License
 
-**BSD**
-
-### Author
-
-Ming Bai  &lt;mbbill AT gmail DOT COM&gt;
+**MIT**
