@@ -145,7 +145,7 @@ vim.keymap.set('i', '<A-e>', '<C-e>',      { noremap = true }, { desc = 'Cancel 
 
 -- Split
 vim.keymap.set('n', '<leader>sv', '<C-w>v', { desc = '[S]plit [V]ertical' })
-vim.keymap.set('n', '<leader>ss', '<C-w>o', { desc = '[S]plit H[O]rizontal' })
+vim.keymap.set('n', '<leader>so', '<C-w>s', { desc = '[S]plit H[O]rizontal' })
 vim.keymap.set('n', '<leader>sl', '<C-w>l', { desc = '[S]plit goto [L]eft' })
 vim.keymap.set('n', '<leader>sh', '<C-w>h', { desc = '[S]plit goto [R]ight' })
 vim.keymap.set('n', '<leader>sj', '<C-w>j', { desc = '[S]plit goto [D]own' })
@@ -684,9 +684,7 @@ require('lazy').setup({
                 direction = 'horizontal',
             })
             if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
-                vim.keymap.set({"n", 't'}, "†", "<CMD>:ToggleTerm<CR>", { desc = "Toggle Terminal" })
-            else
-                vim.keymap.set("n", "<C-`>", "<CMD>:ToggleTerm<CR>", { desc = "Toggle Terminal" })
+                vim.keymap.set({"n", 'i', 't'}, "†", "<CMD>:ToggleTerm<CR>", { desc = "Toggle Terminal" })
             end
         end
     },

@@ -1,4 +1,36 @@
+# Set Parameters ==============================================================
+
+Set-PSReadlineKeyHandler -Key Tab -Function MenuComplete
+Set-PSReadlineKeyHandler -Key UpArrow -Function HistorySearchBackward
+Set-PSReadlineKeyHandler -Key DownArrow -Function HistorySearchForward
+
+# cd Last Dir Path ============================================================
+
+$LAST_DIR_PATH = "$HOME/AppData/last-dir.txt"
+if (-not (Test-Path $LAST_DIR_PATH)) {
+    New-Item -ItemType File -Path $pathFile -Force
+    echo $PWD.Path > $LAST_DIR_PATH
+}
+cd (Get-Content -Path $LAST_DIR_PATH -Raw).Trim()
+
+# Redefine cd =================================================================
+
+Invoke-Expression (& { (zoxide init powershell | Out-String) })
+Remove-Item Alias:\cd -Force
+function cd {
+    param([string]$Path)
+    z $Path
+    echo $PWD.Path > $LAST_DIR_PATH
+}
+
 # Functions ===================================================================
+
+function poweroff {
+    Stop-Computer -Force
+}
+function reboot {
+    Restart-Computer -Force
+}
 
 function prompt {
     # Get the current location (full path)
@@ -58,10 +90,6 @@ function backup {
     push -CommitMessage "Backup from Windows Desktop"
     Pop-Location
 }
-
-# Start Inits =================================================================
-
-Invoke-Expression (& { (zoxide init --cmd cd powershell | Out-String) })
 
 # Recycle Bin =================================================================
 
