@@ -352,6 +352,17 @@ require('lazy').setup({
                 dir = plugin_path .. "/oil.nvim",
                 lazy = false,
                 config = function()
+                    function _G.get_oil_winbar()
+                      local bufnr = vim.api.nvim_win_get_buf(vim.g.statusline_winid)
+                      local dir = require("oil").get_current_dir(bufnr)
+                      if dir then
+                        return vim.fn.fnamemodify(dir, ":~")
+                      else
+                        -- If there is no current directory (e.g. over ssh), just show the buffer name
+                        return vim.api.nvim_buf_get_name(0)
+                      end
+                    end
+
                     require("oil").setup({
                         default_file_explorer = true,
                         delete_to_trash = true,
@@ -394,7 +405,14 @@ require('lazy').setup({
                             preview_split = "auto",
                         },
                         win_options = {
+                            winbar = "%!v:lua.get_oil_winbar()",
                             signcolumn = "yes:2",
+                            wrap = true,
+                            signcolumn = "yes",
+                            foldcolumn = "0",
+                            list = true,
+                            conceallevel = 3,
+                            concealcursor = "nvic",
                         },
                         view_options = {
                             show_hidden = true,
@@ -483,11 +501,16 @@ require('lazy').setup({
     },
 
     { -- Tags Manager
-        dir = plugin_path .. "/vim-gutentags",
+        "JMarkin/gentags.lua",
+        cond = vim.fn.executable("ctags") == 1,
+        event = "VeryLazy",
         config = function()
-            vim.g.gutentags_ctags_extra_args = { '--c-kinds=+p' }
-            vim.g.gutentags_project_root = { 'tags' }
-        end
+            require('gentags').setup({
+                args = {
+                    '--c-kinds=+p',
+                },
+            })
+        end,
     },
 
     {
@@ -710,6 +733,24 @@ require('lazy').setup({
             vim.keymap.set("n", "<leader>mn", function() harpoon:list():next() end,                        { desc = "[M]ark [N]ext"})
         end,
     },
+
+    { -- Quickfix
+        "kevinhwang91/nvim-bqf",
+        enabled = false,
+        config = function()
+          require("bqf").setup()
+        end,
+    },
+    {
+        "stevearc/qf_helper.nvim",
+        opts = {},
+    },
+
+
+    -- Database
+    "tpope/vim-dadbod",
+    "kristijanhusak/vim-dadbod-completion",
+    "kristijanhusak/vim-dadbod-ui",
 
     { -- Debugger
         "mfussenegger/nvim-dap",
