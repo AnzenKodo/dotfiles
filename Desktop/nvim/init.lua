@@ -713,7 +713,8 @@ require('lazy').setup({
         end,
     },
 
-    { -- Marks
+    -- Marks
+    {
         dir = plugin_path .. "/harpoon",
         branch = "harpoon2",
         dependencies = {
