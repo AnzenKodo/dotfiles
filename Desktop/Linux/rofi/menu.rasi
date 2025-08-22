@@ -1,0 +1,4 @@
+@import "config.rasi"
+window {
+    width: 10%;
+}

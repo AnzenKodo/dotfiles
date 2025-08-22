@@ -1,12 +1,6 @@
 {
-  "cmp-nvim-tags": { "branch": "main", "commit": "e126a09ef49f0611c127dea851fa0052aa223f15" },
   "gentags.lua": { "branch": "main", "commit": "f8b0314c150f8f10411cf47adacf7cf9f308d4c6" },
-  "nvim-cmp": { "branch": "main", "commit": "b5311ab3ed9c846b585c0c15b7559be131ec4be9" },
-  "nvim-dap": { "branch": "master", "commit": "a479e25ed5b5d331fb46ee4b9e160ff02ac64310" },
-  "nvim-dap-go": { "branch": "main", "commit": "b4421153ead5d726603b02743ea40cf26a51ed5f" },
-  "nvim-dap-ui": { "branch": "master", "commit": "cf91d5e2d07c72903d052f5207511bf7ecdb7122" },
-  "nvim-dap-virtual-text": { "branch": "master", "commit": "fbdb48c2ed45f4a8293d0d483f7730d24467ccb6" },
-  "nvim-nio": { "branch": "master", "commit": "21f5324bfac14e22ba26553caf69ec76ae8a7662" },
+  "multicursor.nvim": { "branch": "1.0", "commit": "9eedebdd395bbbc4711081e33b0606c079e054c3" },
   "qf_helper.nvim": { "branch": "master", "commit": "62e94495385a06f5143527548c348f4a9df2e704" },
   "vim-dadbod": { "branch": "master", "commit": "e95afed23712f969f83b4857a24cf9d59114c2e6" },
   "vim-dadbod-completion": { "branch": "master", "commit": "a8dac0b3cf6132c80dc9b18bef36d4cf7a9e1fe6" },

@@ -1,6 +1,6 @@
 {
 	"$schema" : "https://aka.ms/winget-packages.schema.2.0.json",
-	"CreationDate" : "2025-08-12T18:27:41.176-00:00",
+	"CreationDate" : "2025-08-22T14:48:22.057-00:00",
 	"Sources" : 
 	[
 		{
@@ -9,10 +9,6 @@
 				{
 					"PackageIdentifier" : "7zip.7zip",
 					"Version" : "25.00"
-				},
-				{
-					"PackageIdentifier" : "Betterbird.Betterbird",
-					"Version" : "128.13.0"
 				},
 				{
 					"PackageIdentifier" : "Git.Git",
@@ -48,7 +44,11 @@
 				},
 				{
 					"PackageIdentifier" : "Microsoft.Edge",
-					"Version" : "139.0.3405.86"
+					"Version" : "139.0.3405.102"
+				},
+				{
+					"PackageIdentifier" : "OBSProject.OBSStudio",
+					"Version" : "31.1.2"
 				},
 				{
 					"PackageIdentifier" : "Python.Launcher",
@@ -63,8 +63,12 @@
 					"Version" : "14.40.33810.0"
 				},
 				{
+					"PackageIdentifier" : "karakun.OpenWebStart",
+					"Version" : "1.7.0"
+				},
+				{
 					"PackageIdentifier" : "Brave.Brave",
-					"Version" : "139.1.81.131"
+					"Version" : "139.1.81.136"
 				},
 				{
 					"PackageIdentifier" : "Google.Protobuf",
@@ -85,10 +89,6 @@
 				{
 					"PackageIdentifier" : "Obsidian.Obsidian",
 					"Version" : "1.8.10"
-				},
-				{
-					"PackageIdentifier" : "beekeeper-studio.beekeeper-studio",
-					"Version" : "5.3.4"
 				},
 				{
 					"PackageIdentifier" : "fullstorydev.grpcurl",

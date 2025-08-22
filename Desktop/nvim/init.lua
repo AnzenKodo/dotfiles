@@ -53,17 +53,21 @@ vim.o.swapfile = false
 vim.o.backup = false
 
 if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
-    if vim.fn.executable('pwsh') == 1 then
-        vim.o.shell = 'pwsh -NoLogo'
+    if vim.fn.executable('bash') == 1 then
+        vim.o.shell = 'bash'
     else
-        vim.o.shell = 'powershell -NoLogo'
-    end
+        if vim.fn.executable('pwsh') == 1 then
+            vim.o.shell = 'pwsh -NoLogo'
+        else
+            vim.o.shell = 'powershell -NoLogo'
+        end
 
-    vim.o.shellcmdflag = '-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command'
-    vim.o.shellredir = '2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode'
-    vim.o.shellpipe = '2>&1 | Tee-Object %s; exit $LastExitCode'
-    vim.o.shellquote = ''
-    vim.o.shellxquote = ''
+        vim.o.shellcmdflag = '-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command'
+        vim.o.shellredir = '2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode'
+        vim.o.shellpipe = '2>&1 | Tee-Object %s; exit $LastExitCode'
+        vim.o.shellquote = ''
+        vim.o.shellxquote = ''
+    end
 end
 
 -- Functions for Keymaps
@@ -156,6 +160,26 @@ vim.keymap.set('n', '<leader>s>', '<C-w>>', { desc = '[S]plit increase [>] width
 vim.keymap.set('n', '<leader>s<', '<C-w>>', { desc = '[S]plit decrease [<] width' })
 vim.keymap.set('n', '<leader>sx', '<C-w>x', { desc = '[S]plit [X]wap sides' })
 vim.keymap.set('n', '<leader>ss', '<C-w>w', { desc = '[S]plit [S]witch' })
+vim.keymap.set('n', '<leader>sd', function()
+    local cur_win  = vim.api.nvim_get_current_win()          -- active window
+    local cur_buf  = vim.api.nvim_get_current_buf()          -- active buffer
+    local wins     = vim.api.nvim_tabpage_list_wins(0)       -- all wins in tab
+    -- pick any window that isn’t the current one
+    local target
+    for _, w in ipairs(wins) do
+        if w ~= cur_win then
+            target = w
+            break
+        end
+    end
+    -- if there was no other window, just split once
+    if not target then
+        vim.cmd('vsplit')
+        target = vim.api.nvim_get_current_win()
+    end
+    vim.api.nvim_win_set_buf(target, cur_buf) -- put the buffer in the target window
+    vim.api.nvim_set_current_win(target)
+end, {desc = '[S]plit [D]uplicate' })
 vim.keymap.set({'n', 'v'}, '<leader>sf', function()
     local original_win = vim.api.nvim_get_current_win()
     local mode = vim.api.nvim_get_mode().mode
@@ -747,6 +771,45 @@ require('lazy').setup({
         opts = {},
     },
 
+
+    {
+        "jake-stewart/multicursor.nvim",
+        branch = "1.0",
+        config = function()
+            local mc = require("multicursor-nvim")
+            mc.setup()
+
+            -- Add or skip cursor above/below the main cursor.
+            vim.keymap.set({"n", "x"}, "<C-M-Up>", function() mc.lineAddCursor(-1) end)
+            vim.keymap.set({"n", "x"}, "<C-M-Down>", function() mc.lineAddCursor(1) end)
+            vim.keymap.set({"n", "x"}, "<C-M-Left>", function() mc.lineSkipCursor(-1) end)
+            vim.keymap.set({"n", "x"}, "<C-M-Right>", function() mc.lineSkipCursor(1) end)
+
+            -- Add or skip adding a new cursor by matching word/selection
+            vim.keymap.set({"n", "x"}, "<C-d>", function() mc.matchAddCursor(1) end)
+            vim.keymap.set({"n", "x"}, "<leader>ms", function() mc.matchSkipCursor(1) end)
+            vim.keymap.set({"n", "x"}, "<C-D>", function() mc.matchAddCursor(-1) end)
+            vim.keymap.set({"n", "x"}, "<leader>mS", function() mc.matchSkipCursor(-1) end)
+
+            mc.addKeymapLayer(function(layerSet)
+                -- Select a different cursor as the main one.
+                layerSet({"n", "x"}, "<leader>md", mc.prevCursor)
+                layerSet({"n", "x"}, "<leader>mD", mc.nextCursor)
+
+                -- Delete the main cursor.
+                layerSet({"n", "x"}, "<leader>mq", mc.deleteCursor)
+
+                -- Enable and clear cursors using escape.
+                layerSet("n", "<esc>", function()
+                    if not mc.cursorsEnabled() then
+                        mc.enableCursors()
+                    else
+                        mc.clearCursors()
+                    end
+                end)
+            end)
+        end
+    },
 
     -- Database
     "tpope/vim-dadbod",
