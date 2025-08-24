@@ -35,15 +35,6 @@ export PATH="~/Applications/AppImages:~/Applications/bin"\
 ":~/Code/Tools/idea-IC-251.26927.53/bin"\
 ":$PATH"
 
-# Custom Application Variables =================================================
-
-export TERMINAL="ghostty"
-export EDITOR="nvim"
-export BROWSER="brave --disable-features=OutdatedBuildDetector"
-export FILES="thunar"
-export OFFICE="onlyoffice"
-export PASSWORD_MANAGER="keepassxc"
-
 # Application Variables ========================================================
 
 export GTK2_RC_FILES=~/Dotfiles/Desktop/gtk2rc
@@ -119,12 +110,10 @@ alias reboot="ask_and_run sudo reboot"
 alias logout="ask_and_run pkill xfce4-session"
 alias suspend="sudo pm-suspend"
 alias hibernate="sudo pm-hibernate"
-#alias quit
 #alias lock
 
 alias rmr="gtrash restore"
 alias rme="gtrash find --rm ."
-alias xcolor="xcolor | xclip"
 alias rsync="rsync --hard-links --archive --recursive --update --executability \
     --verbose --human-readable --progress"
 alias rsync_git="rsync --filter='dir-merge,- .gitignore' --delete"
@@ -185,29 +174,3 @@ ctags-system()
         /usr/include/string.h /usr/include/time.h \
         -R /usr/include/sys /usr/include/xcb /usr/include/GLES2/ /usr/include/EGL
 }
-
-# Add Terminal Functions
-#===============================================================================
-
-if [ -x /usr/lib/command-not-found -o -x /usr/share/command-not-found/command-not-found ]; then
-	function command_not_found_handle {
-        if [ -x /usr/lib/command-not-found ]; then
-		   /usr/lib/command-not-found -- "$1"
-           return $?
-        elif [ -x /usr/share/command-not-found/command-not-found ]; then
-		   /usr/share/command-not-found/command-not-found -- "$1"
-           return $?
-		else
-		   printf "%s: command not found\n" "$1" >&2
-		   return 127
-		fi
-	}
-fi
-
-if ! shopt -oq posix; then
-  if [ -f /usr/share/bash-completion/bash_completion ]; then
-    . /usr/share/bash-completion/bash_completion
-  elif [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
-  fi
-fi
