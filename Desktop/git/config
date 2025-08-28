@@ -14,3 +14,5 @@
 	rebase = true
 [push]
     autoSetupRemote = true
+[credential "https://git-codecommit.ap-south-1.amazonaws.com"]
+	provider = generic

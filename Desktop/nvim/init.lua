@@ -52,6 +52,13 @@ vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 vim.o.swapfile = false
 vim.o.backup = false
 
+-- Auto Reload file
+vim.o.autoread = true
+vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold", "CursorHoldI" }, {
+  pattern = { "*" },
+  command = "if mode() != 'c' | checktime | endif",
+})
+
 if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
     if vim.fn.executable('bash') == 1 then
         vim.o.shell = 'bash'

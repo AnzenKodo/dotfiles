@@ -1,6 +1,6 @@
 {
 	"$schema" : "https://aka.ms/winget-packages.schema.2.0.json",
-	"CreationDate" : "2025-08-24T12:08:12.624-00:00",
+	"CreationDate" : "2025-08-28T12:09:01.796-00:00",
 	"Sources" : 
 	[
 		{
@@ -31,20 +31,24 @@
 					"Version" : "7.4.3.1790"
 				},
 				{
+					"PackageIdentifier" : "Oracle.JavaRuntimeEnvironment",
+					"Version" : "8.0.1510.12"
+				},
+				{
 					"PackageIdentifier" : "Google.GoogleDrive",
-					"Version" : "112.0.3.0"
+					"Version" : "113.0.1.0"
 				},
 				{
 					"PackageIdentifier" : "Neovim.Neovim",
 					"Version" : "0.11.3"
 				},
 				{
-					"PackageIdentifier" : "Microsoft.OpenJDK.21",
-					"Version" : "21.0.8.9"
+					"PackageIdentifier" : "GoLang.Go",
+					"Version" : "1.25.0"
 				},
 				{
 					"PackageIdentifier" : "Microsoft.Edge",
-					"Version" : "139.0.3405.111"
+					"Version" : "139.0.3405.119"
 				},
 				{
 					"PackageIdentifier" : "OBSProject.OBSStudio",
@@ -63,24 +67,12 @@
 					"Version" : "14.40.33810.0"
 				},
 				{
-					"PackageIdentifier" : "karakun.OpenWebStart",
-					"Version" : "1.7.0"
-				},
-				{
 					"PackageIdentifier" : "Brave.Brave",
-					"Version" : "139.1.81.136"
-				},
-				{
-					"PackageIdentifier" : "Google.Protobuf",
-					"Version" : "31.1"
+					"Version" : "139.1.81.137"
 				},
 				{
 					"PackageIdentifier" : "MartinStorsjo.LLVM-MinGW.MSVCRT",
 					"Version" : "20.1.8-20250709"
-				},
-				{
-					"PackageIdentifier" : "Postman.Postman",
-					"Version" : "11.57.0"
 				},
 				{
 					"PackageIdentifier" : "UniversalCtags.Ctags",
@@ -108,7 +100,7 @@
 				},
 				{
 					"PackageIdentifier" : "Microsoft.Teams",
-					"Version" : "25185.410.3812.8024"
+					"Version" : "25198.1112.3855.2900"
 				},
 				{
 					"PackageIdentifier" : "Microsoft.AppInstaller",
@@ -125,10 +117,6 @@
 				{
 					"PackageIdentifier" : "Microsoft.VCLibs.Desktop.14",
 					"Version" : "14.0.33728.0"
-				},
-				{
-					"PackageIdentifier" : "Microsoft.WindowsTerminal",
-					"Version" : "1.22.12111.0"
 				}
 			],
 			"SourceDetails" : 
