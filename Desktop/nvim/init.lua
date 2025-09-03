@@ -14,6 +14,9 @@ vim.o.updatetime = 50
 vim.o.confirm = true
 vim.o.sessionoptions="blank,buffers,curdir,folds,help,tabpages,winsize,winpos,localoptions"
 vim.o.exrc = true
+vim.o.backspace = "indent,eol,start"
+vim.o.mouse = "a"
+vim.o.fileformats = "unix,dos,mac"
 -- vim.o.laststatus = 3
 
 -- Split
@@ -28,7 +31,7 @@ vim.o.undofile = true       -- Undo
 
 -- Auto complete
 vim.o.omnifunc = "syntaxcomplete#Compete"
-vim.opt.completeopt:append { "menuone", "preview" }
+vim.opt.completeopt:append { "menuone", "preview", "noselect" }
 
 -- Tabs
 vim.o.tabstop = 4      -- Number of spaces a tab counts for
@@ -37,8 +40,8 @@ vim.o.expandtab = true -- Convert tabs to spaces
 vim.o.softtabstop = 4
 
 -- Search and Replace
--- vim.o.ignorecase = true
-vim.o.smartcase = true
+vim.o.ignorecase = true    -- Not case sensitive
+vim.o.smartcase = true     -- Case sensitive if uppercase
 vim.o.inccommand = 'split'
 
 vim.schedule(function()
@@ -46,7 +49,7 @@ vim.schedule(function()
 end)
 
 vim.o.list = true
-vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
+vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣', eol = ' ', trail="." }
 
 -- Useless Settings
 vim.o.swapfile = false
@@ -58,24 +61,6 @@ vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold", "CursorHo
   pattern = { "*" },
   command = "if mode() != 'c' | checktime | endif",
 })
-
-if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
-    if vim.fn.executable('bash') == 1 then
-        vim.o.shell = 'bash'
-    else
-        if vim.fn.executable('pwsh') == 1 then
-            vim.o.shell = 'pwsh -NoLogo'
-        else
-            vim.o.shell = 'powershell -NoLogo'
-        end
-
-        vim.o.shellcmdflag = '-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command'
-        vim.o.shellredir = '2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode'
-        vim.o.shellpipe = '2>&1 | Tee-Object %s; exit $LastExitCode'
-        vim.o.shellquote = ''
-        vim.o.shellxquote = ''
-    end
-end
 
 -- Functions for Keymaps
 -- ============================================================================
@@ -108,7 +93,7 @@ end
 -- Keybindings
 -- ============================================================================
 
-vim.keymap.set("n", "<leader>r", ":checktime<CR>",  { desc = "[R]eload" })
+vim.keymap.set("n", "<leader>r", ":Reload<CR>",  { desc = "[R]eload" })
 vim.keymap.set("n", '<Esc>', '<cmd>nohlsearch<CR>', { desc = "Clear Search Highlight" })
 vim.keymap.set("t", '<Esc>', '<C-\\><C-n>',    { desc = 'Exit terminal mode' })
 vim.keymap.set('n', 'L', vim.diagnostic.open_float, { desc = 'Show Diagnostic' })
@@ -145,7 +130,7 @@ vim.keymap.set('n', '<leader>ba', function()
     end
 end, { desc = 'Wipe all buffers', })
 
--- Auto complete
+-- Autocomplete
 vim.keymap.set('i', '<A-o>', '<C-x><C-o>', { noremap = true }, { desc = 'Omni-completion (context-aware)' })
 vim.keymap.set('i', '<A-n>', '<C-x><C-n>', { noremap = true }, { desc = 'Completion from current file.' })
 vim.keymap.set('i', '<A-i>', '<C-x><C-i>', { noremap = true }, { desc = 'Completion from include file.' })
@@ -155,19 +140,31 @@ vim.keymap.set('i', '<A-l>', '<C-x><C-l>', { noremap = true }, { desc = 'Whole l
 vim.keymap.set('i', '<A-e>', '<C-e>',      { noremap = true }, { desc = 'Cancel completion' })
 
 -- Split
-
-vim.keymap.set('n', '<leader>sv', '<C-w>v', { desc = '[S]plit [V]ertical' })
-vim.keymap.set('n', '<leader>so', '<C-w>s', { desc = '[S]plit H[O]rizontal' })
-vim.keymap.set('n', '<leader>sl', '<C-w>l', { desc = '[S]plit goto [L]eft' })
-vim.keymap.set('n', '<leader>sh', '<C-w>h', { desc = '[S]plit goto [R]ight' })
-vim.keymap.set('n', '<leader>sj', '<C-w>j', { desc = '[S]plit goto [D]own' })
-vim.keymap.set('n', '<leader>sk', '<C-w>k', { desc = '[S]plit goto [U]p' })
-vim.keymap.set('n', '<leader>s=', '<C-w>=', { desc = '[S]plit equally [=]' })
-vim.keymap.set('n', '<leader>s>', '<C-w>>', { desc = '[S]plit increase [>] width' })
-vim.keymap.set('n', '<leader>s<', '<C-w>>', { desc = '[S]plit decrease [<] width' })
-vim.keymap.set('n', '<leader>sx', '<C-w>x', { desc = '[S]plit [X]wap sides' })
-vim.keymap.set('n', '<leader>ss', '<C-w>w', { desc = '[S]plit [S]witch' })
-vim.keymap.set('n', '<leader>sd', function()
+vim.keymap.set('n', '<leader>wv', '<C-w>v', { desc = '[W]indow [V]ertical' })
+vim.keymap.set('n', '<leader>wo', '<C-w>s', { desc = '[W]indow H[O]rizontal' })
+vim.keymap.set('n', '<leader>wl', '<C-w>l', { desc = '[W]indow goto [L]eft' })
+vim.keymap.set('n', '<leader>wh', '<C-w>h', { desc = '[W]indow goto [R]ight' })
+vim.keymap.set('n', '<leader>wj', '<C-w>j', { desc = '[W]indow goto [D]own' })
+vim.keymap.set('n', '<leader>wk', '<C-w>k', { desc = '[W]indow goto [U]p' })
+vim.keymap.set('n', '<leader>w>', '<C-w>>', { desc = '[W]indow increase [>] width' })
+vim.keymap.set('n', '<leader>w<', '<C-w>>', { desc = '[W]indow decrease [<] width' })
+vim.keymap.set('n', '<leader>wx', '<C-w>x', { desc = '[W]indow [X]wap sides' })
+vim.keymap.set('n', '<leader>ws', '<C-w>w', { desc = '[W]indow [S]witch' })
+vim.keymap.set('n', '<leader>wn', '<C-w>n', { desc = '[W]indow [N]ew' })
+vim.keymap.set('n', '<leader>w=', '<C-w>=', { desc = '[W]indow [=]Equal' })
+local toggle_state = false
+vim.keymap.set('n', '<leader>w/', function()
+    toggle_state = not toggle_state
+    if toggle_state then
+        -- Maximize current window vertically and horizontally
+        vim.cmd('wincmd |')
+        vim.cmd('wincmd _')
+    else
+        -- Equalize all windows
+        vim.cmd('wincmd =')
+    end
+end, { desc = '[W]indow Toggle' })
+vim.keymap.set('n', '<leader>wd', function()
     local cur_win  = vim.api.nvim_get_current_win()          -- active window
     local cur_buf  = vim.api.nvim_get_current_buf()          -- active buffer
     local wins     = vim.api.nvim_tabpage_list_wins(0)       -- all wins in tab
@@ -186,8 +183,8 @@ vim.keymap.set('n', '<leader>sd', function()
     end
     vim.api.nvim_win_set_buf(target, cur_buf) -- put the buffer in the target window
     vim.api.nvim_set_current_win(target)
-end, {desc = '[S]plit [D]uplicate' })
-vim.keymap.set({'n', 'v'}, '<leader>sf', function()
+end, {desc = '[W]indow [D]uplicate' })
+vim.keymap.set({'n', 'v'}, '<leader>wf', function()
     local original_win = vim.api.nvim_get_current_win()
     local mode = vim.api.nvim_get_mode().mode
     local file_spec
@@ -225,7 +222,7 @@ vim.keymap.set({'n', 'v'}, '<leader>sf', function()
         end)
         vim.api.nvim_win_set_cursor(target_win, {tonumber(line), tonumber(column) - 1})
     end
-end, { desc = "[S]plit goto [F]ile", noremap = true })
+end, { desc = "[W]indow goto [F]ile", noremap = true })
 
 -- Better Search Next
 vim.keymap.set("n", "n", "'Nn'[v:searchforward].'zv'",  { expr = true, desc = "Next Search Result" })
@@ -300,8 +297,21 @@ vim.api.nvim_create_autocmd("BufReadPost", {
 vim.o.tags = "tags,/home/ramen/.cache/ctags/system.tags"
 vim.keymap.set('n', ']g', '<C-]>', { desc = 'Jump to definition' })
 vim.keymap.set('n', '[g', '<C-t>', { desc = 'Return from jump' })
-vim.keymap.set('n', '<leader>sd', '<cmd>lua open_buffer_in_other_split()<CR><C-]> ', { desc = "[S]plit goto definition" })
-vim.keymap.set('n', '<leader>sg', '<cmd>lua open_buffer_in_other_split()<CR>g]',     { desc = "[S]plit [G]oto tag" })
+vim.keymap.set('n', '<leader>wd', '<cmd>lua open_buffer_in_other_split()<CR><C-]> ', { desc = "[W]indow goto definition" })
+vim.keymap.set('n', '<leader>wg', '<cmd>lua open_buffer_in_other_split()<CR>g]',     { desc = "[W]indow [G]oto tag" })
+
+-- Make
+-- ============================================================================
+
+vim.api.nvim_create_autocmd("BufEnter", {
+    callback = function()
+        -- Ant Build
+        if vim.fn.filereadable("build.xml") == 1 then
+            vim.opt.makeprg="ant compile"
+            vim.opt.errorformat="%A\\ %#[javac]\\ %f:%l:\\ error:\\ %m,%-Z\\ %#[javac]\\ %p^,%-C%.%#,%-G%.%#BUILD\\ FAILED%.%#,%-GTotal\\ time:\\ %.%#"
+        end
+    end,
+})
 
 -- Plugin Manger
 -- ============================================================================
@@ -479,58 +489,6 @@ require('lazy').setup({
         end,
     },
 
-    { -- Linter
-        dir = plugin_path .. "/nvim-lint",
-        event = "VeryLazy",
-        config = function()
-            require('lint').linters_by_ft = {
-                c = {'gcc'},
-                cpp = {'gcc'},
-                java = { 'javac' },
-            }
-            local pattern = [[^([^:]+):(%d+):(%d+):%s+([^:]+):%s+(.*)$]]
-            local groups = { 'file', 'lnum', 'col', 'severity', 'message' }
-            local severity_map = {
-                ['error'] = vim.diagnostic.severity.ERROR,
-                ['warning'] = vim.diagnostic.severity.WARN,
-                ['performance'] = vim.diagnostic.severity.WARN,
-                ['style'] = vim.diagnostic.severity.INFO,
-                ['information'] = vim.diagnostic.severity.INFO,
-            }
-            -- C
-            require('lint').linters.gcc = {
-                cmd = 'gcc',
-                stdin = false,
-                append_fname = true,
-                args = {'-Wall', '-Wextra', "-fsyntax-only",
-                    "-Wno-incompatible-pointer-types", "-Wno-override-init",
-                    "-Wno-unused-variable", "-Wno-unused-parameter",
-                    "-Wno-unused-function", "-Wno-unused-but-set-variable",
-                    "-Wno-missing-braces"
-                },
-                stream = 'stderr',
-                ignore_exitcode = true,
-                env = nil,
-                parser = require('lint.parser').from_pattern(pattern, groups, severity_map, { ['source'] = 'gcc' }),
-            }
-            -- Java
-            require('lint').linters.javac = {
-              cmd = 'javac',
-              stdin = false,
-              append_fname = true,
-              args = {'-Xlint:all'},
-              ignore_exitcode = true,
-              parser = require('lint.parser').from_errorformat('%A%f:%l:\\ %m,%-Z%p^,%-C%.%#'),
-            }
-            vim.api.nvim_create_autocmd({ "BufWritePost" }, {
-              callback = function()
-                require("lint").try_lint()
-                require("lint").try_lint("typos")
-              end,
-            })
-        end,
-    },
-
     { -- Tags Manager
         "JMarkin/gentags.lua",
         cond = vim.fn.executable("ctags") == 1,
@@ -657,7 +615,7 @@ require('lazy').setup({
                 { '<leader>f', group = '[F]ind' },
                 { '<leader>b', group = '[B]uffer' },
                 { '<leader>t', group = '[T]oggle' },
-                { '<leader>s', group = '[S]plit' },
+                { '<leader>w', group = '[W]indow' },
                 { '<leader>m', group = '[M]ark' },
                 { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
             },

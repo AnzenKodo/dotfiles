@@ -5,3 +5,4 @@ New-Item -ItemType SymbolicLink -Path "$HOME\.bashrc" -Target "C:\Users\aman.v\D
 
 mkdir "$HOME\AppData\Roaming\alacritty"
 New-Item -ItemType SymbolicLink -Path "$HOME\AppData\Roaming\alacritty\alacritty.toml" -Target "C:\Users\aman.v\Dotfiles\Desktop\alacritty.toml"
+New-Item -ItemType SymbolicLink -Path 'C:\Users\aman.v\Drive\' -Target 'C:\Users\aman.v\My Drive\Drive"
