@@ -131,8 +131,7 @@ dotfile_link()
 }
 
 
-# alias rclone="rclone --config=$HOME/Drive/Dotfiles/rclone.conf"
-alias rclone="rclone --config=$HOME/Downloads/rclone.conf"
+alias rclone="rclone --config=$HOME/Drive/Dotfiles/rclone.conf"
 backup()
 {
     opml_to_feed ~/Drive/Dotfiles/podcast.opml ~/Drive/Notes/Feed.md
@@ -146,8 +145,7 @@ backup()
         --exclude buffers/** \
         --check-first --metadata --checksum --download-hash --verbose \
         --compare size,modtime,checksum \
-        --resync \
-        # --conflict-resolve newer
+        # --resync
 
     # cd ~/Code/anzenkodo.github.io
     # echo $RANDOM > ~/Code/anzenkodo.github.io/site_checksum.txt
