@@ -131,7 +131,8 @@ dotfile_link()
 }
 
 
-alias rclone="rclone --config=$HOME/Drive/Dotfiles/rclone.conf"
+# alias rclone="rclone --config=$HOME/Drive/Dotfiles/rclone.conf"
+alias rclone="rclone --config=$HOME/Downloads/rclone.conf"
 backup()
 {
     opml_to_feed ~/Drive/Dotfiles/podcast.opml ~/Drive/Notes/Feed.md
