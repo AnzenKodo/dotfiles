@@ -1,6 +1,23 @@
 # Load Global Profile
 #===============================================================================
 
+# Path =========================================================================
+
+export PATH="~/Applications/AppImages:~/Applications/bin"\
+":~/Code/miniapps/bin"\
+":~/Applications/ffmpeg:~/Applications/jdk-23/bin"\
+":$XDG_DATA_HOME/python/bin:$CARGO_HOME/bin:~/Applications/clang/bin"\
+":~/Code/Tools/clangd/bin"\
+":~/Code/Tools/jdk-24.0.1/bin"\
+":~/Code/Tools/gradle-8.14.3/bin"\
+":~/Code/Tools/idea-IC-251.26927.53/bin"\
+":$PATH"
+
+# To slove __git_ps1 not found error
+if [ -f /usr/share/git/git-prompt.sh ]; then
+    source /usr/share/git/git-prompt.sh
+fi
+
 export XDG_CACHE_HOME="$HOME/.cache"
 last_dir_path="$XDG_CACHE_HOME/last-dir.txt"
 source ~/Dotfiles/Desktop/profile.sh
@@ -22,18 +39,6 @@ export XDG_VIDEOS_DIR="$HOME/Videos"
 # History ======================================================================
 
 HISTFILE=$XDG_STATE_HOME/bash/history
-
-# Path =========================================================================
-
-export PATH="~/Applications/AppImages:~/Applications/bin"\
-":~/Code/miniapps/bin"\
-":~/Applications/ffmpeg:~/Applications/jdk-23/bin"\
-":$XDG_DATA_HOME/python/bin:$CARGO_HOME/bin:~/Applications/clang/bin"\
-":~/Code/Tools/clangd/bin"\
-":~/Code/Tools/jdk-24.0.1/bin"\
-":~/Code/Tools/gradle-8.14.3/bin"\
-":~/Code/Tools/idea-IC-251.26927.53/bin"\
-":$PATH"
 
 # Application Variables ========================================================
 
@@ -107,9 +112,7 @@ complete -F _open_complete oe
 
 alias poweroff="ask_and_run sudo poweroff"
 alias reboot="ask_and_run sudo reboot"
-alias logout="ask_and_run pkill xfce4-session"
-alias suspend="sudo pm-suspend"
-alias hibernate="sudo pm-hibernate"
+alias logout="ask_and_run xfce4-session-logout"
 #alias lock
 
 alias rmr="gtrash restore"
@@ -121,6 +124,12 @@ alias ctags_system="ctags -R -f ~/Dotfiles/Desktop/nvim/system.tags /usr/include
 
 # Functions
 #===============================================================================
+
+dotfile_link()
+{
+    ln -sfv ~/Dotfiles/Desktop/Linux/$1 $2
+}
+
 
 alias rclone="rclone --config=$HOME/Drive/Dotfiles/rclone.conf"
 backup()

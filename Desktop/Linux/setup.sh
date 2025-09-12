@@ -1,77 +1,47 @@
 rm -rf ~/Public ~/Desktop ~/Templates
-mkdir ~/Drive ~/Applications ~/Applications/bin ~/Code ~/Pictures/Screenshots
 
-sudo apt purge xf* node* firefox-esr gimp* libreoffice* refracta* \
-atril exfalso htop system-config-printer synaptic xscan mutt desktop-base \
-slim lynx gnome-keyring p7zip-full
-
-sudo rm /usr/lib/python3.11/EXTERNALLY-MANAGED
-
-sudo apt install git xclip \
-thunar thunar-archive-plugin \ # Files
-ristretto \ # Image Viewer
-qpdfview \ # Pdf Viewer
-timeshift \ # Backup
 rofi \ # Menu
+
+sudo xbps-remove firefox
+
+sudo xbps-install xtools xclip git \
+xfce4-clipman-plugin \ # Clipboard
+xfce4-screenshooter \ # Screenshort
+zip unzip xarchiver thunar-archive-plugin \ # Archive
+lightdm-gtk-greeter-settings \ # Display Manager
+noto-fonts-emoji \ # Fonts
+playerctl # Media Controller
 calc \ # Calculator
-keepassxc \ # Password
-xtodo \ # For typeing
-fonts-noto fonts-noto-color-emoji fonts-dejavu \ # Fonts
-gparted \ # Disk Manger
-pm-utils xfce4-power-manager \ # Power Management tools
-playerctl \ # Media Controller
-brightnessctl \ # Brightness Controller
-gvfs-backends \ # FTP support for thunar
-gnome-themes-extra-data python-is-python3 command-not-found xdg-desktop-portal-gtk
+evince \ # Pdf Viewer
 
-sudo apt autopurge
-
-sudo update-rc.d -f alsa-utils defaults
-sudo update-rc.d -f acpi-fakekey disable
-sudo update-rc.d -f bluetooth disable
-sudo update-rc.d -f exim4 disable
-sudo update-rc.d -f gdomap disable
-sudo update-rc.d -f live-config disable
-sudo update-rc.d -f live-tools disable
-sudo update-rc.d -f rsync disable
-sudo update-rc.d -f speech-dispatcher disable
-sudo update-rc.d -f ssh disable
-sudo update-rc.d -f tor disable
-sudo update-rc.d -f vsftpd disable
+ln -sfv ~/Dotfiles/Desktop/Linux/profile.sh $HOME/.bashrc
 
 mkdir $XDG_STATE_HOME/bash
+touch $XDG_STATE_HOME/bash/history
 mkdir $XDG_CACHE_HOME/X11
 
-ln -sf $DOTFILES/Desktop/profile.sh $HOME/.bashrc
-ln -sf $DOTFILES/Desktop/profile.sh $HOME/.profile
-
 rm $XDG_DATA_HOME/applications
-ln -sf ~/Applications/Mime $XDG_DATA_HOME/applications
-ln -sf ~/Applications/Mime/icons $XDG_DATA_HOME/icons
-ln -sf $DOTFILES/fonts $XDG_DATA_HOME
-ln -sf $DOTFILES/Desktop/themes $XDG_DATA_HOME
-ln -sf $DOTFILES/Desktop/icons $XDG_DATA_HOME
+ln -sfv ~/Applications/Mime $XDG_DATA_HOME/applications
+ln -sfv ~/Applications/Mime/icons $XDG_DATA_HOME/icons
+ln -sfv ~/Dotfiles/fonts $XDG_DATA_HOME
 
-ln -sf ~/Applications/Mime/mimeapps.list $XDG_CONFIG_HOME/mimeapps.list
+ln -sfv ~/Applications/Mime/mimeapps.list $XDG_CONFIG_HOME/mimeapps.list
 ln -srf $DOTFILES/Desktop/activitywatch $XDG_CONFIG_HOME
-ln -sf $DOTFILES/Desktop/xfce4 $XDG_CONFIG_HOME
-ln -sf $DOTFILES/Desktop/ghostty $XDG_CONFIG_HOME
-ln -sf $DOTFILES/Desktop/zed $XDG_CONFIG_HOME
-ln -sf $DOTFILES/Desktop/git $XDG_CONFIG_HOME
-ln -sf $DOTFILES/Desktop/rofi $XDG_CONFIG_HOME
-ln -sf $DOTFILES/Desktop/focus-editor $XDG_CONFIG_HOME
-ln -sf ~/Drive/Dotfiles/Desktop/keepassxc $XDG_CONFIG_HOME
- ln -sf ~/Dotfiles/Desktop/nvim $XDG_CONFIG_HOME
-# sudo rm /usr/local/bin
-# sudo ln -srf $USR_APPLICATIONS_DIR/bin /usr/local/bin
+dotfile_link xfce4 $XDG_CONFIG_HOME
+ln -srf ~/Dotfiles/Desktop/ghostty $XDG_CONFIG_HOME
+ln -srf ~/Dotfiles/Desktop/git $XDG_CONFIG_HOME
+ln -srf ~/Dotfiles/Desktop/focus-editor $XDG_CONFIG_HOME
+ln -sfv ~/Drive/Dotfiles/Desktop/keepassxc $XDG_CONFIG_HOME
+ln -sfv ~/Dotfiles/Desktop/nvim $XDG_CONFIG_HOME
+
+sudo rm /usr/local/bin
+sudo ln -srf $USR_APPLICATIONS_DIR/bin /usr/local/bin
 
 # Archive
 #===============================================================================
 
 # mkdir $XDG_CONFIG_HOME/alacritty
 # ln -sf $DOTFILES/alacritty.toml $XDG_CONFIG_HOME/alacritty/alacritty.toml
-
-# ln -sf $DOTFILES/nvim ~/.config/nvim
 
 # ln -srf $DOTFILES/i3 $XDG_CONFIG_HOME/i3
 
