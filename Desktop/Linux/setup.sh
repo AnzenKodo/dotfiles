@@ -9,7 +9,7 @@ xfce4-clipman-plugin \ # Clipboard
 xfce4-screenshooter \ # Screenshort
 zip unzip xarchiver thunar-archive-plugin \ # Archive
 lightdm-gtk-greeter-settings \ # Display Manager
-noto-fonts-emoji \ # Fonts
+noto-fonts-emoji noto-fonts-ttf-extra noto-fonts-cjk \ # Fonts
 playerctl # Media Controller
 calc \ # Calculator
 evince \ # Pdf Viewer
@@ -26,7 +26,7 @@ ln -sfv ~/Applications/Mime/icons $XDG_DATA_HOME/icons
 ln -sfv ~/Dotfiles/fonts $XDG_DATA_HOME
 
 ln -sfv ~/Applications/Mime/mimeapps.list $XDG_CONFIG_HOME/mimeapps.list
-ln -srf $DOTFILES/Desktop/activitywatch $XDG_CONFIG_HOME
+ln -sfv ~/Dotfiles/Desktop/activitywatch $XDG_CONFIG_HOME
 dotfile_link xfce4 $XDG_CONFIG_HOME
 ln -srf ~/Dotfiles/Desktop/ghostty $XDG_CONFIG_HOME
 ln -srf ~/Dotfiles/Desktop/git $XDG_CONFIG_HOME
