@@ -1,6 +1,3 @@
-[user]
-	email = AnzenKodo@users.noreply.github.com
-	name = AnzenKodo
 [core]
 	autocrlf = false
 	editor = focus

@@ -2,7 +2,5 @@
   "gentags.lua": { "branch": "main", "commit": "f8b0314c150f8f10411cf47adacf7cf9f308d4c6" },
   "multicursor.nvim": { "branch": "1.0", "commit": "9eedebdd395bbbc4711081e33b0606c079e054c3" },
   "qf_helper.nvim": { "branch": "master", "commit": "62e94495385a06f5143527548c348f4a9df2e704" },
-  "vim-dadbod": { "branch": "master", "commit": "e95afed23712f969f83b4857a24cf9d59114c2e6" },
-  "vim-dadbod-completion": { "branch": "master", "commit": "a8dac0b3cf6132c80dc9b18bef36d4cf7a9e1fe6" },
-  "vim-dadbod-ui": { "branch": "master", "commit": "2900a1617b3df1a48683d872eadbe1101146a49a" }
+  "trouble.nvim": { "branch": "main", "commit": "85bedb7eb7fa331a2ccbecb9202d8abba64d37b3" }
 }

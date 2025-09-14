@@ -145,10 +145,6 @@ shopt -s globstar
 # Add Terminal Functions
 #===============================================================================
 
-if [ "$PWD" = "$HOME" ]; then
-    cd "$(cat $last_dir_path)"
-fi
-
 if [ -x /usr/lib/command-not-found -o -x /usr/share/command-not-found/command-not-found ]; then
 	function command_not_found_handle {
         if [ -x /usr/lib/command-not-found ]; then

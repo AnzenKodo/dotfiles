@@ -62,6 +62,16 @@ vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold", "CursorHo
   command = "if mode() != 'c' | checktime | endif",
 })
 
+-- Neovim Gui
+-- ============================================================================
+
+if vim.g.neovide then
+    vim.o.guifont = "Consolas:h12"
+    vim.keymap.set({ "n", "v" }, "<C-=>", ":lua vim.g.neovide_scale_factor = vim.g.neovide_scale_factor + 0.1<CR>")
+    vim.keymap.set({ "n", "v" }, "<C-->", ":lua vim.g.neovide_scale_factor = vim.g.neovide_scale_factor - 0.1<CR>")
+    vim.keymap.set({ "n", "v" }, "<C-0>", ":lua vim.g.neovide_scale_factor = 1<CR>")
+end
+
 -- Functions for Keymaps
 -- ============================================================================
 
@@ -93,7 +103,6 @@ end
 -- Keybindings
 -- ============================================================================
 
-vim.keymap.set("n", "<leader>r", ":Reload<CR>",  { desc = "[R]eload" })
 vim.keymap.set("n", '<Esc>', '<cmd>nohlsearch<CR>', { desc = "Clear Search Highlight" })
 vim.keymap.set("t", '<Esc>', '<C-\\><C-n>',    { desc = 'Exit terminal mode' })
 vim.keymap.set('n', 'L', vim.diagnostic.open_float, { desc = 'Show Diagnostic' })
@@ -138,6 +147,8 @@ vim.keymap.set('i', '<A-d>', '<C-x><C-k>', { noremap = true }, { desc = 'Diction
 vim.keymap.set('i', '<A-f>', '<C-x><C-f>', { noremap = true }, { desc = 'Filename completion' })
 vim.keymap.set('i', '<A-l>', '<C-x><C-l>', { noremap = true }, { desc = 'Whole line completion' })
 vim.keymap.set('i', '<A-e>', '<C-e>',      { noremap = true }, { desc = 'Cancel completion' })
+vim.keymap.set('i', '<Tab>', 'pumvisible() ? "\\<C-n>" : "\\<C-x><C-n>"', { expr = true })
+vim.keymap.set('i', '<S-Tab>', 'pumvisible() ? "\\<C-p>" : "\\<C-x><C-k>"', { expr = true })
 
 -- Split
 vim.keymap.set('n', '<leader>wv', '<C-w>v', { desc = '[W]indow [V]ertical' })
@@ -244,7 +255,7 @@ function open_split_terminal()
     vim.cmd.wincmd "J"
     vim.api.nvim_win_set_height(0, 12)
     vim.wo.winfixheight = true
-    vim.cmd.term()
+    vim.cmd.term("bash")
 end
 
 if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
@@ -310,6 +321,38 @@ vim.api.nvim_create_autocmd("BufEnter", {
             vim.opt.makeprg="ant compile"
             vim.opt.errorformat="%A\\ %#[javac]\\ %f:%l:\\ error:\\ %m,%-Z\\ %#[javac]\\ %p^,%-C%.%#,%-G%.%#BUILD\\ FAILED%.%#,%-GTotal\\ time:\\ %.%#"
         end
+    end,
+})
+
+vim.api.nvim_create_autocmd("QuickfixCmdPost", {
+    pattern = "make",
+    callback = function()
+        local qf_list = vim.fn.getqflist()
+        local diagnostics = {}
+        local current_buf = vim.api.nvim_get_current_buf()
+        for _, item in ipairs(qf_list) do
+            if item.valid == 1 and item.bufnr == current_buf and item.bufnr > 0 then
+                table.insert(diagnostics, {
+                    bufnr = item.bufnr,
+                    lnum = item.lnum - 1,  -- 0-indexed for diagnostics
+                    col = item.col - 1,
+                    severity = vim.diagnostic.severity.ERROR,  -- Adjust based on type
+                    message = item.text,
+                    source = "make",
+                })
+            end
+        end
+        vim.diagnostic.set(vim.api.nvim_create_namespace("make_diagnostics"), 0, diagnostics, {})
+    end,
+})
+
+-- Open quickfix in full width
+vim.api.nvim_create_augroup("QuickFix", { clear = true })
+vim.api.nvim_create_autocmd("FileType", {
+    group = "QuickFix",
+    pattern = "qf",
+    callback = function()
+        vim.cmd("wincmd J")
     end,
 })
 
@@ -532,21 +575,21 @@ require('lazy').setup({
                         end
                     end, { desc = "Previous hunk or diff" })
                     -- Actions
-                    vim.keymap.set('n', '<leader>hs', require('gitsigns').stage_hunk, { desc = "[S]tage [H]unk" })
-                    vim.keymap.set('n', '<leader>hr', require('gitsigns').reset_hunk, { desc = "[R]eset [H]unk" })
-                    vim.keymap.set('v', '<leader>hs', function()
+                    vim.keymap.set('n', '<leader>gs', require('gitsigns').stage_hunk, { desc = "[G]it [S]tage" })
+                    vim.keymap.set('n', '<leader>gr', require('gitsigns').reset_hunk, { desc = "[G]it [R]eset" })
+                    vim.keymap.set('v', '<leader>gs', function()
                         require('gitsigns').stage_hunk({ vim.fn.line('.'), vim.fn.line('v') })
-                    end, { desc = "[S]tage [H]unk" })
-                    vim.keymap.set('v', '<leader>hr', function()
+                    end, { desc = "[G]it [S]tage" })
+                    vim.keymap.set('v', '<leader>gr', function()
                         require('gitsigns').reset_hunk({ vim.fn.line('.'), vim.fn.line('v') })
-                    end, { desc = "[R]eset [H]unk" })
-                    vim.keymap.set('n', '<leader>hS', require('gitsigns').stage_buffer, { desc = "[H]unk entire buffer [S]tage" })
-                    vim.keymap.set('n', '<leader>hR', require('gitsigns').reset_buffer, { desc = "[H]unk entire buffer [R]eset" })
-                    vim.keymap.set('n', '<leader>hp', require('gitsigns').preview_hunk, { desc = "[H]unk Preview" })
-                    vim.keymap.set('n', '<leader>hi', require('gitsigns').preview_hunk_inline, { desc = "[H]unk [I]nline preview" })
-                    vim.keymap.set('n', '<leader>hd', require('gitsigns').diffthis, { desc = "[H]unk [D]iff" })
-                    vim.keymap.set('n', '<leader>hq', require('gitsigns').setqflist, { desc = "[H]unk [Q]uickfix" })
-                    vim.keymap.set('n', '<leader>hQ', function() require('gitsigns').setqflist('all') end, { desc = "[H]unk [Q]uickfix all" })
+                    end, { desc = "[G]it [R]eset" })
+                    vim.keymap.set('n', '<leader>gS', require('gitsigns').stage_buffer, { desc = "[G]it entire buffer [S]tage" })
+                    vim.keymap.set('n', '<leader>gR', require('gitsigns').reset_buffer, { desc = "[G]it entire buffer [R]eset" })
+                    vim.keymap.set('n', '<leader>gp', require('gitsigns').preview_hunk, { desc = "[G]it Preview" })
+                    vim.keymap.set('n', '<leader>gi', require('gitsigns').preview_hunk_inline, { desc = "[G]it [I]nline preview" })
+                    vim.keymap.set('n', '<leader>gd', require('gitsigns').diffthis, { desc = "[G]it [D]iff" })
+                    vim.keymap.set('n', '<leader>gq', require('gitsigns').setqflist, { desc = "[G]it [Q]uickfix" })
+                    vim.keymap.set('n', '<leader>gQ', function() require('gitsigns').setqflist('all') end, { desc = "[G]it [Q]uickfix all" })
                 end
             })
         end,
@@ -617,7 +660,8 @@ require('lazy').setup({
                 { '<leader>t', group = '[T]oggle' },
                 { '<leader>w', group = '[W]indow' },
                 { '<leader>m', group = '[M]ark' },
-                { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
+                { '<leader>u', group = '[U]ndo' },
+                { '<leader>g', group = '[G]it', mode = { 'n', 'v' } },
             },
         },
     },
@@ -713,8 +757,8 @@ require('lazy').setup({
         config = function()
             local harpoon = require("harpoon")
             harpoon:setup()
-            vim.keymap.set("n", "<leader>mm", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end, { desc = "[M]ark [M]enu" })
             vim.keymap.set("n", "<leader>ma", function() harpoon:list():add() end,                         { desc = "[M]ark [A]dd"})
+            vim.keymap.set("n", "<leader>mm", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end, { desc = "[M]ark [M]enu" })
             vim.keymap.set("n", "<leader>m1", function() harpoon:list():select(1) end,                     { desc = "[M]ark [1]"})
             vim.keymap.set("n", "<leader>m2", function() harpoon:list():select(2) end,                     { desc = "[M]ark [2]"})
             vim.keymap.set("n", "<leader>m3", function() harpoon:list():select(3) end,                     { desc = "[M]ark [3]"})
@@ -724,19 +768,6 @@ require('lazy').setup({
         end,
     },
 
-    { -- Quickfix
-        "kevinhwang91/nvim-bqf",
-        enabled = false,
-        config = function()
-          require("bqf").setup()
-        end,
-    },
-    {
-        "stevearc/qf_helper.nvim",
-        opts = {},
-    },
-
-
     {
         "jake-stewart/multicursor.nvim",
         branch = "1.0",
@@ -745,24 +776,24 @@ require('lazy').setup({
             mc.setup()
 
             -- Add or skip cursor above/below the main cursor.
-            vim.keymap.set({"n", "x"}, "<C-M-Up>", function() mc.lineAddCursor(-1) end)
             vim.keymap.set({"n", "x"}, "<C-M-Down>", function() mc.lineAddCursor(1) end)
+            vim.keymap.set({"n", "x"}, "<C-M-Up>", function() mc.lineAddCursor(-1) end)
             vim.keymap.set({"n", "x"}, "<C-M-Left>", function() mc.lineSkipCursor(-1) end)
             vim.keymap.set({"n", "x"}, "<C-M-Right>", function() mc.lineSkipCursor(1) end)
 
             -- Add or skip adding a new cursor by matching word/selection
             vim.keymap.set({"n", "x"}, "<C-d>", function() mc.matchAddCursor(1) end)
-            vim.keymap.set({"n", "x"}, "<leader>ms", function() mc.matchSkipCursor(1) end)
+            -- vim.keymap.set({"n", "x"}, "<leader>ms", function() mc.matchSkipCursor(1) end)
             vim.keymap.set({"n", "x"}, "<C-D>", function() mc.matchAddCursor(-1) end)
-            vim.keymap.set({"n", "x"}, "<leader>mS", function() mc.matchSkipCursor(-1) end)
+            -- vim.keymap.set({"n", "x"}, "<leader>mS", function() mc.matchSkipCursor(-1) end)
 
             mc.addKeymapLayer(function(layerSet)
                 -- Select a different cursor as the main one.
-                layerSet({"n", "x"}, "<leader>md", mc.prevCursor)
-                layerSet({"n", "x"}, "<leader>mD", mc.nextCursor)
+                -- layerSet({"n", "x"}, "<leader>md", mc.prevCursor)
+                -- layerSet({"n", "x"}, "<leader>mD", mc.nextCursor)
 
                 -- Delete the main cursor.
-                layerSet({"n", "x"}, "<leader>mq", mc.deleteCursor)
+                -- layerSet({"n", "x"}, "<leader>mq", mc.deleteCursor)
 
                 -- Enable and clear cursors using escape.
                 layerSet("n", "<esc>", function()
@@ -775,12 +806,6 @@ require('lazy').setup({
             end)
         end
     },
-
-    -- Database
-    "tpope/vim-dadbod",
-    "kristijanhusak/vim-dadbod-completion",
-    "kristijanhusak/vim-dadbod-ui",
-
 }, {
     root = plugin_path .. "/Online",
 })
