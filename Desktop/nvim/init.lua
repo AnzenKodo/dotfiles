@@ -58,8 +58,12 @@ vim.o.backup = false
 -- Auto Reload file
 vim.o.autoread = true
 vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold", "CursorHoldI" }, {
-  pattern = { "*" },
-  command = "if mode() != 'c' | checktime | endif",
+    pattern = { "*" },
+    callback = function()
+        if vim.fn.getcmdwintype() == '' and vim.fn.mode() ~= 'c' then
+            vim.cmd('checktime')
+        end
+    end,
 })
 
 -- Neovim Gui
@@ -147,8 +151,8 @@ vim.keymap.set('i', '<A-d>', '<C-x><C-k>', { noremap = true }, { desc = 'Diction
 vim.keymap.set('i', '<A-f>', '<C-x><C-f>', { noremap = true }, { desc = 'Filename completion' })
 vim.keymap.set('i', '<A-l>', '<C-x><C-l>', { noremap = true }, { desc = 'Whole line completion' })
 vim.keymap.set('i', '<A-e>', '<C-e>',      { noremap = true }, { desc = 'Cancel completion' })
-vim.keymap.set('i', '<Tab>', 'pumvisible() ? "\\<C-n>" : "\\<C-x><C-n>"', { expr = true })
-vim.keymap.set('i', '<S-Tab>', 'pumvisible() ? "\\<C-p>" : "\\<C-x><C-k>"', { expr = true })
+vim.keymap.set('i', '<Tab>', 'pumvisible() ? "\\<C-n>" : "\\<Tab>"', { expr = true })
+vim.keymap.set('i', '<S-Tab>', 'pumvisible() ? "\\<C-p>" : "\\<S-Tab>"', { expr = true })
 
 -- Split
 vim.keymap.set('n', '<leader>wv', '<C-w>v', { desc = '[W]indow [V]ertical' })
@@ -320,6 +324,9 @@ vim.api.nvim_create_autocmd("BufEnter", {
         if vim.fn.filereadable("build.xml") == 1 then
             vim.opt.makeprg="ant compile"
             vim.opt.errorformat="%A\\ %#[javac]\\ %f:%l:\\ error:\\ %m,%-Z\\ %#[javac]\\ %p^,%-C%.%#,%-G%.%#BUILD\\ FAILED%.%#,%-GTotal\\ time:\\ %.%#"
+        end
+        if vim.fn.filereadable("build.c") == 1 then
+            vim.opt.makeprg="gcc build.c && ./a.out build-run"
         end
     end,
 })
@@ -537,11 +544,7 @@ require('lazy').setup({
         cond = vim.fn.executable("ctags") == 1,
         event = "VeryLazy",
         config = function()
-            require('gentags').setup({
-                args = {
-                    '--c-kinds=+p',
-                },
-            })
+            require('gentags').setup({ args = { '--c-kinds=+p', '-R' } })
         end,
     },
 

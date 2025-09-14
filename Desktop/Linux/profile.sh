@@ -3,8 +3,8 @@
 
 # Path =========================================================================
 
-export PATH="~/Applications/AppImages:~/Applications/bin"\
-":~/Code/Miniapps/bin:~/Code/Tools/bin"\
+export PATH="$HOME/Applications/AppImages:$HOME/Applications/bin"\
+":$HOME/Code/Miniapps/bin:$HOME/Code/Tools/bin"\
 ":$XDG_DATA_HOME/python/bin:$CARGO_HOME/bin"\
 ":$PATH"
 
@@ -48,7 +48,7 @@ export GNUPGHOME="$XDG_DATA_HOME"/gnupg
 export CALCHISTFILE="$XDG_CACHE_HOME"/calc_history
 export FCEUX_HOME="$XDG_CONFIG_HOME"/fceux
 export ASPELL_CONF="personal $HOME/Dotfiles/Desktop/en.pws; repl $XDG_DATA_HOME/aspell.en.prepl"
-export PAGER="bat"
+# export PAGER="bat"
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 export AW_SYNC_DIR="~/Drive/Dotfiles/ActivityWatch"
 export WINEPREFIX="$XDG_DATA_HOME"/wineprefixes/default
@@ -186,3 +186,10 @@ setup_git_id()
     git config --local user.email "50282743+AnzenKodo@users.noreply.github.com"
     git config --local user.name "AnzenKodo"
 }
+
+# Added Terminal Feature's
+#==============================================================================
+
+if [ "$PWD" = "$HOME" ]; then
+    cd "$(cat $XDG_CACHE_HOME/last-dir.txt)"
+fi
