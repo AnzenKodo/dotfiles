@@ -180,3 +180,9 @@ ctags-system()
         /usr/include/string.h /usr/include/time.h \
         -R /usr/include/sys /usr/include/xcb /usr/include/GLES2/ /usr/include/EGL
 }
+
+setup_git_id()
+{
+    git config --local user.email "50282743+AnzenKodo@users.noreply.github.com"
+    git config --local user.name "AnzenKodo"
+}
