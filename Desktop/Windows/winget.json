@@ -1,6 +1,6 @@
 {
 	"$schema" : "https://aka.ms/winget-packages.schema.2.0.json",
-	"CreationDate" : "2025-09-03T17:32:26.041-00:00",
+	"CreationDate" : "2025-09-14T11:25:57.757-00:00",
 	"Sources" : 
 	[
 		{
@@ -17,10 +17,6 @@
 				{
 					"PackageIdentifier" : "JetBrains.IntelliJIDEA.Community",
 					"Version" : "2025.2"
-				},
-				{
-					"PackageIdentifier" : "KeeWeb.KeeWeb",
-					"Version" : "1.18.7"
 				},
 				{
 					"PackageIdentifier" : "ONLYOFFICE.DesktopEditors",
@@ -48,7 +44,7 @@
 				},
 				{
 					"PackageIdentifier" : "Microsoft.Edge",
-					"Version" : "139.0.3405.125"
+					"Version" : "140.0.3485.66"
 				},
 				{
 					"PackageIdentifier" : "OBSProject.OBSStudio",
