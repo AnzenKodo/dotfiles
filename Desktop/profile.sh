@@ -123,6 +123,11 @@ download-music()
     --parse-metadata "playlist_index:%(track_number)s" \
     --output "%(artist)s - %(title)s.%(ext)s" "$2"
 }
+setup_git_id()
+{
+    git config --local user.email "50282743+AnzenKodo@users.noreply.github.com"
+    git config --local user.name "AnzenKodo"
+}
 
 # Bind
 #===============================================================================
