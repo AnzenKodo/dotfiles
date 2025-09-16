@@ -63,6 +63,8 @@ alias tldr="tldr -c"
 
 alias todo="$EDITOR ~/Drive/Notes/Online/Todo.md"
 alias feed="$EDITOR ~/Drive/Notes/Feed.md"
+alias bookmarks="$EDITOR ~/Drive/Notes/Online/Bookmarks.md"
+alias note="$EDITOR ~/Drive/Notes/Note.md"
 
 # Functions
 #===============================================================================
@@ -166,9 +168,9 @@ if [ -x /usr/lib/command-not-found -o -x /usr/share/command-not-found/command-no
 fi
 
 if ! shopt -oq posix; then
-  if [ -f /usr/share/bash-completion/bash_completion ]; then
-    . /usr/share/bash-completion/bash_completion
-  elif [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
-  fi
+    if [ -f /usr/share/bash-completion/bash_completion ]; then
+        . /usr/share/bash-completion/bash_completion
+    elif [ -f /etc/bash_completion ]; then
+        . /etc/bash_completion
+    fi
 fi

@@ -2,7 +2,7 @@
 working_directory = "C:/Users/aman.v/"
 
 [terminal]
-shell = { program = "bash" }
+# shell = { program = "bash" }
 
 [[keyboard.bindings]]
 action = "ToggleFullscreen"
