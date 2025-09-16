@@ -1,6 +1,6 @@
 {
 	"$schema" : "https://aka.ms/winget-packages.schema.2.0.json",
-	"CreationDate" : "2025-09-16T09:54:51.798-00:00",
+	"CreationDate" : "2025-09-16T10:24:04.108-00:00",
 	"Sources" : 
 	[
 		{
@@ -41,6 +41,10 @@
 				{
 					"PackageIdentifier" : "GoLang.Go",
 					"Version" : "1.25.0"
+				},
+				{
+					"PackageIdentifier" : "wez.wezterm",
+					"Version" : "20240203-110809-5046fc22"
 				},
 				{
 					"PackageIdentifier" : "Microsoft.Edge",

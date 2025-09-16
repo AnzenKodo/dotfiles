@@ -262,7 +262,7 @@ function open_split_terminal()
     vim.cmd.term("bash")
 end
 
-if vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1 then
+if (vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1) and not vim.g.neovide then
     vim.keymap.set({"i", "n"}, "†", open_split_terminal, { desc = "Open Split Termainl" })
 else
     vim.keymap.set({"i", "n"}, "<C-`>", open_split_terminal, { desc = "Open Split Termainl" })
