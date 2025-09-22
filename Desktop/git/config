@@ -13,3 +13,6 @@
     autoSetupRemote = true
 [credential "https://git-codecommit.ap-south-1.amazonaws.com"]
 	provider = generic
+[user]
+	email = aman.v@orosoft.com
+	name = Aman Varma

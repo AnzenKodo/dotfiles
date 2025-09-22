@@ -1,6 +1,6 @@
 {
 	"$schema" : "https://aka.ms/winget-packages.schema.2.0.json",
-	"CreationDate" : "2025-09-16T10:24:04.108-00:00",
+	"CreationDate" : "2025-09-22T15:14:16.945-00:00",
 	"Sources" : 
 	[
 		{
@@ -32,7 +32,7 @@
 				},
 				{
 					"PackageIdentifier" : "Google.GoogleDrive",
-					"Version" : "113.0.1.0"
+					"Version" : "114.0.1.0"
 				},
 				{
 					"PackageIdentifier" : "Neovim.Neovim",
@@ -47,8 +47,8 @@
 					"Version" : "20240203-110809-5046fc22"
 				},
 				{
-					"PackageIdentifier" : "Microsoft.Edge",
-					"Version" : "140.0.3485.66"
+					"PackageIdentifier" : "Microsoft.OpenJDK.17",
+					"Version" : "17.0.16.8"
 				},
 				{
 					"PackageIdentifier" : "OBSProject.OBSStudio",
@@ -67,6 +67,14 @@
 					"Version" : "14.40.33810.0"
 				},
 				{
+					"PackageIdentifier" : "EclipseFoundation.Eclipse.Java",
+					"Version" : "2025.06"
+				},
+				{
+					"PackageIdentifier" : "Gyan.FFmpeg",
+					"Version" : "8.0"
+				},
+				{
 					"PackageIdentifier" : "MartinStorsjo.LLVM-MinGW.MSVCRT",
 					"Version" : "20.1.8-20250709"
 				},
@@ -77,6 +85,10 @@
 				{
 					"PackageIdentifier" : "Obsidian.Obsidian",
 					"Version" : "1.8.10"
+				},
+				{
+					"PackageIdentifier" : "Axosoft.GitKraken",
+					"Version" : "11.4.0"
 				},
 				{
 					"PackageIdentifier" : "ActivityWatch.ActivityWatch",
@@ -118,6 +130,10 @@
 		{
 			"Packages" : 
 			[
+				{
+					"PackageIdentifier" : "XPFFTQ037JWMHS",
+					"Version" : "140.0.3485.81"
+				},
 				{
 					"PackageIdentifier" : "9PNKDR50694P",
 					"Version" : "25.1.5.0"

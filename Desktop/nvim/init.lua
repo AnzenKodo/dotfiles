@@ -74,6 +74,11 @@ if vim.g.neovide then
     vim.keymap.set({ "n", "v" }, "<C-=>", ":lua vim.g.neovide_scale_factor = vim.g.neovide_scale_factor + 0.1<CR>")
     vim.keymap.set({ "n", "v" }, "<C-->", ":lua vim.g.neovide_scale_factor = vim.g.neovide_scale_factor - 0.1<CR>")
     vim.keymap.set({ "n", "v" }, "<C-0>", ":lua vim.g.neovide_scale_factor = 1<CR>")
+
+    vim.keymap.set('n', '<C-S-v>', '"+P')
+    vim.keymap.set('v', '<C-S-v>', '"+P')
+    vim.keymap.set('i', '<C-S-v>', '<ESC>l"+Pli')
+    vim.keymap.set('c', '<C-S-v>', '<C-R>+')
 end
 
 -- Functions for Keymaps
@@ -326,7 +331,7 @@ vim.api.nvim_create_autocmd("BufEnter", {
             vim.opt.errorformat="%A\\ %#[javac]\\ %f:%l:\\ error:\\ %m,%-Z\\ %#[javac]\\ %p^,%-C%.%#,%-G%.%#BUILD\\ FAILED%.%#,%-GTotal\\ time:\\ %.%#"
         end
         if vim.fn.filereadable("build.c") == 1 then
-            vim.opt.makeprg="gcc build.c && ./a.out build-run"
+            vim.opt.makeprg="cc build.c && ./a.out build-run"
         end
     end,
 })
