@@ -143,7 +143,7 @@ backup()
         --exclude buffers/** \
         --check-first --metadata --checksum --download-hash --verbose \
         --compare size,modtime,checksum \
-        # --resync
+        --resync
 
     # cd ~/Code/anzenkodo.github.io
     # echo $RANDOM > ~/Code/anzenkodo.github.io/site_checksum.txt

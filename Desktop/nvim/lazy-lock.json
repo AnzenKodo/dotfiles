@@ -1,4 +1,5 @@
 {
   "gentags.lua": { "branch": "main", "commit": "7a8a75b51b24cf65f46208d47ec727d32bfa428f" },
-  "multicursor.nvim": { "branch": "1.0", "commit": "9eedebdd395bbbc4711081e33b0606c079e054c3" }
+  "multicursor.nvim": { "branch": "1.0", "commit": "9eedebdd395bbbc4711081e33b0606c079e054c3" },
+  "nvim-bqf": { "branch": "main", "commit": "17680cda3538913e88dd4c6456c837db9ace40ae" }
 }

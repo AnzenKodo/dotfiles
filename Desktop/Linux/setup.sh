@@ -1,18 +1,22 @@
-rm -rf ~/Public ~/Desktop ~/Templates
+# Error Fixing ================================================================
 
-rofi \ # Menu
+# LightDB not starting fix
+sudo ln -s /etc/sv/dbus /var/service/
+
+# Without updating many thing in void stops wroking slowly (eg. Network Manager)
+sudo xbps-install -Su
 
 sudo xbps-remove firefox
 
-sudo xbps-install xtools xclip git \
-xfce4-clipman-plugin \ # Clipboard
+sudo xbps-install xtools git \
+xfce4-clipman-plugin xclip \ # Clipboard
 xfce4-screenshooter \ # Screenshort
 zip unzip xarchiver thunar-archive-plugin \ # Archive
 lightdm-gtk-greeter-settings \ # Display Manager
 noto-fonts-emoji noto-fonts-ttf-extra noto-fonts-cjk \ # Fonts
 playerctl # Media Controller
 calc \ # Calculator
-evince \ # Pdf Viewer
+evince # Pdf Viewer
 
 ln -sfv ~/Dotfiles/Desktop/Linux/profile.sh $HOME/.bashrc
 

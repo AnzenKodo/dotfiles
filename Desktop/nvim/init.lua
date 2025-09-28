@@ -331,7 +331,7 @@ vim.api.nvim_create_autocmd("BufEnter", {
             vim.opt.errorformat="%A\\ %#[javac]\\ %f:%l:\\ error:\\ %m,%-Z\\ %#[javac]\\ %p^,%-C%.%#,%-G%.%#BUILD\\ FAILED%.%#,%-GTotal\\ time:\\ %.%#"
         end
         if vim.fn.filereadable("build.c") == 1 then
-            vim.opt.makeprg="cc build.c && ./a.out build-run"
+            vim.opt.makeprg="cc -ggdb build.c && ./a.out build-run mingw"
         end
     end,
 })
@@ -754,8 +754,7 @@ require('lazy').setup({
         end,
     },
 
-    -- Marks
-    {
+    { -- Marks
         dir = plugin_path .. "/harpoon",
         branch = "harpoon2",
         dependencies = {
@@ -813,6 +812,10 @@ require('lazy').setup({
                 end)
             end)
         end
+    },
+    {
+        'kevinhwang91/nvim-bqf',
+        ft = 'qf',
     },
 }, {
     root = plugin_path .. "/Online",
