@@ -142,8 +142,8 @@ backup()
         bisync ~/Drive Personal: \
         --exclude buffers/** \
         --check-first --metadata --checksum --download-hash --verbose \
-        --compare size,modtime,checksum \
-        --resync
+        --compare size,modtime,checksum
+        # --resync
 
     # cd ~/Code/anzenkodo.github.io
     # echo $RANDOM > ~/Code/anzenkodo.github.io/site_checksum.txt
