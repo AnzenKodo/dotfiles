@@ -783,10 +783,10 @@ require('lazy').setup({
             mc.setup()
 
             -- Add or skip cursor above/below the main cursor.
-            vim.keymap.set({"n", "x"}, "<C-M-Down>", function() mc.lineAddCursor(1) end)
-            vim.keymap.set({"n", "x"}, "<C-M-Up>", function() mc.lineAddCursor(-1) end)
-            vim.keymap.set({"n", "x"}, "<C-M-Left>", function() mc.lineSkipCursor(-1) end)
-            vim.keymap.set({"n", "x"}, "<C-M-Right>", function() mc.lineSkipCursor(1) end)
+            vim.keymap.set({"n", "x"}, "<M-J>", function() mc.lineAddCursor(1) end)
+            vim.keymap.set({"n", "x"}, "<M-K>", function() mc.lineAddCursor(-1) end)
+            vim.keymap.set({"n", "x"}, "<M-L>", function() mc.lineSkipCursor(1) end)
+            vim.keymap.set({"n", "x"}, "<M-H>", function() mc.lineSkipCursor(-1) end)
 
             -- Add or skip adding a new cursor by matching word/selection
             vim.keymap.set({"n", "x"}, "<C-d>", function() mc.matchAddCursor(1) end)

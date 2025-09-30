@@ -51,7 +51,8 @@ export ASPELL_CONF="personal $HOME/Dotfiles/Desktop/en.pws; repl $XDG_DATA_HOME/
 # export PAGER="bat"
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 export AW_SYNC_DIR="~/Drive/Dotfiles/ActivityWatch"
-export WINEPREFIX="$XDG_DATA_HOME"/wineprefixes/default
+export WINEPREFIX="$XDG_DATA_HOME/wineprefixes/default64"
+export WINEARCH=win64
 
 export GOPATH="$XDG_DATA_HOME"/go
 export GOMODCACHE="$XDG_CACHE_HOME"/go/mod

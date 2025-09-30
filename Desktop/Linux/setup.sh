@@ -5,6 +5,8 @@ sudo ln -s /etc/sv/dbus /var/service/
 
 # Without updating many thing in void stops wroking slowly (eg. Network Manager)
 sudo xbps-install -Su
+# Enables repo for 32bits packages
+sudo xbps-install -S void-repo-multilib
 
 sudo xbps-remove firefox
 
