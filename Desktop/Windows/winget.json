@@ -1,6 +1,6 @@
 {
 	"$schema" : "https://aka.ms/winget-packages.schema.2.0.json",
-	"CreationDate" : "2025-09-22T15:14:16.945-00:00",
+	"CreationDate" : "2025-09-30T16:18:51.059-00:00",
 	"Sources" : 
 	[
 		{
@@ -100,7 +100,7 @@
 				},
 				{
 					"PackageIdentifier" : "Microsoft.Teams",
-					"Version" : "25227.205.3936.6644"
+					"Version" : "25241.203.3947.4411"
 				},
 				{
 					"PackageIdentifier" : "Microsoft.AppInstaller",
@@ -132,11 +132,11 @@
 			[
 				{
 					"PackageIdentifier" : "XPFFTQ037JWMHS",
-					"Version" : "140.0.3485.81"
+					"Version" : "140.0.3485.94"
 				},
 				{
 					"PackageIdentifier" : "9PNKDR50694P",
-					"Version" : "25.1.5.0"
+					"Version" : "25.2.1.0"
 				}
 			],
 			"SourceDetails" : 
