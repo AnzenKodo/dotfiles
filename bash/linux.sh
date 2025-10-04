@@ -65,3 +65,11 @@ backup()
     # push "Updated Notes"
     # cd -
 }
+
+server_backup()
+{
+    rsync_git ~/Code Gangnam@34.41.58.206:~/
+    rsync_git ~/Drive Gangnam@34.41.58.206:~/
+    rsync_git ~/Dotfiles Gangnam@34.41.58.206:~/
+    rsync --exclude="Archive" --exclude="Deb" --exclude="AppImages" --exclude="clang" --delete ~/Applications Gangnam@34.41.58.206:~/
+}
