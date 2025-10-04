@@ -531,6 +531,7 @@ require('lazy').setup({
 
     { -- Time Tracker
         dir = plugin_path .. '/aw-watcher-vim',
+        cond = vim.env.TERMUX_VERSION ~= nil
     },
 
     { -- Session Manager
@@ -603,7 +604,7 @@ require('lazy').setup({
     {
         dir = plugin_path .. "/neogit",
         dependencies = {
-            { dir = plugin_path .. "telescope/plenary.nvim" },
+            { dir = plugin_path .. "/plenary.nvim" },
             {
                 dir = plugin_path .. "/diffview.nvim",
                 config = function()
@@ -675,9 +676,7 @@ require('lazy').setup({
         dir = plugin_path .. "/telescope/telescope.nvim",
         event = 'VimEnter',
         dependencies = {
-            {
-                dir = plugin_path .. "/telescope/plenary.nvim"
-            },
+            { dir = plugin_path .. "/plenary.nvim" },
             {
                 dir = plugin_path .. "/telescope/telescope-fzf-native.nvim",
                 build = 'make',
@@ -730,7 +729,7 @@ require('lazy').setup({
 
     { -- Undo History
         dir = plugin_path .. "/undotree",
-        dependencies = "nvim-lua/plenary.nvim",
+        dependencies = { dir = plugin_path .. "/plenary.nvim" },
         config = true,
         keys = { -- load the plugin only when using it's keybinding:
             { "<leader>u", "<cmd>lua require('undotree').toggle()<cr>" },
@@ -755,7 +754,7 @@ require('lazy').setup({
         dir = plugin_path .. "/harpoon",
         branch = "harpoon2",
         dependencies = {
-            "nvim-lua/plenary.nvim",
+            { dir = plugin_path .. "/plenary.nvim" },
             { dir = plugin_path .. "/telescope/telescope.nvim" }
         },
         config = function()
