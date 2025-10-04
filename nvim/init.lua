@@ -531,7 +531,7 @@ require('lazy').setup({
 
     { -- Time Tracker
         dir = plugin_path .. '/aw-watcher-vim',
-        cond = vim.env.TERMUX_VERSION ~= nil
+        cond = not (vim.env.TERMUX_VERSION ~= nil)
     },
 
     { -- Session Manager
