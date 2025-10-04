@@ -14,12 +14,14 @@ export PATH="$HOME/Applications/AppImages:$HOME/Applications/bin"\
 ":$XDG_DATA_HOME/python/bin:$CARGO_HOME/bin"\
 ":$PATH"
 
-# Load ========================================================================
+# Set Preload Variables =======================================================
 
-export XDG_CACHE_HOME="$HOME/.cache"
-
+export XDG_STATE_HOME="$HOME/.local/state"
 last_dir_state_path="$XDG_STATE_HOME/last-dir.txt"
 bash_state_path=$XDG_STATE_HOME/bash
+
+# Load ========================================================================
+
 source ~/Dotfiles/bash/default.sh
 
 # Set Variables
@@ -27,9 +29,9 @@ source ~/Dotfiles/bash/default.sh
 
 # Support XDG Base Directory ===================================================
 
+export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_DATA_HOME="$HOME/.local/share"
-export XDG_STATE_HOME="$HOME/.local/state"
 export XDG_DOWNLOAD_DIR="$HOME/Downloads"
 export XDG_DOCUMENTS_DIR="$HOME/Documents"
 export XDG_MUSIC_DIR="$HOME/Music"
