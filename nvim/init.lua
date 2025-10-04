@@ -542,7 +542,7 @@ require('lazy').setup({
     },
 
     { -- Tags Manager
-        "JMarkin/gentags.lua",
+        dir = plugin_path .. "/gentags.lua",
         cond = vim.fn.executable("ctags") == 1,
         event = "VeryLazy",
         config = function()
@@ -772,6 +772,11 @@ require('lazy').setup({
         end,
     },
 
+    { -- Better Quickfix 
+        dir = plugin_path .. '/nvim-bqf',
+        ft = 'qf',
+    },
+
     {
         "jake-stewart/multicursor.nvim",
         branch = "1.0",
@@ -809,10 +814,6 @@ require('lazy').setup({
                 end)
             end)
         end
-    },
-    {
-        'kevinhwang91/nvim-bqf',
-        ft = 'qf',
     },
 }, {
     root = plugin_path .. "/Online",
