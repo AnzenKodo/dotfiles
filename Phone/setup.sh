@@ -1,4 +1,4 @@
-pkg install openssh neovim git zoxide fzf axel
+pkg install openssh neovim git axel tokei 
 pkg install bat
 
 git clone https://github.com/AnzenKodo/dotfiles Dotfiles --depth=1
