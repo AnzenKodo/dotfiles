@@ -5,12 +5,3 @@
 
 source ~/Dotfiles/bash/unix.sh
 
-# Functions
-#===============================================================================
-
-backup()
-{
-    cd ~/Dotfiles
-    push "Backup from Android Phone"
-    cd -
-}

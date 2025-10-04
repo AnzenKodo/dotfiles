@@ -1,6 +1,6 @@
 {
 	"$schema" : "https://aka.ms/winget-packages.schema.2.0.json",
-	"CreationDate" : "2025-10-05T00:25:53.737-00:00",
+	"CreationDate" : "2025-10-05T03:09:13.335-00:00",
 	"Sources" : 
 	[
 		{
@@ -31,10 +31,6 @@
 					"Version" : "8.0.1510.12"
 				},
 				{
-					"PackageIdentifier" : "Google.GoogleDrive",
-					"Version" : "114.0.1.0"
-				},
-				{
 					"PackageIdentifier" : "Neovim.Neovim",
 					"Version" : "0.11.3"
 				},
@@ -49,6 +45,10 @@
 				{
 					"PackageIdentifier" : "Microsoft.OpenJDK.17",
 					"Version" : "17.0.16.8"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.Edge",
+					"Version" : "141.0.3537.57"
 				},
 				{
 					"PackageIdentifier" : "OBSProject.OBSStudio",
@@ -95,10 +95,6 @@
 					"Version" : "1.8.10"
 				},
 				{
-					"PackageIdentifier" : "Axosoft.GitKraken",
-					"Version" : "11.4.0"
-				},
-				{
 					"PackageIdentifier" : "VSCodium.VSCodium",
 					"Version" : "1.104.26450"
 				},
@@ -142,10 +138,6 @@
 		{
 			"Packages" : 
 			[
-				{
-					"PackageIdentifier" : "XPFFTQ037JWMHS",
-					"Version" : "141.0.3537.57"
-				},
 				{
 					"PackageIdentifier" : "9PNKDR50694P",
 					"Version" : "25.2.1.0"

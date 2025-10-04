@@ -44,10 +44,6 @@ vim.o.ignorecase = true    -- Not case sensitive
 vim.o.smartcase = true     -- Case sensitive if uppercase
 vim.o.inccommand = 'split'
 
-vim.schedule(function()
-    vim.o.clipboard = 'unnamedplus'
-end)
-
 vim.o.list = true
 vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣', eol = ' ', trail="." }
 
@@ -65,6 +61,17 @@ vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold", "CursorHo
         end
     end,
 })
+
+-- Clipboard 
+-- ============================================================================
+
+local function is_termux()
+    return vim.env.TERMUX_VERSION ~= nil
+end
+
+vim.schedule(function()
+    vim.o.clipboard = 'unnamedplus'
+end)
 
 -- Neovim Gui
 -- ============================================================================
@@ -531,7 +538,7 @@ require('lazy').setup({
 
     { -- Time Tracker
         dir = plugin_path .. '/aw-watcher-vim',
-        cond = not (vim.env.TERMUX_VERSION ~= nil)
+        cond = not is_termux()
     },
 
     { -- Session Manager

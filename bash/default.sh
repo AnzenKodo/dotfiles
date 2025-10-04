@@ -66,6 +66,7 @@ alias axel="axel --verbose"
 alias yt="yt-dlp --ffmpeg-location ~/Applications/ffmpeg/ -S ext"
 alias yta="yt-dlp --ffmpeg-location ~/Applications/ffmpeg/ --extract-audio --audio-format"
 alias tldr="tldr -c"
+alias rclone="rclone --config=$HOME/Drive/Dotfiles/rclone.conf"
 
 alias todo="$EDITOR ~/Drive/Notes/Online/Todo.md"
 alias feed="$EDITOR ~/Drive/Notes/Feed.md"
@@ -131,6 +132,7 @@ download-music()
     --parse-metadata "playlist_index:%(track_number)s" \
     --output "%(artist)s - %(title)s.%(ext)s" "$2"
 }
+
 setup_git_id()
 {
     git config --local user.email "50282743+AnzenKodo@users.noreply.github.com"
