@@ -93,31 +93,10 @@ alias rsync="rsync --hard-links --archive --recursive --update --executability \
     --verbose --human-readable --progress"
 alias rsync_git="rsync --filter='dir-merge,- .gitignore' --delete"
 alias ctags_system="ctags -R -f ~/Dotfiles/Desktop/nvim/system.tags /usr/include/"
+alias rclone="rclone --config=$HOME/Drive/Dotfiles/rclone.conf"
 
 # Functions
 #===============================================================================
-
-alias rclone="rclone --config=$HOME/Drive/Dotfiles/rclone.conf"
-backup()
-{
-    opml_to_feed ~/Drive/Dotfiles/podcast.opml ~/Drive/Notes/Feed.md
-
-    cd ~/Dotfiles
-    push "Backup from Linux Desktop"
-    cd -
-
-    rclone \
-        bisync ~/Drive Personal: \
-        --exclude buffers/** \
-        --check-first --metadata --checksum --download-hash --verbose \
-        --compare size,modtime,checksum
-        # --resync
-
-    # cd ~/Code/anzenkodo.github.io
-    # echo $RANDOM > ~/Code/anzenkodo.github.io/site_checksum.txt
-    # push "Updated Notes"
-    # cd -
-}
 
 server_backup()
 {
