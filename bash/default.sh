@@ -78,7 +78,7 @@ alias note="$EDITOR ~/Drive/Notes/Note.md"
 cd()
 {
     z "$@"
-    pwd > $last_dir_path
+    pwd > $last_dir_state_path
 
 }
 
