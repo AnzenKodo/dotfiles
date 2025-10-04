@@ -106,25 +106,6 @@ alias ctags_system="ctags -R -f ~/Dotfiles/Desktop/nvim/system.tags /usr/include
 # Functions
 #===============================================================================
 
-backup()
-{
-    cd ~/Dotfiles
-    push "Backup from Linux Desktop"
-    cd -
-
-    rclone \
-        bisync ~/Drive Personal: \
-        --exclude buffers/** \
-        --check-first --metadata --checksum --download-hash --verbose \
-        --compare size,modtime,checksum
-        # --resync
-
-    # cd ~/Code/anzenkodo.github.io
-    # echo $RANDOM > ~/Code/anzenkodo.github.io/site_checksum.txt
-    # push "Updated Notes"
-    # cd -
-}
-
 server_backup()
 {
     rsync_git ~/Code Gangnam@34.41.58.206:~/

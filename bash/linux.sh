@@ -46,3 +46,22 @@ ctags-system()
         /usr/include/string.h /usr/include/time.h \
         -R /usr/include/sys /usr/include/xcb /usr/include/GLES2/ /usr/include/EGL
 }
+
+backup()
+{
+    cd ~/Dotfiles
+    push "Backup from Linux Desktop"
+    cd -
+
+    rclone \
+        bisync ~/Drive Personal: \
+        --exclude buffers/** \
+        --check-first --metadata --checksum --download-hash --verbose \
+        --compare size,modtime,checksum
+        # --resync
+
+    # cd ~/Code/anzenkodo.github.io
+    # echo $RANDOM > ~/Code/anzenkodo.github.io/site_checksum.txt
+    # push "Updated Notes"
+    # cd -
+}

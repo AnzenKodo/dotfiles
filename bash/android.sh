@@ -5,3 +5,12 @@
 
 source ~/Dotfiles/bash/unix.sh
 
+# Functions
+#===============================================================================
+
+backup()
+{
+    cd ~/Dotfiles
+    push "Backup from Linux Desktop"
+    cd -
+}
