@@ -48,4 +48,5 @@ function backup {
         --exclude buffers/** \
         --check-first --metadata --checksum --download-hash --verbose \
         --compare size,modtime,checksum
+        --resync
 }
