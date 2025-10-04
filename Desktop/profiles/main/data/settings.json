@@ -6,10 +6,6 @@
     "editor.minimap.enabled": false,
     "editor.smoothScrolling": false,
     "git.openRepositoryInParentFolders": "always",
-    "hexeditor.columnWidth": 18,
-    "hexeditor.showDecodedText": false,
-    "hexeditor.defaultEndianness": "little",
-    "hexeditor.inspectorType": "aside",
     "security.workspace.trust.banner": "never",
     "extensions.autoCheckUpdates": false,
     "extensions.autoUpdate": false,
@@ -23,7 +19,6 @@
     "syncSettings.crons": {
         "upload": "0 6 * * *"
     },
-    "clangd.path": "/home/ramen/.config/VSCodium/User/globalStorage/llvm-vs-code-extensions.vscode-clangd/install/19.1.2/clangd_19.1.2/bin/clangd",
     "workbench.secondarySideBar.showLabels": false,
     "debug.onTaskErrors": "debugAnyway",
     "workbench.editor.editorActionsLocation": "titleBar",

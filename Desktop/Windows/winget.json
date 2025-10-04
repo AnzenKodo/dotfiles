@@ -1,6 +1,6 @@
 {
 	"$schema" : "https://aka.ms/winget-packages.schema.2.0.json",
-	"CreationDate" : "2025-09-30T16:18:51.059-00:00",
+	"CreationDate" : "2025-10-04T10:02:30.784-00:00",
 	"Sources" : 
 	[
 		{
@@ -67,6 +67,14 @@
 					"Version" : "14.40.33810.0"
 				},
 				{
+					"PackageIdentifier" : "Brave.Brave",
+					"Version" : "141.1.83.109"
+				},
+				{
+					"PackageIdentifier" : "BrechtSanders.WinLibs.POSIX.MSVCRT",
+					"Version" : "15.2.0-13.0.0-r1"
+				},
+				{
 					"PackageIdentifier" : "EclipseFoundation.Eclipse.Java",
 					"Version" : "2025.06"
 				},
@@ -91,6 +99,10 @@
 					"Version" : "11.4.0"
 				},
 				{
+					"PackageIdentifier" : "VSCodium.VSCodium",
+					"Version" : "1.104.26450"
+				},
+				{
 					"PackageIdentifier" : "ActivityWatch.ActivityWatch",
 					"Version" : "0.13.2"
 				},
@@ -104,7 +116,7 @@
 				},
 				{
 					"PackageIdentifier" : "Microsoft.AppInstaller",
-					"Version" : "1.26.430.0"
+					"Version" : "1.26.510.0"
 				},
 				{
 					"PackageIdentifier" : "Microsoft.UI.Xaml.2.7",
@@ -132,7 +144,7 @@
 			[
 				{
 					"PackageIdentifier" : "XPFFTQ037JWMHS",
-					"Version" : "140.0.3485.94"
+					"Version" : "141.0.3537.57"
 				},
 				{
 					"PackageIdentifier" : "9PNKDR50694P",
@@ -148,5 +160,5 @@
 			}
 		}
 	],
-	"WinGetVersion" : "1.11.430"
+	"WinGetVersion" : "1.11.510"
 }

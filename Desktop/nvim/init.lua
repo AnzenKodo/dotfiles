@@ -139,14 +139,14 @@ vim.keymap.set("v", "<A-k>", ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<c
 vim.keymap.set("n", "[b", "<cmd>bprevious<cr>",    { desc = "Prev Buffer" })
 vim.keymap.set("n", "]b", "<cmd>bnext<cr>",        { desc = "Next Buffer" })
 vim.keymap.set("n", "<leader>bb", "<cmd>e #<cr>",  { desc = "Switch to Other Buffer" })
-vim.keymap.set('n', '<leader>bd', ':bn | bd#<CR>', { desc = '[D]elete [S]plit' })
+vim.keymap.set('n', '<leader>bd', ':bn | bd#<CR>', { desc = '[B]uffer [D]elete' })
 vim.keymap.set('n', '<leader>ba', function()
     for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
         if vim.api.nvim_buf_is_loaded(bufnr) and vim.api.nvim_buf_get_option(bufnr, 'buflisted') then
           vim.api.nvim_buf_delete(bufnr, { force = true })
         end
     end
-end, { desc = 'Wipe all buffers', })
+end, { desc = '[B]uffer delete [A]ll', })
 
 -- Autocomplete
 vim.keymap.set('i', '<A-o>', '<C-x><C-o>', { noremap = true }, { desc = 'Omni-completion (context-aware)' })
@@ -317,8 +317,8 @@ vim.api.nvim_create_autocmd("BufReadPost", {
 vim.o.tags = "tags,/home/ramen/.cache/ctags/system.tags"
 vim.keymap.set('n', ']g', '<C-]>', { desc = 'Jump to definition' })
 vim.keymap.set('n', '[g', '<C-t>', { desc = 'Return from jump' })
-vim.keymap.set('n', '<leader>wd', '<cmd>lua open_buffer_in_other_split()<CR><C-]> ', { desc = "[W]indow goto definition" })
-vim.keymap.set('n', '<leader>wg', '<cmd>lua open_buffer_in_other_split()<CR>g]',     { desc = "[W]indow [G]oto tag" })
+vim.keymap.set('n', '<leader>wg', '<cmd>lua open_buffer_in_other_split()<CR><C-]> ', { desc = "[W]indow [G]oto definition" })
+vim.keymap.set('n', '<leader>wt', '<cmd>lua open_buffer_in_other_split()<CR>g]',     { desc = "[W]indow show [T]ag" })
 
 -- Make
 -- ============================================================================
@@ -329,9 +329,6 @@ vim.api.nvim_create_autocmd("BufEnter", {
         if vim.fn.filereadable("build.xml") == 1 then
             vim.opt.makeprg="ant compile"
             vim.opt.errorformat="%A\\ %#[javac]\\ %f:%l:\\ error:\\ %m,%-Z\\ %#[javac]\\ %p^,%-C%.%#,%-G%.%#BUILD\\ FAILED%.%#,%-GTotal\\ time:\\ %.%#"
-        end
-        if vim.fn.filereadable("build.c") == 1 then
-            vim.opt.makeprg="cc -ggdb build.c && ./a.out build-run mingw"
         end
     end,
 })
