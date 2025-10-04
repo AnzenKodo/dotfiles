@@ -18,6 +18,13 @@ source ~/Dotfiles/bash/default.sh
 # Set Variables
 #===============================================================================
 
+# Path =========================================================================
+
+export PATH="$HOME/Applications/AppImages:$HOME/Applications/bin"\
+":$HOME/Code/Miniapps/bin:$HOME/Code/Tools/bin"\
+":$XDG_DATA_HOME/python/bin:$CARGO_HOME/bin"\
+":$PATH"
+
 # Support XDG Base Directory ===================================================
 
 export XDG_CONFIG_HOME="$HOME/.config"
