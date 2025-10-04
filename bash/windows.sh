@@ -1,8 +1,8 @@
-# Load Global Profile
+# Load Default Profile
 #===============================================================================
 
 last_dir_path="$HOME/AppData/last-dir.txt"
-source ~/Dotfiles/Desktop/profile.sh
+source ~/Dotfiles/bash/default.sh
 
 # Alias
 #===============================================================================
