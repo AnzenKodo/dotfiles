@@ -72,17 +72,6 @@ _open_complete()
     COMPREPLY=( $(compgen -c "$cur") )
 }
 
-ask_and_run()
-{
-    read -p "Do you want to proceed? (y/n): " ans
-    case $ans in
-        [Yy]* )
-            eval "$@" ;;
-        * )
-            echo "Operation cancelled." ;;
-    esac
-}
-
 o()
 {
     "$@" > /dev/null 2>&1 & disown

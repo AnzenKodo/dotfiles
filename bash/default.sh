@@ -41,6 +41,19 @@ export FZF_DEFAULT_OPTS="
 # Alias
 #===============================================================================
 
+# Alias Functions ==============================================================
+
+ask_and_run()
+{
+    read -p "Do you want to proceed? (y/n): " ans
+    case $ans in
+        [Yy]* )
+            eval "$@" ;;
+        * )
+            echo "Operation cancelled." ;;
+    esac
+}
+
 alias bat="bat --theme=gruvbox-dark --style=numbers"
 
 alias ..="cd .."
