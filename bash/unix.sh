@@ -7,6 +7,13 @@ if [ -f /usr/share/git/git-prompt.sh ]; then
     source /usr/share/git/git-prompt.sh
 fi
 
+# Path =========================================================================
+
+export PATH="$HOME/Applications/AppImages:$HOME/Applications/bin"\
+":$HOME/Code/Miniapps/bin:$HOME/Code/Tools/bin"\
+":$XDG_DATA_HOME/python/bin:$CARGO_HOME/bin"\
+":$PATH"
+
 # Load ========================================================================
 
 export XDG_CACHE_HOME="$HOME/.cache"
@@ -17,13 +24,6 @@ source ~/Dotfiles/bash/default.sh
 
 # Set Variables
 #===============================================================================
-
-# Path =========================================================================
-
-export PATH="$HOME/Applications/AppImages:$HOME/Applications/bin"\
-":$HOME/Code/Miniapps/bin:$HOME/Code/Tools/bin"\
-":$XDG_DATA_HOME/python/bin:$CARGO_HOME/bin"\
-":$PATH"
 
 # Support XDG Base Directory ===================================================
 
