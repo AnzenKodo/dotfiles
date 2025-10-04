@@ -8,6 +8,12 @@ PROMPT_COMMAND='PS1_CMD1=$(__git_ps1 " (%s)");history -a'
 
 # History ======================================================================
 
+if [ -d $bash_state_path ]; then
+    HISTFILE=$bash_state_path/history
+else
+    mkdir $bash_state_path
+    touch $bash_state_path/history
+fi
 HISTCONTROL=ignoreboth:erasedups:ignorespace
 HISTFILESIZE=
 HISTSIZE=
@@ -179,6 +185,10 @@ fi
 
 # cd to last cd directory =====================================================
 
-if [ "$PWD" = "$HOME" ]; then
-    cd "$(cat $last_dir_path)"
+if [ -f $last_dir_state_path ]; then
+    if [ "$PWD" = "$HOME" ]; then
+        cd "$(cat $last_dir_state_path)"
+    fi
+else
+    touch $last_dir_state_path
 fi

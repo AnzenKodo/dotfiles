@@ -10,7 +10,9 @@ fi
 # Load ========================================================================
 
 export XDG_CACHE_HOME="$HOME/.cache"
-last_dir_path="$XDG_CACHE_HOME/last-dir.txt"
+
+last_dir_state_path="$XDG_STATE_HOME/last-dir.txt"
+bash_state_path=$XDG_STATE_HOME/bash
 source ~/Dotfiles/bash/default.sh
 
 # Set Variables
@@ -26,10 +28,6 @@ export XDG_DOCUMENTS_DIR="$HOME/Documents"
 export XDG_MUSIC_DIR="$HOME/Music"
 export XDG_PICTURES_DIR="$HOME/Pictures"
 export XDG_VIDEOS_DIR="$HOME/Videos"
-
-# History ======================================================================
-
-HISTFILE=$XDG_STATE_HOME/bash/history
 
 # Application Variables ========================================================
 

@@ -15,6 +15,8 @@ source ~/Dotfiles/bash/unix.sh
 # Set Variables
 #===============================================================================
 
+# Application Variables ========================================================
+
 export GTK2_RC_FILES=~/Dotfiles/Desktop/gtk2rc
 export WGETRC="$XDG_CONFIG_HOME/wgetrc"
 export ICEAUTHORITY=$XDG_CACHE_HOME/ICEauthority

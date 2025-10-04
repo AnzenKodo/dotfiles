@@ -1,7 +1,8 @@
 # Load Default Profile
 #===============================================================================
 
-last_dir_path="$HOME/AppData/last-dir.txt"
+last_dir_state_path="$HOME/AppData/last-dir.txt"
+bash_state_path=$HOME/AppData/bash
 source ~/Dotfiles/bash/default.sh
 
 # Alias
