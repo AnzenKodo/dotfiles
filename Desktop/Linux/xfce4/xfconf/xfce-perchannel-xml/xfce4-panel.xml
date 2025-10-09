@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.1" encoding="UTF-8"?>
 
 <channel name="xfce4-panel" version="1.0">
   <property name="configver" type="int" value="2"/>
@@ -6,109 +6,118 @@
     <value type="int" value="1"/>
     <property name="dark-mode" type="bool" value="true"/>
     <property name="panel-1" type="empty">
-      <property name="position" type="string" value="p=8;x=960;y=1265"/>
+      <property name="position" type="string" value="p=2;x=1694;y=480"/>
       <property name="length" type="double" value="100"/>
       <property name="position-locked" type="bool" value="true"/>
-      <property name="icon-size" type="uint" value="20"/>
-      <property name="size" type="uint" value="29"/>
+      <property name="icon-size" type="uint" value="0"/>
+      <property name="size" type="uint" value="30"/>
       <property name="plugin-ids" type="array">
-        <value type="int" value="11"/>
-        <value type="int" value="4"/>
+        <value type="int" value="1"/>
         <value type="int" value="2"/>
         <value type="int" value="3"/>
+        <value type="int" value="4"/>
+        <value type="int" value="14"/>
+        <value type="int" value="17"/>
+        <value type="int" value="5"/>
+        <value type="int" value="11"/>
         <value type="int" value="6"/>
+        <value type="int" value="7"/>
         <value type="int" value="8"/>
         <value type="int" value="9"/>
         <value type="int" value="10"/>
-        <value type="int" value="7"/>
-        <value type="int" value="12"/>
-        <value type="int" value="1"/>
-        <value type="int" value="14"/>
       </property>
-      <property name="background-style" type="uint" value="0"/>
-      <property name="mode" type="uint" value="0"/>
+      <property name="mode" type="uint" value="1"/>
       <property name="nrows" type="uint" value="1"/>
-      <property name="length-adjust" type="bool" value="false"/>
-      <property name="background-rgba" type="array">
-        <value type="double" value="0.19607843137254902"/>
-        <value type="double" value="0.18823529411764706"/>
-        <value type="double" value="0.18431372549019609"/>
-        <value type="double" value="1"/>
-      </property>
+      <property name="autohide-behavior" type="uint" value="0"/>
+      <property name="length-adjust" type="bool" value="true"/>
       <property name="enter-opacity" type="uint" value="100"/>
       <property name="leave-opacity" type="uint" value="100"/>
     </property>
   </property>
   <property name="plugins" type="empty">
+    <property name="plugin-1" type="string" value="applicationsmenu">
+      <property name="custom-menu" type="bool" value="false"/>
+      <property name="custom-menu-file" type="string" value="/home/ramen/Applications/Mime/defaults.list"/>
+      <property name="button-title" type="string" value=""/>
+      <property name="small" type="bool" value="true"/>
+      <property name="show-tooltips" type="bool" value="true"/>
+      <property name="show-generic-names" type="bool" value="true"/>
+    </property>
     <property name="plugin-2" type="string" value="tasklist">
       <property name="grouping" type="bool" value="false"/>
-      <property name="show-labels" type="bool" value="true"/>
-      <property name="flat-buttons" type="bool" value="true"/>
-      <property name="show-handle" type="bool" value="false"/>
+      <property name="show-handle" type="bool" value="true"/>
       <property name="show-tooltips" type="bool" value="true"/>
+      <property name="flat-buttons" type="bool" value="false"/>
+      <property name="show-labels" type="bool" value="false"/>
       <property name="middle-click" type="uint" value="1"/>
-      <property name="show-only-minimized" type="bool" value="false"/>
+      <property name="switch-workspace-on-unminimize" type="bool" value="true"/>
       <property name="sort-order" type="uint" value="4"/>
-      <property name="include-all-workspaces" type="bool" value="false"/>
-      <property name="window-scrolling" type="bool" value="true"/>
-      <property name="show-wireframes" type="bool" value="false"/>
     </property>
     <property name="plugin-3" type="string" value="separator">
       <property name="expand" type="bool" value="true"/>
       <property name="style" type="uint" value="0"/>
     </property>
+    <property name="plugin-4" type="string" value="pager">
+      <property name="rows" type="uint" value="2"/>
+      <property name="miniature-view" type="bool" value="true"/>
+      <property name="wrap-workspaces" type="bool" value="false"/>
+    </property>
+    <property name="plugin-5" type="string" value="separator">
+      <property name="style" type="uint" value="0"/>
+    </property>
     <property name="plugin-6" type="string" value="systray">
-      <property name="square-icons" type="bool" value="true"/>
+      <property name="square-icons" type="bool" value="false"/>
       <property name="known-legacy-items" type="array">
+        <value type="string" value="wi-fi network connection “netgear” active: netgear (73%)"/>
+        <value type="string" value="wi-fi network connection “netgear” active: netgear (67%)"/>
+        <value type="string" value="wi-fi network connection “netgear” active: netgear (68%)"/>
+        <value type="string" value="ethernet network connection “wired connection 1” active"/>
         <value type="string" value="networking disabled"/>
-        <value type="string" value="wi-fi network connection “netgear 1” active: netgear (69%)"/>
-        <value type="string" value="wi-fi network connection “netgear 1” active: netgear (76%)"/>
-        <value type="string" value="wi-fi network connection “netgear 1” active: netgear (58%)"/>
-        <value type="string" value="xfce4-power-manager"/>
-        <value type="string" value="wi-fi network connection “netgear 1” active: netgear (57%)"/>
-        <value type="string" value="wi-fi network connection “netgear 1” active: netgear (56%)"/>
-        <value type="string" value="wi-fi network connection “netgear 1” active: netgear (54%)"/>
-        <value type="string" value="wi-fi network connection “netgear 1” active: netgear (59%)"/>
-        <value type="string" value="keepassxc"/>
-        <value type="string" value="wi-fi network connection “netgear 1” active: netgear (60%)"/>
-        <value type="string" value="clipman"/>
-        <value type="string" value="gpick"/>
-        <value type="string" value="wi-fi network connection “netgear 1” active: netgear (66%)"/>
-        <value type="string" value="wi-fi network connection “netgear 1” active: netgear (63%)"/>
+        <value type="string" value="wi-fi network connection “netgear” active: netgear (99%)"/>
         <value type="string" value="networkmanager applet"/>
-        <value type="string" value="no network connection"/>
+        <value type="string" value="wi-fi network connection “netgear” active: netgear (71%)"/>
+        <value type="string" value="wi-fi network connection “netgear” active: netgear (47%)"/>
+        <value type="string" value="wi-fi network connection “netgear” active: netgear (53%)"/>
+        <value type="string" value="wi-fi network connection “netgear” active: netgear (55%)"/>
+        <value type="string" value="wi-fi network connection “netgear” active: netgear (63%)"/>
+        <value type="string" value="clipman"/>
+        <value type="string" value="xfce4-power-manager"/>
+        <value type="string" value="wi-fi network connection “netgear” active: netgear (51%)"/>
+        <value type="string" value="wi-fi network connection “netgear” active: netgear (61%)"/>
+        <value type="string" value="wi-fi network connection “netgear” active: netgear (65%)"/>
+        <value type="string" value="wi-fi network connection “netgear” active: netgear (57%)"/>
+        <value type="string" value="wi-fi network connection “netgear” active: netgear (49%)"/>
       </property>
-      <property name="known-items" type="array">
-        <value type="string" value="ClipGrab"/>
-        <value type="string" value="chrome_status_icon_1"/>
-        <value type="string" value="steam"/>
-        <value type="string" value="aw-qt"/>
-        <value type="string" value="vlc"/>
-        <value type="string" value="KeePassXC"/>
-        <value type="string" value="obs"/>
-        <value type="string" value="blueman"/>
+      <property name="hidden-legacy-items" type="array">
       </property>
-      <property name="symbolic-icons" type="bool" value="true"/>
+      <property name="single-row" type="bool" value="true"/>
       <property name="icon-size" type="int" value="0"/>
+      <property name="symbolic-icons" type="bool" value="true"/>
+      <property name="menu-is-primary" type="bool" value="false"/>
+      <property name="hide-new-items" type="bool" value="false"/>
+      <property name="known-items" type="array">
+        <value type="string" value="obs"/>
+        <value type="string" value="aw-qt"/>
+        <value type="string" value="KeePassXC"/>
+      </property>
     </property>
-    <property name="plugin-8" type="string" value="pulseaudio">
-      <property name="enable-keyboard-shortcuts" type="bool" value="true"/>
-      <property name="show-notifications" type="bool" value="true"/>
-      <property name="mpris-players" type="string" value="brave.instance10107;brave.instance10138;brave.instance10301;brave.instance1039;brave.instance10442;brave.instance1049;brave.instance11020;brave.instance11115;brave.instance11412;brave.instance11656;brave.instance11809;brave.instance12535;brave.instance12813;brave.instance13224;brave.instance14505;brave.instance14977;brave.instance16042;brave.instance17775;brave.instance18088;brave.instance18256;brave.instance18302;brave.instance18749;brave.instance18968;brave.instance19569;brave.instance19720;brave.instance20417;brave.instance20698;brave.instance21317;brave.instance21334;brave.instance21682;brave.instance22549;brave.instance2386;brave.instance24443;brave.instance2504;brave.instance2539;brave.instance25442;brave.instance25512;brave.instance26131;brave.instance26155;brave.instance27028;brave.instance27182;brave.instance27459;brave.instance2772;brave.instance2785;brave.instance2786;brave.instance2793;brave.instance2794;brave.instance2797;brave.instance2798;brave.instance2801;brave.instance2803;brave.instance28212;brave.instance28321;brave.instance28386;brave.instance2846;brave.instance2853;brave.instance2857;brave.instance2863;brave.instance2865;brave.instance28665;brave.instance2868;brave.instance2872;brave.instance2873;brave.instance2875;brave.instance2876;brave.instance2878;brave.instance2880;brave.instance2884;brave.instance2885;brave.instance2886;brave.instance2888;brave.instance2889;brave.instance2890;brave.instance2891;brave.instance2893;brave.instance2894;brave.instance2896;brave.instance2898;brave.instance2900;brave.instance29019;brave.instance2903;brave.instance2905;brave.instance2906;brave.instance2909;brave.instance2910;brave.instance2914;brave.instance2916;brave.instance29282;brave.instance29367;brave.instance2957;brave.instance2961;brave.instance2964;brave.instance2966;brave.instance2974;brave.instance2975;brave.instance29804;brave.instance3014;brave.instance30371;brave.instance3050;brave.instance3053;brave.instance3065;brave.instance3088;brave.instance3098;brave.instance30987;brave.instance31029;brave.instance3110;brave.instance3112;brave.instance3118;brave.instance3133;brave.instance3139;brave.instance3150;brave.instance3152;brave.instance3162;brave.instance3191;brave.instance3197;brave.instance3198;brave.instance3203;brave.instance3211;brave.instance3213;brave.instance32201;brave.instance3227;brave.instance3241;brave.instance3256;brave.instance32605;brave.instance3270;brave.instance3291;brave.instance3350;brave.instance3363;brave.instance3419;brave.instance3423;brave.instance3425;brave.instance3440;brave.instance3459;brave.instance3482;brave.instance3486;brave.instance3496;brave.instance3517;brave.instance3555;brave.instance3583;brave.instance361;brave.instance3622;brave.instance3646;brave.instance3660;brave.instance3664;brave.instance3669;brave.instance3712;brave.instance3795;brave.instance3876;brave.instance3877;brave.instance3907;brave.instance3941;brave.instance3954;brave.instance3988;brave.instance4010;brave.instance4085;brave.instance4094;brave.instance4145;brave.instance4153;brave.instance4310;brave.instance4604;brave.instance4654;brave.instance4779;brave.instance4788;brave.instance5168;brave.instance5500;brave.instance5534;brave.instance5680;brave.instance6046;brave.instance6278;brave.instance6549;brave.instance6573;brave.instance6785;brave.instance7051;brave.instance7063;brave.instance723;brave.instance7255;brave.instance7464;brave.instance7540;brave.instance7683;brave.instance8139;brave.instance8170;brave.instance8180;brave.instance8482;brave.instance8491;brave.instance8518;brave.instance8572;chromium.instance11021;chromium.instance13659;chromium.instance19799;chromium.instance26093;chromium.instance32546;chromium.instance3766;chromium.instance4760;chromium.instance5132;chromium.instance5364;chromium.instance661;chromium.instance7756;chromium.instance8121;chromium.instance8922;firefox.instance_1_121;firefox.instance_1_1388;firefox.instance_1_1418;firefox.instance_1_223;firefox.instance_1_269;firefox.instance_1_56;firefox.instance_1_885;vlc;vlc.instance12565;vlc.instance17696;vlc.instance21852;vlc.instance26887;vlc.instance28895;vlc.instance28990;vlc.instance29234;vlc.instance29254;vlc.instance29346;vlc.instance29437;vlc.instance29989;vlc.instance30149;vlc.instance30484;vlc.instance9003;vlc.instance9223"/>
+    <property name="plugin-7" type="string" value="separator">
+      <property name="style" type="uint" value="0"/>
     </property>
-    <property name="plugin-9" type="string" value="power-manager-plugin"/>
-    <property name="plugin-10" type="string" value="notification-plugin"/>
-    <property name="plugin-12" type="string" value="clock">
-      <property name="digital-date-format" type="string" value="%a, %b %d, %Y"/>
-      <property name="digital-time-format" type="string" value="%I:%M %p"/>
+    <property name="plugin-8" type="string" value="clock">
       <property name="mode" type="uint" value="2"/>
-      <property name="digital-date-font" type="string" value="Sans 10"/>
-      <property name="digital-time-font" type="string" value="Sans 10"/>
+      <property name="digital-date-format" type="string" value="%a, %d %b %Y"/>
+      <property name="digital-time-format" type="string" value="%I:%M %p"/>
+      <property name="show-week-numbers" type="bool" value="true"/>
+      <property name="digital-date-font" type="string" value="Sans 7"/>
+      <property name="digital-time-font" type="string" value="Sans 8"/>
     </property>
-    <property name="plugin-14" type="string" value="actions">
-      <property name="appearance" type="uint" value="1"/>
+    <property name="plugin-9" type="string" value="separator">
+      <property name="style" type="uint" value="0"/>
+    </property>
+    <property name="plugin-10" type="string" value="actions">
       <property name="button-title" type="uint" value="3"/>
-      <property name="custom-title" type="string" value="  ⏻  "/>
+      <property name="custom-title" type="string" value="ტ"/>
       <property name="items" type="array">
         <value type="string" value="+lock-screen"/>
         <value type="string" value="+switch-user"/>
@@ -124,38 +133,24 @@
         <value type="string" value="-logout-dialog"/>
       </property>
     </property>
-    <property name="plugin-7" type="string" value="separator">
-      <property name="style" type="uint" value="0"/>
-      <property name="expand" type="bool" value="false"/>
+    <property name="plugin-14" type="string" value="notification-plugin"/>
+    <property name="plugin-17" type="string" value="pulseaudio">
+      <property name="enable-keyboard-shortcuts" type="bool" value="true"/>
+      <property name="known-players" type="string" value="Brave;obsidian"/>
     </property>
     <property name="clipman" type="empty">
       <property name="settings" type="empty">
-        <property name="enable-actions" type="bool" value="true"/>
         <property name="show-qr-code" type="bool" value="true"/>
-        <property name="add-primary-clipboard" type="bool" value="false"/>
+        <property name="enable-actions" type="bool" value="true"/>
         <property name="max-texts-in-history" type="uint" value="1000"/>
+        <property name="persistent-primary-clipboard" type="bool" value="false"/>
       </property>
       <property name="tweaks" type="empty">
         <property name="paste-on-activate" type="uint" value="1"/>
-        <property name="popup-at-pointer" type="bool" value="false"/>
-        <property name="reverse-menu-order" type="bool" value="false"/>
+        <property name="popup-at-pointer" type="bool" value="true"/>
+        <property name="max-menu-items" type="uint" value="20"/>
       </property>
     </property>
-    <property name="plugin-1" type="string" value="showdesktop"/>
-    <property name="plugin-11" type="string" value="launcher">
-      <property name="items" type="array">
-        <value type="string" value="17314875221.desktop"/>
-      </property>
-      <property name="arrow-position" type="uint" value="0"/>
-      <property name="show-label" type="bool" value="false"/>
-      <property name="disable-tooltips" type="bool" value="false"/>
-      <property name="move-first" type="bool" value="false"/>
-    </property>
-    <property name="plugin-4" type="string" value="pager">
-      <property name="rows" type="uint" value="2"/>
-      <property name="miniature-view" type="bool" value="true"/>
-      <property name="wrap-workspaces" type="bool" value="false"/>
-      <property name="workspace-scrolling" type="bool" value="true"/>
-    </property>
+    <property name="plugin-11" type="string" value="power-manager-plugin"/>
   </property>
 </channel>

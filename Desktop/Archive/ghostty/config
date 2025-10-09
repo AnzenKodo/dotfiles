@@ -17,3 +17,4 @@ window-padding-y=0
 window-padding-x=0
 window-padding-balance=false
 keybind = ctrl+shift+r=reload_config
+keybind = f11=toggle_fullscreen

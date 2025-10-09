@@ -24,18 +24,18 @@ ln -sfv ~/Dotfiles/bash/linux.sh $HOME/.bashrc
 
 mkdir $XDG_CACHE_HOME/X11
 
-ln -sfv ~/Dotfiles/nvim $XDG_CONFIG_HOME
-ln -srf ~/Dotfiles/git $XDG_CONFIG_HOME
+ln -sfv ~/Dotfiles/nvim  $XDG_CONFIG_HOME
+ln -srf ~/Dotfiles/git   $XDG_CONFIG_HOME
 ln -sfv ~/Dotfiles/fonts $XDG_DATA_HOME
 
 rm $XDG_DATA_HOME/applications
-ln -sfv ~/Applications/Mime $XDG_DATA_HOME/applications
+ln -sfv ~/Applications/Mime       $XDG_DATA_HOME/applications
 ln -sfv ~/Applications/Mime/icons $XDG_DATA_HOME/icons
 
-ln -sfv ~/Applications/Mime/mimeapps.list $XDG_CONFIG_HOME/mimeapps.list
-ln -sfv ~/Dotfiles/Desktop/activitywatch $XDG_CONFIG_HOME
-dotfile_link xfce4 $XDG_CONFIG_HOME
-ln -srf ~/Dotfiles/Desktop/focus-editor $XDG_CONFIG_HOME
+ln -sfv ~/Applications/Mime/mimeapps.list $XDG_CONFIG_HOME
+ln -sfv ~/Dotfiles/Desktop/activitywatch  $XDG_CONFIG_HOME
+ln -sfv ~/Dotfiles/Desktop/Linux/xfce4    $XDG_CONFIG_HOME
+ln -srf ~/Dotfiles/Desktop/focus-editor   $XDG_CONFIG_HOME
 ln -sfv ~/Drive/Dotfiles/Desktop/keepassxc $XDG_CONFIG_HOME
 
 sudo rm /usr/local/bin

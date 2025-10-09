@@ -260,8 +260,8 @@ vim.keymap.set("x", "N", "'nN'[v:searchforward]",       { expr = true, desc = "P
 vim.keymap.set("o", "N", "'nN'[v:searchforward]",       { expr = true, desc = "Prev Search Result" })
 
 -- Better indenting
-vim.keymap.set("v", "<", "<gv", { desc = "Indent left" })
-vim.keymap.set("v", ">", ">gv", { desc = "Indent right" })
+-- vim.keymap.set("v", "<", "<gv", { desc = "Indent left" })
+-- vim.keymap.set("v", ">", ">gv", { desc = "Indent right" })
 
 -- Terminal
 -- ============================================================================
