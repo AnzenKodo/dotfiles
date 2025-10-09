@@ -285,7 +285,6 @@ end
 
 vim.api.nvim_create_user_command("Reload", function()
     dofile(vim.env.MYVIMRC)
-    vim.cmd("Lazy reload gruvbox-material")
     vim.notify("Config reloaded!", vim.log.levels.INFO)
 end, {})
 
@@ -376,451 +375,293 @@ vim.api.nvim_create_autocmd("FileType", {
 -- ============================================================================
 
 local plugin_path = vim.fn.stdpath("config") .. "/plugins"
-local lazypath = plugin_path .. "/lazy.nvim"
-if not (vim.uv or vim.loop).fs_stat(lazypath) then
-    local lazyrepo = "https://github.com/folke/lazy.nvim.git"
-    local out = vim.fn.system({
-        "git", "clone", "--filter=blob:none", "--branch=stable",
-        lazyrepo, lazypath
-    })
-    if vim.v.shell_error ~= 0 then
-        vim.api.nvim_echo({
-            { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
-            { out,                            "WarningMsg" },
-            { "\nPress any key to exit..." },
-        }, true, {})
-        vim.fn.getchar()
-        os.exit(1)
+vim.opt.runtimepath:append(plugin_path .. "/*")
+
+-- Theme ======================================================================
+-- Colorscheme
+vim.g.gruvbox_material_background = 'material'
+vim.g.gruvbox_material_background = "soft"
+vim.g.gruvbox_material_better_performance = true
+vim.g.gruvbox_material_enable_italic = true
+vim.g.gruvbox_material_dim_inactive_windows = true
+vim.cmd.colorscheme('gruvbox-material')
+vim.cmd.highlight('IndentLineCurrent guifg=#928374')
+vim.cmd.highlight('IndentLine guifg=#504945')
+
+-- Status Line 
+require('lualine').setup({
+    sections = {
+        lualine_c = {
+            {
+                'filename',
+                path = 1, -- Show absolute path
+                file_status = true, -- Show file status
+            }
+        }
+    },
+    options = { theme = 'gruvbox-material' },
+})
+
+-- Indent
+require("indentmini").setup()
+
+-- Smart Auto Indent ==========================================================
+require('guess-indent').setup {}
+
+-- Wildcard ===================================================================
+require('wilder').setup({ modes = {':', '/', '?'} })
+
+-- Keymap Helper ==============================================================
+require('which-key').setup({  
+    delay = 0,
+    icons = {
+        keys = vim.g.have_nerd_font and {} or {
+            Up = '<Up> ',
+            Down = '<Down> ',
+            Left = '<Left> ',
+            Right = '<Right> ',
+            C = '<C-…> ',
+            M = '<M-…> ',
+            D = '<D-…> ',
+            S = '<S-…> ',
+            CR = '<CR> ',
+            Esc = '<Esc> ',
+            ScrollWheelDown = '<ScrollWheelDown> ',
+            ScrollWheelUp = '<ScrollWheelUp> ',
+            NL = '<NL> ',
+            BS = '<BS> ',
+            Space = '<Space> ',
+            Tab = '<Tab> ',
+            F1 = '<F1>',
+            F2 = '<F2>',
+            F3 = '<F3>',
+            F4 = '<F4>',
+            F5 = '<F5>',
+            F6 = '<F6>',
+            F7 = '<F7>',
+            F8 = '<F8>',
+            F9 = '<F9>',
+            F10 = '<F10>',
+            F11 = '<F11>',
+            F12 = '<F12>',
+        },
+    },
+    -- Document existing key chains
+    spec = {
+        { '<leader>d', group = '[D]iagnostic' },
+        { '<leader>f', group = '[F]ind' },
+        { '<leader>b', group = '[B]uffer' },
+        { '<leader>t', group = '[T]oggle' },
+        { '<leader>w', group = '[W]indow' },
+        { '<leader>m', group = '[M]ark' },
+        { '<leader>u', group = '[U]ndo' },
+        { '<leader>g', group = '[G]it', mode = { 'n', 'v' } },
+    },
+})
+
+-- Session Manager ============================================================
+require("auto-session").setup()
+
+-- Undo History ===============================================================
+vim.keymap.set('n', '<leader>u', '<cmd>lua require("undotree").toggle()<cr>', { desc = 'Undo History' })
+
+-- Better Quickfix ============================================================
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = "qf",
+    callback = function()
+        require('bqf').setup()
+    end,
+})
+
+-- File Manager ===============================================================
+function _G.get_oil_winbar()
+    local bufnr = vim.api.nvim_win_get_buf(vim.g.statusline_winid)
+    local dir = require("oil").get_current_dir(bufnr)
+    if dir then
+        return vim.fn.fnamemodify(dir, ":~")
+    else
+        -- If there is no current directory (e.g. over ssh), just show the buffer name
+        return vim.api.nvim_buf_get_name(0)
     end
 end
-vim.opt.rtp:prepend(lazypath)
-
-require('lazy').setup({
-    { -- Theme
-        dir = plugin_path .. "/gruvbox-material",
-        lazy = false,
-        priority = 1000,
-        config = function()
-            vim.g.gruvbox_material_background = 'material'
-            vim.g.gruvbox_material_background = "soft"
-            vim.g.gruvbox_material_better_performance = true
-            vim.g.gruvbox_material_enable_italic = true
-            -- vim.g.gruvbox_material_enable_bold = true
-            vim.g.gruvbox_material_dim_inactive_windows = true
-            vim.cmd.colorscheme('gruvbox-material')
-            vim.cmd.highlight('IndentLineCurrent guifg=#928374')
-            vim.cmd.highlight('IndentLine guifg=#504945')
-        end
+require("oil").setup({
+    default_file_explorer = true,
+    delete_to_trash = true,
+    watch_for_changes = true,
+    skip_confirm_for_simple_edits = true,
+    prompt_save_on_select_new_entry = false,
+    columns = {
+        "icon",
+        "permissions",
+        "size",
+        "birthtime",
+        "mtime",
+        "atime",
     },
-
-    { -- Wildcard
-        dir = plugin_path .. "/wilder.nvim",
-        config = function()
-            require('wilder').setup({
-                modes = {':', '/', '?'}
-            })
-        end,
-    },
-
-    { -- Status Line
-        dir = plugin_path .. "/lualine.nvim",
-        config = function()
-            require('lualine').setup({
-                sections = {
-                    lualine_c = {
-                        {
-                            'filename',
-                            path = 1, -- Show absolute path
-                            file_status = true, -- Show file status
-                        }
-                    }
-                },
-                options = {
-                    theme = 'gruvbox-material',
-                },
-            })
-        end,
-    },
-
-    { -- File Manager
-        dir = plugin_path .. "/oil-git-status.nvim",
-        config = function()
-            require("oil-git-status").setup()
-        end,
-        dependencies = {
-            {
-                dir = plugin_path .. "/oil.nvim",
-                lazy = false,
-                config = function()
-                    function _G.get_oil_winbar()
-                      local bufnr = vim.api.nvim_win_get_buf(vim.g.statusline_winid)
-                      local dir = require("oil").get_current_dir(bufnr)
-                      if dir then
-                        return vim.fn.fnamemodify(dir, ":~")
-                      else
-                        -- If there is no current directory (e.g. over ssh), just show the buffer name
-                        return vim.api.nvim_buf_get_name(0)
-                      end
-                    end
-
-                    require("oil").setup({
-                        default_file_explorer = true,
-                        delete_to_trash = true,
-                        watch_for_changes = true,
-                        skip_confirm_for_simple_edits = true,
-                        prompt_save_on_select_new_entry = false,
-                        columns = {
-                            "icon",
-                            "permissions",
-                            "size",
-                            "birthtime",
-                            "mtime",
-                            "atime",
-                        },
-                        keymaps = {
-                            ["<CR>"] = "actions.select",
-                            ["<leader>sv"] = { "actions.select", opts = { vertical = true } },
-                            ["<leader>ss"] = { "actions.select", opts = { horizontal = true } },
-                            ["-"] = { "actions.parent", mode = "n" },
-                            ["_"] = { "actions.open_cwd", mode = "n" },
-                            ["g?"] = { "actions.show_help", mode = "n" },
-                            ["gp"] = "actions.preview",
-                            ["gr"] = "actions.refresh",
-                            ["gs"] = { "actions.change_sort", mode = "n" },
-                            ["gx"] = "actions.open_external",
-                            ["g."] = { "actions.toggle_hidden", mode = "n" },
-                            ["g\\"] = { "actions.toggle_trash", mode = "n" },
-                            ["gf"] = {
-                                function()
-                                    require("telescope.builtin").find_files({
-                                        cwd = require("oil").get_current_dir()
-                                    })
-                                end,
-                                mode = "n",
-                                nowait = true,
-                                desc = "Find files in the current directory"
-                            },
-                        },
-                        float = {
-                            preview_split = "auto",
-                        },
-                        win_options = {
-                            winbar = "%!v:lua.get_oil_winbar()",
-                            signcolumn = "yes:2",
-                            wrap = true,
-                            signcolumn = "yes",
-                            foldcolumn = "0",
-                            list = true,
-                            conceallevel = 3,
-                            concealcursor = "nvic",
-                        },
-                        view_options = {
-                            show_hidden = true,
-                            natural_order = "fast",
-                            case_insensitive = false,
-                            sort = {
-                                { "type", "asc" },
-                                { "name", "asc" },
-                            },
-                            highlight_filename = function(entry, is_hidden, is_link_target, is_link_orphan)
-                                return nil
-                            end,
-                            is_always_hidden = function(name, bufnr)
-                                return false
-                            end,
-                        },
-                    })
-                    vim.keymap.set("n", "<leader>-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
-                end,
-            },
-        },
-    },
-
-    { -- Time Tracker
-        dir = plugin_path .. '/aw-watcher-vim',
-        cond = not is_termux()
-    },
-
-    { -- Session Manager
-        dir = plugin_path .. '/auto-session',
-        lazy = false,
-        config = function()
-            require("auto-session").setup()
-        end,
-    },
-
-    { -- Tags Manager
-        dir = plugin_path .. "/gentags.lua",
-        cond = vim.fn.executable("ctags") == 1,
-        event = "VeryLazy",
-        config = function()
-            require('gentags').setup({ args = { '--c-kinds=+p', '-R' } })
-        end,
-    },
-
-    {
-        dir = plugin_path .. "/gitsigns.nvim",
-        opts = {
-            signs = {
-                add = { text = '+' },
-                change = { text = '~' },
-                delete = { text = '_' },
-                topdelete = { text = '‾' },
-                changedelete = { text = '~' },
-            },
-        },
-        config = function()
-            require('gitsigns').setup({
-                on_attach = function(bufnr)
-                    -- Navigation
-                    vim.keymap.set('n', ']c', function()
-                        if vim.wo.diff then
-                            vim.cmd.normal({']c', bang = true})
-                        else
-                            require('gitsigns').nav_hunk('next')
-                        end
-                    end, { desc = "Next hunk or diff" })
-                    vim.keymap.set('n', '[c', function()
-                        if vim.wo.diff then
-                            vim.cmd.normal({'[c', bang = true})
-                        else
-                            require('gitsigns').nav_hunk('prev')
-                        end
-                    end, { desc = "Previous hunk or diff" })
-                    -- Actions
-                    vim.keymap.set('n', '<leader>gs', require('gitsigns').stage_hunk, { desc = "[G]it [S]tage" })
-                    vim.keymap.set('n', '<leader>gr', require('gitsigns').reset_hunk, { desc = "[G]it [R]eset" })
-                    vim.keymap.set('v', '<leader>gs', function()
-                        require('gitsigns').stage_hunk({ vim.fn.line('.'), vim.fn.line('v') })
-                    end, { desc = "[G]it [S]tage" })
-                    vim.keymap.set('v', '<leader>gr', function()
-                        require('gitsigns').reset_hunk({ vim.fn.line('.'), vim.fn.line('v') })
-                    end, { desc = "[G]it [R]eset" })
-                    vim.keymap.set('n', '<leader>gS', require('gitsigns').stage_buffer, { desc = "[G]it entire buffer [S]tage" })
-                    vim.keymap.set('n', '<leader>gR', require('gitsigns').reset_buffer, { desc = "[G]it entire buffer [R]eset" })
-                    vim.keymap.set('n', '<leader>gp', require('gitsigns').preview_hunk, { desc = "[G]it Preview" })
-                    vim.keymap.set('n', '<leader>gi', require('gitsigns').preview_hunk_inline, { desc = "[G]it [I]nline preview" })
-                    vim.keymap.set('n', '<leader>gd', require('gitsigns').diffthis, { desc = "[G]it [D]iff" })
-                    vim.keymap.set('n', '<leader>gq', require('gitsigns').setqflist, { desc = "[G]it [Q]uickfix" })
-                    vim.keymap.set('n', '<leader>gQ', function() require('gitsigns').setqflist('all') end, { desc = "[G]it [Q]uickfix all" })
-                end
-            })
-        end,
-    },
-
-    {
-        dir = plugin_path .. "/neogit",
-        dependencies = {
-            { dir = plugin_path .. "/plenary.nvim" },
-            {
-                dir = plugin_path .. "/diffview.nvim",
-                config = function()
-                    require("diffview").setup({ use_icons = false, })
-                end
-            },
-            { dir = plugin_path .. "/telescope/telescope.nvim" }
-        },
-        config = function()
-            require("neogit").setup({
-                  kind = "replace",
-                  graph_style = "unicode",
-            })
-        end,
-    },
-
-    {
-        dir = plugin_path .. "/which-key.nvim",
-        event = 'VimEnter', -- Sets the loading event to 'VimEnter'
-        opts = {
-            delay = 0,
-            icons = {
-                keys = vim.g.have_nerd_font and {} or {
-                    Up = '<Up> ',
-                    Down = '<Down> ',
-                    Left = '<Left> ',
-                    Right = '<Right> ',
-                    C = '<C-…> ',
-                    M = '<M-…> ',
-                    D = '<D-…> ',
-                    S = '<S-…> ',
-                    CR = '<CR> ',
-                    Esc = '<Esc> ',
-                    ScrollWheelDown = '<ScrollWheelDown> ',
-                    ScrollWheelUp = '<ScrollWheelUp> ',
-                    NL = '<NL> ',
-                    BS = '<BS> ',
-                    Space = '<Space> ',
-                    Tab = '<Tab> ',
-                    F1 = '<F1>',
-                    F2 = '<F2>',
-                    F3 = '<F3>',
-                    F4 = '<F4>',
-                    F5 = '<F5>',
-                    F6 = '<F6>',
-                    F7 = '<F7>',
-                    F8 = '<F8>',
-                    F9 = '<F9>',
-                    F10 = '<F10>',
-                    F11 = '<F11>',
-                    F12 = '<F12>',
-                },
-            },
-            -- Document existing key chains
-            spec = {
-                { '<leader>d', group = '[D]iagnostic' },
-                { '<leader>f', group = '[F]ind' },
-                { '<leader>b', group = '[B]uffer' },
-                { '<leader>t', group = '[T]oggle' },
-                { '<leader>w', group = '[W]indow' },
-                { '<leader>m', group = '[M]ark' },
-                { '<leader>u', group = '[U]ndo' },
-                { '<leader>g', group = '[G]it', mode = { 'n', 'v' } },
-            },
-        },
-    },
-
-    { -- Fuzzy Finder
-        dir = plugin_path .. "/telescope/telescope.nvim",
-        event = 'VimEnter',
-        dependencies = {
-            { dir = plugin_path .. "/plenary.nvim" },
-            {
-                dir = plugin_path .. "/telescope/telescope-fzf-native.nvim",
-                build = 'make',
-                cond = function()
-                    return vim.fn.executable 'make' == 1
-                end,
-            },
-            {
-                dir = plugin_path .. "/telescope/telescope-ui-select.nvim"
-            },
-        },
-        config = function()
-            require('telescope').setup {
-                extensions = {
-                    ['ui-select'] = {
-                        require('telescope.themes').get_dropdown(),
-                    },
-                },
-            }
-            -- Enable Telescope extensions if they are installed
-            pcall(require('telescope').load_extension, 'fzf')
-            pcall(require('telescope').load_extension, 'ui-select')
-            -- Keymaps
-            local builtin = require 'telescope.builtin'
-            vim.keymap.set('n', '<leader>fh', builtin.help_tags,            { desc = '[F]ind [H]elp' })
-            vim.keymap.set('n', '<leader>fk', builtin.keymaps,              { desc = '[F]ind [K]eymaps' })
-            vim.keymap.set('n', '<leader>ff', builtin.find_files,           { desc = '[F]ind [F]iles' })
-            vim.keymap.set('n', '<leader>fs', builtin.builtin,              { desc = '[F]ind builtin [S]earch' })
-            vim.keymap.set('n', '<leader>fw', builtin.grep_string,          { desc = '[F]ind current [W]ord' })
-            vim.keymap.set('n', '<leader>fg', builtin.live_grep,            { desc = '[F]ind by [G]rep' })
-            vim.keymap.set('n', '<leader>ft', builtin.tags,                 { desc = '[F]ind  [T]ags' })
-            vim.keymap.set('n', '<leader>fc', builtin.current_buffer_tags,  { desc = '[F]ind [C]urrent tags' })
-            vim.keymap.set('n', '<leader>fo', builtin.oldfiles,             { desc = '[F]ind Recent Files ("." for repeat)' })
-            vim.keymap.set('n', '<leader>fb', builtin.buffers,              { desc = 'Find existing buffers' })
-            vim.keymap.set('n', '<leader>f:', builtin.command_history,      { desc = 'Command History' })
-            vim.keymap.set('n', '<leader>/', function()
-                builtin.current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
-                    winblend = 10,
-                    previewer = false,
+    keymaps = {
+        ["<CR>"] = "actions.select",
+        ["<leader>sv"] = { "actions.select", opts = { vertical = true } },
+        ["<leader>ss"] = { "actions.select", opts = { horizontal = true } },
+        ["-"] = { "actions.parent", mode = "n" },
+        ["_"] = { "actions.open_cwd", mode = "n" },
+        ["g?"] = { "actions.show_help", mode = "n" },
+        ["gp"] = "actions.preview",
+        ["gr"] = "actions.refresh",
+        ["gs"] = { "actions.change_sort", mode = "n" },
+        ["gx"] = "actions.open_external",
+        ["g."] = { "actions.toggle_hidden", mode = "n" },
+        ["g\\"] = { "actions.toggle_trash", mode = "n" },
+        ["gf"] = {
+            function()
+                require("telescope.builtin").find_files({
+                    cwd = require("oil").get_current_dir()
                 })
-            end, { desc = '[/] Fuzzily search in current buffer' })
-            vim.keymap.set('n', '<leader>f/', function()
-                builtin.live_grep {
-                    grep_open_files = true,
-                    prompt_title = 'Live Grep in Open Files',
-                }
-            end, { desc = '[F]ind [/] in Open Files' })
-        end,
-    },
-
-    { -- Undo History
-        dir = plugin_path .. "/undotree",
-        dependencies = { dir = plugin_path .. "/plenary.nvim" },
-        config = true,
-        keys = { -- load the plugin only when using it's keybinding:
-            { "<leader>u", "<cmd>lua require('undotree').toggle()<cr>" },
+            end,
+            mode = "n",
+            nowait = true,
+            desc = "Find files in the current directory"
         },
     },
-
-    { -- Shows Indent
-       dir = plugin_path .. "/indentmini.nvim",
-       config = function()
-            require("indentmini").setup()
-       end,
+    float = {
+        preview_split = "auto",
     },
-
-    { -- Smart Auto Indent
-        dir = plugin_path .. "/guess-indent.nvim",
-        config = function()
-            require('guess-indent').setup {}
-        end,
+    win_options = {
+        winbar = "%!v:lua.get_oil_winbar()",
+        signcolumn = "yes:2",
+        wrap = true,
+        signcolumn = "yes",
+        foldcolumn = "0",
+        list = true,
+        conceallevel = 3,
+        concealcursor = "nvic",
     },
-
-    { -- Marks
-        dir = plugin_path .. "/harpoon",
-        branch = "harpoon2",
-        dependencies = {
-            { dir = plugin_path .. "/plenary.nvim" },
-            { dir = plugin_path .. "/telescope/telescope.nvim" }
+    view_options = {
+        show_hidden = true,
+        natural_order = "fast",
+        case_insensitive = false,
+        sort = {
+            { "type", "asc" },
+            { "name", "asc" },
         },
-        config = function()
-            local harpoon = require("harpoon")
-            harpoon:setup()
-            vim.keymap.set("n", "<leader>ma", function() harpoon:list():add() end,                         { desc = "[M]ark [A]dd"})
-            vim.keymap.set("n", "<leader>mm", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end, { desc = "[M]ark [M]enu" })
-            vim.keymap.set("n", "<leader>m1", function() harpoon:list():select(1) end,                     { desc = "[M]ark [1]"})
-            vim.keymap.set("n", "<leader>m2", function() harpoon:list():select(2) end,                     { desc = "[M]ark [2]"})
-            vim.keymap.set("n", "<leader>m3", function() harpoon:list():select(3) end,                     { desc = "[M]ark [3]"})
-            vim.keymap.set("n", "<leader>m4", function() harpoon:list():select(4) end,                     { desc = "[M]ark [4]"})
-            vim.keymap.set("n", "<leader>mp", function() harpoon:list():prev() end,                        { desc = "[M]ark [P]revious"})
-            vim.keymap.set("n", "<leader>mn", function() harpoon:list():next() end,                        { desc = "[M]ark [N]ext"})
+        highlight_filename = function(entry, is_hidden, is_link_target, is_link_orphan)
+            return nil
+        end,
+        is_always_hidden = function(name, bufnr)
+            return false
         end,
     },
-
-    { -- Better Quickfix 
-        dir = plugin_path .. '/nvim-bqf',
-        ft = 'qf',
-    },
-
-    {
-        "jake-stewart/multicursor.nvim",
-        branch = "1.0",
-        config = function()
-            local mc = require("multicursor-nvim")
-            mc.setup()
-
-            -- Add or skip cursor above/below the main cursor.
-            vim.keymap.set({"n", "x"}, "<M-J>", function() mc.lineAddCursor(1) end)
-            vim.keymap.set({"n", "x"}, "<M-K>", function() mc.lineAddCursor(-1) end)
-            vim.keymap.set({"n", "x"}, "<M-L>", function() mc.lineSkipCursor(1) end)
-            vim.keymap.set({"n", "x"}, "<M-H>", function() mc.lineSkipCursor(-1) end)
-
-            -- Add or skip adding a new cursor by matching word/selection
-            vim.keymap.set({"n", "x"}, "<C-d>", function() mc.matchAddCursor(1) end)
-            -- vim.keymap.set({"n", "x"}, "<leader>ms", function() mc.matchSkipCursor(1) end)
-            vim.keymap.set({"n", "x"}, "<C-D>", function() mc.matchAddCursor(-1) end)
-            -- vim.keymap.set({"n", "x"}, "<leader>mS", function() mc.matchSkipCursor(-1) end)
-
-            mc.addKeymapLayer(function(layerSet)
-                -- Select a different cursor as the main one.
-                -- layerSet({"n", "x"}, "<leader>md", mc.prevCursor)
-                -- layerSet({"n", "x"}, "<leader>mD", mc.nextCursor)
-
-                -- Delete the main cursor.
-                -- layerSet({"n", "x"}, "<leader>mq", mc.deleteCursor)
-
-                -- Enable and clear cursors using escape.
-                layerSet("n", "<esc>", function()
-                    if not mc.cursorsEnabled() then
-                        mc.enableCursors()
-                    else
-                        mc.clearCursors()
-                    end
-                end)
-            end)
-        end
-    },
-}, {
-    root = plugin_path .. "/Online",
 })
+require("oil-git-status").setup()
+vim.keymap.set("n", "<leader>-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
+
+-- Marks ======================================================================
+local harpoon = require("harpoon")
+harpoon:setup()
+vim.keymap.set("n", "<leader>ma", function() harpoon:list():add() end,                         { desc = "[M]ark [A]dd"})
+vim.keymap.set("n", "<leader>mm", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end, { desc = "[M]ark [M]enu" })
+vim.keymap.set("n", "<leader>m1", function() harpoon:list():select(1) end,                     { desc = "[M]ark [1]"})
+vim.keymap.set("n", "<leader>m2", function() harpoon:list():select(2) end,                     { desc = "[M]ark [2]"})
+vim.keymap.set("n", "<leader>m3", function() harpoon:list():select(3) end,                     { desc = "[M]ark [3]"})
+vim.keymap.set("n", "<leader>m4", function() harpoon:list():select(4) end,                     { desc = "[M]ark [4]"})
+vim.keymap.set("n", "<leader>mp", function() harpoon:list():prev() end,                        { desc = "[M]ark [P]revious"})
+vim.keymap.set("n", "<leader>mn", function() harpoon:list():next() end,                        { desc = "[M]ark [N]ext"})
+
+-- Fuzzy Finder ===============================================================
+-- vim.opt.runtimepath:append(plugin_path .. "/telescope-fzf-native.nvim")
+-- build = 'make',
+-- cond = function()
+--     return vim.fn.executable 'make' == 1
+-- end,
+require('telescope').setup {
+    extensions = {
+        ['ui-select'] = {
+            require('telescope.themes').get_dropdown(),
+        },
+    },
+}
+-- Enable Telescope extensions if they are installed
+pcall(require('telescope').load_extension, 'fzf')
+pcall(require('telescope').load_extension, 'ui-select')
+-- Keymaps
+local builtin = require 'telescope.builtin'
+vim.keymap.set('n', '<leader>fh', builtin.help_tags,            { desc = '[F]ind [H]elp' })
+vim.keymap.set('n', '<leader>fk', builtin.keymaps,              { desc = '[F]ind [K]eymaps' })
+vim.keymap.set('n', '<leader>ff', builtin.find_files,           { desc = '[F]ind [F]iles' })
+vim.keymap.set('n', '<leader>fs', builtin.builtin,              { desc = '[F]ind builtin [S]earch' })
+vim.keymap.set('n', '<leader>fw', builtin.grep_string,          { desc = '[F]ind current [W]ord' })
+vim.keymap.set('n', '<leader>fg', builtin.live_grep,            { desc = '[F]ind by [G]rep' })
+vim.keymap.set('n', '<leader>ft', builtin.tags,                 { desc = '[F]ind  [T]ags' })
+vim.keymap.set('n', '<leader>fc', builtin.current_buffer_tags,  { desc = '[F]ind [C]urrent tags' })
+vim.keymap.set('n', '<leader>fo', builtin.oldfiles,             { desc = '[F]ind Recent Files ("." for repeat)' })
+vim.keymap.set('n', '<leader>fb', builtin.buffers,              { desc = 'Find existing buffers' })
+vim.keymap.set('n', '<leader>f:', builtin.command_history,      { desc = 'Command History' })
+vim.keymap.set('n', '<leader>/', function()
+    builtin.current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
+        winblend = 10,
+        previewer = false,
+    })
+end, { desc = '[/] Fuzzily search in current buffer' })
+vim.keymap.set('n', '<leader>f/', function()
+    builtin.live_grep {
+        grep_open_files = true,
+        prompt_title = 'Live Grep in Open Files',
+    }
+end, { desc = '[F]ind [/] in Open Files' })
+
+-- Git ========================================================================
+-- Git Hunk
+require('gitsigns').setup({
+    signs = {
+        add = { text = '+' },
+        change = { text = '~' },
+        delete = { text = '_' },
+        topdelete = { text = '‾' },
+        changedelete = { text = '~' },
+    },
+    on_attach = function(bufnr)
+        -- Navigation
+        vim.keymap.set('n', ']c', function()
+            if vim.wo.diff then
+                vim.cmd.normal({']c', bang = true})
+            else
+                require('gitsigns').nav_hunk('next')
+            end
+        end, { desc = "Next hunk or diff" })
+        vim.keymap.set('n', '[c', function()
+            if vim.wo.diff then
+                vim.cmd.normal({'[c', bang = true})
+            else
+                require('gitsigns').nav_hunk('prev')
+            end
+        end, { desc = "Previous hunk or diff" })
+        -- Actions
+        vim.keymap.set('n', '<leader>gs', require('gitsigns').stage_hunk, { desc = "[G]it [S]tage" })
+        vim.keymap.set('n', '<leader>gr', require('gitsigns').reset_hunk, { desc = "[G]it [R]eset" })
+        vim.keymap.set('v', '<leader>gs', function()
+            require('gitsigns').stage_hunk({ vim.fn.line('.'), vim.fn.line('v') })
+        end, { desc = "[G]it [S]tage" })
+        vim.keymap.set('v', '<leader>gr', function()
+            require('gitsigns').reset_hunk({ vim.fn.line('.'), vim.fn.line('v') })
+        end, { desc = "[G]it [R]eset" })
+        vim.keymap.set('n', '<leader>gS', require('gitsigns').stage_buffer, { desc = "[G]it entire buffer [S]tage" })
+        vim.keymap.set('n', '<leader>gR', require('gitsigns').reset_buffer, { desc = "[G]it entire buffer [R]eset" })
+        vim.keymap.set('n', '<leader>gp', require('gitsigns').preview_hunk, { desc = "[G]it Preview" })
+        vim.keymap.set('n', '<leader>gi', require('gitsigns').preview_hunk_inline, { desc = "[G]it [I]nline preview" })
+        vim.keymap.set('n', '<leader>gd', require('gitsigns').diffthis, { desc = "[G]it [D]iff" })
+        vim.keymap.set('n', '<leader>gq', require('gitsigns').setqflist, { desc = "[G]it [Q]uickfix" })
+        vim.keymap.set('n', '<leader>gQ', function() require('gitsigns').setqflist('all') end, { desc = "[G]it [Q]uickfix all" })
+    end
+})
+
+-- Git Manager
+require("diffview").setup({ use_icons = false, })
+require("neogit").setup({
+    kind = "replace",
+    graph_style = "unicode",
+})
+
+-- Time Tracker ===============================================================
+if not is_termux() then
+    vim.opt.runtimepath:append(plugin_path .. "Manual/aw-watcher.vim")
+end
+
