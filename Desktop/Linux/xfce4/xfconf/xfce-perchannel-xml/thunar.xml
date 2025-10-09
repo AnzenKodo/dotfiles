@@ -8,4 +8,6 @@
   <property name="last-window-height" type="int" value="480"/>
   <property name="last-separator-position" type="int" value="170"/>
   <property name="last-show-hidden" type="bool" value="true"/>
+  <property name="last-details-view-zoom-level" type="string" value="THUNAR_ZOOM_LEVEL_38_PERCENT"/>
+  <property name="last-details-view-column-widths" type="string" value="50,50,137,50,50,991,50,50,454,50,50,80,50,429"/>
 </channel>
