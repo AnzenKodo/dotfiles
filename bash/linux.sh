@@ -26,10 +26,11 @@ export JAVA_HOME="$HOME/Code/Tools/jdk-24.0.1"
 
 # Power Management =============================================================
 
-alias poweroff="ask_and_run sudo poweroff"
-alias reboot="ask_and_run sudo reboot"
+alias poweroff="xfce4-session-logout"
+alias reboot="ask_and_run xfce4-session-logout --reboot"
 alias logout="ask_and_run xfce4-session-logout --logout"
 alias lock="ask_and_run xfce4-session-logout --switch-user"
+alias suspend="ask_and_run xfce4-session-logout --suspend"
 
 # Functions
 #===============================================================================
