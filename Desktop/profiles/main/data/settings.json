@@ -1,5 +1,5 @@
 {
-    "workbench.colorTheme": "Monokai",
+    "workbench.colorTheme": "Gruvbox Dark Soft",
     "security.workspace.trust.enabled": false,
     "editor.minimap.showSlider": "always",
     "editor.minimap.renderCharacters": false,
