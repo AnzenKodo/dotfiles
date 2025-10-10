@@ -2,7 +2,5 @@ disabled: []
 enabled:
   - id: eclipse-cdt.cdt-gdb-vscode
     uuid: aef919b8-7a32-4702-beef-23d976ef3d3a
-  - id: jdinhlife.gruvbox
-    uuid: c6d564c4-ca8c-45ba-abf6-c85f2d1468d8
   - id: zokugun.cron-tasks
     uuid: b7bbbbd5-7a39-4312-87aa-ef6a41de67fb
