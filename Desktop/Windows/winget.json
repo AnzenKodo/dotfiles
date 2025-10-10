@@ -1,6 +1,6 @@
 {
 	"$schema" : "https://aka.ms/winget-packages.schema.2.0.json",
-	"CreationDate" : "2025-10-05T04:25:20.920-00:00",
+	"CreationDate" : "2025-10-11T02:44:12.764-00:00",
 	"Sources" : 
 	[
 		{
@@ -29,6 +29,14 @@
 				{
 					"PackageIdentifier" : "Oracle.JavaRuntimeEnvironment",
 					"Version" : "8.0.1510.12"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.msodbcsql.17",
+					"Version" : "17.7.2.1"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.SQLServer.2012.NativeClient",
+					"Version" : "11.4.7462.6"
 				},
 				{
 					"PackageIdentifier" : "Neovim.Neovim",
@@ -67,8 +75,16 @@
 					"Version" : "14.40.33810.0"
 				},
 				{
+					"PackageIdentifier" : "Microsoft.SQLServerManagementStudio",
+					"Version" : "18.9.1"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.VCRedist.2013.x86",
+					"Version" : "12.0.30501.0"
+				},
+				{
 					"PackageIdentifier" : "Brave.Brave",
-					"Version" : "141.1.83.109"
+					"Version" : "141.1.83.112"
 				},
 				{
 					"PackageIdentifier" : "BrechtSanders.WinLibs.POSIX.MSVCRT",

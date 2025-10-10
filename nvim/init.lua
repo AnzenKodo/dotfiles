@@ -119,6 +119,8 @@ end
 -- Keybindings
 -- ============================================================================
 
+vim.keymap.set({'n', 'v'}, 'm', '"_d', { noremap = true })
+vim.keymap.set('n', 'mm', '"_dd', { noremap = true })
 vim.keymap.set("n", '<Esc>', '<cmd>nohlsearch<CR>', { desc = "Clear Search Highlight" })
 vim.keymap.set("t", '<Esc>', '<C-\\><C-n>',    { desc = 'Exit terminal mode' })
 vim.keymap.set('n', 'L', vim.diagnostic.open_float, { desc = 'Show Diagnostic' })
@@ -142,6 +144,10 @@ vim.keymap.set("i", "<A-k>", "<esc><cmd>m .-2<cr>==gi",                         
 vim.keymap.set("v", "<A-j>", ":<C-u>execute \"'<,'>move '>+\" . v:count1<cr>gv=gv",       { desc = "Move Line Down" })
 vim.keymap.set("v", "<A-k>", ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<cr>gv=gv", { desc = "Move Line Up" })
 
+-- Paste
+vim.keymap.set('x', 'P', function() vim.cmd('normal! p') end, { silent = true })
+vim.keymap.set('x', 'p', function() vim.cmd('normal! P') end, { silent = true })
+
 -- Buffers
 vim.keymap.set("n", "[b", "<cmd>bprevious<cr>",    { desc = "Prev Buffer" })
 vim.keymap.set("n", "]b", "<cmd>bnext<cr>",        { desc = "Next Buffer" })
@@ -163,7 +169,7 @@ vim.keymap.set('i', '<A-d>', '<C-x><C-k>', { noremap = true }, { desc = 'Diction
 vim.keymap.set('i', '<A-f>', '<C-x><C-f>', { noremap = true }, { desc = 'Filename completion' })
 vim.keymap.set('i', '<A-l>', '<C-x><C-l>', { noremap = true }, { desc = 'Whole line completion' })
 vim.keymap.set('i', '<A-e>', '<C-e>',      { noremap = true }, { desc = 'Cancel completion' })
-vim.keymap.set('i', '<Tab>', 'pumvisible() ? "\\<C-n>" : "\\<Tab>"', { expr = true })
+vim.keymap.set('i', '<Tab>',   'pumvisible() ? "\\<C-n>" : "\\<Tab>"', { expr = true })
 vim.keymap.set('i', '<S-Tab>', 'pumvisible() ? "\\<C-p>" : "\\<S-Tab>"', { expr = true })
 
 -- Split
@@ -258,10 +264,6 @@ vim.keymap.set("o", "n", "'Nn'[v:searchforward]",       { expr = true, desc = "N
 vim.keymap.set("n", "N", "'nN'[v:searchforward].'zv'",  { expr = true, desc = "Prev Search Result" })
 vim.keymap.set("x", "N", "'nN'[v:searchforward]",       { expr = true, desc = "Prev Search Result" })
 vim.keymap.set("o", "N", "'nN'[v:searchforward]",       { expr = true, desc = "Prev Search Result" })
-
--- Better indenting
--- vim.keymap.set("v", "<", "<gv", { desc = "Indent left" })
--- vim.keymap.set("v", ">", ">gv", { desc = "Indent right" })
 
 -- Terminal
 -- ============================================================================
@@ -406,10 +408,20 @@ require('lualine').setup({
 require("indentmini").setup()
 
 -- Smart Auto Indent ==========================================================
-require('guess-indent').setup {}
+require('guess-indent').setup()
 
 -- Wildcard ===================================================================
 require('wilder').setup({ modes = {':', '/', '?'} })
+
+-- Multicursor ================================================================
+require("multiple-cursors").setup()
+vim.keymap.set({"n", "x"}, "<C-k>", "<Cmd>MultipleCursorsAddUp<CR>",            { desc = "Add cursor and move up" })
+vim.keymap.set({"n", "i"}, "<C-h>", "<Cmd>MultipleCursorsMouseAddDelete<CR>",   { desc = "Add or remove cursor" })
+vim.keymap.set({"n", "x"}, "<C-j>", "<Cmd>MultipleCursorsAddDown<CR>",          { desc = "Add cursor and move down" })
+vim.keymap.set({"x"},      "<C-v>", "<Cmd>MultipleCursorsAddVisualArea<CR>",    { desc = "Add cursors to the lines of the visual area" })
+vim.keymap.set({"n", "x"}, "<C-d>", "<Cmd>MultipleCursorsAddJumpNextMatch<CR>", { desc = "Add cursor and jump to next cword" })
+vim.keymap.set({"n", "x"}, "<C-a>", "<Cmd>MultipleCursorsAddMatches<CR>",       { desc = "Add cursors to all cword" })
+vim.keymap.set({"n", "x"}, "<C-l>", "<Cmd>MultipleCursorsLock<CR>",             { desc = "Lock virtual cursors" })
 
 -- Keymap Helper ==============================================================
 require('which-key').setup({  
@@ -557,14 +569,14 @@ vim.keymap.set("n", "<leader>-", "<CMD>Oil<CR>", { desc = "Open parent directory
 -- Marks ======================================================================
 local harpoon = require("harpoon")
 harpoon:setup()
-vim.keymap.set("n", "<leader>ma", function() harpoon:list():add() end,                         { desc = "[M]ark [A]dd"})
 vim.keymap.set("n", "<leader>mm", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end, { desc = "[M]ark [M]enu" })
-vim.keymap.set("n", "<leader>m1", function() harpoon:list():select(1) end,                     { desc = "[M]ark [1]"})
-vim.keymap.set("n", "<leader>m2", function() harpoon:list():select(2) end,                     { desc = "[M]ark [2]"})
-vim.keymap.set("n", "<leader>m3", function() harpoon:list():select(3) end,                     { desc = "[M]ark [3]"})
-vim.keymap.set("n", "<leader>m4", function() harpoon:list():select(4) end,                     { desc = "[M]ark [4]"})
-vim.keymap.set("n", "<leader>mp", function() harpoon:list():prev() end,                        { desc = "[M]ark [P]revious"})
-vim.keymap.set("n", "<leader>mn", function() harpoon:list():next() end,                        { desc = "[M]ark [N]ext"})
+vim.keymap.set("n", "<leader>ma", function() harpoon:list():add() end,     { desc = "[M]ark [A]dd"})
+vim.keymap.set("n", "<leader>m1", function() harpoon:list():select(1) end, { desc = "[M]ark [1]"})
+vim.keymap.set("n", "<leader>m2", function() harpoon:list():select(2) end, { desc = "[M]ark [2]"})
+vim.keymap.set("n", "<leader>m3", function() harpoon:list():select(3) end, { desc = "[M]ark [3]"})
+vim.keymap.set("n", "<leader>m4", function() harpoon:list():select(4) end, { desc = "[M]ark [4]"})
+vim.keymap.set("n", "<leader>mp", function() harpoon:list():prev() end,    { desc = "[M]ark [P]revious"})
+vim.keymap.set("n", "<leader>mn", function() harpoon:list():next() end,    { desc = "[M]ark [N]ext"})
 
 -- Fuzzy Finder ===============================================================
 -- vim.opt.runtimepath:append(plugin_path .. "/telescope-fzf-native.nvim")
@@ -584,17 +596,17 @@ pcall(require('telescope').load_extension, 'fzf')
 pcall(require('telescope').load_extension, 'ui-select')
 -- Keymaps
 local builtin = require 'telescope.builtin'
-vim.keymap.set('n', '<leader>fh', builtin.help_tags,            { desc = '[F]ind [H]elp' })
-vim.keymap.set('n', '<leader>fk', builtin.keymaps,              { desc = '[F]ind [K]eymaps' })
-vim.keymap.set('n', '<leader>ff', builtin.find_files,           { desc = '[F]ind [F]iles' })
-vim.keymap.set('n', '<leader>fs', builtin.builtin,              { desc = '[F]ind builtin [S]earch' })
-vim.keymap.set('n', '<leader>fw', builtin.grep_string,          { desc = '[F]ind current [W]ord' })
-vim.keymap.set('n', '<leader>fg', builtin.live_grep,            { desc = '[F]ind by [G]rep' })
-vim.keymap.set('n', '<leader>ft', builtin.tags,                 { desc = '[F]ind  [T]ags' })
-vim.keymap.set('n', '<leader>fc', builtin.current_buffer_tags,  { desc = '[F]ind [C]urrent tags' })
-vim.keymap.set('n', '<leader>fo', builtin.oldfiles,             { desc = '[F]ind Recent Files ("." for repeat)' })
-vim.keymap.set('n', '<leader>fb', builtin.buffers,              { desc = 'Find existing buffers' })
-vim.keymap.set('n', '<leader>f:', builtin.command_history,      { desc = 'Command History' })
+vim.keymap.set('n', '<leader>fh', builtin.help_tags,           { desc = '[F]ind [H]elp' })
+vim.keymap.set('n', '<leader>fk', builtin.keymaps,             { desc = '[F]ind [K]eymaps' })
+vim.keymap.set('n', '<leader>ff', builtin.find_files,          { desc = '[F]ind [F]iles' })
+vim.keymap.set('n', '<leader>fs', builtin.builtin,             { desc = '[F]ind builtin [S]earch' })
+vim.keymap.set('n', '<leader>fw', builtin.grep_string,         { desc = '[F]ind current [W]ord' })
+vim.keymap.set('n', '<leader>fg', builtin.live_grep,           { desc = '[F]ind by [G]rep' })
+vim.keymap.set('n', '<leader>ft', builtin.tags,                { desc = '[F]ind  [T]ags' })
+vim.keymap.set('n', '<leader>fc', builtin.current_buffer_tags, { desc = '[F]ind [C]urrent tags' })
+vim.keymap.set('n', '<leader>fo', builtin.oldfiles,            { desc = '[F]ind Recent Files ("." for repeat)' })
+vim.keymap.set('n', '<leader>fb', builtin.buffers,             { desc = 'Find existing buffers' })
+vim.keymap.set('n', '<leader>f:', builtin.command_history,     { desc = 'Command History' })
 vim.keymap.set('n', '<leader>/', function()
     builtin.current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
         winblend = 10,
@@ -635,21 +647,17 @@ require('gitsigns').setup({
             end
         end, { desc = "Previous hunk or diff" })
         -- Actions
-        vim.keymap.set('n', '<leader>gs', require('gitsigns').stage_hunk, { desc = "[G]it [S]tage" })
-        vim.keymap.set('n', '<leader>gr', require('gitsigns').reset_hunk, { desc = "[G]it [R]eset" })
-        vim.keymap.set('v', '<leader>gs', function()
-            require('gitsigns').stage_hunk({ vim.fn.line('.'), vim.fn.line('v') })
-        end, { desc = "[G]it [S]tage" })
-        vim.keymap.set('v', '<leader>gr', function()
-            require('gitsigns').reset_hunk({ vim.fn.line('.'), vim.fn.line('v') })
-        end, { desc = "[G]it [R]eset" })
-        vim.keymap.set('n', '<leader>gS', require('gitsigns').stage_buffer, { desc = "[G]it entire buffer [S]tage" })
-        vim.keymap.set('n', '<leader>gR', require('gitsigns').reset_buffer, { desc = "[G]it entire buffer [R]eset" })
-        vim.keymap.set('n', '<leader>gp', require('gitsigns').preview_hunk, { desc = "[G]it Preview" })
+        vim.keymap.set('v', '<leader>gs', function() require('gitsigns').stage_hunk({ vim.fn.line('.'), vim.fn.line('v') }) end, { desc = "[G]it [S]tage" })
+        vim.keymap.set('v', '<leader>gr', function() require('gitsigns').reset_hunk({ vim.fn.line('.'), vim.fn.line('v') }) end, { desc = "[G]it [R]eset" })
+        vim.keymap.set('n', '<leader>gQ', function() require('gitsigns').setqflist('all') end,                                   { desc = "[G]it [Q]uickfix all" })
+        vim.keymap.set('n', '<leader>gs', require('gitsigns').stage_hunk,          { desc = "[G]it [S]tage" })
+        vim.keymap.set('n', '<leader>gr', require('gitsigns').reset_hunk,          { desc = "[G]it [R]eset" })
+        vim.keymap.set('n', '<leader>gS', require('gitsigns').stage_buffer,        { desc = "[G]it entire buffer [S]tage" })
+        vim.keymap.set('n', '<leader>gR', require('gitsigns').reset_buffer,        { desc = "[G]it entire buffer [R]eset" })
+        vim.keymap.set('n', '<leader>gp', require('gitsigns').preview_hunk,        { desc = "[G]it Preview" })
         vim.keymap.set('n', '<leader>gi', require('gitsigns').preview_hunk_inline, { desc = "[G]it [I]nline preview" })
-        vim.keymap.set('n', '<leader>gd', require('gitsigns').diffthis, { desc = "[G]it [D]iff" })
-        vim.keymap.set('n', '<leader>gq', require('gitsigns').setqflist, { desc = "[G]it [Q]uickfix" })
-        vim.keymap.set('n', '<leader>gQ', function() require('gitsigns').setqflist('all') end, { desc = "[G]it [Q]uickfix all" })
+        vim.keymap.set('n', '<leader>gd', require('gitsigns').diffthis,            { desc = "[G]it [D]iff" })
+        vim.keymap.set('n', '<leader>gq', require('gitsigns').setqflist,           { desc = "[G]it [Q]uickfix" })
     end
 })
 

@@ -1,5 +1,0 @@
-{
-  "aw-watcher-vim": { "branch": "master", "commit": "4ba86d05a940574000c33f280fd7f6eccc284331" },
-  "multicursor.nvim": { "branch": "1.0", "commit": "9eedebdd395bbbc4711081e33b0606c079e054c3" },
-  "oil.nvim": { "branch": "master", "commit": "919e155fdf38e9148cdb5304faaaf53c20d703ea" }
-}
