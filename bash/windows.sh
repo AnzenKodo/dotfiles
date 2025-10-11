@@ -8,11 +8,10 @@ source ~/Dotfiles/bash/default.sh
 # Alias
 #===============================================================================
 
-alias poweroff='ask_and_run shutdown /s /t 0'
-alias reboot='ask_and_run shutdown /r /t 0'
-alias logout='ask_and_run shutdown /l'
+alias poweroff='ask_and_run cmd //c shutdown -s -f -t 0'
+alias reboot='ask_and_run cmd //c shutdown /r /f /t 0'
+alias logout='ask_and_run cmd //c shutdown /l'
 alias suspend='ask_and_run rundll32.exe powrprof.dll,SetSuspendState 0,1,0'
-alias hibernate='ask_and_run shutdown /h'
 
 # Functions
 #===============================================================================

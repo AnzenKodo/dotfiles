@@ -1,6 +1,6 @@
 {
 	"$schema" : "https://aka.ms/winget-packages.schema.2.0.json",
-	"CreationDate" : "2025-10-11T02:49:08.794-00:00",
+	"CreationDate" : "2025-10-11T14:33:18.289-00:00",
 	"Sources" : 
 	[
 		{
@@ -124,7 +124,7 @@
 				},
 				{
 					"PackageIdentifier" : "Microsoft.Teams",
-					"Version" : "25241.203.3947.4411"
+					"Version" : "25255.703.3978.7153"
 				},
 				{
 					"PackageIdentifier" : "Microsoft.AppInstaller",
