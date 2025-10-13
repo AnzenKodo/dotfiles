@@ -1,19 +1,27 @@
-local _M = {}
+---@class UndoTreeConfig
+local M = {}
 
-function _M.contains(table, item)
-  for _, v in ipairs(table) do
-    if v == item then
-      return true
-    end
+---@param T table
+---@return table T
+function M.reverse_table(T)
+  if vim.fn.has("nvim-0.11") == 1 then
+    vim.validate("T", T, "table", false)
+  else
+    vim.validate({ T = { T, "table" } })
   end
-  return false
+
+  if vim.tbl_isempty(T) then
+    return T
+  end
+
+  local len = #T
+  for i = 1, math.floor(len / 2), 1 do
+    T[i], T[len - i + 1] = T[len - i + 1], T[i]
+  end
+
+  return T
 end
 
-function _M.reverse_table(input, output)
-  -- NOTE: `output` must be a empty table
-  for i = #input, 1, -1 do
-    table.insert(output, input[i])
-  end
-end
+return M
 
-return _M
+-- vim:ts=2:sts=2:sw=2:et:ai:si:sta:

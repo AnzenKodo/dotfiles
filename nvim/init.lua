@@ -469,7 +469,7 @@ require('which-key').setup({
 require("auto-session").setup()
 
 -- Undo History ===============================================================
-vim.keymap.set('n', '<leader>u', '<cmd>lua require("undotree").toggle()<cr>', { desc = 'Undo History' })
+vim.keymap.set('n', '<leader>u', require("undotree").toggle, { desc = 'Undo History' })
 
 -- Better Quickfix ============================================================
 vim.api.nvim_create_autocmd("FileType", {

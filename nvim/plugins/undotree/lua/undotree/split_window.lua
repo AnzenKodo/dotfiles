@@ -1,47 +1,93 @@
-local split_window = {}
-local if_nil = vim.F.if_nil
+local floor = math.floor
 
 local _unique_winbuf = 0
 
-local set_option = function(winid, bufnr)
+---@param winid integer
+---@param bufnr integer
+local function set_option(winid, bufnr)
+  if vim.fn.has("nvim-0.11") == 1 then
+    vim.validate("winid", winid, "number", false, "integer")
+    vim.validate("bufnr", bufnr, "number", false, "integer")
+  else
+    vim.validate({
+      winid = { winid, "number" },
+      bufnr = { bufnr, "number" },
+    })
+  end
+
+  local opts_buf_set, opts_win_set = { buf = bufnr }, { win = winid }
+
   -- window options --
-  vim.api.nvim_win_set_option(winid, 'number', false)
-  vim.api.nvim_win_set_option(winid, 'relativenumber', false)
-  vim.api.nvim_win_set_option(winid, 'winfixwidth', true)
-  vim.api.nvim_win_set_option(winid, 'wrap', false)
-  vim.api.nvim_win_set_option(winid, 'spell', false)
-  vim.api.nvim_win_set_option(winid, 'cursorline', true)
-  vim.api.nvim_win_set_option(winid, 'signcolumn', 'no')
+  local window_opts = {
+    number = false,
+    relativenumber = false,
+    winfixwidth = true,
+    wrap = false,
+    spell = false,
+    cursorline = true,
+    signcolumn = "no",
+  }
+
+  for option, value in pairs(window_opts) do
+    vim.api.nvim_set_option_value(option, value, opts_win_set)
+  end
+
   -- buf options --
-  vim.api.nvim_buf_set_option(bufnr, 'bufhidden', 'wipe') -- NOTE: or 'delete'
-  vim.api.nvim_buf_set_option(bufnr, 'buflisted', false)
-  vim.api.nvim_buf_set_option(bufnr, 'buftype', 'nowrite')
-  vim.api.nvim_buf_set_option(bufnr, 'swapfile', false)
-  -- vim.api.nvim_buf_set_option(bufnr, 'filetype', 'undotree')
-  vim.api.nvim_buf_set_option(bufnr, 'modifiable', false)
+  local buffer_opts = {
+    bufhidden = "wipe", -- NOTE: or 'delete'
+    buflisted = false,
+    buftype = "nowrite",
+    swapfile = false,
+    -- filetype = "undotree",
+    modifiable = false,
+  }
+
+  for option, value in pairs(buffer_opts) do
+    vim.api.nvim_set_option_value(option, value, opts_buf_set)
+  end
 end
 
+---@class UndoTreeSplitWindow
+local split_window = {}
+
+---@param self UndoTreeSplitWindow
+---@param what string|integer
+---@param opts? UndoWinTree.Opts
+---@return integer winid
+---@return integer prev_winid
 function split_window:create(what, opts)
+  if vim.fn.has("nvim-0.11") == 1 then
+    vim.validate("what", what, { "string", "number" }, false, "string|integer")
+    vim.validate("opts", opts, "table", true, "UndoWinTree.Opts")
+  else
+    vim.validate({
+      what = { what, { "string", "number" } },
+      opts = { opts, { "table", "nil" } },
+    })
+  end
   opts = opts or {}
-  local size = 0
-  local c_win_command = { "silent keepalt" }
+
+  local size, c_win_command = 0, { "silent keepalt" }
+
   if opts.position == "bottom" then
     table.insert(c_win_command, "botright")
-    size = if_nil(opts.size, math.floor(vim.o.lines * 0.30))
+    size = opts.size or floor(vim.o.lines * 0.30)
   elseif opts.position == "left_bottom" then
-    size = if_nil(opts.size, math.floor(vim.o.lines * 0.35))
+    size = opts.size or floor(vim.o.lines * 0.35)
   elseif opts.position == "right" then
     table.insert(c_win_command, "botright vertical")
-    size = if_nil(opts.size, math.floor(vim.o.columns * 0.25))
+    size = opts.size or floor(vim.o.columns * 0.25)
   else -- DEFAULT: opts.postion == "left"
     table.insert(c_win_command, "topleft vertical")
-    size = if_nil(opts.size, math.floor(vim.o.columns * 0.25))
+    size = opts.size or floor(vim.o.columns * 0.25)
   end
   table.insert(c_win_command, size)
 
-  if type(what) == "number" then
+  local what_t = type(what)
+
+  if what_t == "number" then
     table.insert(c_win_command, "split")
-  elseif type(what) == "string" then
+  elseif what_t == "string" then
     if what ~= "" then
       table.insert(c_win_command, "new " .. what)
     else
@@ -53,7 +99,8 @@ function split_window:create(what, opts)
   local prev_winid = vim.fn.win_getid()
   vim.cmd(table.concat(c_win_command, " "))
   local winid = vim.fn.win_getid()
-  if type(what) == "number" then
+
+  if what_t == "number" then
     vim.api.nvim_win_set_buf(winid, what)
   end
 
@@ -66,3 +113,5 @@ function split_window:create(what, opts)
 end
 
 return split_window
+
+-- vim:ts=2:sts=2:sw=2:et:ai:si:sta:
