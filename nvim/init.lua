@@ -153,13 +153,7 @@ vim.keymap.set("n", "[b", "<cmd>bprevious<cr>",    { desc = "Prev Buffer" })
 vim.keymap.set("n", "]b", "<cmd>bnext<cr>",        { desc = "Next Buffer" })
 vim.keymap.set("n", "<leader>bb", "<cmd>e #<cr>",  { desc = "Switch to Other Buffer" })
 vim.keymap.set('n', '<leader>bd', ':bn | bd#<CR>', { desc = '[B]uffer [D]elete' })
-vim.keymap.set('n', '<leader>ba', function()
-    for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
-        if vim.api.nvim_buf_is_loaded(bufnr) and vim.api.nvim_buf_get_option(bufnr, 'buflisted') then
-          vim.api.nvim_buf_delete(bufnr, { force = true })
-        end
-    end
-end, { desc = '[B]uffer delete [A]ll', })
+vim.keymap.set('n', '<leader>ba', '<cmd>%bdelete|edit #|bdelete #<cr>', { desc = '[B]uffer delete [A]ll', })
 
 -- Autocomplete
 vim.keymap.set('i', '<A-o>', '<C-x><C-o>', { noremap = true }, { desc = 'Omni-completion (context-aware)' })
