@@ -6,10 +6,10 @@ My programs config files.
 
 ## Screenshots
 
-![Desktop Homescreen Screenshots](./Screenshots/Desktop-Homescreen.png)
+![Desktop Homescreen Screenshots](./screenshots/Desktop-Homescreen.png)
 
 ### Phone
 
-![Phone Homescreen Screenshot](./Screenshots/Phone-Homescreen.jpeg)
-![Phone Lockscreen Screenshot](./Screenshots/Phone-Lockscreen.jpeg)
+![Phone Homescreen Screenshot](./screenshots/Phone-Homescreen.jpeg)
+![Phone Lockscreen Screenshot](./screenshots/Phone-Lockscreen.jpeg)
 

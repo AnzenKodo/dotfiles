@@ -87,7 +87,7 @@ if vim.g.neovide then
     vim.keymap.set('i', '<C-S-v>', '<ESC>l"+Pli')
     vim.keymap.set('c', '<C-S-v>', '<C-R>+')
 
-    local neovide_fullscreen = true
+    local neovide_fullscreen = true 
     vim.keymap.set({'n', 'i', 't', 'x'}, '<F11>', function()
         neovide_fullscreen = not neovide_fullscreen
         vim.g.neovide_fullscreen = neovide_fullscreen
@@ -196,25 +196,27 @@ vim.keymap.set('n', '<leader>w/', function()
     end
 end, { desc = '[W]indow Toggle' })
 vim.keymap.set('n', '<leader>wd', function()
-    local cur_win = vim.api.nvim_get_current_win()          -- active window
-    local cur_buf = vim.api.nvim_get_current_buf()          -- active buffer
-    local wins = vim.api.nvim_tabpage_list_wins(0)          -- all wins in tab
-    local cur_pos = vim.api.nvim_win_get_cursor(cur_win)
-    -- Check if the buffer is already open in another window
-    local target = nil
-    for _, w in ipairs(wins) do
-        if w ~= cur_win and vim.api.nvim_win_get_buf(w) == cur_buf then
-            target = w
+    local current_win = vim.api.nvim_get_current_win()
+    local current_buf = vim.api.nvim_get_current_buf()
+    local current_line = vim.api.nvim_win_get_cursor(0)
+    local wins = vim.api.nvim_list_wins()
+    local target_win = nil
+    for _, win in ipairs(wins) do
+        if win ~= current_win then
+            target_win = win
             break
         end
     end
-    -- If not found, split to create a new window
-    if not target then
+    if target_win then
+        vim.api.nvim_set_current_win(target_win)
+    else
         vim.cmd('vsplit')
-        target = vim.api.nvim_get_current_win()
+        vim.api.nvim_set_current_buf(current_buf)
     end
-    vim.api.nvim_set_current_win(target)
-    vim.api.nvim_win_set_cursor(target, cur_pos)
+    if vim.api.nvim_win_get_buf(target_win) ~= current_buf then
+        vim.api.nvim_set_current_buf(current_buf)
+    end
+    vim.api.nvim_win_set_cursor(0, current_line)
 end, {desc = '[W]indow [D]uplicate' })
 vim.keymap.set({'n', 'v'}, '<leader>wf', function()
     local original_win = vim.api.nvim_get_current_win()
@@ -289,14 +291,24 @@ else
     vim.keymap.set({"i", "n"}, "<C-`>", open_split_terminal, { desc = "Open Split Termainl" })
 end
 
--- Commands
+-- Config Reload 
 -- ============================================================================
 
-vim.api.nvim_create_user_command("Reload", function()
-    vim.cmd("wall")
-    dofile(vim.env.MYVIMRC)
+local function config_reload()
+    vim.cmd[[ source $MYVIMRC ]]
     vim.notify("Config reloaded!", vim.log.levels.INFO)
-end, {})
+end
+
+vim.api.nvim_create_user_command("Reload", config_reload, {})
+
+local user_config_group = vim.api.nvim_create_augroup("user_config", { clear = true })
+-- Clear existing autocommands to prevent duplicates
+vim.api.nvim_clear_autocmds({ group = user_config_group, event = "BufWritePost" })
+vim.api.nvim_create_autocmd("BufWritePost", {
+    group = user_config_group,
+    pattern = "nvim/init.lua",
+    callback = config_reload,
+})
 
 -- Autocommands
 -- ============================================================================
@@ -429,7 +441,7 @@ require("multiple-cursors").setup()
 vim.keymap.set({"n", "x"}, "<C-k>", "<Cmd>MultipleCursorsAddUp<CR>",            { desc = "Add cursor and move up" })
 vim.keymap.set({"n", "i"}, "<C-h>", "<Cmd>MultipleCursorsMouseAddDelete<CR>",   { desc = "Add or remove cursor" })
 vim.keymap.set({"n", "x"}, "<C-j>", "<Cmd>MultipleCursorsAddDown<CR>",          { desc = "Add cursor and move down" })
-vim.keymap.set({"x"},      "<C-v>", "<Cmd>MultipleCursorsAddVisualArea<CR>",    { desc = "Add cursors to the lines of the visual area" })
+vim.keymap.set({"x"},      "<C-x>", "<Cmd>MultipleCursorsAddVisualArea<CR>",    { desc = "Add cursors to the lines of the visual area" })
 vim.keymap.set({"n", "x"}, "<C-l>", "<Cmd>MultipleCursorsLock<CR>",             { desc = "Lock virtual cursors" })
 
 -- Keymap Helper ==============================================================
