@@ -86,6 +86,13 @@ if vim.g.neovide then
     vim.keymap.set('v', '<C-S-v>', '"+P')
     vim.keymap.set('i', '<C-S-v>', '<ESC>l"+Pli')
     vim.keymap.set('c', '<C-S-v>', '<C-R>+')
+
+    local neovide_fullscreen = true
+    vim.keymap.set({'n', 'i', 't', 'x'}, '<F11>', function()
+        neovide_fullscreen = not neovide_fullscreen
+        vim.g.neovide_fullscreen = neovide_fullscreen
+        vim.notify("Full Screen")
+    end, { desc = "Full Screen" })
 end
 
 -- Functions for Keymaps
@@ -119,8 +126,6 @@ end
 -- Keybindings
 -- ============================================================================
 
-vim.keymap.set({'n', 'v'}, 'm', '"_d', { noremap = true })
-vim.keymap.set('n', 'mm', '"_dd', { noremap = true })
 vim.keymap.set("n", '<Esc>', '<cmd>nohlsearch<CR>', { desc = "Clear Search Highlight" })
 vim.keymap.set("t", '<Esc>', '<C-\\><C-n>',    { desc = 'Exit terminal mode' })
 vim.keymap.set('n', 'L', vim.diagnostic.open_float, { desc = 'Show Diagnostic' })
@@ -144,16 +149,13 @@ vim.keymap.set("i", "<A-k>", "<esc><cmd>m .-2<cr>==gi",                         
 vim.keymap.set("v", "<A-j>", ":<C-u>execute \"'<,'>move '>+\" . v:count1<cr>gv=gv",       { desc = "Move Line Down" })
 vim.keymap.set("v", "<A-k>", ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<cr>gv=gv", { desc = "Move Line Up" })
 
+-- Delete
+vim.keymap.set({'n', 'v'}, 'm', '"_d',   { desc = "Delete with yank." })
+vim.keymap.set('n',        'mm', '"_dd', { desc = "Delete with yank." })
+
 -- Paste
 vim.keymap.set('x', 'P', function() vim.cmd('normal! p') end, { silent = true })
 vim.keymap.set('x', 'p', function() vim.cmd('normal! P') end, { silent = true })
-
--- Buffers
-vim.keymap.set("n", "[b", "<cmd>bprevious<cr>",    { desc = "Prev Buffer" })
-vim.keymap.set("n", "]b", "<cmd>bnext<cr>",        { desc = "Next Buffer" })
-vim.keymap.set("n", "<leader>bb", "<cmd>e #<cr>",  { desc = "Switch to Other Buffer" })
-vim.keymap.set('n', '<leader>bd', ':bn | bd#<CR>', { desc = '[B]uffer [D]elete' })
-vim.keymap.set('n', '<leader>ba', '<cmd>%bdelete|edit #|bdelete #<cr>', { desc = '[B]uffer delete [A]ll', })
 
 -- Autocomplete
 vim.keymap.set('i', '<A-o>', '<C-x><C-o>', { noremap = true }, { desc = 'Omni-completion (context-aware)' })
@@ -179,6 +181,8 @@ vim.keymap.set('n', '<leader>wx', '<C-w>x', { desc = '[W]indow [X]wap sides' })
 vim.keymap.set('n', '<leader>ws', '<C-w>w', { desc = '[W]indow [S]witch' })
 vim.keymap.set('n', '<leader>wn', '<C-w>n', { desc = '[W]indow [N]ew' })
 vim.keymap.set('n', '<leader>w=', '<C-w>=', { desc = '[W]indow [=]Equal' })
+vim.keymap.set('n', '<leader>ww', "<cmd>e #<cr>", { desc = 'Switch to previous [W]indow buffer' })
+
 local toggle_state = false
 vim.keymap.set('n', '<leader>w/', function()
     toggle_state = not toggle_state
@@ -192,24 +196,25 @@ vim.keymap.set('n', '<leader>w/', function()
     end
 end, { desc = '[W]indow Toggle' })
 vim.keymap.set('n', '<leader>wd', function()
-    local cur_win  = vim.api.nvim_get_current_win()          -- active window
-    local cur_buf  = vim.api.nvim_get_current_buf()          -- active buffer
-    local wins     = vim.api.nvim_tabpage_list_wins(0)       -- all wins in tab
-    -- pick any window that isn’t the current one
-    local target
+    local cur_win = vim.api.nvim_get_current_win()          -- active window
+    local cur_buf = vim.api.nvim_get_current_buf()          -- active buffer
+    local wins = vim.api.nvim_tabpage_list_wins(0)          -- all wins in tab
+    local cur_pos = vim.api.nvim_win_get_cursor(cur_win)
+    -- Check if the buffer is already open in another window
+    local target = nil
     for _, w in ipairs(wins) do
-        if w ~= cur_win then
+        if w ~= cur_win and vim.api.nvim_win_get_buf(w) == cur_buf then
             target = w
             break
         end
     end
-    -- if there was no other window, just split once
+    -- If not found, split to create a new window
     if not target then
         vim.cmd('vsplit')
         target = vim.api.nvim_get_current_win()
     end
-    vim.api.nvim_win_set_buf(target, cur_buf) -- put the buffer in the target window
     vim.api.nvim_set_current_win(target)
+    vim.api.nvim_win_set_cursor(target, cur_pos)
 end, {desc = '[W]indow [D]uplicate' })
 vim.keymap.set({'n', 'v'}, '<leader>wf', function()
     local original_win = vim.api.nvim_get_current_win()
@@ -259,6 +264,14 @@ vim.keymap.set("n", "N", "'nN'[v:searchforward].'zv'",  { expr = true, desc = "P
 vim.keymap.set("x", "N", "'nN'[v:searchforward]",       { expr = true, desc = "Prev Search Result" })
 vim.keymap.set("o", "N", "'nN'[v:searchforward]",       { expr = true, desc = "Prev Search Result" })
 
+-- Buffers 
+-- ============================================================================
+
+vim.keymap.set("n", "[b", "<cmd>bprevious<cr>",    { desc = "Prev Buffer" })
+vim.keymap.set("n", "]b", "<cmd>bnext<cr>",        { desc = "Next Buffer" })
+vim.api.nvim_create_user_command("Bda", function() vim.cmd("%bdelete|edit #|bdelete #") end, {})
+vim.api.nvim_create_user_command("Bd",  function() vim.cmd("bn | bd#") end, {})
+
 -- Terminal
 -- ============================================================================
 
@@ -280,6 +293,7 @@ end
 -- ============================================================================
 
 vim.api.nvim_create_user_command("Reload", function()
+    vim.cmd("wall")
     dofile(vim.env.MYVIMRC)
     vim.notify("Config reloaded!", vim.log.levels.INFO)
 end, {})
@@ -407,14 +421,15 @@ require('guess-indent').setup()
 -- Wildcard ===================================================================
 require('wilder').setup({ modes = {':', '/', '?'} })
 
+-- Wildcard ===================================================================
+require('select-undo').setup()
+
 -- Multicursor ================================================================
 require("multiple-cursors").setup()
 vim.keymap.set({"n", "x"}, "<C-k>", "<Cmd>MultipleCursorsAddUp<CR>",            { desc = "Add cursor and move up" })
 vim.keymap.set({"n", "i"}, "<C-h>", "<Cmd>MultipleCursorsMouseAddDelete<CR>",   { desc = "Add or remove cursor" })
 vim.keymap.set({"n", "x"}, "<C-j>", "<Cmd>MultipleCursorsAddDown<CR>",          { desc = "Add cursor and move down" })
 vim.keymap.set({"x"},      "<C-v>", "<Cmd>MultipleCursorsAddVisualArea<CR>",    { desc = "Add cursors to the lines of the visual area" })
-vim.keymap.set({"n", "x"}, "<C-d>", "<Cmd>MultipleCursorsAddJumpNextMatch<CR>", { desc = "Add cursor and jump to next cword" })
-vim.keymap.set({"n", "x"}, "<C-a>", "<Cmd>MultipleCursorsAddMatches<CR>",       { desc = "Add cursors to all cword" })
 vim.keymap.set({"n", "x"}, "<C-l>", "<Cmd>MultipleCursorsLock<CR>",             { desc = "Lock virtual cursors" })
 
 -- Keymap Helper ==============================================================
@@ -456,7 +471,6 @@ require('which-key').setup({
     spec = {
         { '<leader>d', group = '[D]iagnostic' },
         { '<leader>f', group = '[F]ind' },
-        { '<leader>b', group = '[B]uffer' },
         { '<leader>t', group = '[T]oggle' },
         { '<leader>w', group = '[W]indow' },
         { '<leader>m', group = '[M]ark' },
@@ -469,7 +483,7 @@ require('which-key').setup({
 require("auto-session").setup()
 
 -- Undo History ===============================================================
-vim.keymap.set('n', '<leader>u', require("undotree").toggle, { desc = 'Undo History' })
+vim.api.nvim_create_user_command("UndoTree", require("undotree").toggle, {})
 
 -- Better Quickfix ============================================================
 vim.api.nvim_create_autocmd("FileType", {
@@ -590,17 +604,14 @@ pcall(require('telescope').load_extension, 'fzf')
 pcall(require('telescope').load_extension, 'ui-select')
 -- Keymaps
 local builtin = require 'telescope.builtin'
-vim.keymap.set('n', '<leader>fh', builtin.help_tags,           { desc = '[F]ind [H]elp' })
 vim.keymap.set('n', '<leader>fk', builtin.keymaps,             { desc = '[F]ind [K]eymaps' })
 vim.keymap.set('n', '<leader>ff', builtin.find_files,          { desc = '[F]ind [F]iles' })
-vim.keymap.set('n', '<leader>fs', builtin.builtin,             { desc = '[F]ind builtin [S]earch' })
 vim.keymap.set('n', '<leader>fw', builtin.grep_string,         { desc = '[F]ind current [W]ord' })
 vim.keymap.set('n', '<leader>fg', builtin.live_grep,           { desc = '[F]ind by [G]rep' })
 vim.keymap.set('n', '<leader>ft', builtin.tags,                { desc = '[F]ind  [T]ags' })
 vim.keymap.set('n', '<leader>fc', builtin.current_buffer_tags, { desc = '[F]ind [C]urrent tags' })
 vim.keymap.set('n', '<leader>fo', builtin.oldfiles,            { desc = '[F]ind Recent Files ("." for repeat)' })
 vim.keymap.set('n', '<leader>fb', builtin.buffers,             { desc = 'Find existing buffers' })
-vim.keymap.set('n', '<leader>f:', builtin.command_history,     { desc = 'Command History' })
 vim.keymap.set('n', '<leader>/', function()
     builtin.current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
         winblend = 10,
