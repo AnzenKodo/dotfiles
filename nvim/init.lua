@@ -339,6 +339,37 @@ vim.api.nvim_create_autocmd("BufWritePost", {
     callback = config_reload,
 })
 
+vim.api.nvim_create_autocmd({"CursorMoved", "CursorMovedI"}, {
+    callback = function()
+        min_length_cursor_len = 3
+        vim.api.nvim_set_hl(0, "CursorWord", { underline = true })
+        local column = vim.api.nvim_win_get_cursor(0)[2]
+        local line = vim.api.nvim_get_current_line()
+        local cursorword = vim.fn.matchstr(line:sub(1, column + 1), [[\k*$]])
+        .. vim.fn.matchstr(line:sub(column + 1), [[^\k*]]):sub(2)
+
+        if cursorword == vim.w.cursorword then
+            return
+        end
+        vim.w.cursorword = cursorword
+        if 
+            vim.w.cursorword_id then
+            vim.call("matchdelete", vim.w.cursorword_id)
+            vim.w.cursorword_id = nil
+        end
+        if
+            cursorword == ""
+            or #cursorword > 100
+            or #cursorword < min_length_cursor_len
+            or string.find(cursorword, "[\192-\255]+") ~= nil
+        then
+            return
+        end
+        local pattern = [[\<]] .. cursorword .. [[\>]]
+        vim.w.cursorword_id = vim.fn.matchadd("CursorWord", pattern, -1)
+    end
+})
+
 -- Tags
 -- ============================================================================
 
@@ -689,4 +720,3 @@ require("neogit").setup({
 if not is_termux() then
     vim.opt.runtimepath:append(plugin_path .. "Manual/aw-watcher.vim")
 end
-
