@@ -42,7 +42,7 @@ function backup {
     push "Backup from Windows Desktop"
     cd -
 
-    cp $HOME/AppData/Local/Syncthing $HOME/Drive/Dotfiles/Desktop/syncthing
+    rclone --verbose sync $HOME/AppData/Local/Syncthing/ $HOME/Drive/Dotfiles/Desktop/syncthing/
     syncthing
     # rclone \
     #     bisync ~/Drive Personal: \

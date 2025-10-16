@@ -54,7 +54,7 @@ backup()
     push "Backup from Linux Desktop"
     cd -
 
-    cp $XDG_STATE_HOME/syncthing ~/Drive/Dotfiles/Desktop/
+    yes | cp $XDG_STATE_HOME/syncthing ~/Drive/Dotfiles/Desktop/
     syncthing
     # rclone \
     #     bisync ~/Drive Personal: \
