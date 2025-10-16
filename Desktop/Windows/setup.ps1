@@ -1,5 +1,4 @@
 New-Item -ItemType SymbolicLink -Path "$HOME\AppData\Local\nvim" -Target "$HOME\Dotfiles\nvim"
-New-Item -ItemType SymbolicLink -Path "$HOME\AppData\Local\Syncthing" -Target "$HOME\Drive\Dotfiles\Desktop\syncthing"
 New-Item -ItemType SymbolicLink -Path "$HOME\.gitconfig" -Target "C:\Users\aman.v\Dotfiles\git\config"
 
 New-Item -ItemType SymbolicLink -Path "$HOME\Documents\WindowsPowerShell\" -Target "$HOME\Dotfiles\Desktop\Windows\WindowsPowerShell"
