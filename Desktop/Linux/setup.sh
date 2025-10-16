@@ -35,9 +35,8 @@ ln -sfv ~/Applications/Mime/icons $XDG_DATA_HOME/icons
 mkdir $XDG_CONFIG_HOME/wezterm
 ln -sfv ~/Dotfiles/Desktop/wezterm.lua     $XDG_CONFIG_HOME/wezterm/wezterm.lua
 ln -sfv ~/Dotfiles/Desktop/activitywatch   $XDG_CONFIG_HOME
-ln -sfv ~/Dotfiles/Desktop/Linux/xfce4     $XDG_CONFIG_HOME
-ln -srf ~/Dotfiles/Desktop/focus-editor    $XDG_CONFIG_HOME
 ln -sfv ~/Drive/Dotfiles/Desktop/keepassxc $XDG_CONFIG_HOME
+ln -sfv ~/Dotfiles/Desktop/Linux/xfce4     $XDG_CONFIG_HOME
 ln -sfv ~/Applications/Mime/mimeapps.list  $XDG_CONFIG_HOME
 
 sudo rm /usr/local/bin
@@ -45,6 +44,8 @@ sudo ln -srf $USR_APPLICATIONS_DIR/bin /usr/local/bin
 
 # Archive
 #===============================================================================
+
+# ln -srf ~/Dotfiles/Desktop/focus-editor    $XDG_CONFIG_HOME
 
 # ln -srf ~/Dotfiles/Desktop/ghostty $XDG_CONFIG_HOME
 

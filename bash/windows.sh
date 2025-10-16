@@ -42,11 +42,13 @@ function backup {
     push "Backup from Windows Desktop"
     cd -
 
-    rclone \
-        bisync ~/Drive Personal: \
-        --exclude buffers/** \
-        --check-first --metadata --checksum --download-hash --verbose \
-        --compare size,modtime,checksum
+    cp $HOME/AppData/Local/Syncthing $HOME/Drive/Dotfiles/Desktop/syncthing
+    syncthing
+    # rclone \
+    #     bisync ~/Drive Personal: \
+    #     --exclude buffers/** \
+    #     --check-first --metadata --checksum --download-hash --verbose \
+    #     --compare size,modtime,checksum
         # --resync
 }
 

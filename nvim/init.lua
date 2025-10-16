@@ -266,6 +266,35 @@ vim.keymap.set("n", "N", "'nN'[v:searchforward].'zv'",  { expr = true, desc = "P
 vim.keymap.set("x", "N", "'nN'[v:searchforward]",       { expr = true, desc = "Prev Search Result" })
 vim.keymap.set("o", "N", "'nN'[v:searchforward]",       { expr = true, desc = "Prev Search Result" })
 
+-- Autocommands
+-- ============================================================================
+
+-- Remove Trim Trailing Whitespace
+-- vim.api.nvim_create_autocmd({ "BufWritePre" }, {
+--   pattern = { "*" },
+--   command = [[%s/\s\+$//e]],
+-- })
+
+-- Highlight when yanking (copying) text
+vim.api.nvim_create_autocmd('TextYankPost', {
+    desc = 'Highlight when yanking (copying) text',
+    group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
+    callback = function()
+        vim.hl.on_yank()
+    end,
+})
+
+-- Save the last cursor position
+vim.api.nvim_create_autocmd("BufReadPost", {
+  callback = function()
+    local mark = vim.api.nvim_buf_get_mark(0, '"')
+    local lcount = vim.api.nvim_buf_line_count(0)
+    if mark[1] > 0 and mark[1] <= lcount then
+      vim.api.nvim_win_set_cursor(0, mark)
+    end
+  end,
+})
+
 -- Buffers 
 -- ============================================================================
 
@@ -306,37 +335,8 @@ local user_config_group = vim.api.nvim_create_augroup("user_config", { clear = t
 vim.api.nvim_clear_autocmds({ group = user_config_group, event = "BufWritePost" })
 vim.api.nvim_create_autocmd("BufWritePost", {
     group = user_config_group,
-    pattern = "nvim/init.lua",
+    pattern = "init.lua",
     callback = config_reload,
-})
-
--- Autocommands
--- ============================================================================
-
--- Remove Trim Trailing Whitespace
--- vim.api.nvim_create_autocmd({ "BufWritePre" }, {
---   pattern = { "*" },
---   command = [[%s/\s\+$//e]],
--- })
-
--- Highlight when yanking (copying) text
-vim.api.nvim_create_autocmd('TextYankPost', {
-    desc = 'Highlight when yanking (copying) text',
-    group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
-    callback = function()
-        vim.hl.on_yank()
-    end,
-})
-
--- Save the last cursor position
-vim.api.nvim_create_autocmd("BufReadPost", {
-  callback = function()
-    local mark = vim.api.nvim_buf_get_mark(0, '"')
-    local lcount = vim.api.nvim_buf_line_count(0)
-    if mark[1] > 0 and mark[1] <= lcount then
-      vim.api.nvim_win_set_cursor(0, mark)
-    end
-  end,
 })
 
 -- Tags

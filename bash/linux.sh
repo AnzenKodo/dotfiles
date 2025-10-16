@@ -54,13 +54,15 @@ backup()
     push "Backup from Linux Desktop"
     cd -
 
-    rclone \
-        bisync ~/Drive Personal: \
-        --exclude buffers/** \
-        --check-first --metadata --checksum --download-hash --verbose \
-        --compare size,modtime,checksum
-        # --resync
-    fd conflict ~/Drive
+    cp $XDG_STATE_HOME/syncthing ~/Drive/Dotfiles/Desktop/
+    syncthing
+    # rclone \
+    #     bisync ~/Drive Personal: \
+    #     --exclude buffers/** \
+    #     --check-first --metadata --checksum --download-hash --verbose \
+    #     --compare size,modtime,checksum
+    #     # --resync
+    # fd conflict ~/Drive
 
     # cd ~/Code/anzenkodo.github.io
     # echo $RANDOM > ~/Code/anzenkodo.github.io/site_checksum.txt
