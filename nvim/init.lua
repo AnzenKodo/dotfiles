@@ -62,7 +62,7 @@ vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold", "CursorHo
     end,
 })
 
--- Clipboard 
+-- Clipboard
 -- ============================================================================
 
 local function is_termux()
@@ -87,7 +87,7 @@ if vim.g.neovide then
     vim.keymap.set('i', '<C-S-v>', '<ESC>l"+Pli')
     vim.keymap.set('c', '<C-S-v>', '<C-R>+')
 
-    local neovide_fullscreen = true 
+    local neovide_fullscreen = true
     vim.keymap.set({'n', 'i', 't', 'x'}, '<F11>', function()
         neovide_fullscreen = not neovide_fullscreen
         vim.g.neovide_fullscreen = neovide_fullscreen
@@ -270,10 +270,15 @@ vim.keymap.set("o", "N", "'nN'[v:searchforward]",       { expr = true, desc = "P
 -- ============================================================================
 
 -- Remove Trim Trailing Whitespace
--- vim.api.nvim_create_autocmd({ "BufWritePre" }, {
---   pattern = { "*" },
---   command = [[%s/\s\+$//e]],
--- })
+vim.api.nvim_create_autocmd({ "BufWritePre" }, {
+  pattern = { "*" },
+  callback = function()
+      local path = vim.api.nvim_buf_get_name(0)
+      if not path:find("neo", 1, true) then
+          vim.cmd([[%s/\s\+$//e]])
+      end
+  end,
+})
 
 -- Highlight when yanking (copying) text
 vim.api.nvim_create_autocmd('TextYankPost', {
@@ -295,7 +300,7 @@ vim.api.nvim_create_autocmd("BufReadPost", {
   end,
 })
 
--- Buffers 
+-- Buffers
 -- ============================================================================
 
 vim.keymap.set("n", "[b", "<cmd>bprevious<cr>",    { desc = "Prev Buffer" })
@@ -320,7 +325,7 @@ else
     vim.keymap.set({"i", "n"}, "<C-`>", open_split_terminal, { desc = "Open Split Termainl" })
 end
 
--- Config Reload 
+-- Config Reload
 -- ============================================================================
 
 local function config_reload()
@@ -342,7 +347,7 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 vim.api.nvim_create_autocmd({"CursorMoved", "CursorMovedI"}, {
     callback = function()
         min_length_cursor_len = 3
-        vim.api.nvim_set_hl(0, "CursorWord", { underline = true })
+        vim.api.nvim_set_hl(0, "CursorWord", { bg = "#2C242A" })
         local column = vim.api.nvim_win_get_cursor(0)[2]
         local line = vim.api.nvim_get_current_line()
         local cursorword = vim.fn.matchstr(line:sub(1, column + 1), [[\k*$]])
@@ -352,8 +357,7 @@ vim.api.nvim_create_autocmd({"CursorMoved", "CursorMovedI"}, {
             return
         end
         vim.w.cursorword = cursorword
-        if 
-            vim.w.cursorword_id then
+        if vim.w.cursorword_id then
             vim.call("matchdelete", vim.w.cursorword_id)
             vim.w.cursorword_id = nil
         end
@@ -431,6 +435,7 @@ local plugin_path = vim.fn.stdpath("config") .. "/plugins"
 vim.opt.runtimepath:append(plugin_path .. "/*")
 
 -- Theme ======================================================================
+
 -- Colorscheme
 vim.g.gruvbox_material_background = 'material'
 vim.g.gruvbox_material_background = "soft"
@@ -441,7 +446,7 @@ vim.cmd.colorscheme('gruvbox-material')
 vim.cmd.highlight('IndentLineCurrent guifg=#928374')
 vim.cmd.highlight('IndentLine guifg=#504945')
 
--- Status Line 
+-- Status Line
 require('lualine').setup({
     sections = {
         lualine_c = {
@@ -476,7 +481,7 @@ vim.keymap.set({"x"},      "<C-x>", "<Cmd>MultipleCursorsAddVisualArea<CR>",    
 vim.keymap.set({"n", "x"}, "<C-l>", "<Cmd>MultipleCursorsLock<CR>",             { desc = "Lock virtual cursors" })
 
 -- Keymap Helper ==============================================================
-require('which-key').setup({  
+require('which-key').setup({
     delay = 0,
     icons = {
         keys = vim.g.have_nerd_font and {} or {
@@ -636,6 +641,13 @@ vim.keymap.set("n", "<leader>mn", function() harpoon:list():next() end,    { des
 --     return vim.fn.executable 'make' == 1
 -- end,
 require('telescope').setup {
+    defaults = {
+        mappings = {
+            i = {
+                ["<C-S-v>"] = require('telescope.actions').paste_from_register,
+            },
+        },
+    },
     extensions = {
         ['ui-select'] = {
             require('telescope.themes').get_dropdown(),

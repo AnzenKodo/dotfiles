@@ -6,7 +6,7 @@ Set-PSReadlineKeyHandler -Key DownArrow -Function HistorySearchForward
 
 # cd Last Dir Path ============================================================
 
-$LAST_DIR_PATH = "$HOME/AppData/last-dir.txt"
+$LAST_DIR_PATH = "$HOME/AppData/last-dir-ps.txt"
 if (-not (Test-Path $LAST_DIR_PATH)) 
 {
     New-Item -ItemType File -Path $pathFile -Force

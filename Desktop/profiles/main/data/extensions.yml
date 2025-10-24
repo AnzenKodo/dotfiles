@@ -1,6 +1,16 @@
-disabled: []
-enabled:
+disabled:
   - id: eclipse-cdt.cdt-gdb-vscode
     uuid: aef919b8-7a32-4702-beef-23d976ef3d3a
+  - id: llvm-vs-code-extensions.vscode-clangd
+    uuid: 103154cb-b81d-4e1b-8281-c5f4fa563d37
+enabled:
+  - id: eclipse-cdt.memory-inspector
+    uuid: 681ef5db-1230-4f71-8675-8df7a812b966
+  - id: jdinhlife.gruvbox
+    uuid: c6d564c4-ca8c-45ba-abf6-c85f2d1468d8
+  - id: ms-vscode.cpptools
+    uuid: 690b692e-e8a9-493f-b802-8089d50ac1b2
+  - id: ms-vscode.hexeditor
+    uuid: cc7d2112-5178-4472-8e0e-25dced95e7f0
   - id: zokugun.cron-tasks
     uuid: b7bbbbd5-7a39-4312-87aa-ef6a41de67fb

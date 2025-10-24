@@ -1,6 +1,6 @@
 {
 	"$schema" : "https://aka.ms/winget-packages.schema.2.0.json",
-	"CreationDate" : "2025-10-18T01:28:37.528-00:00",
+	"CreationDate" : "2025-10-25T01:41:21.039-00:00",
 	"Sources" : 
 	[
 		{
@@ -56,7 +56,7 @@
 				},
 				{
 					"PackageIdentifier" : "Microsoft.Edge",
-					"Version" : "141.0.3537.71"
+					"Version" : "141.0.3537.99"
 				},
 				{
 					"PackageIdentifier" : "OBSProject.OBSStudio",
@@ -84,7 +84,7 @@
 				},
 				{
 					"PackageIdentifier" : "Brave.Brave",
-					"Version" : "141.1.83.118"
+					"Version" : "141.1.83.120"
 				},
 				{
 					"PackageIdentifier" : "BrechtSanders.WinLibs.POSIX.MSVCRT",
@@ -113,6 +113,10 @@
 				{
 					"PackageIdentifier" : "VSCodium.VSCodium",
 					"Version" : "1.104.26450"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.VisualStudioCode",
+					"Version" : "1.105.1"
 				},
 				{
 					"PackageIdentifier" : "ActivityWatch.ActivityWatch",
@@ -156,7 +160,7 @@
 			[
 				{
 					"PackageIdentifier" : "9PNKDR50694P",
-					"Version" : "25.2.2.0"
+					"Version" : "25.2.3.0"
 				}
 			],
 			"SourceDetails" : 
