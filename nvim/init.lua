@@ -644,7 +644,7 @@ require('telescope').setup {
     defaults = {
         mappings = {
             i = {
-                ["<C-S-v>"] = require('telescope.actions').paste_from_register,
+                ["<C-S-v>"] = { "<C-r>+", type = "command" },
             },
         },
     },
