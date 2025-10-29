@@ -149,10 +149,6 @@ vim.keymap.set("i", "<A-k>", "<esc><cmd>m .-2<cr>==gi",                         
 vim.keymap.set("v", "<A-j>", ":<C-u>execute \"'<,'>move '>+\" . v:count1<cr>gv=gv",       { desc = "Move Line Down" })
 vim.keymap.set("v", "<A-k>", ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<cr>gv=gv", { desc = "Move Line Up" })
 
--- Delete
-vim.keymap.set({'n', 'v'}, 'm', '"_d',   { desc = "Delete with yank." })
-vim.keymap.set('n',        'mm', '"_dd', { desc = "Delete with yank." })
-
 -- Paste
 vim.keymap.set('x', 'P', function() vim.cmd('normal! p') end, { silent = true })
 vim.keymap.set('x', 'p', function() vim.cmd('normal! P') end, { silent = true })
@@ -428,8 +424,17 @@ vim.api.nvim_create_autocmd("FileType", {
     end,
 })
 
--- Plugin Manger
+
+
+-- Plugins
 -- ============================================================================
+
+-- Load Built-in Plugins ======================================================
+
+vim.cmd('packadd justify')
+-- vim.cmd('packadd nvim.undotree')
+
+-- Load External Plugins ======================================================
 
 local plugin_path = vim.fn.stdpath("config") .. "/plugins"
 vim.opt.runtimepath:append(plugin_path .. "/*")
@@ -621,18 +626,6 @@ require("oil").setup({
 })
 require("oil-git-status").setup()
 vim.keymap.set("n", "<leader>-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
-
--- Marks ======================================================================
-local harpoon = require("harpoon")
-harpoon:setup()
-vim.keymap.set("n", "<leader>mm", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end, { desc = "[M]ark [M]enu" })
-vim.keymap.set("n", "<leader>ma", function() harpoon:list():add() end,     { desc = "[M]ark [A]dd"})
-vim.keymap.set("n", "<leader>m1", function() harpoon:list():select(1) end, { desc = "[M]ark [1]"})
-vim.keymap.set("n", "<leader>m2", function() harpoon:list():select(2) end, { desc = "[M]ark [2]"})
-vim.keymap.set("n", "<leader>m3", function() harpoon:list():select(3) end, { desc = "[M]ark [3]"})
-vim.keymap.set("n", "<leader>m4", function() harpoon:list():select(4) end, { desc = "[M]ark [4]"})
-vim.keymap.set("n", "<leader>mp", function() harpoon:list():prev() end,    { desc = "[M]ark [P]revious"})
-vim.keymap.set("n", "<leader>mn", function() harpoon:list():next() end,    { desc = "[M]ark [N]ext"})
 
 -- Fuzzy Finder ===============================================================
 -- vim.opt.runtimepath:append(plugin_path .. "/telescope-fzf-native.nvim")
