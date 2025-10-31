@@ -1,6 +1,6 @@
 {
 	"$schema" : "https://aka.ms/winget-packages.schema.2.0.json",
-	"CreationDate" : "2025-10-29T18:41:27.769-00:00",
+	"CreationDate" : "2025-10-31T10:33:06.698-00:00",
 	"Sources" : 
 	[
 		{
@@ -88,7 +88,7 @@
 				},
 				{
 					"PackageIdentifier" : "Brave.Brave",
-					"Version" : "141.1.83.120"
+					"Version" : "142.1.84.132"
 				},
 				{
 					"PackageIdentifier" : "BrechtSanders.WinLibs.POSIX.MSVCRT",
@@ -140,7 +140,7 @@
 				},
 				{
 					"PackageIdentifier" : "Microsoft.AppInstaller",
-					"Version" : "1.26.510.0"
+					"Version" : "1.27.350.0"
 				},
 				{
 					"PackageIdentifier" : "Microsoft.UI.Xaml.2.7",
@@ -180,5 +180,5 @@
 			}
 		}
 	],
-	"WinGetVersion" : "1.11.510"
+	"WinGetVersion" : "1.12.350"
 }
