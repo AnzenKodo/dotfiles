@@ -717,7 +717,6 @@ require('gitsigns').setup({
 -- Git Manager
 require("diffview").setup({ use_icons = false, })
 require("neogit").setup({
-    kind = "replace",
     graph_style = "unicode",
 })
 
