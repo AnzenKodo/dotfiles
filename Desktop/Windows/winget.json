@@ -1,6 +1,6 @@
 {
 	"$schema" : "https://aka.ms/winget-packages.schema.2.0.json",
-	"CreationDate" : "2025-11-06T18:46:38.755-00:00",
+	"CreationDate" : "2025-11-07T11:08:37.057-00:00",
 	"Sources" : 
 	[
 		{
@@ -88,7 +88,7 @@
 				},
 				{
 					"PackageIdentifier" : "Brave.Brave",
-					"Version" : "142.1.84.132"
+					"Version" : "142.1.84.135"
 				},
 				{
 					"PackageIdentifier" : "BrechtSanders.WinLibs.POSIX.MSVCRT",
