@@ -477,13 +477,27 @@ require('wilder').setup({ modes = {':', '/', '?'} })
 -- Wildcard ===================================================================
 require('select-undo').setup()
 
--- Multicursor ================================================================
+-- Editing ====================================================================
+-- Multicursor
 require("multiple-cursors").setup()
 vim.keymap.set({"n", "x"}, "<C-k>", "<Cmd>MultipleCursorsAddUp<CR>",            { desc = "Add cursor and move up" })
 vim.keymap.set({"n", "i"}, "<C-h>", "<Cmd>MultipleCursorsMouseAddDelete<CR>",   { desc = "Add or remove cursor" })
 vim.keymap.set({"n", "x"}, "<C-j>", "<Cmd>MultipleCursorsAddDown<CR>",          { desc = "Add cursor and move down" })
 vim.keymap.set({"x"},      "<C-x>", "<Cmd>MultipleCursorsAddVisualArea<CR>",    { desc = "Add cursors to the lines of the visual area" })
 vim.keymap.set({"n", "x"}, "<C-l>", "<Cmd>MultipleCursorsLock<CR>",             { desc = "Lock virtual cursors" })
+
+-- Bracket Split and Join
+require("treesj").setup({ })
+vim.keymap.set('n', '<leader>es', require('treesj').toggle)
+
+-- Better 'f'
+require("flash").setup({})
+vim.keymap.set({ "n", "x", "o" }, "<leader>es",  function() require("flash").jump() end,              { desc = "Flash" })
+vim.keymap.set({ "n", "x", "o" }, "<leader>eS",  function() require("flash").treesitter() end,        { desc = "Flash Treesitter" })
+vim.keymap.set({ "o", "x" },      "<leader>er",  function() require("flash").treesitter_search() end, { desc = "Treesitter Search" })
+vim.keymap.set("o",               "<leader>eR",  function() require("flash").remote() end,            { desc = "Remote Flash" })
+-- vim.keymap.set({ "c" },           "<c-s>",  function() require("flash").toggle() end,            { desc = "Toggle Flash Search" })
+
 
 -- Keymap Helper ==============================================================
 require('which-key').setup({
@@ -724,3 +738,5 @@ require("neogit").setup({
 if not is_termux() then
     vim.opt.runtimepath:append(plugin_path .. "Manual/aw-watcher.vim")
 end
+
+
