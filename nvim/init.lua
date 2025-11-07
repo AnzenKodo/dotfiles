@@ -95,7 +95,7 @@ if vim.g.neovide then
     end, { desc = "Full Screen" })
 end
 
--- Functions for Keymaps
+-- Utils Functions
 -- ============================================================================
 
 local function get_visual_selection()
@@ -106,6 +106,19 @@ local function get_visual_selection()
     lines[1] = lines[1]:sub(s_start[3], -1)
     lines[#lines] = lines[#lines]:sub(1, s_end[3])
     return table.concat(lines, '\n')
+end
+
+
+local function win_to_bash_path(win_path)
+    if not win_path or win_path == "" then
+        return win_path
+    end
+    win_path = win_path:gsub("\\", "/")
+    if win_path:match("^[A-Za-z]:/") then
+        local drive = win_path:sub(1, 1):lower()
+        win_path = "/" .. drive .. win_path:sub(3)
+    end
+    return win_path
 end
 
 function open_buffer_in_other_split()
@@ -490,7 +503,7 @@ vim.keymap.set({"n", "x"}, "<C-l>", "<Cmd>MultipleCursorsLock<CR>",             
 require("treesj").setup({ })
 vim.keymap.set('n', '<leader>es', require('treesj').toggle)
 
--- Better 'f'
+-- Better 'f', 't', 'F', 'T'
 require("flash").setup({})
 vim.keymap.set({ "n", "x", "o" }, "<leader>es",  function() require("flash").jump() end,              { desc = "Flash" })
 vim.keymap.set({ "n", "x", "o" }, "<leader>eS",  function() require("flash").treesitter() end,        { desc = "Flash Treesitter" })
@@ -498,6 +511,10 @@ vim.keymap.set({ "o", "x" },      "<leader>er",  function() require("flash").tre
 vim.keymap.set("o",               "<leader>eR",  function() require("flash").remote() end,            { desc = "Remote Flash" })
 -- vim.keymap.set({ "c" },           "<c-s>",  function() require("flash").toggle() end,            { desc = "Toggle Flash Search" })
 
+-- Better 'w', 'e' and 'b'
+vim.keymap.set({ "n", "o", "x" }, "w", "<cmd>lua require('spider').motion('w')<CR>")
+vim.keymap.set({ "n", "o", "x" }, "e", "<cmd>lua require('spider').motion('e')<CR>")
+vim.keymap.set({ "n", "o", "x" }, "b", "<cmd>lua require('spider').motion('b')<CR>")
 
 -- Keymap Helper ==============================================================
 require('which-key').setup({
@@ -571,6 +588,7 @@ function _G.get_oil_winbar()
         return vim.api.nvim_buf_get_name(0)
     end
 end
+
 require("oil").setup({
     default_file_explorer = true,
     delete_to_trash = true,
@@ -587,18 +605,19 @@ require("oil").setup({
     },
     keymaps = {
         ["<CR>"] = "actions.select",
-        ["<leader>sv"] = { "actions.select", opts = { vertical = true } },
-        ["<leader>ss"] = { "actions.select", opts = { horizontal = true } },
-        ["-"] = { "actions.parent", mode = "n" },
-        ["_"] = { "actions.open_cwd", mode = "n" },
-        ["g?"] = { "actions.show_help", mode = "n" },
-        ["gp"] = "actions.preview",
-        ["gr"] = "actions.refresh",
-        ["gs"] = { "actions.change_sort", mode = "n" },
-        ["gx"] = "actions.open_external",
-        ["g."] = { "actions.toggle_hidden", mode = "n" },
-        ["g\\"] = { "actions.toggle_trash", mode = "n" },
-        ["gf"] = {
+        ["<leader>wv"] = { "actions.select", opts = { vertical = true } },
+        ["<leader>wo"] = { "actions.select", opts = { horizontal = true } },
+        ["-"]   = { "actions.parent",        mode = "n" },
+        ["_"]   = { "actions.open_cwd",      mode = "n" },
+        ["g?"]  = { "actions.show_help",     mode = "n" },
+        ["gs"]  = { "actions.change_sort",   mode = "n" },
+        ["g."]  = { "actions.toggle_hidden", mode = "n" },
+        ["g\\"] = { "actions.toggle_trash",  mode = "n" },
+        ["g`"]  = { "actions.cd",            mode = "n" },
+        ["gp"]  = "actions.preview",
+        ["gr"]  = "actions.refresh",
+        ["gx"]  = "actions.open_external",
+        ["gf"]  = {
             function()
                 require("telescope.builtin").find_files({
                     cwd = require("oil").get_current_dir()
@@ -608,6 +627,30 @@ require("oil").setup({
             nowait = true,
             desc = "Find files in the current directory"
         },
+        -- ["<C-`>"] = {
+        --     function()
+        --         vim.cmd.new()
+        --         vim.cmd.wincmd "J"
+        --         vim.api.nvim_win_set_height(0, 12)
+        --         vim.wo.winfixheight = true
+        --         local current_dir = require("oil").get_current_dir()
+        --         if (vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1) then
+        --             current_dir = win_to_bash_path(current_dir)
+        --         end
+        --         -- current_dir = vim.fn.fnameescape(current_dir)
+        --         vim.cmd.term("bash -c \"cd " .. current_dir .. " && bash\"")
+        --     end,
+        --     nowait = true,
+        --     mode = "n",
+        --     desc = "Open terminal current directory"
+        -- },
+        -- ["†"] = {
+        --     function()
+        --     end,
+        --     nowait = true,
+        --     mode = "n",
+        --     desc = "Open terminal current directory"
+        -- },
     },
     float = {
         preview_split = "auto",
