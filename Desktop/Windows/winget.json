@@ -1,6 +1,6 @@
 {
 	"$schema" : "https://aka.ms/winget-packages.schema.2.0.json",
-	"CreationDate" : "2025-11-10T09:07:32.350-00:00",
+	"CreationDate" : "2025-11-11T09:33:01.874-00:00",
 	"Sources" : 
 	[
 		{
@@ -60,7 +60,7 @@
 				},
 				{
 					"PackageIdentifier" : "Microsoft.Edge",
-					"Version" : "142.0.3595.53"
+					"Version" : "142.0.3595.69"
 				},
 				{
 					"PackageIdentifier" : "OBSProject.OBSStudio",
@@ -101,6 +101,10 @@
 				{
 					"PackageIdentifier" : "Gyan.FFmpeg",
 					"Version" : "8.0"
+				},
+				{
+					"PackageIdentifier" : "JernejSimoncic.Wget",
+					"Version" : "1.21.4"
 				},
 				{
 					"PackageIdentifier" : "MartinStorsjo.LLVM-MinGW.MSVCRT",
