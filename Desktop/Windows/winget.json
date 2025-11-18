@@ -1,6 +1,6 @@
 {
 	"$schema" : "https://aka.ms/winget-packages.schema.2.0.json",
-	"CreationDate" : "2025-11-12T02:26:51.112-00:00",
+	"CreationDate" : "2025-11-18T09:25:16.926-00:00",
 	"Sources" : 
 	[
 		{
@@ -64,7 +64,7 @@
 				},
 				{
 					"PackageIdentifier" : "Microsoft.Edge",
-					"Version" : "142.0.3595.69"
+					"Version" : "142.0.3595.80"
 				},
 				{
 					"PackageIdentifier" : "OBSProject.OBSStudio",
@@ -92,7 +92,7 @@
 				},
 				{
 					"PackageIdentifier" : "Brave.Brave",
-					"Version" : "142.1.84.135"
+					"Version" : "142.1.84.139"
 				},
 				{
 					"PackageIdentifier" : "BrechtSanders.WinLibs.POSIX.MSVCRT",
@@ -136,7 +136,7 @@
 				},
 				{
 					"PackageIdentifier" : "ZedIndustries.Zed.Preview",
-					"Version" : "0.211.4-pre"
+					"Version" : "0.212.0-pre"
 				},
 				{
 					"PackageIdentifier" : "Python.Python.3.9",
@@ -144,7 +144,7 @@
 				},
 				{
 					"PackageIdentifier" : "Microsoft.Teams",
-					"Version" : "25275.2601.4002.2815"
+					"Version" : "25290.205.4069.4894"
 				},
 				{
 					"PackageIdentifier" : "Microsoft.AppInstaller",
