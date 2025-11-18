@@ -445,7 +445,7 @@ vim.api.nvim_create_autocmd("FileType", {
 -- Load Built-in Plugins ======================================================
 
 vim.cmd('packadd justify')
--- vim.cmd('packadd nvim.undotree')
+-- vim.cmd('packadd undotree')
 
 -- Load External Plugins ======================================================
 
@@ -501,14 +501,20 @@ vim.keymap.set({"n", "x"}, "<C-l>", "<Cmd>MultipleCursorsLock<CR>",             
 
 -- Bracket Split and Join
 require("treesj").setup({ })
-vim.keymap.set('n', '<leader>es', require('treesj').toggle)
+vim.keymap.set('n', '<leader>et', require('treesj').toggle)
 
 -- Better 'f', 't', 'F', 'T'
-require("flash").setup({})
-vim.keymap.set({ "n", "x", "o" }, "<leader>es",  function() require("flash").jump() end,              { desc = "Flash" })
-vim.keymap.set({ "n", "x", "o" }, "<leader>eS",  function() require("flash").treesitter() end,        { desc = "Flash Treesitter" })
-vim.keymap.set({ "o", "x" },      "<leader>er",  function() require("flash").treesitter_search() end, { desc = "Treesitter Search" })
-vim.keymap.set("o",               "<leader>eR",  function() require("flash").remote() end,            { desc = "Remote Flash" })
+require("flash").setup({
+  modes = {
+    char = {
+      jump_labels = true
+    }
+  }
+})
+vim.keymap.set({ "n", "x", "o" }, "<leader>ef", function() require("flash").jump() end,              { desc = "Flash" })
+vim.keymap.set({ "n", "x", "o" }, "<leader>eF", function() require("flash").treesitter() end,        { desc = "Flash Treesitter" })
+vim.keymap.set({ "o", "x" },      "<leader>er", function() require("flash").treesitter_search() end, { desc = "Treesitter Search" })
+vim.keymap.set("o",               "<leader>eR", function() require("flash").remote() end,            { desc = "Remote Flash" })
 -- vim.keymap.set({ "c" },           "<c-s>",  function() require("flash").toggle() end,            { desc = "Toggle Flash Search" })
 
 -- Better 'w', 'e' and 'b'
@@ -560,6 +566,7 @@ require('which-key').setup({
         { '<leader>m', group = '[M]ark' },
         { '<leader>u', group = '[U]ndo' },
         { '<leader>g', group = '[G]it', mode = { 'n', 'v' } },
+        { '<leader>e', group = '[E]dit' },
     },
 })
 
@@ -570,12 +577,27 @@ require("auto-session").setup()
 vim.api.nvim_create_user_command("UndoTree", require("undotree").toggle, {})
 
 -- Better Quickfix ============================================================
-vim.api.nvim_create_autocmd("FileType", {
-    pattern = "qf",
-    callback = function()
-        require('bqf').setup()
-    end,
+require("quicker").setup()
+vim.keymap.set("n", "<leader>l", function() require("quicker").toggle({ loclist = true }) end, { desc = "Toggle loclist" })
+require("quicker").setup({
+  keys = {
+    {
+      ">",
+      function()
+        require("quicker").expand({ before = 2, after = 2, add_to_existing = true })
+      end,
+      desc = "Expand quickfix context",
+    },
+    {
+      "<",
+      function()
+        require("quicker").collapse()
+      end,
+      desc = "Collapse quickfix context",
+    },
+  },
 })
+
 
 -- File Manager ===============================================================
 function _G.get_oil_winbar()
@@ -782,4 +804,23 @@ if not is_termux() then
     vim.opt.runtimepath:append(plugin_path .. "Manual/aw-watcher.vim")
 end
 
+-- Tags =======================================================================
+
+if vim.fn.executable("ctags") == 1 then
+    local Path = require("plenary.path")
+    require("gentags").setup({
+        autostart = true,
+        root_dir = vim.g.gentags_root_dir or vim.loop.cwd(),
+        async = true, -- run ctags asynchronous
+        bin = "ctags",
+        args = { -- extra args
+            '--c-kinds=+p',
+            '-R',
+            -- "--extras=+r+q",
+            "--exclude=.git",
+            "--exclude=build",
+        },
+        lang_ft_map = { }
+    })
+end
 
