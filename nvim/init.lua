@@ -500,14 +500,13 @@ vim.keymap.set({"x"},      "<C-x>", "<Cmd>MultipleCursorsAddVisualArea<CR>",    
 vim.keymap.set({"n", "x"}, "<C-l>", "<Cmd>MultipleCursorsLock<CR>",             { desc = "Lock virtual cursors" })
 
 -- Bracket Split and Join
-require("treesj").setup({ })
 vim.keymap.set('n', '<leader>et', require('treesj').toggle)
 
 -- Better 'f', 't', 'F', 'T'
 require("flash").setup({
   modes = {
     char = {
-      jump_labels = true
+      -- jump_labels = true
     }
   }
 })
@@ -803,24 +802,3 @@ require("neogit").setup({
 if not is_termux() then
     vim.opt.runtimepath:append(plugin_path .. "Manual/aw-watcher.vim")
 end
-
--- Tags =======================================================================
-
-if vim.fn.executable("ctags") == 1 then
-    local Path = require("plenary.path")
-    require("gentags").setup({
-        autostart = true,
-        root_dir = vim.g.gentags_root_dir or vim.loop.cwd(),
-        async = true, -- run ctags asynchronous
-        bin = "ctags",
-        args = { -- extra args
-            '--c-kinds=+p',
-            '-R',
-            -- "--extras=+r+q",
-            "--exclude=.git",
-            "--exclude=build",
-        },
-        lang_ft_map = { }
-    })
-end
-
