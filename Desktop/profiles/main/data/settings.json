@@ -22,34 +22,8 @@
     "workbench.secondarySideBar.showLabels": false,
     "debug.onTaskErrors": "debugAnyway",
     "workbench.editor.editorActionsLocation": "titleBar",
+    "workbench.activityBar.location": "bottom",
     "chat.commandCenter.enabled": false,
     "workbench.experimental.share.enabled": true,
     "workbench.secondarySideBar.defaultVisibility": "hidden",
-    "mssql.connectionGroups": [
-        {
-            "name": "ROOT",
-            "id": "1A292D69-97DE-4703-865F-39CD0F552312"
-        }
-    ],
-    "mssql.connections": [
-        {
-            "authenticationType": "SqlLogin",
-            "connectTimeout": 30,
-            "applicationName": "vscode-mssql",
-            "applicationIntent": "ReadWrite",
-            "profileName": "OroSoft",
-            "server": "nebula.orosoftsolutions.com",
-            "user": "neo",
-            "password": "",
-            "savePassword": true,
-            "trustServerCertificate": true,
-            "groupId": "1A292D69-97DE-4703-865F-39CD0F552312",
-            "id": "54E8A899-A5CA-48A1-947C-CD39B0E66093",
-            "database": "",
-            "commandTimeout": 30,
-            "encrypt": "Mandatory",
-            "profileSource": 0
-        }
-    ],
-    "github.copilot.nextEditSuggestions.enabled": true,
 }
