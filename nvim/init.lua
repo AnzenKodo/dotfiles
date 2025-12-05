@@ -313,7 +313,7 @@ vim.api.nvim_create_autocmd("BufReadPost", {
 vim.api.nvim_create_autocmd({"CursorMoved", "CursorMovedI"}, {
     callback = function()
         min_length_cursor_len = 3
-        vim.api.nvim_set_hl(0, "CursorWord", { bg = "#3f2638" })
+        vim.api.nvim_set_hl(0, "CursorWord", { bg = "#3f2638", fg = "#DDC7A1" })
         local column = vim.api.nvim_win_get_cursor(0)[2]
         local line = vim.api.nvim_get_current_line()
         local cursorword = vim.fn.matchstr(line:sub(1, column + 1), [[\k*$]])
