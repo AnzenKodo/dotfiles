@@ -1,6 +1,6 @@
 {
 	"$schema" : "https://aka.ms/winget-packages.schema.2.0.json",
-	"CreationDate" : "2025-12-05T15:58:38.822-00:00",
+	"CreationDate" : "2025-12-09T18:33:07.329-00:00",
 	"Sources" : 
 	[
 		{
@@ -64,7 +64,7 @@
 				},
 				{
 					"PackageIdentifier" : "Microsoft.Edge",
-					"Version" : "142.0.3595.94"
+					"Version" : "143.0.3650.66"
 				},
 				{
 					"PackageIdentifier" : "OBSProject.OBSStudio",
@@ -123,10 +123,6 @@
 					"Version" : "1.8.10"
 				},
 				{
-					"PackageIdentifier" : "VSCodium.VSCodium",
-					"Version" : "1.104.26450"
-				},
-				{
 					"PackageIdentifier" : "Microsoft.VisualStudioCode",
 					"Version" : "1.105.1"
 				},
@@ -176,7 +172,7 @@
 			[
 				{
 					"PackageIdentifier" : "9PNKDR50694P",
-					"Version" : "25.2.4.0"
+					"Version" : "25.3.0.0"
 				}
 			],
 			"SourceDetails" : 
