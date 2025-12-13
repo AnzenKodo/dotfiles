@@ -92,6 +92,10 @@ alias rsync="rsync --hard-links --archive --recursive --update --executability \
 alias rsync_git="rsync --filter='dir-merge,- .gitignore' --delete"
 alias ctags_system="ctags -R -f ~/Dotfiles/Desktop/nvim/system.tags /usr/include/"
 
-# Functions
+# Other
 #===============================================================================
 
+if [ -f ~/.ssh/id_ed25519 ] && [ -z "$SSH_AUTH_SOCK" ]; then
+    eval "$(ssh-agent -s)" > /dev/null
+    ssh-add ~/.ssh/id_ed25519
+fi
