@@ -1,8 +1,9 @@
-sudo apt install rsync git
-
-ln -sf $DOTFILES/Desktop/profile.sh $HOME/.bashrc
+sudo apt install git bash-completion
 
 mkdir $XDG_STATE_HOME/bash
-mkdir $XDG_CACHE_HOME/X11
-
-
+ln -sfv ~/Dotfiles/bash/linux.sh   $HOME/.bashrc
+ln -sf ~/Dotfiles/tmux             $XDG_CONFIG_HOME
+ln -sf ~/Dotfiles/nvim             $XDG_CONFIG_HOME
+ln -sfr ~/Dotfiles/git             $XDG_CONFIG_HOME
+rm $HOME/.ssh
+ln -sf ~/Drive/Dotfiles/ssh        $HOME/.ssh
