@@ -9,6 +9,7 @@
       <value type="string" value="com.usebottles.bottles"/>
       <value type="string" value="org.freedesktop.network-manager-applet"/>
       <value type="string" value="org.xfce.Thunar"/>
+      <value type="string" value="wezterm"/>
       <value type="string" value="Xfce volume control"/>
       <value type="string" value="Xfce4-notifyd settings"/>
       <value type="string" value="xfce4-power-manager"/>

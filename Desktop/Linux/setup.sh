@@ -24,9 +24,10 @@ ln -sfv ~/Dotfiles/bash/linux.sh $HOME/.bashrc
 
 mkdir $XDG_CACHE_HOME/X11
 
-ln -sfv ~/Dotfiles/nvim  $XDG_CONFIG_HOME
-ln -srf ~/Dotfiles/git   $XDG_CONFIG_HOME
-ln -sfv ~/Dotfiles/fonts $XDG_DATA_HOME
+ln -sfv ~/Dotfiles/tmux             $XDG_CONFIG_HOME
+ln -sfv ~/Dotfiles/nvim             $XDG_CONFIG_HOME
+ln -srf ~/Dotfiles/git              $XDG_CONFIG_HOME
+ln -sfv ~/Dotfiles/fonts            $XDG_DATA_HOME
 
 rm $XDG_DATA_HOME/applications
 ln -sfv ~/Applications/Mime       $XDG_DATA_HOME/applications

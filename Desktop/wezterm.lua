@@ -20,5 +20,14 @@ if is_windows() then
     config.default_prog = { 'bash.exe' }
 end
 
+config.ssh_domains = {
+    {
+        name = 'server',
+        remote_address = '34.71.170.37',
+        username = 'Gangnam',
+        multiplexing = 'WezTerm',  -- or "None" for plain SSH
+    },
+}
+
 return config
 
