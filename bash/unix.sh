@@ -22,7 +22,7 @@ bash_state_path=$XDG_STATE_HOME/bash
 
 # Load ========================================================================
 
-source ~/Dotfiles/bash/default.sh
+source ~/Dotfiles/bash/main.sh
 
 # Set Variables
 #===============================================================================

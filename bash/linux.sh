@@ -73,8 +73,17 @@ backup()
 server_backup()
 {
     rsync_git ~/Code Gangnam@34.41.58.206:~/
-    rsync_git ~/Drive Gangnam@34.41.58.206:~/
-    rsync_git ~/Dotfiles Gangnam@34.41.58.206:~/
     rsync --exclude="Archive" --exclude="Deb" --exclude="AppImages" --exclude="clang" --delete ~/Applications Gangnam@34.41.58.206:~/
 }
 
+tserver()
+{
+    local session_name="server-session"
+    tmux has-session -t "$session_name" 2>/dev/null
+    if [ $? != 0 ]; then
+        tmux new-session -d -s "$session_name" -n "main"
+        tmux new-window -t "$session_name" -n "syncthing"
+        tmux send-keys -t "$session_name:syncthing" "syncthing" C-m
+    fi
+    tmux new-session -A -s "$session_name"
+}
