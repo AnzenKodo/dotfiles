@@ -95,7 +95,7 @@ alias ctags_system="ctags -R -f ~/Dotfiles/Desktop/nvim/system.tags /usr/include
 # Other
 #===============================================================================
 
-if [ -f ~/.ssh/id_ed25519 ] && [ -z "$SSH_AUTH_SOCK" ]; then
-    eval "$(ssh-agent -s)" > /dev/null
-    ssh-add ~/.ssh/id_ed25519
-fi
+# if [ -f ~/.ssh/id_ed25519 ] && [ -z "$SSH_AUTH_SOCK" ]; then
+#     eval "$(ssh-agent -s)" > /dev/null
+#     ssh-add ~/.ssh/id_ed25519
+# fi

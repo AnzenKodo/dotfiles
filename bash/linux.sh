@@ -82,8 +82,10 @@ tserver()
     tmux has-session -t "$session_name" 2>/dev/null
     if [ $? != 0 ]; then
         tmux new-session -d -s "$session_name" -n "main"
-        tmux new-window -t "$session_name" -n "syncthing"
-        tmux send-keys -t "$session_name:syncthing" "syncthing" C-m
+        tmux new-window -t "$session_name" -n "drive"
+        tmux send-keys -t "$session_name:drive" "syncthing" C-m
+        tmux new-window -t "$session_name" -n "repo"
+        tmux send-keys -t "$session_name:repo" "forgejo --custom-path ~/Drive/Dotfiles/Server/forgejo/custom" C-m
     fi
     tmux new-session -A -s "$session_name"
 }
