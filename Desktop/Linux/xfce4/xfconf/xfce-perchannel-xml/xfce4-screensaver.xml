@@ -8,6 +8,9 @@
         <value type="string" value="screensavers-xfce-floaters"/>
       </property>
     </property>
+    <property name="idle-activation" type="empty">
+      <property name="enabled" type="bool" value="false"/>
+    </property>
   </property>
   <property name="screensavers" type="empty">
     <property name="xfce-floaters" type="empty">
@@ -19,5 +22,8 @@
       <property name="arguments" type="string" value="--location=&apos;/home/ramen/Pictures&apos; --background-color=&apos;#000000&apos; --no-crop"/>
       <property name="location" type="string" value="/home/ramen/Pictures"/>
     </property>
+  </property>
+  <property name="lock" type="empty">
+    <property name="sleep-activation" type="bool" value="true"/>
   </property>
 </channel>

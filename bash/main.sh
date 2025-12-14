@@ -154,18 +154,19 @@ setup_git_id()
 
 # Bind
 #===============================================================================
-
-bind '"\x08":backward-kill-word'
-bind 'set completion-ignore-case on'
-bind "TAB:menu-complete"
-bind "set show-all-if-ambiguous on"
-bind "set menu-complete-display-prefix on"
-bind '"\e[Z": menu-complete-backward'
-bind "set colored-stats On"
-bind 'set mark-symlinked-directories On'
-bind 'set show-all-if-ambiguous On'
-bind 'set show-all-if-unmodified On'
-bind 'set visible-stats On'
+if [[ -t 0 && -t 1 && "$-" == *i* ]]; then
+    bind '"\x08":backward-kill-word'
+    bind 'set completion-ignore-case on'
+    bind "TAB:menu-complete"
+    bind "set show-all-if-ambiguous on"
+    bind "set menu-complete-display-prefix on"
+    bind '"\e[Z": menu-complete-backward'
+    bind "set colored-stats On"
+    bind 'set mark-symlinked-directories On'
+    bind 'set show-all-if-ambiguous On'
+    bind 'set show-all-if-unmodified On'
+    bind 'set visible-stats On'
+fi
 
 shopt -s checkwinsize
 shopt -s globstar
