@@ -70,10 +70,11 @@ backup()
     # cd -
 }
 
+alias rsync_git="rsync --filter='dir-merge,- .gitignore' --delete"
 server_backup()
 {
-    rsync_git ~/Code Gangnam@34.41.58.206:~/
-    rsync --exclude="Archive" --exclude="Deb" --exclude="AppImages" --exclude="clang" --delete ~/Applications Gangnam@34.41.58.206:~/
+    rsync_git ~/Code Gangnam@34.71.170.37:~/
+    # rsync --exclude="Archive" --exclude="Deb" --exclude="AppImages" --exclude="clang" --delete ~/Applications Gangnam@34.71.170.37:~/
 }
 
 tserver()

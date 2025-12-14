@@ -89,7 +89,6 @@ alias rmr="gtrash restore"
 alias rme="gtrash find --rm ."
 alias rsync="rsync --hard-links --archive --recursive --update --executability \
     --verbose --human-readable --progress"
-alias rsync_git="rsync --filter='dir-merge,- .gitignore' --delete"
 alias ctags_system="ctags -R -f ~/Dotfiles/Desktop/nvim/system.tags /usr/include/"
 
 # Other
