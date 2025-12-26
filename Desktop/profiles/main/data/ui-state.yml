@@ -64,8 +64,8 @@ workbench.auxiliarybar.placeholderPanels: "[{\"id\":\"workbench.panel.chat\",\"\
   jsDebugHasExcludedCallers && debugType == 'pwa-msedge' ||
   jsDebugHasExcludedCallers && debugType ==
   'pwa-node'\"},{\"when\":\"jsDebugNetworkAvailable\"}]}]"
-workbench.auxiliaryBar.size: "529"
-workbench.editor.languageDetectionOpenedLanguages.global: '[["lua",true],["yaml",true],["jsonc",true],["cpp",true],["plaintext",true],["c",true]]'
+workbench.auxiliaryBar.size: "682"
+workbench.editor.languageDetectionOpenedLanguages.global: '[["lua",true],["yaml",true],["cpp",true],["plaintext",true],["jsonc",true],["c",true]]'
 workbench.explorer.views.state.hidden: '[{"id":"outline","isHidden":false},{"id":"timeline","isHidden":false},{"id":"workbench.explorer.openEditorsView","isHidden":true},{"id":"workbench.explorer.emptyView","isHidden":false},{"id":"workbench.explorer.fileView","isHidden":false},{"id":"npm","isHidden":true}]'
 workbench.panel.alignment: center
 workbench.panel.chat.hidden: '[{"id":"workbench.panel.chat.view.copilot","isHidden":false}]'

@@ -482,16 +482,17 @@ require('lualine').setup({
 -- Indent
 require("indentmini").setup()
 
--- Smart Auto Indent ==========================================================
-require('guess-indent').setup()
-
--- Wildcard ===================================================================
+-- Wildcard
 require('wilder').setup({ modes = {':', '/', '?'} })
 
--- Wildcard ===================================================================
+-- Editing ====================================================================
+
+-- Undo
 require('select-undo').setup()
 
--- Editing ====================================================================
+-- Smart Auto Indent
+require('guess-indent').setup()
+
 -- Multicursor
 require("multiple-cursors").setup()
 vim.keymap.set({"n", "x"}, "<C-k>", "<Cmd>MultipleCursorsAddUp<CR>",            { desc = "Add cursor and move up" })
@@ -501,7 +502,11 @@ vim.keymap.set({"x"},      "<C-x>", "<Cmd>MultipleCursorsAddVisualArea<CR>",    
 vim.keymap.set({"n", "x"}, "<C-l>", "<Cmd>MultipleCursorsLock<CR>",             { desc = "Lock virtual cursors" })
 
 -- Bracket Split and Join
-vim.keymap.set('n', '<leader>et', require('treesj').toggle)
+require('mini.splitjoin').setup({
+    mappings = {
+        toggle = '<leader>et',
+    },
+})
 
 -- Better 'f', 't', 'F', 'T'
 require("flash").setup({
@@ -598,6 +603,11 @@ require("quicker").setup({
   },
 })
 
+-- Mark Management ============================================================
+require('marko').setup({
+  default_keymap = false,
+})
+vim.keymap.set('n', '<leader>mm', function() require('marko').show_marks() end, { desc = 'Show marks popup' })
 
 -- File Manager ===============================================================
 function _G.get_oil_winbar()
@@ -754,44 +764,57 @@ end, { desc = '[F]ind [/] in Open Files' })
 
 -- Git ========================================================================
 -- Git Hunk
-require('gitsigns').setup({
-    signs = {
-        add = { text = '+' },
-        change = { text = '~' },
-        delete = { text = '_' },
-        topdelete = { text = '‾' },
-        changedelete = { text = '~' },
+require('mini.diff').setup({
+    mappings = {
+        apply = '<leader>gs',
+        reset = '<leader>gr',
+        textobject = '',
+        -- Go to hunk range in corresponding direction
+        goto_first = '[H',
+        goto_prev = '[h',
+        goto_next = ']h',
+        goto_last = ']H',
     },
-    on_attach = function(bufnr)
-        -- Navigation
-        vim.keymap.set('n', ']c', function()
-            if vim.wo.diff then
-                vim.cmd.normal({']c', bang = true})
-            else
-                require('gitsigns').nav_hunk('next')
-            end
-        end, { desc = "Next hunk or diff" })
-        vim.keymap.set('n', '[c', function()
-            if vim.wo.diff then
-                vim.cmd.normal({'[c', bang = true})
-            else
-                require('gitsigns').nav_hunk('prev')
-            end
-        end, { desc = "Previous hunk or diff" })
-        -- Actions
-        vim.keymap.set('v', '<leader>gs', function() require('gitsigns').stage_hunk({ vim.fn.line('.'), vim.fn.line('v') }) end, { desc = "[G]it [S]tage" })
-        vim.keymap.set('v', '<leader>gr', function() require('gitsigns').reset_hunk({ vim.fn.line('.'), vim.fn.line('v') }) end, { desc = "[G]it [R]eset" })
-        vim.keymap.set('n', '<leader>gQ', function() require('gitsigns').setqflist('all') end,                                   { desc = "[G]it [Q]uickfix all" })
-        vim.keymap.set('n', '<leader>gs', require('gitsigns').stage_hunk,          { desc = "[G]it [S]tage" })
-        vim.keymap.set('n', '<leader>gr', require('gitsigns').reset_hunk,          { desc = "[G]it [R]eset" })
-        vim.keymap.set('n', '<leader>gS', require('gitsigns').stage_buffer,        { desc = "[G]it entire buffer [S]tage" })
-        vim.keymap.set('n', '<leader>gR', require('gitsigns').reset_buffer,        { desc = "[G]it entire buffer [R]eset" })
-        vim.keymap.set('n', '<leader>gp', require('gitsigns').preview_hunk,        { desc = "[G]it Preview" })
-        vim.keymap.set('n', '<leader>gi', require('gitsigns').preview_hunk_inline, { desc = "[G]it [I]nline preview" })
-        vim.keymap.set('n', '<leader>gd', require('gitsigns').diffthis,            { desc = "[G]it [D]iff" })
-        vim.keymap.set('n', '<leader>gq', require('gitsigns').setqflist,           { desc = "[G]it [Q]uickfix" })
-    end
 })
+vim.keymap.set('n', '<leader>gd', MiniDiff.toggle_overlay, { desc = "[G]it [D]iff" })
+-- require('gitsigns').setup({
+--     signs = {
+--         add = { text = '+' },
+--         change = { text = '~' },
+--         delete = { text = '_' },
+--         topdelete = { text = '‾' },
+--         changedelete = { text = '~' },
+--     },
+--     on_attach = function(bufnr)
+--         -- Navigation
+--         vim.keymap.set('n', ']c', function()
+--             if vim.wo.diff then
+--                 vim.cmd.normal({']c', bang = true})
+--             else
+--                 require('gitsigns').nav_hunk('next')
+--             end
+--         end, { desc = "Next hunk or diff" })
+--         vim.keymap.set('n', '[c', function()
+--             if vim.wo.diff then
+--                 vim.cmd.normal({'[c', bang = true})
+--             else
+--                 require('gitsigns').nav_hunk('prev')
+--             end
+--         end, { desc = "Previous hunk or diff" })
+--         -- Actions
+--         vim.keymap.set('v', '<leader>gs', function() require('gitsigns').stage_hunk({ vim.fn.line('.'), vim.fn.line('v') }) end, { desc = "[G]it [S]tage" })
+--         vim.keymap.set('v', '<leader>gr', function() require('gitsigns').reset_hunk({ vim.fn.line('.'), vim.fn.line('v') }) end, { desc = "[G]it [R]eset" })
+--         vim.keymap.set('n', '<leader>gQ', function() require('gitsigns').setqflist('all') end,                                   { desc = "[G]it [Q]uickfix all" })
+--         vim.keymap.set('n', '<leader>gs', require('gitsigns').stage_hunk,          { desc = "[G]it [S]tage" })
+--         vim.keymap.set('n', '<leader>gr', require('gitsigns').reset_hunk,          { desc = "[G]it [R]eset" })
+--         vim.keymap.set('n', '<leader>gS', require('gitsigns').stage_buffer,        { desc = "[G]it entire buffer [S]tage" })
+--         vim.keymap.set('n', '<leader>gR', require('gitsigns').reset_buffer,        { desc = "[G]it entire buffer [R]eset" })
+--         vim.keymap.set('n', '<leader>gp', require('gitsigns').preview_hunk,        { desc = "[G]it Preview" })
+--         vim.keymap.set('n', '<leader>gi', require('gitsigns').preview_hunk_inline, { desc = "[G]it [I]nline preview" })
+--         vim.keymap.set('n', '<leader>gd', require('gitsigns').diffthis,            { desc = "[G]it [D]iff" })
+--         vim.keymap.set('n', '<leader>gq', require('gitsigns').setqflist,           { desc = "[G]it [Q]uickfix" })
+--     end
+-- })
 
 -- Git Manager
 require("diffview").setup({ use_icons = false, })
