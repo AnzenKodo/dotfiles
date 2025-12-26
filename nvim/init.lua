@@ -527,6 +527,22 @@ vim.keymap.set({ "n", "o", "x" }, "w", "<cmd>lua require('spider').motion('w')<C
 vim.keymap.set({ "n", "o", "x" }, "e", "<cmd>lua require('spider').motion('e')<CR>")
 vim.keymap.set({ "n", "o", "x" }, "b", "<cmd>lua require('spider').motion('b')<CR>")
 
+-- Surround
+require('mini.surround').setup({
+    mappings = {
+        add = '<leader>sa', -- Add surrounding in Normal and Visual modes
+        delete = '<leader>sd', -- Delete surrounding
+        find = '<leader>sf', -- Find surrounding (to the right)
+        find_left = '<leader>sF', -- Find surrounding (to the left)
+        highlight = '<leader>sh', -- Highlight surrounding
+        replace = '<leader>sr', -- Replace surrounding
+        suffix_last = 'l', -- Suffix to search with "prev" method
+        suffix_next = 'n', -- Suffix to search with "next" method
+    },
+    highlight_duration = 1000,
+})
+require('mini.ai').setup()
+
 -- Keymap Helper ==============================================================
 require('which-key').setup({
     delay = 0,
@@ -572,6 +588,7 @@ require('which-key').setup({
         { '<leader>u', group = '[U]ndo' },
         { '<leader>g', group = '[G]it', mode = { 'n', 'v' } },
         { '<leader>e', group = '[E]dit' },
+        { '<leader>s', group = '[S]urround' },
     },
 })
 
