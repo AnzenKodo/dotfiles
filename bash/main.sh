@@ -74,7 +74,7 @@ alias tar="tar -v"
 
 alias refresh="source ~/.bashrc"
 alias dir_size="du -sh -- * | sort -hr"
-alias timg="timg -p kitty --title='%b (%wx%h)'"
+alias icat="wezterm imgcat"
 alias axel="axel --verbose"
 alias yt="yt-dlp --ffmpeg-location ~/Applications/ffmpeg/ -S ext"
 alias yta="yt-dlp --ffmpeg-location ~/Applications/ffmpeg/ --extract-audio --audio-format"

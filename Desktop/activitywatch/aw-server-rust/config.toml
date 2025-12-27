@@ -4,3 +4,5 @@
 #cors = []
 #
 #[custom_static]
+[server.custom_static]
+aw-watcher-media-player = "~/.config/activitywatch/aw-watcher-media-player/visualization"

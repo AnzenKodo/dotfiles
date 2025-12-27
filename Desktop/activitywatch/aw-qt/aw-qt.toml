@@ -6,6 +6,7 @@ autostart_modules = [
     "aw-watcher-afk",
     "aw-sync",
     # "aw-notify",
+    "aw-watcher-media-player"
 ]
 
 [aw-qt-testing]
