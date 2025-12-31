@@ -54,8 +54,8 @@ ask_and_run()
     esac
 }
 
+alias sudo="doas"
 alias bat="bat --theme=gruvbox-dark --style=numbers"
-
 alias ..="cd .."
 alias ~="cd ~"
 alias ls="ls -lha --color=always --group-directories-first"
@@ -71,6 +71,7 @@ alias top="btm --battery --enable_cache_memory --enable_gpu_memory --network_use
 alias xclip="xclip -selection clipboard"
 alias zip="zip -r"
 alias tar="tar -v"
+alias tree="tree --color --dirsfirst"
 
 alias refresh="source ~/.bashrc"
 alias dir_size="du -sh -- * | sort -hr"

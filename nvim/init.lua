@@ -310,15 +310,20 @@ vim.api.nvim_create_autocmd("BufReadPost", {
 })
 
 -- Highlight current matching words
-vim.api.nvim_create_autocmd({"CursorMoved", "CursorMovedI"}, {
+vim.api.nvim_create_autocmd({"CursorMoved", "CursorMovedI", "ModeChanged"}, {
     callback = function()
         min_length_cursor_len = 3
-        vim.api.nvim_set_hl(0, "CursorWord", { bg = "#3f2638", fg = "#DDC7A1" })
+        vim.api.nvim_set_hl(0, "CursorWord", { bg = "#45403D" })
         local column = vim.api.nvim_win_get_cursor(0)[2]
         local line = vim.api.nvim_get_current_line()
         local cursorword = vim.fn.matchstr(line:sub(1, column + 1), [[\k*$]])
         .. vim.fn.matchstr(line:sub(column + 1), [[^\k*]]):sub(2)
 
+        local mode = vim.fn.mode()
+        if mode ~= "n" and mode ~= "N" then
+            vim.api.nvim_set_hl(0, "CursorWord", {})
+            return
+        end
         if cursorword == vim.w.cursorword then
             return
         end
@@ -339,6 +344,21 @@ vim.api.nvim_create_autocmd({"CursorMoved", "CursorMovedI"}, {
         vim.w.cursorword_id = vim.fn.matchadd("CursorWord", pattern, -1)
     end
 })
+-- vim.api.nvim_create_autocmd("ModeChanged", {
+--   group = augroup,
+--   pattern = "*:[^n]*",  -- From Normal to any other mode
+--   callback = function()
+--     vim.api.nvim_set_hl(0, "CursorWord", {})  -- Clear highlight
+--   end,
+-- })
+
+-- vim.api.nvim_create_autocmd("ModeChanged", {
+--   group = augroup,
+--   pattern = "[^n]*:n",  -- From any other mode to Normal
+--   callback = function()
+--     vim.api.nvim_set_hl(0, "CursorWord", { bg = "#45403D", fg = "#DDC7A1" })
+--   end,
+-- })
 
 -- Buffers
 -- ============================================================================
@@ -794,44 +814,6 @@ require('mini.diff').setup({
     },
 })
 vim.keymap.set('n', '<leader>gd', MiniDiff.toggle_overlay, { desc = "[G]it [D]iff" })
--- require('gitsigns').setup({
---     signs = {
---         add = { text = '+' },
---         change = { text = '~' },
---         delete = { text = '_' },
---         topdelete = { text = '‾' },
---         changedelete = { text = '~' },
---     },
---     on_attach = function(bufnr)
---         -- Navigation
---         vim.keymap.set('n', ']c', function()
---             if vim.wo.diff then
---                 vim.cmd.normal({']c', bang = true})
---             else
---                 require('gitsigns').nav_hunk('next')
---             end
---         end, { desc = "Next hunk or diff" })
---         vim.keymap.set('n', '[c', function()
---             if vim.wo.diff then
---                 vim.cmd.normal({'[c', bang = true})
---             else
---                 require('gitsigns').nav_hunk('prev')
---             end
---         end, { desc = "Previous hunk or diff" })
---         -- Actions
---         vim.keymap.set('v', '<leader>gs', function() require('gitsigns').stage_hunk({ vim.fn.line('.'), vim.fn.line('v') }) end, { desc = "[G]it [S]tage" })
---         vim.keymap.set('v', '<leader>gr', function() require('gitsigns').reset_hunk({ vim.fn.line('.'), vim.fn.line('v') }) end, { desc = "[G]it [R]eset" })
---         vim.keymap.set('n', '<leader>gQ', function() require('gitsigns').setqflist('all') end,                                   { desc = "[G]it [Q]uickfix all" })
---         vim.keymap.set('n', '<leader>gs', require('gitsigns').stage_hunk,          { desc = "[G]it [S]tage" })
---         vim.keymap.set('n', '<leader>gr', require('gitsigns').reset_hunk,          { desc = "[G]it [R]eset" })
---         vim.keymap.set('n', '<leader>gS', require('gitsigns').stage_buffer,        { desc = "[G]it entire buffer [S]tage" })
---         vim.keymap.set('n', '<leader>gR', require('gitsigns').reset_buffer,        { desc = "[G]it entire buffer [R]eset" })
---         vim.keymap.set('n', '<leader>gp', require('gitsigns').preview_hunk,        { desc = "[G]it Preview" })
---         vim.keymap.set('n', '<leader>gi', require('gitsigns').preview_hunk_inline, { desc = "[G]it [I]nline preview" })
---         vim.keymap.set('n', '<leader>gd', require('gitsigns').diffthis,            { desc = "[G]it [D]iff" })
---         vim.keymap.set('n', '<leader>gq', require('gitsigns').setqflist,           { desc = "[G]it [Q]uickfix" })
---     end
--- })
 
 -- Git Manager
 require("diffview").setup({ use_icons = false, })
@@ -841,5 +823,8 @@ require("neogit").setup({
 
 -- Time Tracker ===============================================================
 if not is_termux() then
-    vim.opt.runtimepath:append(plugin_path .. "Manual/aw-watcher.vim")
+    vim.opt.runtimepath:append(plugin_path .. "/Manual/aw-watcher-vim")
 end
+require("visimatch").setup({
+    chars_lower_limit = 2,
+})
