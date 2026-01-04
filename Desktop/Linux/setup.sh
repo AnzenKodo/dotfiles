@@ -39,6 +39,7 @@ ln -sfv ~/Dotfiles/Desktop/activitywatch   $XDG_CONFIG_HOME
 ln -sfv ~/Drive/Dotfiles/Desktop/keepassxc $XDG_CONFIG_HOME
 ln -sfv ~/Dotfiles/Desktop/Linux/xfce4     $XDG_CONFIG_HOME
 ln -sfv ~/Applications/Mime/mimeapps.list  $XDG_CONFIG_HOME
+ln -sfv ~/Dotfiles/Desktop/gf2_config.ini  $XDG_CONFIG_HOME
 
 sudo rm /usr/local/bin
 sudo ln -srf $USR_APPLICATIONS_DIR/bin /usr/local/bin
