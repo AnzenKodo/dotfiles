@@ -168,9 +168,9 @@ vim.keymap.set('x', 'p', function() vim.cmd('normal! P') end, { silent = true })
 
 -- Autocomplete
 vim.keymap.set('i', '<A-o>', '<C-x><C-o>', { noremap = true }, { desc = 'Omni-completion (context-aware)' })
-vim.keymap.set('i', '<A-n>', '<C-x><C-n>', { noremap = true }, { desc = 'Completion from current file.' })
+vim.keymap.set('i', '<A-b>', '<C-x><C-n>', { noremap = true }, { desc = 'Completion from current file.' })
 vim.keymap.set('i', '<A-i>', '<C-x><C-i>', { noremap = true }, { desc = 'Completion from include file.' })
-vim.keymap.set('i', '<A-d>', '<C-x><C-k>', { noremap = true }, { desc = 'Dictionary completion' })
+vim.keymap.set('i', '<A-n>', '<C-x><C-k>', { noremap = true }, { desc = 'Dictionary completion' })
 vim.keymap.set('i', '<A-f>', '<C-x><C-f>', { noremap = true }, { desc = 'Filename completion' })
 vim.keymap.set('i', '<A-l>', '<C-x><C-l>', { noremap = true }, { desc = 'Whole line completion' })
 vim.keymap.set('i', '<A-e>', '<C-e>',      { noremap = true }, { desc = 'Cancel completion' })
@@ -344,21 +344,21 @@ vim.api.nvim_create_autocmd({"CursorMoved", "CursorMovedI", "ModeChanged"}, {
         vim.w.cursorword_id = vim.fn.matchadd("CursorWord", pattern, -1)
     end
 })
--- vim.api.nvim_create_autocmd("ModeChanged", {
---   group = augroup,
---   pattern = "*:[^n]*",  -- From Normal to any other mode
---   callback = function()
---     vim.api.nvim_set_hl(0, "CursorWord", {})  -- Clear highlight
---   end,
--- })
 
--- vim.api.nvim_create_autocmd("ModeChanged", {
---   group = augroup,
---   pattern = "[^n]*:n",  -- From any other mode to Normal
---   callback = function()
---     vim.api.nvim_set_hl(0, "CursorWord", { bg = "#45403D", fg = "#DDC7A1" })
---   end,
--- })
+-- Update Autocomplet after save
+vim.api.nvim_create_autocmd({ "BufWritePre" }, {
+    callback = function()
+        local files = vim.fn.globpath('.', '**/*', false, true)
+        files = vim.tbl_filter(function(file)
+            return vim.fn.isdirectory(file) == 0 and not string.match(file, '/%.')
+        end, files)
+        -- limit to current filetype
+        local ext = vim.bo.filetype == '' and '*' or '*.' .. vim.bo.filetype
+        files = vim.fn.globpath('.', '**/' .. ext, false, true)
+        files = vim.tbl_filter(function(file) return vim.fn.isdirectory(file) == 0 end, files)
+        vim.opt_local.dictionary = table.concat(files, ',')
+    end
+})
 
 -- Buffers
 -- ============================================================================
@@ -780,7 +780,7 @@ pcall(require('telescope').load_extension, 'ui-select')
 local builtin = require 'telescope.builtin'
 vim.keymap.set('n', '<leader>fk', builtin.keymaps,             { desc = '[F]ind [K]eymaps' })
 vim.keymap.set('n', '<leader>ff', builtin.find_files,          { desc = '[F]ind [F]iles' })
-vim.keymap.set('n', '<leader>fw', builtin.grep_string,         { desc = '[F]ind current [W]ord' })
+vim.keymap.set({'n', 'x'}, '<leader>fw', builtin.grep_string,         { desc = '[F]ind current [W]ord' })
 vim.keymap.set('n', '<leader>fg', builtin.live_grep,           { desc = '[F]ind by [G]rep' })
 vim.keymap.set('n', '<leader>ft', builtin.tags,                { desc = '[F]ind  [T]ags' })
 vim.keymap.set('n', '<leader>fc', builtin.current_buffer_tags, { desc = '[F]ind [C]urrent tags' })
