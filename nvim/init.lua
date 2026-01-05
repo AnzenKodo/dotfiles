@@ -136,6 +136,36 @@ function open_buffer_in_other_split()
     vim.api.nvim_win_set_cursor(0, {line, col})
 end
 
+local function fill_cmp()
+    local ext = vim.bo.filetype
+    if ext == '' then return end
+    local cmd
+    if vim.fn.executable('fd') == 1 then
+        cmd = { 'fd', '--type', 'f', '--hidden', '--no-ignore', '--extension', ext, '.' }
+    elseif vim.fn.executable('rg') == 1 then
+        cmd = { 'rg', '--files', '--hidden', '--no-ignore', '--glob', '*.' .. ext }
+    else
+        cmd = { 'find', '.', '-type', 'f', '-name', '*.' .. ext }
+    end
+    local job = vim.fn.jobstart(cmd, {
+        stdout_buffered = true,
+        on_exit = function(_, code)
+            if code ~= 0 then return end
+            local files = vim.fn.systemlist(cmd)
+            -- Filter out directories (unlikely with --type f) and hidden if desired
+            files = vim.tbl_filter(function(f) return f ~= '' and not f:match('/%..*') end, files)
+            if #files == 0 then return end
+            vim.schedule(function()
+                vim.opt_local.dictionary = table.concat(files, ',')
+            end)
+        end,
+    })
+
+    if job <= 0 then
+        print('Failed to start job for dictionary setup')
+    end
+end
+
 -- Keybindings
 -- ============================================================================
 
@@ -348,15 +378,7 @@ vim.api.nvim_create_autocmd({"CursorMoved", "CursorMovedI", "ModeChanged"}, {
 -- Update Autocomplet after save
 vim.api.nvim_create_autocmd({ "BufWritePre" }, {
     callback = function()
-        local files = vim.fn.globpath('.', '**/*', false, true)
-        files = vim.tbl_filter(function(file)
-            return vim.fn.isdirectory(file) == 0 and not string.match(file, '/%.')
-        end, files)
-        -- limit to current filetype
-        local ext = vim.bo.filetype == '' and '*' or '*.' .. vim.bo.filetype
-        files = vim.fn.globpath('.', '**/' .. ext, false, true)
-        files = vim.tbl_filter(function(file) return vim.fn.isdirectory(file) == 0 end, files)
-        vim.opt_local.dictionary = table.concat(files, ',')
+        fill_cmp()
     end
 })
 
@@ -482,6 +504,7 @@ vim.api.nvim_set_hl(0, "CursorLine",        { bg = "#3C3836" })
 vim.api.nvim_set_hl(0, "Visual",            { bg = "#504945" })
 vim.api.nvim_set_hl(0, "Type",              { fg = "#7DAEA3" })
 vim.api.nvim_set_hl(0, "WinSeparator",      { fg = "#282828", bg = "#282828" })
+vim.api.nvim_set_hl(0, 'ColorColumn', { bg = '#3c3836' })
 vim.api.nvim_set_hl(0, "commentNote",       { fg = "#D8A657", bold = true })
 vim.cmd([[syntax keyword commentNote NOTE containedin=.*Comment.*]])
 
