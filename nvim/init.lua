@@ -407,7 +407,7 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 -- Tags
 -- ============================================================================
 
-vim.o.tags = "tags,/home/ramen/.cache/ctags/system.tags"
+vim.o.tags = "tags"
 vim.keymap.set('n', ']g', '<C-]>', { desc = 'Jump to definition' })
 vim.keymap.set('n', '[g', '<C-t>', { desc = 'Return from jump' })
 vim.keymap.set('n', '<leader>wg', '<cmd>lua open_buffer_in_other_split()<CR><C-]> ', { desc = "[W]indow [G]oto definition" })
@@ -458,7 +458,32 @@ vim.api.nvim_create_autocmd("FileType", {
     end,
 })
 
-
+-- Theme
+-- ============================================================================
+vim.treesitter.stop()
+local links = {
+    -- "String", "Comment", "Todo", "Debug", "Underlined", "Ignore", "Error", "Type",
+    "Function", "Constant", "Character", "Number", "Boolean", "Float",
+    "Identifier", "Statement", "Conditional", "Repeat", "Label",
+    "Operator", "Keyword", "Exception", "PreProc", "Include", "Define",
+    "Macro", "PreCondit",  "StorageClass", "Structure", "Typedef",
+    "Special", "SpecialChar", "Tag", "Delimiter", "SpecialComment",
+}
+for _, group in ipairs(links) do
+    vim.api.nvim_set_hl(0, group, { fg = "#D4BE98" })
+end
+vim.api.nvim_set_hl(0, "String",            { fg = "#A9B665" });
+vim.api.nvim_set_hl(0, "Comment",           { fg = "#89B482" });
+vim.api.nvim_set_hl(0, "Normal",            { bg = "#32302F" })
+vim.api.nvim_set_hl(0, "NormalNC",          { bg = "#282828" })
+vim.api.nvim_set_hl(0, "LineNr",            { fg = "#A89984" })
+vim.api.nvim_set_hl(0, "Todo",              { fg = "#EA6962", bold = true })
+vim.api.nvim_set_hl(0, "CursorLine",        { bg = "#3C3836" })
+vim.api.nvim_set_hl(0, "Visual",            { bg = "#504945" })
+vim.api.nvim_set_hl(0, "Type",              { fg = "#7DAEA3" })
+vim.api.nvim_set_hl(0, "WinSeparator",      { fg = "#282828", bg = "#282828" })
+vim.api.nvim_set_hl(0, "commentNote",       { fg = "#D8A657", bold = true })
+vim.cmd([[syntax keyword commentNote NOTE containedin=.*Comment.*]])
 
 -- Plugins
 -- ============================================================================
@@ -474,16 +499,6 @@ local plugin_path = vim.fn.stdpath("config") .. "/plugins"
 vim.opt.runtimepath:append(plugin_path .. "/*")
 
 -- Theme ======================================================================
-
--- Colorscheme
-vim.g.gruvbox_material_background = 'material'
-vim.g.gruvbox_material_background = "soft"
-vim.g.gruvbox_material_better_performance = true
-vim.g.gruvbox_material_enable_italic = true
-vim.g.gruvbox_material_dim_inactive_windows = true
-vim.cmd.colorscheme('gruvbox-material')
-vim.cmd.highlight('IndentLineCurrent guifg=#928374')
-vim.cmd.highlight('IndentLine guifg=#504945')
 
 -- Status Line
 require('lualine').setup({
@@ -501,6 +516,8 @@ require('lualine').setup({
 
 -- Indent
 require("indentmini").setup()
+vim.api.nvim_set_hl(0, "IndentLineCurrent", { fg = "#928374" })
+vim.api.nvim_set_hl(0, "IndentLine",        { fg = "#504945" })
 
 -- Wildcard
 require('wilder').setup({ modes = {':', '/', '?'} })
