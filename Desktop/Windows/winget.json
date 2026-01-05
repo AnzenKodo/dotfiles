@@ -1,6 +1,6 @@
 {
 	"$schema" : "https://aka.ms/winget-packages.schema.2.0.json",
-	"CreationDate" : "2025-12-15T10:17:45.690-00:00",
+	"CreationDate" : "2026-01-05T09:27:09.417-00:00",
 	"Sources" : 
 	[
 		{
@@ -39,6 +39,10 @@
 					"Version" : "17.7.2.1"
 				},
 				{
+					"PackageIdentifier" : "Microsoft.SQLServer.OLEDBDriver",
+					"Version" : "18.5.0.0"
+				},
+				{
 					"PackageIdentifier" : "Microsoft.SQLServer.2012.NativeClient",
 					"Version" : "11.4.7462.6"
 				},
@@ -60,7 +64,7 @@
 				},
 				{
 					"PackageIdentifier" : "Microsoft.Edge",
-					"Version" : "143.0.3650.80"
+					"Version" : "143.0.3650.96"
 				},
 				{
 					"PackageIdentifier" : "OBSProject.OBSStudio",
@@ -88,7 +92,7 @@
 				},
 				{
 					"PackageIdentifier" : "Brave.Brave",
-					"Version" : "143.1.85.116"
+					"Version" : "143.1.85.118"
 				},
 				{
 					"PackageIdentifier" : "BrechtSanders.WinLibs.POSIX.MSVCRT",
@@ -128,7 +132,7 @@
 				},
 				{
 					"PackageIdentifier" : "ZedIndustries.Zed.Preview",
-					"Version" : "0.216.0-pre"
+					"Version" : "0.218.3-pre"
 				},
 				{
 					"PackageIdentifier" : "Python.Python.3.9",
