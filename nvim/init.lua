@@ -736,30 +736,48 @@ require("oil").setup({
             nowait = true,
             desc = "Find files in the current directory"
         },
-        -- ["<C-`>"] = {
-        --     function()
-        --         vim.cmd.new()
-        --         vim.cmd.wincmd "J"
-        --         vim.api.nvim_win_set_height(0, 12)
-        --         vim.wo.winfixheight = true
-        --         local current_dir = require("oil").get_current_dir()
-        --         if (vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1) then
-        --             current_dir = win_to_bash_path(current_dir)
-        --         end
-        --         -- current_dir = vim.fn.fnameescape(current_dir)
-        --         vim.cmd.term("bash -c \"cd " .. current_dir .. " && bash\"")
-        --     end,
-        --     nowait = true,
-        --     mode = "n",
-        --     desc = "Open terminal current directory"
-        -- },
-        -- ["†"] = {
-        --     function()
-        --     end,
-        --     nowait = true,
-        --     mode = "n",
-        --     desc = "Open terminal current directory"
-        -- },
+        -- ["<C-`>"] = "actions.open_terminal",
+        ["<M-`>"] = {
+            function()
+                local dir = require("oil").get_current_dir()
+                vim.cmd.new()
+                vim.api.nvim_win_set_height(0, 12)
+                vim.wo.winfixheight = true
+                vim.fn.termopen(vim.o.shell, { cwd = dir })
+                vim.cmd.startinsert()
+            end,
+            nowait = true,
+            mode = "n",
+            desc = "Open terminal in current file's directory"
+        },
+        ["<C-`>"] = {
+            function()
+                local dir = require("oil").get_current_dir()
+                vim.cmd.new()
+                vim.cmd.wincmd "J"
+                vim.api.nvim_win_set_height(0, 12)
+                vim.wo.winfixheight = true
+                vim.fn.termopen(vim.o.shell, { cwd = dir })
+                vim.cmd.startinsert()
+            end,
+            nowait = true,
+            mode = "n",
+            desc = "Open terminal window in current file's directory"
+        },
+        ["†"] = {
+            function()
+                local dir = require("oil").get_current_dir()
+                vim.cmd.new()
+                vim.cmd.wincmd "J"
+                vim.api.nvim_win_set_height(0, 12)
+                vim.wo.winfixheight = true
+                vim.fn.termopen(vim.o.shell, { cwd = dir })
+                vim.cmd.startinsert()
+            end,
+            nowait = true,
+            mode = "n",
+            desc = "Open terminal window in current directory"
+        },
     },
     float = {
         preview_split = "auto",
