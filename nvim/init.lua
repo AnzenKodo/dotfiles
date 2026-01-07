@@ -29,10 +29,6 @@ vim.o.scrolloff = 999       -- Keep cursor centered vertically
 vim.o.sidescrolloff = 50    -- Keep cursor centered horizontally
 vim.o.undofile = true       -- Undo
 
--- Auto complete
-vim.o.omnifunc = "syntaxcomplete#Compete"
-vim.opt.completeopt:append { "menuone", "preview", "noselect" }
-
 -- Tabs
 vim.o.tabstop = 4      -- Number of spaces a tab counts for
 vim.o.shiftwidth = 4   -- Spaces for each (auto)indent step
@@ -136,36 +132,6 @@ function open_buffer_in_other_split()
     vim.api.nvim_win_set_cursor(0, {line, col})
 end
 
-local function fill_cmp()
-    local ext = vim.bo.filetype
-    if ext == '' then return end
-    local cmd
-    if vim.fn.executable('fd') == 1 then
-        cmd = { 'fd', '--type', 'f', '--hidden', '--no-ignore', '--extension', ext, '.' }
-    elseif vim.fn.executable('rg') == 1 then
-        cmd = { 'rg', '--files', '--hidden', '--no-ignore', '--glob', '*.' .. ext }
-    else
-        cmd = { 'find', '.', '-type', 'f', '-name', '*.' .. ext }
-    end
-    local job = vim.fn.jobstart(cmd, {
-        stdout_buffered = true,
-        on_exit = function(_, code)
-            if code ~= 0 then return end
-            local files = vim.fn.systemlist(cmd)
-            -- Filter out directories (unlikely with --type f) and hidden if desired
-            files = vim.tbl_filter(function(f) return f ~= '' and not f:match('/%..*') end, files)
-            if #files == 0 then return end
-            vim.schedule(function()
-                vim.opt_local.dictionary = table.concat(files, ',')
-            end)
-        end,
-    })
-
-    if job <= 0 then
-        print('Failed to start job for dictionary setup')
-    end
-end
-
 -- Keybindings
 -- ============================================================================
 
@@ -195,17 +161,6 @@ vim.keymap.set("v", "<A-k>", ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<c
 -- Paste
 vim.keymap.set('x', 'P', function() vim.cmd('normal! p') end, { silent = true })
 vim.keymap.set('x', 'p', function() vim.cmd('normal! P') end, { silent = true })
-
--- Autocomplete
-vim.keymap.set('i', '<A-o>', '<C-x><C-o>', { noremap = true }, { desc = 'Omni-completion (context-aware)' })
-vim.keymap.set('i', '<A-b>', '<C-x><C-n>', { noremap = true }, { desc = 'Completion from current file.' })
-vim.keymap.set('i', '<A-i>', '<C-x><C-i>', { noremap = true }, { desc = 'Completion from include file.' })
-vim.keymap.set('i', '<A-n>', '<C-x><C-k>', { noremap = true }, { desc = 'Dictionary completion' })
-vim.keymap.set('i', '<A-f>', '<C-x><C-f>', { noremap = true }, { desc = 'Filename completion' })
-vim.keymap.set('i', '<A-l>', '<C-x><C-l>', { noremap = true }, { desc = 'Whole line completion' })
-vim.keymap.set('i', '<A-e>', '<C-e>',      { noremap = true }, { desc = 'Cancel completion' })
-vim.keymap.set('i', '<Tab>',   'pumvisible() ? "\\<C-n>" : "\\<Tab>"', { expr = true })
-vim.keymap.set('i', '<S-Tab>', 'pumvisible() ? "\\<C-p>" : "\\<S-Tab>"', { expr = true })
 
 -- Split
 vim.keymap.set('n', '<leader>wv', '<C-w>v', { desc = '[W]indow [V]ertical' })
@@ -375,13 +330,6 @@ vim.api.nvim_create_autocmd({"CursorMoved", "CursorMovedI", "ModeChanged"}, {
     end
 })
 
--- Update Autocomplet after save
-vim.api.nvim_create_autocmd({ "BufWritePre" }, {
-    callback = function()
-        fill_cmp()
-    end
-})
-
 -- Buffers
 -- ============================================================================
 
@@ -389,6 +337,57 @@ vim.keymap.set("n", "[b", "<cmd>bprevious<cr>",    { desc = "Prev Buffer" })
 vim.keymap.set("n", "]b", "<cmd>bnext<cr>",        { desc = "Next Buffer" })
 vim.api.nvim_create_user_command("Bda", function() vim.cmd("%bdelete|edit #|bdelete #") end, {})
 vim.api.nvim_create_user_command("Bd",  function() vim.cmd("bn | bd#") end, {})
+
+-- Autocomplete
+-- ============================================================================
+
+vim.o.omnifunc = "syntaxcomplete#Compete"
+vim.opt.completeopt:append { "menuone", "preview", "noselect" }
+vim.o.complete = ".,w,b,u,U"
+vim.keymap.set('i', '<A-n>', '<C-x><C-p>', { noremap = true }, { desc = 'Completion from all sources.' })
+vim.keymap.set('i', '<A-o>', '<C-x><C-o>', { noremap = true }, { desc = '[O]mni-completion' })
+vim.keymap.set('i', '<A-b>', '<C-x><C-n>', { noremap = true }, { desc = '[B]uffer completion' })
+vim.keymap.set('i', '<A-i>', '<C-x><C-i>', { noremap = true }, { desc = '[I]nclude file completion' })
+vim.keymap.set('i', '<A-d>', '<C-x><C-k>', { noremap = true }, { desc = '[D]ictionary completion' })
+vim.keymap.set('i', '<A-f>', '<C-x><C-f>', { noremap = true }, { desc = '[F]ilename completion' })
+vim.keymap.set('i', '<A-l>', '<C-x><C-l>', { noremap = true }, { desc = '[L]ine completion' })
+vim.keymap.set('i', '<A-e>', '<C-e>',      { noremap = true }, { desc = '[E]nd completion' })
+vim.keymap.set('i', '<Tab>',   'pumvisible() ? "\\<C-n>" : "\\<Tab>"', { expr = true })
+vim.keymap.set('i', '<S-Tab>', 'pumvisible() ? "\\<C-p>" : "\\<S-Tab>"', { expr = true })
+
+function fill_cmp()
+    local ext = vim.bo.filetype
+    if ext == '' then return end
+    local cmd
+    if vim.fn.executable('fd') == 1 then
+        cmd = { 'fd', '--type', 'f', '--hidden', '--no-ignore', '--extension', ext, '.' }
+    elseif vim.fn.executable('rg') == 1 then
+        cmd = { 'rg', '--files', '--hidden', '--no-ignore', '--glob', '*.' .. ext }
+    else
+        cmd = { 'find', '.', '-type', 'f', '-name', '*.' .. ext }
+    end
+    local job = vim.fn.jobstart(cmd, {
+        stdout_buffered = true,
+        on_exit = function(_, code)
+            if code ~= 0 then return end
+            local files = vim.fn.systemlist(cmd)
+            -- Filter out directories (unlikely with --type f) and hidden if desired
+            files = vim.tbl_filter(function(f) return f ~= '' and not f:match('/%..*') end, files)
+            if #files == 0 then return end
+            vim.schedule(function()
+                vim.o.dictionary = table.concat(files, ',')
+            end)
+        end,
+    })
+
+    if job <= 0 then
+        print('Failed to start job for dictionary setup')
+    end
+end
+
+vim.api.nvim_create_autocmd("BufEnter", {
+    callback = fill_cmp
+})
 
 -- Terminal
 -- ============================================================================
