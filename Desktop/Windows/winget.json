@@ -1,6 +1,6 @@
 {
 	"$schema" : "https://aka.ms/winget-packages.schema.2.0.json",
-	"CreationDate" : "2026-01-06T04:49:09.917-00:00",
+	"CreationDate" : "2026-01-08T12:51:57.162-00:00",
 	"Sources" : 
 	[
 		{
@@ -71,6 +71,10 @@
 					"Version" : "31.1.2"
 				},
 				{
+					"PackageIdentifier" : "Microsoft.WindowsApplicationDriver",
+					"Version" : "1.2.99.0"
+				},
+				{
 					"PackageIdentifier" : "Python.Launcher",
 					"Version" : "< 3.9.8"
 				},
@@ -92,7 +96,7 @@
 				},
 				{
 					"PackageIdentifier" : "Brave.Brave",
-					"Version" : "143.1.85.118"
+					"Version" : "143.1.85.120"
 				},
 				{
 					"PackageIdentifier" : "BrechtSanders.WinLibs.POSIX.MSVCRT",
@@ -132,7 +136,7 @@
 				},
 				{
 					"PackageIdentifier" : "ZedIndustries.Zed.Preview",
-					"Version" : "0.218.3-pre"
+					"Version" : "0.218.5-pre"
 				},
 				{
 					"PackageIdentifier" : "Python.Python.3.9",
@@ -172,7 +176,7 @@
 			[
 				{
 					"PackageIdentifier" : "9PNKDR50694P",
-					"Version" : "25.3.0.0"
+					"Version" : "25.3.1.0"
 				}
 			],
 			"SourceDetails" : 
