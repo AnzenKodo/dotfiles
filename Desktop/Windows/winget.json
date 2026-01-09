@@ -1,6 +1,6 @@
 {
 	"$schema" : "https://aka.ms/winget-packages.schema.2.0.json",
-	"CreationDate" : "2026-01-08T12:51:57.162-00:00",
+	"CreationDate" : "2026-01-09T14:58:24.390-00:00",
 	"Sources" : 
 	[
 		{
@@ -136,7 +136,7 @@
 				},
 				{
 					"PackageIdentifier" : "ZedIndustries.Zed.Preview",
-					"Version" : "0.218.5-pre"
+					"Version" : "0.219.2-pre"
 				},
 				{
 					"PackageIdentifier" : "Python.Python.3.9",

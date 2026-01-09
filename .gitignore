@@ -1,2 +1,3 @@
 *.tags
-Modules
+*.pak
+Modules/
