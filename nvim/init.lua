@@ -400,14 +400,6 @@ function open_split_terminal()
     vim.cmd.term("bash")
 end
 
-vim.keymap.set({"i", "n"}, "<M-`>", function()
-    local dirname = vim.fn.expand('%:p:h')
-    vim.cmd.new()
-    vim.api.nvim_win_set_height(0, 12)
-    vim.wo.winfixheight = true
-    vim.fn.termopen("bash", { cwd = dirname })
-    vim.cmd.startinsert()
-end, { desc = "Open Split Termainl" })
 if (vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1) and not vim.g.neovide then
     vim.keymap.set({"i", "n"}, "†", open_split_terminal, { desc = "Open Split Termainl" })
 else
@@ -496,16 +488,15 @@ local links = {
     "Identifier", "Statement", "Conditional", "Repeat", "Label",
     "Operator", "Keyword", "Exception", "PreProc", "Include", "Define",
     "Macro", "PreCondit",  "StorageClass", "Structure", "Typedef",
-    "Special", "SpecialChar", "Tag", "Delimiter", "SpecialComment"
+    "Special", "SpecialChar", "Tag", "Delimiter", "SpecialComment",
 }
 for _, group in ipairs(links) do
     vim.api.nvim_set_hl(0, group, { fg = "#D4BE98" })
 end
-
 vim.api.nvim_set_hl(0, "String",            { fg = "#A9B665" });
 vim.api.nvim_set_hl(0, "Comment",           { fg = "#89B482" });
-vim.api.nvim_set_hl(0, "Normal",            { bg = "#32302F", fg = "#D4BE98" })
-vim.api.nvim_set_hl(0, "NormalNC",          { bg = "#282828", fg = "#D4BE98" })
+vim.api.nvim_set_hl(0, "Normal",            { bg = "#32302F" })
+vim.api.nvim_set_hl(0, "NormalNC",          { bg = "#282828" })
 vim.api.nvim_set_hl(0, "LineNr",            { fg = "#A89984" })
 vim.api.nvim_set_hl(0, "Todo",              { fg = "#EA6962", bold = true })
 vim.api.nvim_set_hl(0, "CursorLine",        { bg = "#3C3836" })
@@ -515,7 +506,6 @@ vim.api.nvim_set_hl(0, "WinSeparator",      { fg = "#282828", bg = "#282828" })
 vim.api.nvim_set_hl(0, 'ColorColumn', { bg = '#3c3836' })
 vim.api.nvim_set_hl(0, "commentNote",       { fg = "#D8A657", bold = true })
 vim.cmd([[syntax keyword commentNote NOTE containedin=.*Comment.*]])
-
 
 -- Plugins
 -- ============================================================================
@@ -745,20 +735,47 @@ require("oil").setup({
             nowait = true,
             desc = "Find files in the current directory"
         },
-        -- ["<C-`>"] = "actions.open_terminal",
         ["<M-`>"] = {
             function()
                 local dir = require("oil").get_current_dir()
                 vim.cmd.new()
                 vim.api.nvim_win_set_height(0, 12)
                 vim.wo.winfixheight = true
-                vim.fn.termopen("bash", { cwd = dir })
+                vim.fn.termopen(vim.o.shell, { cwd = dir })
                 vim.cmd.startinsert()
             end,
             nowait = true,
             mode = "n",
             desc = "Open terminal in current file's directory"
-        }
+        },
+        ["<C-`>"] = {
+            function()
+                local dir = require("oil").get_current_dir()
+                vim.cmd.new()
+                vim.cmd.wincmd "J"
+                vim.api.nvim_win_set_height(0, 12)
+                vim.wo.winfixheight = true
+                vim.fn.termopen(vim.o.shell, { cwd = dir })
+                vim.cmd.startinsert()
+            end,
+            nowait = true,
+            mode = "n",
+            desc = "Open terminal window in current file's directory"
+        },
+        ["†"] = {
+            function()
+                local dir = require("oil").get_current_dir()
+                vim.cmd.new()
+                vim.cmd.wincmd "J"
+                vim.api.nvim_win_set_height(0, 12)
+                vim.wo.winfixheight = true
+                vim.fn.termopen(vim.o.shell, { cwd = dir })
+                vim.cmd.startinsert()
+            end,
+            nowait = true,
+            mode = "n",
+            desc = "Open terminal window in current directory"
+        },
     },
     float = {
         preview_split = "auto",
@@ -817,20 +834,25 @@ pcall(require('telescope').load_extension, 'fzf')
 pcall(require('telescope').load_extension, 'ui-select')
 -- Keymaps
 local builtin = require 'telescope.builtin'
-vim.keymap.set('n', '<leader>fk', builtin.keymaps,             { desc = '[F]ind [K]eymaps' })
-vim.keymap.set('n', '<leader>ff', builtin.find_files,          { desc = '[F]ind [F]iles' })
-vim.keymap.set({'n', 'x'}, '<leader>fw', builtin.grep_string,         { desc = '[F]ind current [W]ord' })
-vim.keymap.set('n', '<leader>fg', builtin.live_grep,           { desc = '[F]ind by [G]rep' })
-vim.keymap.set('n', '<leader>ft', builtin.tags,                { desc = '[F]ind  [T]ags' })
-vim.keymap.set('n', '<leader>fc', builtin.current_buffer_tags, { desc = '[F]ind [C]urrent tags' })
-vim.keymap.set('n', '<leader>fo', builtin.oldfiles,            { desc = '[F]ind Recent Files ("." for repeat)' })
-vim.keymap.set('n', '<leader>fb', builtin.buffers,             { desc = 'Find existing buffers' })
+vim.keymap.set('n', '<leader>fk', builtin.keymaps,             { desc = '[f]ind [k]eymaps' })
+vim.keymap.set('n', '<leader>ff', builtin.find_files,          { desc = '[f]ind [f]iles' })
+vim.keymap.set('n', '<leader>fF', function()
+    require("telescope.builtin").find_files({
+        cwd = require("oil").get_current_dir()
+    })
+end, { desc = '[F]ind [F]iles in current file dir' })
+vim.keymap.set({'n', 'x'}, '<leader>fw', builtin.grep_string,         { desc = '[f]ind current [w]ord' })
+vim.keymap.set('n', '<leader>fg', builtin.live_grep,           { desc = '[f]ind by [g]rep' })
+vim.keymap.set('n', '<leader>ft', builtin.tags,                { desc = '[f]ind  [t]ags' })
+vim.keymap.set('n', '<leader>fc', builtin.current_buffer_tags, { desc = '[f]ind [c]urrent tags' })
+vim.keymap.set('n', '<leader>fo', builtin.oldfiles,            { desc = '[f]ind Recent Files ("." for repeat)' })
+vim.keymap.set('n', '<leader>fb', builtin.buffers,             { desc = '[f]ind [b]uffers' })
 vim.keymap.set('n', '<leader>/', function()
     builtin.current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
         winblend = 10,
         previewer = false,
     })
-end, { desc = '[/] Fuzzily search in current buffer' })
+end, { desc = 'Fuzzily search in current buffer' })
 vim.keymap.set('n', '<leader>f/', function()
     builtin.live_grep {
         grep_open_files = true,
