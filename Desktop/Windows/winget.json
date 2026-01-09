@@ -1,12 +1,7 @@
 {
 	"$schema" : "https://aka.ms/winget-packages.schema.2.0.json",
-<<<<<<< HEAD
 	"CreationDate" : "2026-01-09T14:58:24.390-00:00",
 	"Sources" :
-=======
-	"CreationDate" : "2026-01-09T16:08:09.169-00:00",
-	"Sources" : 
->>>>>>> dc52385 (Backup from Windows Desktop)
 	[
 		{
 			"Packages" :
