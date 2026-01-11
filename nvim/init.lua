@@ -503,7 +503,7 @@ vim.api.nvim_set_hl(0, "CursorLine",        { bg = "#3C3836" })
 vim.api.nvim_set_hl(0, "Visual",            { bg = "#504945" })
 vim.api.nvim_set_hl(0, "Type",              { fg = "#7DAEA3" })
 vim.api.nvim_set_hl(0, "WinSeparator",      { fg = "#282828", bg = "#282828" })
-vim.api.nvim_set_hl(0, 'ColorColumn', { bg = '#3c3836' })
+vim.api.nvim_set_hl(0, 'ColorColumn',       { bg = '#3c3836' })
 vim.api.nvim_set_hl(0, "commentNote",       { fg = "#D8A657", bold = true })
 vim.cmd([[syntax keyword commentNote NOTE containedin=.*Comment.*]])
 
@@ -725,15 +725,21 @@ require("oil").setup({
         ["gp"]  = "actions.preview",
         ["gr"]  = "actions.refresh",
         ["gx"]  = "actions.open_external",
-        ["gf"]  = {
+        ["<leader>fF"]  = {
             function()
-                require("telescope.builtin").find_files({
-                    cwd = require("oil").get_current_dir()
-                })
+                require("telescope.builtin").find_files({ cwd = require("oil").get_current_dir() })
             end,
             mode = "n",
             nowait = true,
-            desc = "Find files in the current directory"
+            desc = "[f]ind [F]iles in the current dir"
+        },
+        ["<leader>fG"]  = {
+            function()
+                require("telescope.builtin").live_grep({ cwd = require("oil").get_current_dir() })
+            end,
+            mode = "n",
+            nowait = true,
+            desc = "[f]ind by [G]rep files in the current dir"
         },
         ["<M-`>"] = {
             function()
@@ -741,40 +747,12 @@ require("oil").setup({
                 vim.cmd.new()
                 vim.api.nvim_win_set_height(0, 12)
                 vim.wo.winfixheight = true
-                vim.fn.termopen(vim.o.shell, { cwd = dir })
+                vim.fn.termopen("bash", { cwd = dir })
                 vim.cmd.startinsert()
             end,
             nowait = true,
             mode = "n",
             desc = "Open terminal in current file's directory"
-        },
-        ["<C-`>"] = {
-            function()
-                local dir = require("oil").get_current_dir()
-                vim.cmd.new()
-                vim.cmd.wincmd "J"
-                vim.api.nvim_win_set_height(0, 12)
-                vim.wo.winfixheight = true
-                vim.fn.termopen(vim.o.shell, { cwd = dir })
-                vim.cmd.startinsert()
-            end,
-            nowait = true,
-            mode = "n",
-            desc = "Open terminal window in current file's directory"
-        },
-        ["†"] = {
-            function()
-                local dir = require("oil").get_current_dir()
-                vim.cmd.new()
-                vim.cmd.wincmd "J"
-                vim.api.nvim_win_set_height(0, 12)
-                vim.wo.winfixheight = true
-                vim.fn.termopen(vim.o.shell, { cwd = dir })
-                vim.cmd.startinsert()
-            end,
-            nowait = true,
-            mode = "n",
-            desc = "Open terminal window in current directory"
         },
     },
     float = {
@@ -833,28 +811,28 @@ require('telescope').setup {
 pcall(require('telescope').load_extension, 'fzf')
 pcall(require('telescope').load_extension, 'ui-select')
 -- Keymaps
-local builtin = require 'telescope.builtin'
-vim.keymap.set('n', '<leader>fk', builtin.keymaps,             { desc = '[f]ind [k]eymaps' })
-vim.keymap.set('n', '<leader>ff', builtin.find_files,          { desc = '[f]ind [f]iles' })
+vim.keymap.set('n', '<leader>fk', require('telescope.builtin').keymaps,             { desc = '[f]ind [k]eymaps' })
+vim.keymap.set('n', '<leader>ff', require('telescope.builtin').find_files,          { desc = '[f]ind [f]iles' })
+vim.keymap.set('n', '<leader>fg', require('telescope.builtin').live_grep,           { desc = '[f]ind by [g]rep' })
+vim.keymap.set('n', '<leader>ft', require('telescope.builtin').tags,                { desc = '[f]ind  [t]ags' })
+vim.keymap.set('n', '<leader>fc', require('telescope.builtin').current_buffer_tags, { desc = '[f]ind [c]urrent tags' })
+vim.keymap.set('n', '<leader>fo', require('telescope.builtin').oldfiles,            { desc = '[f]ind Recent Files ("." for repeat)' })
+vim.keymap.set('n', '<leader>fb', require('telescope.builtin').buffers,             { desc = '[f]ind [b]uffers' })
+vim.keymap.set('n', '<leader>fG', function()
+    require('telescope.builtin').live_grep({ cwd = "%:p:h" })
+end, { desc = '[f]ind by [G]rep in current file dir' })
 vim.keymap.set('n', '<leader>fF', function()
-    require("telescope.builtin").find_files({
-        cwd = require("oil").get_current_dir()
-    })
+    require("telescope.builtin").find_files({ cwd = "%:p:h" })
 end, { desc = '[F]ind [F]iles in current file dir' })
-vim.keymap.set({'n', 'x'}, '<leader>fw', builtin.grep_string,         { desc = '[f]ind current [w]ord' })
-vim.keymap.set('n', '<leader>fg', builtin.live_grep,           { desc = '[f]ind by [g]rep' })
-vim.keymap.set('n', '<leader>ft', builtin.tags,                { desc = '[f]ind  [t]ags' })
-vim.keymap.set('n', '<leader>fc', builtin.current_buffer_tags, { desc = '[f]ind [c]urrent tags' })
-vim.keymap.set('n', '<leader>fo', builtin.oldfiles,            { desc = '[f]ind Recent Files ("." for repeat)' })
-vim.keymap.set('n', '<leader>fb', builtin.buffers,             { desc = '[f]ind [b]uffers' })
+vim.keymap.set({'n', 'x'}, '<leader>fw', require('telescope.builtin').grep_string,         { desc = '[f]ind current [w]ord' })
 vim.keymap.set('n', '<leader>/', function()
-    builtin.current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
+    require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
         winblend = 10,
         previewer = false,
     })
 end, { desc = 'Fuzzily search in current buffer' })
 vim.keymap.set('n', '<leader>f/', function()
-    builtin.live_grep {
+    require('telescope.builtin').live_grep {
         grep_open_files = true,
         prompt_title = 'Live Grep in Open Files',
     }
