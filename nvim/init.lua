@@ -1,3 +1,19 @@
+local color_table = {
+    bg          = "#32302F",
+    bg_unfocus  = "#282828",
+    bg_light    = "#504945",
+    bg_lighter  = "#3C3836",
+    bg_lighter2 = "#45403D",
+    fg          = "#D4BE98",
+    fg_dark     = "#A89984",
+    green_light = "#A9B665",
+    green_dark  = "#89B482",
+    red         = "#EA6962",
+    yellow      = "#D8A657",
+    blue        = "#7DAEA3",
+    pink        = "#D3869B"
+}
+
 -- Settings
 -- ============================================================================
 
@@ -298,7 +314,7 @@ vim.api.nvim_create_autocmd("BufReadPost", {
 vim.api.nvim_create_autocmd({"CursorMoved", "CursorMovedI", "ModeChanged"}, {
     callback = function()
         min_length_cursor_len = 3
-        vim.api.nvim_set_hl(0, "CursorWord", { bg = "#45403D" })
+        vim.api.nvim_set_hl(0, "CursorWord", { bg = color_table.bg_lighter2 })
         local column = vim.api.nvim_win_get_cursor(0)[2]
         local line = vim.api.nvim_get_current_line()
         local cursorword = vim.fn.matchstr(line:sub(1, column + 1), [[\k*$]])
@@ -481,31 +497,34 @@ vim.api.nvim_create_autocmd("FileType", {
 
 -- Theme
 -- ============================================================================
-vim.treesitter.stop()
-local links = {
-    -- "String", "Comment", "Todo", "Debug", "Underlined", "Ignore", "Error", "Type",
-    "Function", "Constant", "Character", "Number", "Boolean", "Float",
-    "Identifier", "Statement", "Conditional", "Repeat", "Label",
-    "Operator", "Keyword", "Exception", "PreProc", "Include", "Define",
-    "Macro", "PreCondit",  "StorageClass", "Structure", "Typedef",
-    "Special", "SpecialChar", "Tag", "Delimiter", "SpecialComment",
-}
-for _, group in ipairs(links) do
-    vim.api.nvim_set_hl(0, group, { fg = "#D4BE98" })
-end
-vim.api.nvim_set_hl(0, "String",            { fg = "#A9B665" });
-vim.api.nvim_set_hl(0, "Comment",           { fg = "#89B482" });
-vim.api.nvim_set_hl(0, "Normal",            { bg = "#32302F" })
-vim.api.nvim_set_hl(0, "NormalNC",          { bg = "#282828" })
-vim.api.nvim_set_hl(0, "LineNr",            { fg = "#A89984" })
-vim.api.nvim_set_hl(0, "Todo",              { fg = "#EA6962", bold = true })
-vim.api.nvim_set_hl(0, "CursorLine",        { bg = "#3C3836" })
-vim.api.nvim_set_hl(0, "Visual",            { bg = "#504945" })
-vim.api.nvim_set_hl(0, "Type",              { fg = "#7DAEA3" })
-vim.api.nvim_set_hl(0, "WinSeparator",      { fg = "#282828", bg = "#282828" })
-vim.api.nvim_set_hl(0, 'ColorColumn',       { bg = '#3c3836' })
-vim.api.nvim_set_hl(0, "commentNote",       { fg = "#D8A657", bold = true })
-vim.cmd([[syntax keyword commentNote NOTE containedin=.*Comment.*]])
+vim.api.nvim_create_autocmd("BufEnter", {
+    callback = function()
+        vim.treesitter.stop()
+        local links = { "Statement", "Constant", "Identifier", "Operator" }
+        for _, group in ipairs(links) do
+            vim.api.nvim_set_hl(0, group, { fg = color_table.fg })
+        end
+        -- Code
+        vim.api.nvim_set_hl(0, "String",            { fg = color_table.green_light })
+        vim.api.nvim_set_hl(0, "Comment",           { fg = color_table.green_dark })
+        vim.api.nvim_set_hl(0, "Type",              { fg = color_table.blue })
+        vim.api.nvim_set_hl(0, 'Function',          { fg = color_table.pink })
+        vim.api.nvim_set_hl(0, 'PreProc',           { fg = color_table.pink })
+        -- Editor
+        vim.api.nvim_set_hl(0, "Normal",            { bg = color_table.bg })
+        vim.api.nvim_set_hl(0, "NormalNC",          { bg = color_table.bg_unfocus })
+        vim.api.nvim_set_hl(0, "LineNr",            { fg = color_table.fg_dark })
+        vim.api.nvim_set_hl(0, "Todo",              { fg = color_table.red, bold = true })
+        vim.api.nvim_set_hl(0, "CursorLine",        { bg = color_table.bg_lighter })
+        vim.api.nvim_set_hl(0, "Visual",            { bg = color_table.bg_light })
+        vim.api.nvim_set_hl(0, "WinSeparator",      { fg = color_table.bg_unfocus, bg = color_table.bg_unfocus })
+        vim.api.nvim_set_hl(0, 'ColorColumn',       { bg = color_table.bg_lighter })
+        vim.api.nvim_set_hl(0, "IndentLineCurrent", { fg = color_table.fg_dark })
+        vim.api.nvim_set_hl(0, "IndentLine",        { fg = color_table.bg_light })
+        vim.api.nvim_set_hl(0, "commentNote",  { fg = color_table.yellow, bold = true })
+        vim.cmd([[syntax keyword commentNote NOTE containedin=.*Comment.*]])
+    end,
+})
 
 -- Plugins
 -- ============================================================================
@@ -538,8 +557,6 @@ require('lualine').setup({
 
 -- Indent
 require("indentmini").setup()
-vim.api.nvim_set_hl(0, "IndentLineCurrent", { fg = "#928374" })
-vim.api.nvim_set_hl(0, "IndentLine",        { fg = "#504945" })
 
 -- Wildcard
 require('wilder').setup({ modes = {':', '/', '?'} })
