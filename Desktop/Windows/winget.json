@@ -1,6 +1,6 @@
 {
 	"$schema" : "https://aka.ms/winget-packages.schema.2.0.json",
-	"CreationDate" : "2026-01-11T13:01:15.983-00:00",
+	"CreationDate" : "2026-01-12T09:48:40.096-00:00",
 	"Sources" : 
 	[
 		{
@@ -21,10 +21,6 @@
 				{
 					"PackageIdentifier" : "ONLYOFFICE.DesktopEditors",
 					"Version" : "9.0.3"
-				},
-				{
-					"PackageIdentifier" : "Fortinet.FortiClientVPN",
-					"Version" : "7.4.3.1790"
 				},
 				{
 					"PackageIdentifier" : "Oracle.JavaRuntimeEnvironment",
