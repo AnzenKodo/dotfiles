@@ -500,7 +500,7 @@ vim.api.nvim_create_autocmd("FileType", {
 vim.api.nvim_create_autocmd("BufEnter", {
     callback = function()
         vim.treesitter.stop()
-        local links = { "Statement", "Constant", "Identifier", "Operator" }
+        local links = { "Statement", "Constant", "Identifier", "Operator", "Special" }
         for _, group in ipairs(links) do
             vim.api.nvim_set_hl(0, group, { fg = color_table.fg })
         end
@@ -510,6 +510,9 @@ vim.api.nvim_create_autocmd("BufEnter", {
         vim.api.nvim_set_hl(0, "Type",              { fg = color_table.blue })
         vim.api.nvim_set_hl(0, 'Function',          { fg = color_table.pink })
         vim.api.nvim_set_hl(0, 'PreProc',           { fg = color_table.pink })
+        -- Markdown
+        vim.api.nvim_set_hl(0, 'Title',             { fg = color_table.pink })
+        vim.api.nvim_set_hl(0, 'Delimiter',         { fg = color_table.pink })
         -- Editor
         vim.api.nvim_set_hl(0, "Normal",            { bg = color_table.bg })
         vim.api.nvim_set_hl(0, "NormalNC",          { bg = color_table.bg_unfocus })
