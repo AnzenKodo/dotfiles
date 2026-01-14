@@ -1,6 +1,6 @@
 {
 	"$schema" : "https://aka.ms/winget-packages.schema.2.0.json",
-	"CreationDate" : "2026-01-12T09:48:40.096-00:00",
+	"CreationDate" : "2026-01-14T15:40:51.974-00:00",
 	"Sources" : 
 	[
 		{
@@ -43,10 +43,6 @@
 					"Version" : "11.4.7462.6"
 				},
 				{
-					"PackageIdentifier" : "Neovim.Neovim",
-					"Version" : "0.11.3"
-				},
-				{
 					"PackageIdentifier" : "GoLang.Go",
 					"Version" : "1.25.0"
 				},
@@ -57,6 +53,10 @@
 				{
 					"PackageIdentifier" : "Microsoft.OpenJDK.17",
 					"Version" : "17.0.16.8"
+				},
+				{
+					"PackageIdentifier" : "Neovim.Neovim",
+					"Version" : "0.11.5"
 				},
 				{
 					"PackageIdentifier" : "Microsoft.Edge",
