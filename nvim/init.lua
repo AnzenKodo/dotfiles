@@ -10,6 +10,7 @@ local color_table = {
     green_dark  = "#89B482",
     red         = "#EA6962",
     yellow      = "#D8A657",
+    orange      = "#d08c3d",
     blue        = "#7DAEA3",
     pink        = "#D3869B"
 }
@@ -155,17 +156,6 @@ vim.keymap.set("n", '<Esc>', '<cmd>nohlsearch<CR>', { desc = "Clear Search Highl
 vim.keymap.set("t", '<Esc>', '<C-\\><C-n>',    { desc = 'Exit terminal mode' })
 vim.keymap.set('n', 'L', vim.diagnostic.open_float, { desc = 'Show Diagnostic' })
 vim.keymap.set({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save File" })
-vim.keymap.set({'n', 'v'}, 'gf', function()
-    vim.cmd [[
-        let fileInfo = split(expand("<cWORD>"), ":")
-        let column = 0
-        normal! gF
-        if len(fileInfo) > 2
-            let column = fileInfo[2]
-            execute 'normal! ' . column . '|'
-        endif
-    ]]
-end, { desc = "[G]o to [F]ile", noremap = true })
 
 vim.keymap.set("n", "<A-j>", "<cmd>execute 'move .+' . v:count1<cr>==",                   { desc = "Move Line Down" })
 vim.keymap.set("n", "<A-k>", "<cmd>execute 'move .-' . (v:count1 + 1)<cr>==",             { desc = "Move Line Up" })
@@ -191,7 +181,7 @@ vim.keymap.set('n', '<leader>wx', '<C-w>x', { desc = '[W]indow [X]wap sides' })
 vim.keymap.set('n', '<leader>ws', '<C-w>w', { desc = '[W]indow [S]witch' })
 vim.keymap.set('n', '<leader>wn', '<C-w>n', { desc = '[W]indow [N]ew' })
 vim.keymap.set('n', '<leader>w=', '<C-w>=', { desc = '[W]indow [=]Equal' })
-vim.keymap.set('n', '<leader>ww', "<cmd>e #<cr>", { desc = 'Switch to previous [W]indow buffer' })
+vim.keymap.set('n', '<leader>wr', "<cmd>e #<cr>", { desc = '[W]indow [r]otate' })
 
 local toggle_state = false
 vim.keymap.set('n', '<leader>w/', function()
@@ -500,16 +490,17 @@ vim.api.nvim_create_autocmd("FileType", {
 vim.api.nvim_create_autocmd("BufEnter", {
     callback = function()
         vim.treesitter.stop()
-        local links = { "Statement", "Constant", "Identifier", "Operator", "Special" }
+        local links = { "Constant", "Identifier", "Operator", "Special" }
         for _, group in ipairs(links) do
             vim.api.nvim_set_hl(0, group, { fg = color_table.fg })
         end
         -- Code
+        vim.api.nvim_set_hl(0, "Statement",         { fg = color_table.pink })
         vim.api.nvim_set_hl(0, "String",            { fg = color_table.green_light })
         vim.api.nvim_set_hl(0, "Comment",           { fg = color_table.green_dark })
         vim.api.nvim_set_hl(0, "Type",              { fg = color_table.blue })
         vim.api.nvim_set_hl(0, 'Function',          { fg = color_table.pink })
-        vim.api.nvim_set_hl(0, 'PreProc',           { fg = color_table.pink })
+        vim.api.nvim_set_hl(0, 'PreProc',           { fg = color_table.orange })
         -- Markdown
         vim.api.nvim_set_hl(0, 'Title',             { fg = color_table.pink })
         vim.api.nvim_set_hl(0, 'Delimiter',         { fg = color_table.pink })
@@ -595,8 +586,8 @@ require("flash").setup({
     }
   }
 })
-vim.keymap.set({ "n", "x", "o" }, "<leader>ef", function() require("flash").jump() end,              { desc = "Flash" })
-vim.keymap.set({ "n", "x", "o" }, "<leader>eF", function() require("flash").treesitter() end,        { desc = "Flash Treesitter" })
+vim.keymap.set({ "n", "x", "o" }, "<leader>ef", function() require("flash").jump() end,              { desc = "[e]dit [f]lash" })
+vim.keymap.set({ "n", "x", "o" }, "<leader>eF", function() require("flash").treesitter() end,        { desc = "[e]dit [F]lashback" })
 vim.keymap.set({ "o", "x" },      "<leader>er", function() require("flash").treesitter_search() end, { desc = "Treesitter Search" })
 vim.keymap.set("o",               "<leader>eR", function() require("flash").remote() end,            { desc = "Remote Flash" })
 -- vim.keymap.set({ "c" },           "<c-s>",  function() require("flash").toggle() end,            { desc = "Toggle Flash Search" })
@@ -623,51 +614,47 @@ require('mini.surround').setup({
 require('mini.ai').setup()
 
 -- Keymap Helper ==============================================================
-require('which-key').setup({
-    delay = 0,
-    icons = {
-        keys = vim.g.have_nerd_font and {} or {
-            Up = '<Up> ',
-            Down = '<Down> ',
-            Left = '<Left> ',
-            Right = '<Right> ',
-            C = '<C-…> ',
-            M = '<M-…> ',
-            D = '<D-…> ',
-            S = '<S-…> ',
-            CR = '<CR> ',
-            Esc = '<Esc> ',
-            ScrollWheelDown = '<ScrollWheelDown> ',
-            ScrollWheelUp = '<ScrollWheelUp> ',
-            NL = '<NL> ',
-            BS = '<BS> ',
-            Space = '<Space> ',
-            Tab = '<Tab> ',
-            F1 = '<F1>',
-            F2 = '<F2>',
-            F3 = '<F3>',
-            F4 = '<F4>',
-            F5 = '<F5>',
-            F6 = '<F6>',
-            F7 = '<F7>',
-            F8 = '<F8>',
-            F9 = '<F9>',
-            F10 = '<F10>',
-            F11 = '<F11>',
-            F12 = '<F12>',
-        },
+local miniclue = require('mini.clue')
+miniclue.setup({
+    triggers = {
+        { mode = { 'n', 'x' }, keys = '<Leader>' },
+        { mode = 'n', keys = '[' },
+        { mode = 'n', keys = ']' },
+        { mode = 'i', keys = '<C-x>' },
+        { mode = { 'n', 'x' }, keys = 'g' },
+        { mode = { 'n', 'x' }, keys = "'" },
+        { mode = { 'n', 'x' }, keys = '`' },
+        { mode = { 'n', 'x' }, keys = '"' },
+        { mode = { 'i', 'c' }, keys = '<C-r>' },
+        { mode = 'n', keys = '<C-w>' },
+        { mode = { 'n', 'x' }, keys = 'z' },
     },
-    -- Document existing key chains
-    spec = {
-        { '<leader>d', group = '[D]iagnostic' },
-        { '<leader>f', group = '[F]ind' },
-        { '<leader>t', group = '[T]oggle' },
-        { '<leader>w', group = '[W]indow' },
-        { '<leader>m', group = '[M]ark' },
-        { '<leader>u', group = '[U]ndo' },
-        { '<leader>g', group = '[G]it', mode = { 'n', 'v' } },
-        { '<leader>e', group = '[E]dit' },
-        { '<leader>s', group = '[S]urround' },
+    clues = {
+        -- Enhance this by adding descriptions for <Leader> mapping groups
+        miniclue.gen_clues.square_brackets(),
+        miniclue.gen_clues.builtin_completion(),
+        miniclue.gen_clues.g(),
+        miniclue.gen_clues.marks(),
+        miniclue.gen_clues.registers(),
+        miniclue.gen_clues.windows(),
+        miniclue.gen_clues.z(),
+        { mode = 'n', keys = '<Leader>f', desc = '[f]ind' },
+        { mode = 'n', keys = '<Leader>e', desc = '[e]dit' },
+        { mode = 'n', keys = '<Leader>m', desc = '[m]ark' },
+        { mode = 'n', keys = '<Leader>s', desc = '[s]urround' },
+        { mode = 'n', keys = '<Leader>w', desc = '[w]indow' },
+        { mode = 'n', keys = '<Leader>g', desc = '[g]it' },
+    },
+    window = {
+        -- Floating window config
+        config = {},
+
+        -- Delay before showing clue window
+        delay = 10,
+
+        -- Keys to scroll inside the clue window
+        scroll_down = '<C-d>',
+        scroll_up = '<C-u>',
     },
 })
 
@@ -833,18 +820,18 @@ pcall(require('telescope').load_extension, 'ui-select')
 -- Keymaps
 vim.keymap.set('n', '<leader>fk', require('telescope.builtin').keymaps,             { desc = '[f]ind [k]eymaps' })
 vim.keymap.set('n', '<leader>ff', require('telescope.builtin').find_files,          { desc = '[f]ind [f]iles' })
-vim.keymap.set('n', '<leader>fg', require('telescope.builtin').live_grep,           { desc = '[f]ind by [g]rep' })
-vim.keymap.set('n', '<leader>ft', require('telescope.builtin').tags,                { desc = '[f]ind  [t]ags' })
+vim.keymap.set('n', '<leader>fg', require('telescope.builtin').live_grep,           { desc = '[f]ind [g]rep' })
+vim.keymap.set('n', '<leader>ft', require('telescope.builtin').tags,                { desc = '[f]ind [t]ags' })
 vim.keymap.set('n', '<leader>fc', require('telescope.builtin').current_buffer_tags, { desc = '[f]ind [c]urrent tags' })
-vim.keymap.set('n', '<leader>fo', require('telescope.builtin').oldfiles,            { desc = '[f]ind Recent Files ("." for repeat)' })
+vim.keymap.set('n', '<leader>fo', require('telescope.builtin').oldfiles,            { desc = '[f]ind [o]ldfiles' })
 vim.keymap.set('n', '<leader>fb', require('telescope.builtin').buffers,             { desc = '[f]ind [b]uffers' })
 vim.keymap.set('n', '<leader>fG', function()
     require('telescope.builtin').live_grep({ cwd = "%:p:h" })
-end, { desc = '[f]ind by [G]rep in current file dir' })
+end, { desc = '[f]ind [G]rep current file dir' })
 vim.keymap.set('n', '<leader>fF', function()
     require("telescope.builtin").find_files({ cwd = "%:p:h" })
-end, { desc = '[F]ind [F]iles in current file dir' })
-vim.keymap.set({'n', 'x'}, '<leader>fw', require('telescope.builtin').grep_string,         { desc = '[f]ind current [w]ord' })
+end, { desc = '[F]ind [F]iles current file dir' })
+vim.keymap.set({'n', 'x'}, '<leader>fw', require('telescope.builtin').grep_string,         { desc = '[f]ind [w]ord' })
 vim.keymap.set('n', '<leader>/', function()
     require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
         winblend = 10,
@@ -856,7 +843,7 @@ vim.keymap.set('n', '<leader>f/', function()
         grep_open_files = true,
         prompt_title = 'Live Grep in Open Files',
     }
-end, { desc = '[F]ind [/] in Open Files' })
+end, { desc = '[F]ind Open Files' })
 
 -- Git ========================================================================
 -- Git Hunk
@@ -872,7 +859,7 @@ require('mini.diff').setup({
         goto_last = ']H',
     },
 })
-vim.keymap.set('n', '<leader>gd', MiniDiff.toggle_overlay, { desc = "[G]it [D]iff" })
+vim.keymap.set('n', '<leader>gd', MiniDiff.toggle_overlay, { desc = "[g]it [d]iff" })
 
 -- Git Manager
 require("diffview").setup({ use_icons = false, })

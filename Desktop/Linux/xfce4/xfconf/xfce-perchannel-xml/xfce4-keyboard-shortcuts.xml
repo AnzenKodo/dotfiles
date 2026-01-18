@@ -64,6 +64,7 @@
       <property name="&lt;Super&gt;AudioLowerVolume" type="string" value="playerctl play-pause"/>
       <property name="&lt;Super&gt;AudioMute" type="string" value="playerctl previous"/>
       <property name="&lt;Super&gt;c" type="string" value="gpick -s"/>
+      <property name="&lt;Super&gt;a" type="string" value="xdotool mousemove 1900 10 click 1 mousemove restore"/>
     </property>
   </property>
   <property name="xfwm4" type="empty">
