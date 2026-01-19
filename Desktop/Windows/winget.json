@@ -1,6 +1,6 @@
 {
 	"$schema" : "https://aka.ms/winget-packages.schema.2.0.json",
-	"CreationDate" : "2026-01-14T15:40:51.974-00:00",
+	"CreationDate" : "2026-01-19T10:07:41.333-00:00",
 	"Sources" : 
 	[
 		{
@@ -21,6 +21,10 @@
 				{
 					"PackageIdentifier" : "ONLYOFFICE.DesktopEditors",
 					"Version" : "9.0.3"
+				},
+				{
+					"PackageIdentifier" : "Neovim.Neovim",
+					"Version" : "0.12.0"
 				},
 				{
 					"PackageIdentifier" : "Oracle.JavaRuntimeEnvironment",
@@ -53,10 +57,6 @@
 				{
 					"PackageIdentifier" : "Microsoft.OpenJDK.17",
 					"Version" : "17.0.16.8"
-				},
-				{
-					"PackageIdentifier" : "Neovim.Neovim",
-					"Version" : "0.11.5"
 				},
 				{
 					"PackageIdentifier" : "Microsoft.Edge",
@@ -92,7 +92,7 @@
 				},
 				{
 					"PackageIdentifier" : "Brave.Brave",
-					"Version" : "143.1.85.120"
+					"Version" : "144.1.86.139"
 				},
 				{
 					"PackageIdentifier" : "BrechtSanders.WinLibs.POSIX.MSVCRT",

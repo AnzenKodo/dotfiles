@@ -505,7 +505,7 @@ vim.api.nvim_create_autocmd("BufEnter", {
         vim.api.nvim_set_hl(0, 'Title',             { fg = color_table.pink })
         vim.api.nvim_set_hl(0, 'Delimiter',         { fg = color_table.pink })
         -- Editor
-        vim.api.nvim_set_hl(0, "Normal",            { bg = color_table.bg })
+        vim.api.nvim_set_hl(0, "Normal",            { bg = color_table.bg, fg = color_table.fg})
         vim.api.nvim_set_hl(0, "NormalNC",          { bg = color_table.bg_unfocus })
         vim.api.nvim_set_hl(0, "LineNr",            { fg = color_table.fg_dark })
         vim.api.nvim_set_hl(0, "Todo",              { fg = color_table.red, bold = true })
@@ -515,7 +515,7 @@ vim.api.nvim_create_autocmd("BufEnter", {
         vim.api.nvim_set_hl(0, 'ColorColumn',       { bg = color_table.bg_lighter })
         vim.api.nvim_set_hl(0, "IndentLineCurrent", { fg = color_table.fg_dark })
         vim.api.nvim_set_hl(0, "IndentLine",        { fg = color_table.bg_light })
-        vim.api.nvim_set_hl(0, "commentNote",  { fg = color_table.yellow, bold = true })
+        vim.api.nvim_set_hl(0, "commentNote",       { fg = color_table.yellow, bold = true })
         vim.cmd([[syntax keyword commentNote NOTE containedin=.*Comment.*]])
     end,
 })
