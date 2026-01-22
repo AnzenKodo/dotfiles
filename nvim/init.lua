@@ -169,19 +169,19 @@ vim.keymap.set('x', 'P', function() vim.cmd('normal! p') end, { silent = true })
 vim.keymap.set('x', 'p', function() vim.cmd('normal! P') end, { silent = true })
 
 -- Split
-vim.keymap.set('n', '<leader>wv', '<C-w>v', { desc = '[W]indow [V]ertical' })
-vim.keymap.set('n', '<leader>wo', '<C-w>s', { desc = '[W]indow H[O]rizontal' })
-vim.keymap.set('n', '<leader>wl', '<C-w>l', { desc = '[W]indow goto [L]eft' })
-vim.keymap.set('n', '<leader>wh', '<C-w>h', { desc = '[W]indow goto [R]ight' })
-vim.keymap.set('n', '<leader>wj', '<C-w>j', { desc = '[W]indow goto [D]own' })
-vim.keymap.set('n', '<leader>wk', '<C-w>k', { desc = '[W]indow goto [U]p' })
-vim.keymap.set('n', '<leader>w>', '<C-w>>', { desc = '[W]indow increase [>] width' })
-vim.keymap.set('n', '<leader>w<', '<C-w>>', { desc = '[W]indow decrease [<] width' })
-vim.keymap.set('n', '<leader>wx', '<C-w>x', { desc = '[W]indow [X]wap sides' })
-vim.keymap.set('n', '<leader>ws', '<C-w>w', { desc = '[W]indow [S]witch' })
-vim.keymap.set('n', '<leader>wn', '<C-w>n', { desc = '[W]indow [N]ew' })
-vim.keymap.set('n', '<leader>w=', '<C-w>=', { desc = '[W]indow [=]Equal' })
-vim.keymap.set('n', '<leader>wr', "<cmd>e #<cr>", { desc = '[W]indow [r]otate' })
+vim.keymap.set('n', '<leader>wv', '<C-w>v', { desc = '[w]indow [v]ertical' })
+vim.keymap.set('n', '<leader>wo', '<C-w>s', { desc = '[w]indow H[o]rizontal' })
+vim.keymap.set('n', '<leader>wl', '<C-w>l', { desc = '[w]indow goto [l]eft' })
+vim.keymap.set('n', '<leader>wh', '<C-w>h', { desc = '[w]indow goto [l]ight' })
+vim.keymap.set('n', '<leader>wj', '<C-w>j', { desc = '[w]indow goto [d]own' })
+vim.keymap.set('n', '<leader>wk', '<C-w>k', { desc = '[w]indow goto [u]p' })
+vim.keymap.set('n', '<leader>w>', '<C-w>>', { desc = '[w]indow increase [>] width' })
+vim.keymap.set('n', '<leader>w<', '<C-w>>', { desc = '[w]indow decrease [<] width' })
+vim.keymap.set('n', '<leader>wx', '<C-w>x', { desc = '[w]indow [x]wap sides' })
+vim.keymap.set('n', '<leader>ws', '<C-w>w', { desc = '[w]indow [s]witch' })
+vim.keymap.set('n', '<leader>wn', '<C-w>n', { desc = '[w]indow [n]ew' })
+vim.keymap.set('n', '<leader>w=', '<C-w>=', { desc = '[w]indow [=]Equal' })
+vim.keymap.set('n', '<leader>wr', "<cmd>e #<cr>", { desc = '[w]indow [r]otate' })
 
 local toggle_state = false
 vim.keymap.set('n', '<leader>w/', function()
@@ -194,7 +194,7 @@ vim.keymap.set('n', '<leader>w/', function()
         -- Equalize all windows
         vim.cmd('wincmd =')
     end
-end, { desc = '[W]indow Toggle' })
+end, { desc = '[w]indow Toggle' })
 vim.keymap.set('n', '<leader>wd', function()
     local current_win = vim.api.nvim_get_current_win()
     local current_buf = vim.api.nvim_get_current_buf()
@@ -217,7 +217,7 @@ vim.keymap.set('n', '<leader>wd', function()
         vim.api.nvim_set_current_buf(current_buf)
     end
     vim.api.nvim_win_set_cursor(0, current_line)
-end, {desc = '[W]indow [D]uplicate' })
+end, {desc = '[w]indow [d]uplicate' })
 vim.keymap.set({'n', 'v'}, '<leader>wf', function()
     local original_win = vim.api.nvim_get_current_win()
     local mode = vim.api.nvim_get_mode().mode
@@ -256,7 +256,7 @@ vim.keymap.set({'n', 'v'}, '<leader>wf', function()
         end)
         vim.api.nvim_win_set_cursor(target_win, {tonumber(line), tonumber(column) - 1})
     end
-end, { desc = "[W]indow goto [F]ile", noremap = true })
+end, { desc = "[w]indow goto [f]ile", noremap = true })
 
 -- Better Search Next
 vim.keymap.set("n", "n", "'Nn'[v:searchforward].'zv'",  { expr = true, desc = "Next Search Result" })
@@ -301,40 +301,40 @@ vim.api.nvim_create_autocmd("BufReadPost", {
 })
 
 -- Highlight current matching words
-vim.api.nvim_create_autocmd({"CursorMoved", "CursorMovedI", "ModeChanged"}, {
-    callback = function()
-        min_length_cursor_len = 3
-        vim.api.nvim_set_hl(0, "CursorWord", { bg = color_table.bg_lighter2 })
-        local column = vim.api.nvim_win_get_cursor(0)[2]
-        local line = vim.api.nvim_get_current_line()
-        local cursorword = vim.fn.matchstr(line:sub(1, column + 1), [[\k*$]])
-        .. vim.fn.matchstr(line:sub(column + 1), [[^\k*]]):sub(2)
-
-        local mode = vim.fn.mode()
-        if mode ~= "n" and mode ~= "N" then
-            vim.api.nvim_set_hl(0, "CursorWord", {})
-            return
-        end
-        if cursorword == vim.w.cursorword then
-            return
-        end
-        vim.w.cursorword = cursorword
-        if vim.w.cursorword_id then
-            vim.call("matchdelete", vim.w.cursorword_id)
-            vim.w.cursorword_id = nil
-        end
-        if
-            cursorword == ""
-            or #cursorword > 100
-            or #cursorword < min_length_cursor_len
-            or string.find(cursorword, "[\192-\255]+") ~= nil
-        then
-            return
-        end
-        local pattern = [[\<]] .. cursorword .. [[\>]]
-        vim.w.cursorword_id = vim.fn.matchadd("CursorWord", pattern, -1)
-    end
-})
+-- vim.api.nvim_create_autocmd({"CursorMoved", "CursorMovedI", "ModeChanged"}, {
+--     callback = function()
+--         min_length_cursor_len = 3
+--         vim.api.nvim_set_hl(0, "CursorWord", { bg = color_table.bg_lighter2 })
+--         local column = vim.api.nvim_win_get_cursor(0)[2]
+--         local line = vim.api.nvim_get_current_line()
+--         local cursorword = vim.fn.matchstr(line:sub(1, column + 1), [[\k*$]])
+--         .. vim.fn.matchstr(line:sub(column + 1), [[^\k*]]):sub(2)
+--
+--         local mode = vim.fn.mode()
+--         if mode ~= "n" and mode ~= "N" then
+--             vim.api.nvim_set_hl(0, "CursorWord", {})
+--             return
+--         end
+--         if cursorword == vim.w.cursorword then
+--             return
+--         end
+--         vim.w.cursorword = cursorword
+--         if vim.w.cursorword_id then
+--             vim.call("matchdelete", vim.w.cursorword_id)
+--             vim.w.cursorword_id = nil
+--         end
+--         if
+--             cursorword == ""
+--             or #cursorword > 100
+--             or #cursorword < min_length_cursor_len
+--             or string.find(cursorword, "[\192-\255]+") ~= nil
+--         then
+--             return
+--         end
+--         local pattern = [[\<]] .. cursorword .. [[\>]]
+--         vim.w.cursorword_id = vim.fn.matchadd("CursorWord", pattern, -1)
+--     end
+-- })
 
 -- Buffers
 -- ============================================================================
@@ -437,8 +437,8 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 vim.o.tags = "tags"
 vim.keymap.set('n', ']g', '<C-]>', { desc = 'Jump to definition' })
 vim.keymap.set('n', '[g', '<C-t>', { desc = 'Return from jump' })
-vim.keymap.set('n', '<leader>wg', '<cmd>lua open_buffer_in_other_split()<CR><C-]> ', { desc = "[W]indow [G]oto definition" })
-vim.keymap.set('n', '<leader>wt', '<cmd>lua open_buffer_in_other_split()<CR>g]',     { desc = "[W]indow show [T]ag" })
+vim.keymap.set('n', '<leader>wg', '<cmd>lua open_buffer_in_other_split()<CR><C-]> ', { desc = "[w]indow [g]oto definition" })
+vim.keymap.set('n', '<leader>wt', '<cmd>lua open_buffer_in_other_split()<CR>g]',     { desc = "[w]indow show [t]ag" })
 
 -- Make
 -- ============================================================================
@@ -746,7 +746,7 @@ require("oil").setup({
             end,
             mode = "n",
             nowait = true,
-            desc = "[f]ind by [G]rep files in the current dir"
+            desc = "[f]ind by [g]rep files in the current dir"
         },
         ["<M-`>"] = {
             function()
