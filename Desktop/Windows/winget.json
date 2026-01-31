@@ -1,6 +1,6 @@
 {
 	"$schema" : "https://aka.ms/winget-packages.schema.2.0.json",
-	"CreationDate" : "2026-01-30T10:37:55.191-00:00",
+	"CreationDate" : "2026-01-31T10:34:32.126-00:00",
 	"Sources" : 
 	[
 		{
@@ -60,7 +60,7 @@
 				},
 				{
 					"PackageIdentifier" : "Microsoft.Edge",
-					"Version" : "144.0.3719.92"
+					"Version" : "144.0.3719.104"
 				},
 				{
 					"PackageIdentifier" : "OBSProject.OBSStudio",
