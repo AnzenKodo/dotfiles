@@ -165,6 +165,7 @@ vim.keymap.set("v", "<A-j>", ":<C-u>execute \"'<,'>move '>+\" . v:count1<cr>gv=g
 vim.keymap.set("v", "<A-k>", ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<cr>gv=gv", { desc = "Move Line Up" })
 
 -- Paste
+vim.keymap.set('n', 'p', ':iput<CR>', { silent = true });
 vim.keymap.set('x', 'P', function() vim.cmd('normal! p') end, { silent = true })
 vim.keymap.set('x', 'p', function() vim.cmd('normal! P') end, { silent = true })
 
@@ -412,25 +413,6 @@ else
     vim.keymap.set({"i", "n"}, "<C-`>", open_split_terminal, { desc = "Open Split Termainl" })
 end
 
--- Config Reload
--- ============================================================================
-
-local function config_reload()
-    vim.cmd[[ source $MYVIMRC ]]
-    vim.notify("Config reloaded!", vim.log.levels.INFO)
-end
-
-vim.api.nvim_create_user_command("Reload", config_reload, {})
-
-local user_config_group = vim.api.nvim_create_augroup("user_config", { clear = true })
--- Clear existing autocommands to prevent duplicates
-vim.api.nvim_clear_autocmds({ group = user_config_group, event = "BufWritePost" })
-vim.api.nvim_create_autocmd("BufWritePost", {
-    group = user_config_group,
-    pattern = "init.lua",
-    callback = config_reload,
-})
-
 -- Tags
 -- ============================================================================
 
@@ -526,7 +508,7 @@ vim.api.nvim_create_autocmd("BufEnter", {
 -- Load Built-in Plugins ======================================================
 
 vim.cmd('packadd justify')
--- vim.cmd('packadd undotree')
+vim.cmd('packadd nvim.difftool')
 
 -- Load External Plugins ======================================================
 
@@ -630,7 +612,6 @@ miniclue.setup({
         { mode = { 'n', 'x' }, keys = 'z' },
     },
     clues = {
-        -- Enhance this by adding descriptions for <Leader> mapping groups
         miniclue.gen_clues.square_brackets(),
         miniclue.gen_clues.builtin_completion(),
         miniclue.gen_clues.g(),
@@ -638,20 +619,20 @@ miniclue.setup({
         miniclue.gen_clues.registers(),
         miniclue.gen_clues.windows(),
         miniclue.gen_clues.z(),
-        { mode = 'n', keys = '<Leader>f', desc = '[f]ind' },
-        { mode = 'n', keys = '<Leader>e', desc = '[e]dit' },
-        { mode = 'n', keys = '<Leader>m', desc = '[m]ark' },
-        { mode = 'n', keys = '<Leader>s', desc = '[s]urround' },
-        { mode = 'n', keys = '<Leader>w', desc = '[w]indow' },
-        { mode = 'n', keys = '<Leader>g', desc = '[g]it' },
+        { mode = 'n', keys = '<Leader>f',  desc = '[f]ind' },
+        { mode = 'n', keys = '<Leader>e',  desc = '[e]dit' },
+        { mode = 'n', keys = '<Leader>m',  desc = '[m]ark' },
+        { mode = 'n', keys = '<Leader>s',  desc = '[s]urround' },
+        { mode = 'n', keys = '<Leader>w',  desc = '[w]indow' },
+        { mode = 'n', keys = '<Leader>g',  desc = '[g]it' },
+        { mode = 'n', keys = '<Leader>d',  desc = '[d]ebugger' },
+        { mode = 'n', keys = '<Leader>dg', desc = '[d]ebugger [g]oto' },
     },
     window = {
         -- Floating window config
         config = {},
-
         -- Delay before showing clue window
         delay = 10,
-
         -- Keys to scroll inside the clue window
         scroll_down = '<C-d>',
         scroll_up = '<C-u>',
@@ -844,6 +825,74 @@ vim.keymap.set('n', '<leader>f/', function()
         prompt_title = 'Live Grep in Open Files',
     }
 end, { desc = '[F]ind Open Files' })
+
+-- Debugger ===================================================================
+
+vim.api.nvim_create_autocmd("CmdlineEnter", {
+  callback = function()
+    local cmd = vim.fn.getcmdline()
+    if vim.fn.exists(":Termdebug") == 0 then
+        vim.cmd("packadd termdebug")
+    end
+end,
+})
+
+vim.g.termdebug_config = {
+    disasm_window = true,
+    variables_window = true,
+    wide = 10,
+    disasm_window = 15,
+    variables_window = 15,
+    command = {
+        "gdb", "-nx",
+        "-ex", "set breakpoint pending on",
+        "-ex", "set disassembly-flavor intel",
+        "-ex", "set confirm off",
+    }
+}
+local termdebug_keys = {
+    { "n", "<leader>ds",  ":call TermDebugSendCommand('run')<CR>",      "[d]ebugger [s]tart" },
+    { "n", "<leader>dc",  ":call TermDebugSendCommand('continue')<CR>", "[d]ebugger [c]ontinue" },
+    { "n", "<leader>dr",  ":call TermDebugSendCommand('restart')<CR>",  "[d]ebugger [r]estart" },
+    { "n", "<leader>de",  ":call TermDebugSendCommand('exit')<CR>",     "[d]ebugger [e]xit" },
+    { "n", "<leader>dk",  ":call TermDebugSendCommand('kill')<CR>",     "[d]ebugger [k]ill" },
+    { "n", "<leader>db",  ":Break<CR>",                                 "[d]ebugger [b]reakpoint" },
+    { "n", "<leader>du",  ":Clear<CR>",                                 "[d]ebugger [u]nbreakpoint" },
+    { "n", "<leader>dt",  ":Tbreak<CR>",                                "[d]ebugger [t]reak" },
+    { "n", "<leader>dc",  ":Continue<CR>",                              "[d]ebugger [c]ontinue" },
+    { "n", "<leader>dgg", ":Gdb<CR>",                                   "[d]ebugger [g]oto [g]db" },
+    { "n", "<leader>dgp", ":Program<CR>",                               "[d]ebugger [g]oto [p]rogram" },
+    { "n", "<leader>dgs", ":Source<CR>",                                "[d]ebugger [g]oto [s]ource" },
+    { "n", "<leader>dga", ":Asm<CR>",                                   "[d]ebugger [g]oto [a]ssembly" },
+    { "n", "<leader>dgl", ":Var<CR>",                                   "[d]ebugger [g]oto [l]ocal watchlist" },
+    { "n", "<F1>",        ":Over<CR>",                                  "Debugger Next" },
+    { "n", "<F2>",        ":Step<CR>",                                  "Debugger Step" },
+}
+vim.api.nvim_create_autocmd("User", {
+    pattern = "TermdebugStartPost",
+    callback = function()
+        for _, k in ipairs(termdebug_keys) do
+            vim.keymap.set(k[1], k[2], k[3], { desc = k[4] })
+        end
+        vim.cmd('Source')
+        vim.cmd('wincmd K')
+        vim.cmd('horizontal resize 30')
+        vim.cmd('Gdb')
+        vim.cmd('horizontal resize 10')
+        vim.cmd('Asm')
+        vim.cmd('horizontal resize 10')
+        vim.cmd('Source')
+    end,
+})
+
+vim.api.nvim_create_autocmd("User", {
+    pattern = "TermdebugStopPost",
+    callback = function()
+        for _, k in ipairs(termdebug_keys) do
+            pcall(vim.keymap.del, k[1], k[2])
+        end
+    end,
+})
 
 -- Git ========================================================================
 -- Git Hunk
