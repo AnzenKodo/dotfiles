@@ -630,7 +630,9 @@ miniclue.setup({
     },
     window = {
         -- Floating window config
-        config = {},
+        config = {
+            width = 'auto'
+        },
         -- Delay before showing clue window
         delay = 10,
         -- Keys to scroll inside the clue window
@@ -868,29 +870,48 @@ local termdebug_keys = {
     { "n", "<F1>",        ":Over<CR>",                                  "Debugger Next" },
     { "n", "<F2>",        ":Step<CR>",                                  "Debugger Step" },
 }
+local current_debug_edit_file=""
 vim.api.nvim_create_autocmd("User", {
-    pattern = "TermdebugStartPost",
+    pattern = "TermdebugStartPre",
     callback = function()
         for _, k in ipairs(termdebug_keys) do
             vim.keymap.set(k[1], k[2], k[3], { desc = k[4] })
         end
+        current_debug_edit_file=vim.api.nvim_buf_get_name(0)
+        vim.cmd.tabnew()
+    end,
+})
+vim.api.nvim_create_autocmd("User", {
+    pattern = "TermdebugStartPost",
+    callback = function()
         vim.cmd('Source')
         vim.cmd('wincmd K')
-        vim.cmd('horizontal resize 30')
+        vim.cmd.resize(30)
+        vim.cmd.edit(current_debug_edit_file)
         vim.cmd('Gdb')
-        vim.cmd('horizontal resize 10')
+        vim.cmd.resize(10)
         vim.cmd('Asm')
-        vim.cmd('horizontal resize 10')
+        vim.cmd.resize(10)
         vim.cmd('Source')
     end,
 })
-
+vim.api.nvim_create_autocmd("User", {
+    pattern = "TermdebugStopPre",
+    callback = function()
+        vim.cmd('Source')
+        current_debug_edit_file=vim.api.nvim_buf_get_name(0)
+        vim.cmd('Gdb')
+        vim.cmd('Bd')
+    end,
+})
 vim.api.nvim_create_autocmd("User", {
     pattern = "TermdebugStopPost",
     callback = function()
         for _, k in ipairs(termdebug_keys) do
             pcall(vim.keymap.del, k[1], k[2])
         end
+        vim.cmd.tabclose()
+        vim.cmd.edit(current_debug_edit_file)
     end,
 })
 
