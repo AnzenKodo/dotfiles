@@ -1,6 +1,6 @@
 {
 	"$schema" : "https://aka.ms/winget-packages.schema.2.0.json",
-	"CreationDate" : "2026-01-31T10:34:32.126-00:00",
+	"CreationDate" : "2026-02-17T11:43:02.158-00:00",
 	"Sources" : 
 	[
 		{
@@ -21,10 +21,6 @@
 				{
 					"PackageIdentifier" : "ONLYOFFICE.DesktopEditors",
 					"Version" : "9.0.3"
-				},
-				{
-					"PackageIdentifier" : "Neovim.Neovim",
-					"Version" : "0.12.0"
 				},
 				{
 					"PackageIdentifier" : "Oracle.JavaRuntimeEnvironment",
@@ -59,8 +55,12 @@
 					"Version" : "17.0.16.8"
 				},
 				{
+					"PackageIdentifier" : "Neovim.Neovim",
+					"Version" : "0.12.0"
+				},
+				{
 					"PackageIdentifier" : "Microsoft.Edge",
-					"Version" : "144.0.3719.104"
+					"Version" : "145.0.3800.58"
 				},
 				{
 					"PackageIdentifier" : "OBSProject.OBSStudio",
@@ -92,7 +92,7 @@
 				},
 				{
 					"PackageIdentifier" : "Brave.Brave",
-					"Version" : "144.1.86.146"
+					"Version" : "145.1.87.188"
 				},
 				{
 					"PackageIdentifier" : "BrechtSanders.WinLibs.POSIX.MSVCRT",
@@ -136,7 +136,7 @@
 				},
 				{
 					"PackageIdentifier" : "ZedIndustries.Zed.Preview",
-					"Version" : "0.222.0-pre"
+					"Version" : "0.223.2-pre"
 				},
 				{
 					"PackageIdentifier" : "Python.Python.3.9",
@@ -144,7 +144,7 @@
 				},
 				{
 					"PackageIdentifier" : "Microsoft.Teams",
-					"Version" : "26005.204.4249.1621"
+					"Version" : "26015.1706.4351.4392"
 				},
 				{
 					"PackageIdentifier" : "Microsoft.AppInstaller",

@@ -362,39 +362,39 @@ vim.keymap.set('i', '<A-e>', '<C-e>',      { noremap = true }, { desc = '[E]nd c
 vim.keymap.set('i', '<Tab>',   'pumvisible() ? "\\<C-n>" : "\\<Tab>"', { expr = true })
 vim.keymap.set('i', '<S-Tab>', 'pumvisible() ? "\\<C-p>" : "\\<S-Tab>"', { expr = true })
 
-function fill_cmp()
-    local ext = vim.bo.filetype
-    if ext == '' then return end
-    local cmd
-    if vim.fn.executable('fd') == 1 then
-        cmd = { 'fd', '--type', 'f', '--hidden', '--no-ignore', '--extension', ext, '.' }
-    elseif vim.fn.executable('rg') == 1 then
-        cmd = { 'rg', '--files', '--hidden', '--no-ignore', '--glob', '*.' .. ext }
-    else
-        cmd = { 'find', '.', '-type', 'f', '-name', '*.' .. ext }
-    end
-    local job = vim.fn.jobstart(cmd, {
-        stdout_buffered = true,
-        on_exit = function(_, code)
-            if code ~= 0 then return end
-            local files = vim.fn.systemlist(cmd)
-            -- Filter out directories (unlikely with --type f) and hidden if desired
-            files = vim.tbl_filter(function(f) return f ~= '' and not f:match('/%..*') end, files)
-            if #files == 0 then return end
-            vim.schedule(function()
-                vim.o.dictionary = table.concat(files, ',')
-            end)
-        end,
-    })
-
-    if job <= 0 then
-        print('Failed to start job for dictionary setup')
-    end
-end
-
-vim.api.nvim_create_autocmd("BufEnter", {
-    callback = fill_cmp
-})
+-- function fill_cmp()
+--     local ext = vim.bo.filetype
+--     if ext == '' then return end
+--     local cmd
+--     if vim.fn.executable('fd') == 1 then
+--         cmd = { 'fd', '--type', 'f', '--hidden', '--no-ignore', '--extension', ext, '.' }
+--     elseif vim.fn.executable('rg') == 1 then
+--         cmd = { 'rg', '--files', '--hidden', '--no-ignore', '--glob', '*.' .. ext }
+--     else
+--         cmd = { 'find', '.', '-type', 'f', '-name', '*.' .. ext }
+--     end
+--     local job = vim.fn.jobstart(cmd, {
+--         stdout_buffered = true,
+--         on_exit = function(_, code)
+--             if code ~= 0 then return end
+--             local files = vim.fn.systemlist(cmd)
+--             -- Filter out directories (unlikely with --type f) and hidden if desired
+--             files = vim.tbl_filter(function(f) return f ~= '' and not f:match('/%..*') end, files)
+--             if #files == 0 then return end
+--             vim.schedule(function()
+--                 vim.o.dictionary = table.concat(files, ',')
+--             end)
+--         end,
+--     })
+--
+--     if job <= 0 then
+--         print('Failed to start job for dictionary setup')
+--     end
+-- end
+--
+-- vim.api.nvim_create_autocmd("BufEnter", {
+--     callback = fill_cmp
+-- })
 
 -- Terminal
 -- ============================================================================

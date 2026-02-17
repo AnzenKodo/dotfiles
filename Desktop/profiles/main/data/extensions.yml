@@ -1,6 +1,28 @@
-disabled: []
-enabled:
+disabled:
   - id: eclipse-cdt.cdt-gdb-vscode
     uuid: aef919b8-7a32-4702-beef-23d976ef3d3a
+  - id: llvm-vs-code-extensions.vscode-clangd
+    uuid: 103154cb-b81d-4e1b-8281-c5f4fa563d37
+enabled:
+  - id: eclipse-cdt.memory-inspector
+    uuid: 681ef5db-1230-4f71-8675-8df7a812b966
+  - id: GitHub.copilot
+    uuid: 23c4aeee-f844-43cd-b53e-1113e483f1a6
+  - id: GitHub.copilot-chat
+    uuid: 7ec7d6e6-b89e-4cc5-a59b-d6c4d238246f
+  - id: jdinhlife.gruvbox
+    uuid: c6d564c4-ca8c-45ba-abf6-c85f2d1468d8
+  - id: ms-mssql.data-workspace-vscode
+    uuid: 88e082b7-d289-4c59-bde4-4c61e0280428
+  - id: ms-mssql.mssql
+    uuid: 4bf45e86-a448-4531-8c01-ef33f4536306
+  - id: ms-mssql.sql-bindings-vscode
+    uuid: 48154c8d-77c4-4978-a3a2-807fc5266321
+  - id: ms-mssql.sql-database-projects-vscode
+    uuid: 4e9e1d12-64b6-4573-9203-f601d27de5a3
+  - id: ms-vscode.cpptools
+    uuid: 690b692e-e8a9-493f-b802-8089d50ac1b2
+  - id: ms-vscode.hexeditor
+    uuid: cc7d2112-5178-4472-8e0e-25dced95e7f0
   - id: zokugun.cron-tasks
     uuid: b7bbbbd5-7a39-4312-87aa-ef6a41de67fb
