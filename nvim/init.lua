@@ -165,7 +165,7 @@ vim.keymap.set("v", "<A-j>", ":<C-u>execute \"'<,'>move '>+\" . v:count1<cr>gv=g
 vim.keymap.set("v", "<A-k>", ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<cr>gv=gv", { desc = "Move Line Up" })
 
 -- Paste
-vim.keymap.set('n', 'p', ':iput<CR>', { silent = true });
+vim.keymap.set('n', '<leader>ep', ':iput<CR>', { desc = '[e]dit [p]aste' });
 vim.keymap.set('x', 'P', function() vim.cmd('normal! p') end, { silent = true })
 vim.keymap.set('x', 'p', function() vim.cmd('normal! P') end, { silent = true })
 
@@ -853,9 +853,8 @@ vim.g.termdebug_config = {
     }
 }
 local termdebug_keys = {
-    { "n", "<leader>ds",  ":call TermDebugSendCommand('run')<CR>",      "[d]ebugger [s]tart" },
+    { "n", "<leader>dr",  ":call TermDebugSendCommand('run')<CR>",      "[d]ebugger [r]un" },
     { "n", "<leader>dc",  ":call TermDebugSendCommand('continue')<CR>", "[d]ebugger [c]ontinue" },
-    { "n", "<leader>dr",  ":call TermDebugSendCommand('restart')<CR>",  "[d]ebugger [r]estart" },
     { "n", "<leader>de",  ":call TermDebugSendCommand('exit')<CR>",     "[d]ebugger [e]xit" },
     { "n", "<leader>dk",  ":call TermDebugSendCommand('kill')<CR>",     "[d]ebugger [k]ill" },
     { "n", "<leader>db",  ":Break<CR>",                                 "[d]ebugger [b]reakpoint" },
@@ -884,14 +883,16 @@ vim.api.nvim_create_autocmd("User", {
 vim.api.nvim_create_autocmd("User", {
     pattern = "TermdebugStartPost",
     callback = function()
+        vim.cmd('Gdb')
+        vim.cmd('wincmd K')
         vim.cmd('Source')
+        vim.cmd.edit(current_debug_edit_file)
         vim.cmd('wincmd K')
         vim.cmd.resize(30)
-        vim.cmd.edit(current_debug_edit_file)
-        vim.cmd('Gdb')
-        vim.cmd.resize(10)
+        vim.cmd('Program')
+        vim.cmd.resize(15)
         vim.cmd('Asm')
-        vim.cmd.resize(10)
+        vim.cmd.resize(6)
         vim.cmd('Source')
     end,
 })
