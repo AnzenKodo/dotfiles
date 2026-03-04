@@ -1,6 +1,6 @@
 {
 	"$schema" : "https://aka.ms/winget-packages.schema.2.0.json",
-	"CreationDate" : "2026-02-17T11:43:02.158-00:00",
+	"CreationDate" : "2026-03-04T17:34:43.140-00:00",
 	"Sources" : 
 	[
 		{
@@ -21,6 +21,10 @@
 				{
 					"PackageIdentifier" : "ONLYOFFICE.DesktopEditors",
 					"Version" : "9.0.3"
+				},
+				{
+					"PackageIdentifier" : "VideoLAN.VLC",
+					"Version" : "3.0.23"
 				},
 				{
 					"PackageIdentifier" : "Oracle.JavaRuntimeEnvironment",
@@ -60,7 +64,7 @@
 				},
 				{
 					"PackageIdentifier" : "Microsoft.Edge",
-					"Version" : "145.0.3800.58"
+					"Version" : "145.0.3800.82"
 				},
 				{
 					"PackageIdentifier" : "OBSProject.OBSStudio",
@@ -83,6 +87,10 @@
 					"Version" : "14.40.33810.0"
 				},
 				{
+					"PackageIdentifier" : "Microsoft.DotNet.DesktopRuntime.8",
+					"Version" : "8.0.24"
+				},
+				{
 					"PackageIdentifier" : "Microsoft.SQLServerManagementStudio",
 					"Version" : "18.9.1"
 				},
@@ -92,7 +100,7 @@
 				},
 				{
 					"PackageIdentifier" : "Brave.Brave",
-					"Version" : "145.1.87.188"
+					"Version" : "145.1.87.191"
 				},
 				{
 					"PackageIdentifier" : "BrechtSanders.WinLibs.POSIX.MSVCRT",
@@ -136,7 +144,7 @@
 				},
 				{
 					"PackageIdentifier" : "ZedIndustries.Zed.Preview",
-					"Version" : "0.223.2-pre"
+					"Version" : "0.226.4-pre"
 				},
 				{
 					"PackageIdentifier" : "Python.Python.3.9",
@@ -176,7 +184,7 @@
 			[
 				{
 					"PackageIdentifier" : "9PNKDR50694P",
-					"Version" : "25.3.3.0"
+					"Version" : "25.3.5.0"
 				}
 			],
 			"SourceDetails" : 
