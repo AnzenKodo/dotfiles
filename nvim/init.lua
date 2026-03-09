@@ -850,6 +850,7 @@ vim.g.termdebug_config = {
         "-ex", "set breakpoint pending on",
         "-ex", "set disassembly-flavor intel",
         "-ex", "set confirm off",
+        "-ex", "set print pretty on",
     }
 }
 local termdebug_keys = {
@@ -868,6 +869,7 @@ local termdebug_keys = {
     { "n", "<leader>dgl", ":Var<CR>",                                   "[d]ebugger [g]oto [l]ocal watchlist" },
     { "n", "<F1>",        ":Over<CR>",                                  "Debugger Next" },
     { "n", "<F2>",        ":Step<CR>",                                  "Debugger Step" },
+    { "n", "=",           ":Up<CR>",                                    "Debugger go Up frame" },
 }
 local current_debug_edit_file=""
 vim.api.nvim_create_autocmd("User", {

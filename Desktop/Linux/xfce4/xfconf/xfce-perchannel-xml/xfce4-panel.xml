@@ -143,7 +143,7 @@
     </property>
     <property name="plugin-10" type="string" value="actions">
       <property name="button-title" type="uint" value="3"/>
-      <property name="custom-title" type="string" value="ტ"/>
+      <property name="custom-title" type="string" value="⏻"/>
       <property name="items" type="array">
         <value type="string" value="+lock-screen"/>
         <value type="string" value="+switch-user"/>
@@ -155,9 +155,10 @@
         <value type="string" value="+shutdown"/>
         <value type="string" value="+restart"/>
         <value type="string" value="+separator"/>
-        <value type="string" value="+logout"/>
-        <value type="string" value="-logout-dialog"/>
+        <value type="string" value="-logout"/>
+        <value type="string" value="+logout-dialog"/>
       </property>
+      <property name="appearance" type="uint" value="1"/>
     </property>
     <property name="plugin-14" type="string" value="notification-plugin"/>
     <property name="plugin-17" type="string" value="pulseaudio">
