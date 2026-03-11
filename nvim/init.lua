@@ -34,7 +34,6 @@ vim.o.exrc = true
 vim.o.backspace = "indent,eol,start"
 vim.o.mouse = "a"
 vim.o.fileformats = "unix,dos,mac"
--- vim.o.laststatus = 3
 
 -- Split
 vim.o.splitright = true
@@ -270,15 +269,18 @@ vim.keymap.set("o", "N", "'nN'[v:searchforward]",       { expr = true, desc = "P
 -- Autocommands
 -- ============================================================================
 
--- Remove Trim Trailing Whitespace
+-- Better whitespace handling
+vim.keymap.set("i", "<CR>", "<Space><BS><CR>", { noremap = true, silent = true })
+vim.keymap.set("i", "<Esc>", "<Space><BS><Esc>", { noremap = true, silent = true })
 vim.api.nvim_create_autocmd({ "BufWritePre" }, {
-  pattern = { "*" },
-  callback = function()
-      local path = vim.api.nvim_buf_get_name(0)
-      if not path:find("neo", 1, true) then
-          vim.cmd([[%s/\s\+$//e]])
-      end
-  end,
+    pattern = { "*" },
+    callback = function()
+        local save_cursor = vim.fn.getpos(".")
+        pcall(function() 
+            vim.cmd([[%s/\S\zs\s\+$//e]]) 
+        end)
+        vim.fn.setpos(".", save_cursor)
+    end,
 })
 
 -- Highlight when yanking (copying) text
