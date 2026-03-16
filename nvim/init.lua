@@ -85,106 +85,51 @@ vim.schedule(function()
     vim.o.clipboard = 'unnamedplus'
 end)
 
--- Neovim Gui
--- ============================================================================
-
-if vim.g.neovide then
-    vim.o.guifont = "Consolas:h12"
-    vim.keymap.set({ "n", "v" }, "<C-=>", ":lua vim.g.neovide_scale_factor = vim.g.neovide_scale_factor + 0.1<CR>")
-    vim.keymap.set({ "n", "v" }, "<C-->", ":lua vim.g.neovide_scale_factor = vim.g.neovide_scale_factor - 0.1<CR>")
-    vim.keymap.set({ "n", "v" }, "<C-0>", ":lua vim.g.neovide_scale_factor = 1<CR>")
-
-    vim.keymap.set('n', '<C-S-v>', '"+P')
-    vim.keymap.set('v', '<C-S-v>', '"+P')
-    vim.keymap.set('i', '<C-S-v>', '<ESC>l"+Pli')
-    vim.keymap.set('c', '<C-S-v>', '<C-R>+')
-
-    local neovide_fullscreen = true
-    vim.keymap.set({'n', 'i', 't', 'x'}, '<F11>', function()
-        neovide_fullscreen = not neovide_fullscreen
-        vim.g.neovide_fullscreen = neovide_fullscreen
-        vim.notify("Full Screen")
-    end, { desc = "Full Screen" })
-end
-
--- Utils Functions
--- ============================================================================
-
-local function get_visual_selection()
-    local s_start = vim.fn.getpos("'<")
-    local s_end = vim.fn.getpos("'>")
-    local lines = vim.api.nvim_buf_get_lines(0, s_start[2] - 1, s_end[2], false)
-    if #lines == 0 then return '' end
-    lines[1] = lines[1]:sub(s_start[3], -1)
-    lines[#lines] = lines[#lines]:sub(1, s_end[3])
-    return table.concat(lines, '\n')
-end
-
-
-local function win_to_bash_path(win_path)
-    if not win_path or win_path == "" then
-        return win_path
-    end
-    win_path = win_path:gsub("\\", "/")
-    if win_path:match("^[A-Za-z]:/") then
-        local drive = win_path:sub(1, 1):lower()
-        win_path = "/" .. drive .. win_path:sub(3)
-    end
-    return win_path
-end
-
-function open_buffer_in_other_split()
-    local filename = vim.api.nvim_buf_get_name(0)
-    local win_count = #vim.api.nvim_list_wins()
-    local pos = vim.api.nvim_win_get_cursor(0)
-    local line = pos[1]
-    local col = pos[2] + 1  -- Neovim uses 0-based columns
-    if win_count == 1 then
-        vim.cmd('vsplit')
-    else
-        vim.cmd('wincmd w')
-    end
-    vim.cmd('edit ' .. filename)
-    vim.api.nvim_win_set_cursor(0, {line, col})
-end
-
 -- Keybindings
 -- ============================================================================
 
-vim.keymap.set("n", '<Esc>', '<cmd>nohlsearch<CR>', { desc = "Clear Search Highlight" })
-vim.keymap.set("t", '<Esc>', '<C-\\><C-n>',    { desc = 'Exit terminal mode' })
-vim.keymap.set('n', 'L', vim.diagnostic.open_float, { desc = 'Show Diagnostic' })
-vim.keymap.set({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save File" })
+local function keymap_set(mode, map, func, desc, opt_override)
+    local opt = { desc = desc, noremap = true, silent = true }
+    for k, v in pairs(opt_override or {}) do
+        opt[k] = v
+    end
+    vim.keymap.set(mode, map, func, opt)
+end
 
-vim.keymap.set("n", "<A-j>", "<cmd>execute 'move .+' . v:count1<cr>==",                   { desc = "Move Line Down" })
-vim.keymap.set("n", "<A-k>", "<cmd>execute 'move .-' . (v:count1 + 1)<cr>==",             { desc = "Move Line Up" })
-vim.keymap.set("i", "<A-j>", "<esc><cmd>m .+1<cr>==gi",                                   { desc = "Move Line Down" })
-vim.keymap.set("i", "<A-k>", "<esc><cmd>m .-2<cr>==gi",                                   { desc = "Move Line Up" })
-vim.keymap.set("v", "<A-j>", ":<C-u>execute \"'<,'>move '>+\" . v:count1<cr>gv=gv",       { desc = "Move Line Down" })
-vim.keymap.set("v", "<A-k>", ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<cr>gv=gv", { desc = "Move Line Up" })
+keymap_set("n", '<Esc>', '<cmd>nohlsearch<CR>', "Clear Search Highlight")
+keymap_set("t", '<Esc>', '<C-\\><C-n>',    'Exit terminal mode')
+keymap_set('n', 'L', vim.diagnostic.open_float, 'Show Diagnostic')
+keymap_set({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", "Save File")
+
+keymap_set("n", "<A-j>", "<cmd>execute 'move .+' . v:count1<cr>==",                   "Move Line Down")
+keymap_set("n", "<A-k>", "<cmd>execute 'move .-' . (v:count1 + 1)<cr>==",             "Move Line Up")
+keymap_set("i", "<A-j>", "<esc><cmd>m .+1<cr>==gi",                                   "Move Line Down")
+keymap_set("i", "<A-k>", "<esc><cmd>m .-2<cr>==gi",                                   "Move Line Up")
+keymap_set("v", "<A-j>", ":<C-u>execute \"'<,'>move '>+\" . v:count1<cr>gv=gv",       "Move Line Down")
+keymap_set("v", "<A-k>", ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<cr>gv=gv", "Move Line Up")
 
 -- Paste
-vim.keymap.set('n', '<leader>ep', ':iput<CR>', { desc = '[e]dit [p]aste' });
-vim.keymap.set('x', 'P', function() vim.cmd('normal! p') end, { silent = true })
-vim.keymap.set('x', 'p', function() vim.cmd('normal! P') end, { silent = true })
+keymap_set('n', '<leader>ep', ':iput<CR>', '[e]dit [p]aste');
+keymap_set('x', 'P', function() vim.cmd('normal! p') end, '[P]uts before cursor')
+keymap_set('x', 'p', function() vim.cmd('normal! P') end, '[p]uts after cursor')
 
 -- Split
-vim.keymap.set('n', '<leader>wv', '<C-w>v', { desc = '[w]indow [v]ertical' })
-vim.keymap.set('n', '<leader>wo', '<C-w>s', { desc = '[w]indow H[o]rizontal' })
-vim.keymap.set('n', '<leader>wl', '<C-w>l', { desc = '[w]indow goto [l]eft' })
-vim.keymap.set('n', '<leader>wh', '<C-w>h', { desc = '[w]indow goto [l]ight' })
-vim.keymap.set('n', '<leader>wj', '<C-w>j', { desc = '[w]indow goto [d]own' })
-vim.keymap.set('n', '<leader>wk', '<C-w>k', { desc = '[w]indow goto [u]p' })
-vim.keymap.set('n', '<leader>w>', '<C-w>>', { desc = '[w]indow increase [>] width' })
-vim.keymap.set('n', '<leader>w<', '<C-w>>', { desc = '[w]indow decrease [<] width' })
-vim.keymap.set('n', '<leader>wx', '<C-w>x', { desc = '[w]indow [x]wap sides' })
-vim.keymap.set('n', '<leader>ws', '<C-w>w', { desc = '[w]indow [s]witch' })
-vim.keymap.set('n', '<leader>wn', '<C-w>n', { desc = '[w]indow [n]ew' })
-vim.keymap.set('n', '<leader>w=', '<C-w>=', { desc = '[w]indow [=]Equal' })
-vim.keymap.set('n', '<leader>wr', "<cmd>e #<cr>", { desc = '[w]indow [r]otate' })
+keymap_set('n', '<leader>wv', '<C-w>v', '[w]indow [v]ertical')
+keymap_set('n', '<leader>wo', '<C-w>s', '[w]indow H[o]rizontal')
+keymap_set('n', '<leader>wl', '<C-w>l', '[w]indow goto [l]eft')
+keymap_set('n', '<leader>wh', '<C-w>h', '[w]indow goto [l]ight')
+keymap_set('n', '<leader>wj', '<C-w>j', '[w]indow goto [d]own')
+keymap_set('n', '<leader>wk', '<C-w>k', '[w]indow goto [u]p')
+keymap_set('n', '<leader>w>', '<C-w>>', '[w]indow increase [>] width')
+keymap_set('n', '<leader>w<', '<C-w>>', '[w]indow decrease [<] width')
+keymap_set('n', '<leader>wx', '<C-w>x', '[w]indow [x]wap sides')
+keymap_set('n', '<leader>ws', '<C-w>w', '[w]indow [s]witch')
+keymap_set('n', '<leader>wn', '<C-w>n', '[w]indow [n]ew')
+keymap_set('n', '<leader>w=', '<C-w>=', '[w]indow [=]Equal')
+keymap_set('n', '<leader>wr', "<cmd>e #<cr>", '[w]indow [r]otate')
 
 local toggle_state = false
-vim.keymap.set('n', '<leader>w/', function()
+keymap_set('n', '<leader>w/', function()
     toggle_state = not toggle_state
     if toggle_state then
         -- Maximize current window vertically and horizontally
@@ -194,8 +139,8 @@ vim.keymap.set('n', '<leader>w/', function()
         -- Equalize all windows
         vim.cmd('wincmd =')
     end
-end, { desc = '[w]indow Toggle' })
-vim.keymap.set('n', '<leader>wd', function()
+end, '[w]indow Toggle')
+keymap_set('n', '<leader>wd', function()
     local current_win = vim.api.nvim_get_current_win()
     local current_buf = vim.api.nvim_get_current_buf()
     local current_line = vim.api.nvim_win_get_cursor(0)
@@ -217,8 +162,19 @@ vim.keymap.set('n', '<leader>wd', function()
         vim.api.nvim_set_current_buf(current_buf)
     end
     vim.api.nvim_win_set_cursor(0, current_line)
-end, {desc = '[w]indow [d]uplicate' })
-vim.keymap.set({'n', 'v'}, '<leader>wf', function()
+end, '[w]indow [d]uplicate')
+
+local function get_visual_selection()
+    local s_start = vim.fn.getpos("'<")
+    local s_end = vim.fn.getpos("'>")
+    local lines = vim.api.nvim_buf_get_lines(0, s_start[2] - 1, s_end[2], false)
+    if #lines == 0 then return '' end
+    lines[1] = lines[1]:sub(s_start[3], -1)
+    lines[#lines] = lines[#lines]:sub(1, s_end[3])
+    return table.concat(lines, '\n')
+end
+
+keymap_set({'n', 'v'}, '<leader>wf', function()
     local original_win = vim.api.nvim_get_current_win()
     local mode = vim.api.nvim_get_mode().mode
     local file_spec
@@ -256,28 +212,28 @@ vim.keymap.set({'n', 'v'}, '<leader>wf', function()
         end)
         vim.api.nvim_win_set_cursor(target_win, {tonumber(line), tonumber(column) - 1})
     end
-end, { desc = "[w]indow goto [f]ile", noremap = true })
+end, "[w]indow goto [f]ile")
 
 -- Better Search Next
-vim.keymap.set("n", "n", "'Nn'[v:searchforward].'zv'",  { expr = true, desc = "Next Search Result" })
-vim.keymap.set("x", "n", "'Nn'[v:searchforward]",       { expr = true, desc = "Next Search Result" })
-vim.keymap.set("o", "n", "'Nn'[v:searchforward]",       { expr = true, desc = "Next Search Result" })
-vim.keymap.set("n", "N", "'nN'[v:searchforward].'zv'",  { expr = true, desc = "Prev Search Result" })
-vim.keymap.set("x", "N", "'nN'[v:searchforward]",       { expr = true, desc = "Prev Search Result" })
-vim.keymap.set("o", "N", "'nN'[v:searchforward]",       { expr = true, desc = "Prev Search Result" })
+keymap_set("n", "n", "'Nn'[v:searchforward].'zv'", "[n]ext Search Result", { expr = true })
+keymap_set("x", "n", "'Nn'[v:searchforward]",      "[n]ext Search Result", { expr = true })
+keymap_set("o", "n", "'Nn'[v:searchforward]",      "[n]ext Search Result", { expr = true })
+keymap_set("n", "N", "'nN'[v:searchforward].'zv'", "Prev Search Result", { expr = true })
+keymap_set("x", "N", "'nN'[v:searchforward]",      "Prev Search Result", { expr = true })
+keymap_set("o", "N", "'nN'[v:searchforward]",      "Prev Search Result", { expr = true })
 
 -- Autocommands
 -- ============================================================================
 
 -- Better whitespace handling
-vim.keymap.set("i", "<CR>", "<Space><BS><CR>", { noremap = true, silent = true })
-vim.keymap.set("i", "<Esc>", "<Space><BS><Esc>", { noremap = true, silent = true })
+keymap_set("i", "<CR>", "<Space><BS><CR>",   "Enter new line (keep cursor at start of line)")
+keymap_set("i", "<Esc>", "<Space><BS><Esc>", "Exit insert mode (keep cursor position unchanged)")
 vim.api.nvim_create_autocmd({ "BufWritePre" }, {
     pattern = { "*" },
     callback = function()
         local save_cursor = vim.fn.getpos(".")
-        pcall(function() 
-            vim.cmd([[%s/\S\zs\s\+$//e]]) 
+        pcall(function()
+            vim.cmd([[%s/\S\zs\s\+$//e]])
         end)
         vim.fn.setpos(".", save_cursor)
     end,
@@ -303,47 +259,12 @@ vim.api.nvim_create_autocmd("BufReadPost", {
   end,
 })
 
--- Highlight current matching words
--- vim.api.nvim_create_autocmd({"CursorMoved", "CursorMovedI", "ModeChanged"}, {
---     callback = function()
---         min_length_cursor_len = 3
---         vim.api.nvim_set_hl(0, "CursorWord", { bg = color_table.bg_lighter2 })
---         local column = vim.api.nvim_win_get_cursor(0)[2]
---         local line = vim.api.nvim_get_current_line()
---         local cursorword = vim.fn.matchstr(line:sub(1, column + 1), [[\k*$]])
---         .. vim.fn.matchstr(line:sub(column + 1), [[^\k*]]):sub(2)
---
---         local mode = vim.fn.mode()
---         if mode ~= "n" and mode ~= "N" then
---             vim.api.nvim_set_hl(0, "CursorWord", {})
---             return
---         end
---         if cursorword == vim.w.cursorword then
---             return
---         end
---         vim.w.cursorword = cursorword
---         if vim.w.cursorword_id then
---             vim.call("matchdelete", vim.w.cursorword_id)
---             vim.w.cursorword_id = nil
---         end
---         if
---             cursorword == ""
---             or #cursorword > 100
---             or #cursorword < min_length_cursor_len
---             or string.find(cursorword, "[\192-\255]+") ~= nil
---         then
---             return
---         end
---         local pattern = [[\<]] .. cursorword .. [[\>]]
---         vim.w.cursorword_id = vim.fn.matchadd("CursorWord", pattern, -1)
---     end
--- })
 
 -- Buffers
 -- ============================================================================
 
-vim.keymap.set("n", "[b", "<cmd>bprevious<cr>",    { desc = "Prev Buffer" })
-vim.keymap.set("n", "]b", "<cmd>bnext<cr>",        { desc = "Next Buffer" })
+keymap_set("n", "[b", "<cmd>bprevious<cr>",    "Prev Buffer")
+keymap_set("n", "]b", "<cmd>bnext<cr>",        "Next Buffer")
 vim.api.nvim_create_user_command("Bda", function() vim.cmd("%bdelete|edit #|bdelete #") end, {})
 vim.api.nvim_create_user_command("Bd",  function() vim.cmd("bn | bd#") end, {})
 
@@ -353,76 +274,40 @@ vim.api.nvim_create_user_command("Bd",  function() vim.cmd("bn | bd#") end, {})
 vim.o.omnifunc = "syntaxcomplete#Compete"
 vim.opt.completeopt:append { "menuone", "preview", "noselect" }
 vim.o.complete = ".,w,b,u,U"
-vim.keymap.set('i', '<A-n>', '<C-x><C-p>', { noremap = true }, { desc = 'Completion from all sources.' })
-vim.keymap.set('i', '<A-o>', '<C-x><C-o>', { noremap = true }, { desc = '[O]mni-completion' })
-vim.keymap.set('i', '<A-b>', '<C-x><C-n>', { noremap = true }, { desc = '[B]uffer completion' })
-vim.keymap.set('i', '<A-i>', '<C-x><C-i>', { noremap = true }, { desc = '[I]nclude file completion' })
-vim.keymap.set('i', '<A-d>', '<C-x><C-k>', { noremap = true }, { desc = '[D]ictionary completion' })
-vim.keymap.set('i', '<A-f>', '<C-x><C-f>', { noremap = true }, { desc = '[F]ilename completion' })
-vim.keymap.set('i', '<A-l>', '<C-x><C-l>', { noremap = true }, { desc = '[L]ine completion' })
-vim.keymap.set('i', '<A-e>', '<C-e>',      { noremap = true }, { desc = '[E]nd completion' })
-vim.keymap.set('i', '<Tab>',   'pumvisible() ? "\\<C-n>" : "\\<Tab>"', { expr = true })
-vim.keymap.set('i', '<S-Tab>', 'pumvisible() ? "\\<C-p>" : "\\<S-Tab>"', { expr = true })
-
--- function fill_cmp()
---     local ext = vim.bo.filetype
---     if ext == '' then return end
---     local cmd
---     if vim.fn.executable('fd') == 1 then
---         cmd = { 'fd', '--type', 'f', '--hidden', '--no-ignore', '--extension', ext, '.' }
---     elseif vim.fn.executable('rg') == 1 then
---         cmd = { 'rg', '--files', '--hidden', '--no-ignore', '--glob', '*.' .. ext }
---     else
---         cmd = { 'find', '.', '-type', 'f', '-name', '*.' .. ext }
---     end
---     local job = vim.fn.jobstart(cmd, {
---         stdout_buffered = true,
---         on_exit = function(_, code)
---             if code ~= 0 then return end
---             local files = vim.fn.systemlist(cmd)
---             -- Filter out directories (unlikely with --type f) and hidden if desired
---             files = vim.tbl_filter(function(f) return f ~= '' and not f:match('/%..*') end, files)
---             if #files == 0 then return end
---             vim.schedule(function()
---                 vim.o.dictionary = table.concat(files, ',')
---             end)
---         end,
---     })
---
---     if job <= 0 then
---         print('Failed to start job for dictionary setup')
---     end
--- end
---
--- vim.api.nvim_create_autocmd("BufEnter", {
---     callback = fill_cmp
--- })
+keymap_set('i', '<A-n>', '<C-x><C-p>', 'Completion from all sources.')
+keymap_set('i', '<A-o>', '<C-x><C-o>', '[o]mni-completion')
+keymap_set('i', '<A-b>', '<C-x><C-n>', '[b]uffer completion')
+keymap_set('i', '<A-i>', '<C-x><C-i>', '[i]nclude file completion')
+keymap_set('i', '<A-d>', '<C-x><C-k>', '[d]ictionary completion')
+keymap_set('i', '<A-f>', '<C-x><C-f>', '[f]ilename completion')
+keymap_set('i', '<A-l>', '<C-x><C-l>', '[l]ine completion')
+keymap_set('i', '<A-e>', '<C-e>',      '[e]nd completion')
+keymap_set('i', '<Tab>',   'pumvisible() ? "\\<C-n>" : "\\<Tab>"',   "Next completion item (or normal Tab if no menu)",           { expr = true })
+keymap_set('i', '<S-Tab>', 'pumvisible() ? "\\<C-p>" : "\\<S-Tab>"', "Previous completion item (or normal Shift+Tab if no menu)", { expr = true })
 
 -- Terminal
 -- ============================================================================
 
-function open_split_terminal()
+local function open_split_terminal(dir)
     vim.cmd.new()
-    vim.cmd.wincmd "J"
+    if not dir then
+        vim.cmd.wincmd "J"
+    end
     vim.api.nvim_win_set_height(0, 12)
     vim.wo.winfixheight = true
-    vim.cmd.term("bash")
+    vim.fn.termopen("bash", { cwd = dir or "" })
+    vim.cmd.startinsert()
 end
 
 if (vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1) and not vim.g.neovide then
-    vim.keymap.set({"i", "n"}, "†", open_split_terminal, { desc = "Open Split Termainl" })
+    keymap_set({"i", "n"}, "†", open_split_terminal, "Open Split Termainl")
 else
-    vim.keymap.set({"i", "n"}, "<C-`>", open_split_terminal, { desc = "Open Split Termainl" })
+    keymap_set({"i", "n"}, "<C-`>", open_split_terminal, "Open Split Termainl")
 end
-
--- Tags
--- ============================================================================
-
-vim.o.tags = "tags"
-vim.keymap.set('n', ']g', '<C-]>', { desc = 'Jump to definition' })
-vim.keymap.set('n', '[g', '<C-t>', { desc = 'Return from jump' })
-vim.keymap.set('n', '<leader>wg', '<cmd>lua open_buffer_in_other_split()<CR><C-]> ', { desc = "[w]indow [g]oto definition" })
-vim.keymap.set('n', '<leader>wt', '<cmd>lua open_buffer_in_other_split()<CR>g]',     { desc = "[w]indow show [t]ag" })
+keymap_set({"i", "n"}, "<M-`>", function()
+    local dir = vim.fn.expand('%:p:h')
+    open_split_terminal(dir)
+end, "Open in current file directory")
 
 -- Make
 -- ============================================================================
@@ -504,6 +389,26 @@ vim.api.nvim_create_autocmd("BufEnter", {
     end,
 })
 
+-- Neovim Gui
+-- ============================================================================
+
+if vim.g.neovide then
+    vim.o.guifont = "Consolas:h12"
+    keymap_set({ "n", "v" }, "<C-=>",   ":lua vim.g.neovide_scale_factor = vim.g.neovide_scale_factor + 0.1<CR>", "Neovide: Increase font size")
+    keymap_set({ "n", "v" }, "<C-->",   ":lua vim.g.neovide_scale_factor = vim.g.neovide_scale_factor - 0.1<CR>", "Neovide: Decrease font size")
+    keymap_set({ "n", "v" }, "<C-0>",   ":lua vim.g.neovide_scale_factor = 1<CR>",                                "Neovide: Reset font size to default")
+    keymap_set('n',          '<C-S-v>', '"+P',         "Paste from system clipboard (after cursor)")
+    keymap_set('v',          '<C-S-v>', '"+P',         "Paste from system clipboard (replace selection)")
+    keymap_set('i',          '<C-S-v>', '<ESC>l"+Pli', "Paste from system clipboard in insert mode")
+    keymap_set('c',          '<C-S-v>', '<C-R>+',      "Paste from system clipboard in command-line mode")
+    local neovide_fullscreen = true
+    keymap_set({'n', 'i', 't', 'x'}, '<F11>', function()
+        neovide_fullscreen = not neovide_fullscreen
+        vim.g.neovide_fullscreen = neovide_fullscreen
+        vim.notify("Full Screen")
+    end, "Full Screen")
+end
+
 -- Plugins
 -- ============================================================================
 
@@ -549,11 +454,11 @@ require('guess-indent').setup()
 
 -- Multicursor
 require("multiple-cursors").setup()
-vim.keymap.set({"n", "x"}, "<C-k>", "<Cmd>MultipleCursorsAddUp<CR>",            { desc = "Add cursor and move up" })
-vim.keymap.set({"n", "i"}, "<C-h>", "<Cmd>MultipleCursorsMouseAddDelete<CR>",   { desc = "Add or remove cursor" })
-vim.keymap.set({"n", "x"}, "<C-j>", "<Cmd>MultipleCursorsAddDown<CR>",          { desc = "Add cursor and move down" })
-vim.keymap.set({"x"},      "<C-x>", "<Cmd>MultipleCursorsAddVisualArea<CR>",    { desc = "Add cursors to the lines of the visual area" })
-vim.keymap.set({"n", "x"}, "<C-l>", "<Cmd>MultipleCursorsLock<CR>",             { desc = "Lock virtual cursors" })
+keymap_set({"n", "x"}, "<C-k>", "<Cmd>MultipleCursorsAddUp<CR>",            "Add cursor and move up")
+keymap_set({"n", "i"}, "<C-h>", "<Cmd>MultipleCursorsMouseAddDelete<CR>",   "Add or remove cursor")
+keymap_set({"n", "x"}, "<C-j>", "<Cmd>MultipleCursorsAddDown<CR>",          "Add cursor and move down")
+keymap_set({"x"},      "<C-x>", "<Cmd>MultipleCursorsAddVisualArea<CR>",    "Add cursors to the lines of the visual area")
+keymap_set({"n", "x"}, "<C-l>", "<Cmd>MultipleCursorsLock<CR>",             "Lock virtual cursors")
 
 -- Bracket Split and Join
 require('mini.splitjoin').setup({
@@ -570,16 +475,16 @@ require("flash").setup({
     }
   }
 })
-vim.keymap.set({ "n", "x", "o" }, "<leader>ef", function() require("flash").jump() end,              { desc = "[e]dit [f]lash" })
-vim.keymap.set({ "n", "x", "o" }, "<leader>eF", function() require("flash").treesitter() end,        { desc = "[e]dit [F]lashback" })
-vim.keymap.set({ "o", "x" },      "<leader>er", function() require("flash").treesitter_search() end, { desc = "Treesitter Search" })
-vim.keymap.set("o",               "<leader>eR", function() require("flash").remote() end,            { desc = "Remote Flash" })
--- vim.keymap.set({ "c" },           "<c-s>",  function() require("flash").toggle() end,            { desc = "Toggle Flash Search" })
+keymap_set({ "n", "x", "o" }, "<leader>ef", function() require("flash").jump() end,              "[e]dit [f]lash")
+keymap_set({ "n", "x", "o" }, "<leader>eF", function() require("flash").treesitter() end,        "[e]dit [F]lashback")
+keymap_set({ "o", "x" },      "<leader>er", function() require("flash").treesitter_search() end, "Treesitter Search")
+keymap_set("o",               "<leader>eR", function() require("flash").remote() end,            "Remote Flash")
+-- keymap_set({ "c" },           "<c-s>",  function() require("flash").toggle() end,            "Toggle Flash Search")
 
 -- Better 'w', 'e' and 'b'
-vim.keymap.set({ "n", "o", "x" }, "w", "<cmd>lua require('spider').motion('w')<CR>")
-vim.keymap.set({ "n", "o", "x" }, "e", "<cmd>lua require('spider').motion('e')<CR>")
-vim.keymap.set({ "n", "o", "x" }, "b", "<cmd>lua require('spider').motion('b')<CR>")
+keymap_set({ "n", "o", "x" }, "w", "<cmd>lua require('spider').motion('w')<CR>", "Next sub[w]ord")
+keymap_set({ "n", "o", "x" }, "e", "<cmd>lua require('spider').motion('e')<CR>", "[e]nd of next subword")
+keymap_set({ "n", "o", "x" }, "b", "<cmd>lua require('spider').motion('b')<CR>", "[b]ack subword")
 
 -- Surround
 require('mini.surround').setup({
@@ -651,7 +556,7 @@ vim.api.nvim_create_user_command("UndoTree", require("undotree").toggle, {})
 
 -- Better Quickfix ============================================================
 require("quicker").setup()
-vim.keymap.set("n", "<leader>l", function() require("quicker").toggle({ loclist = true }) end, { desc = "Toggle loclist" })
+keymap_set("n", "<leader>l", function() require("quicker").toggle({ loclist = true }) end, "Toggle [l]oclist")
 require("quicker").setup({
   keys = {
     {
@@ -672,10 +577,31 @@ require("quicker").setup({
 })
 
 -- Mark Management ============================================================
-require('marko').setup({
-  default_keymap = false,
+-- Files Marks
+local harpoon = require("harpoon")
+harpoon:setup()
+keymap_set("n", "<leader>mf", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end, '[m]ark [f]iles menu')
+keymap_set("n", "<leader>ma", function() harpoon:list():add() end,                         '[m]ark [a]dd file')
+keymap_set("n", "<leader>m1", function() harpoon:list():select(1) end,                     '[m]ark goto [1]\'st file')
+keymap_set("n", "<leader>m2", function() harpoon:list():select(2) end,                     '[m]ark goto [2]\'nd file')
+keymap_set("n", "<leader>m3", function() harpoon:list():select(3) end,                     '[m]ark goto [3]\'rd file')
+keymap_set("n", "<leader>m4", function() harpoon:list():select(4) end,                     '[m]ark goto [4]\'th file')
+
+-- Code Mark
+require("fusen").setup({
+    keymaps = {},
+    telescope = {
+        keymaps = {
+            delete_mark_insert = "<C-x>",  -- Custom key for insert mode
+            delete_mark_normal = "dd",     -- Custom key for normal mode
+        },
+    },
 })
-vim.keymap.set('n', '<leader>mm', function() require('marko').show_marks() end, { desc = 'Show marks popup' })
+keymap_set("n", "<leader>me", ":FusenAddMark<CR>",          "[m]ark add and [e]dit code")
+keymap_set("n", "<leader>md", ":FusenClearMark<CR>",        "[m]ark delete code")
+keymap_set("n", "<leader>mn", ":FusenNext<CR>",             "[m]ark goto [n]ext code")
+keymap_set("n", "<leader>mN", ":FusenPrev<CR>",             "[m]ark goto [p]rev code")
+keymap_set("n", "<leader>mc", ":Telescope fusen marks<CR>", "[m]ark [c]ode menu")
 
 -- File Manager ===============================================================
 function _G.get_oil_winbar()
@@ -731,16 +657,12 @@ require("oil").setup({
             end,
             mode = "n",
             nowait = true,
-            desc = "[f]ind by [g]rep files in the current dir"
+            desc = "[f]ind by [G]rep files in the current dir"
         },
         ["<M-`>"] = {
             function()
                 local dir = require("oil").get_current_dir()
-                vim.cmd.new()
-                vim.api.nvim_win_set_height(0, 12)
-                vim.wo.winfixheight = true
-                vim.fn.termopen("bash", { cwd = dir })
-                vim.cmd.startinsert()
+                open_split_terminal(dir)
             end,
             nowait = true,
             mode = "n",
@@ -777,7 +699,7 @@ require("oil").setup({
     },
 })
 require("oil-git-status").setup()
-vim.keymap.set("n", "<leader>-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
+keymap_set("n", "<leader>-", "<CMD>Oil<CR>", "Open parent directory")
 
 -- Fuzzy Finder ===============================================================
 -- vim.opt.runtimepath:append(plugin_path .. "/telescope-fzf-native.nvim")
@@ -803,32 +725,32 @@ require('telescope').setup {
 pcall(require('telescope').load_extension, 'fzf')
 pcall(require('telescope').load_extension, 'ui-select')
 -- Keymaps
-vim.keymap.set('n', '<leader>fk', require('telescope.builtin').keymaps,             { desc = '[f]ind [k]eymaps' })
-vim.keymap.set('n', '<leader>ff', require('telescope.builtin').find_files,          { desc = '[f]ind [f]iles' })
-vim.keymap.set('n', '<leader>fg', require('telescope.builtin').live_grep,           { desc = '[f]ind [g]rep' })
-vim.keymap.set('n', '<leader>ft', require('telescope.builtin').tags,                { desc = '[f]ind [t]ags' })
-vim.keymap.set('n', '<leader>fc', require('telescope.builtin').current_buffer_tags, { desc = '[f]ind [c]urrent tags' })
-vim.keymap.set('n', '<leader>fo', require('telescope.builtin').oldfiles,            { desc = '[f]ind [o]ldfiles' })
-vim.keymap.set('n', '<leader>fb', require('telescope.builtin').buffers,             { desc = '[f]ind [b]uffers' })
-vim.keymap.set('n', '<leader>fG', function()
+keymap_set('n', '<leader>fk', require('telescope.builtin').keymaps,             '[f]ind [k]eymaps')
+keymap_set('n', '<leader>ff', require('telescope.builtin').find_files,          '[f]ind [f]iles')
+keymap_set('n', '<leader>fg', require('telescope.builtin').live_grep,           '[f]ind [g]rep')
+keymap_set('n', '<leader>ft', require('telescope.builtin').tags,                '[f]ind [t]ags')
+keymap_set('n', '<leader>fc', require('telescope.builtin').current_buffer_tags, '[f]ind [c]urrent tags')
+keymap_set('n', '<leader>fo', require('telescope.builtin').oldfiles,            '[f]ind [o]ldfiles')
+keymap_set('n', '<leader>fb', require('telescope.builtin').buffers,             '[f]ind [b]uffers')
+keymap_set('n', '<leader>fG', function()
     require('telescope.builtin').live_grep({ cwd = "%:p:h" })
-end, { desc = '[f]ind [G]rep current file dir' })
-vim.keymap.set('n', '<leader>fF', function()
+end, '[f]ind [G]rep current file dir')
+keymap_set('n', '<leader>fF', function()
     require("telescope.builtin").find_files({ cwd = "%:p:h" })
-end, { desc = '[F]ind [F]iles current file dir' })
-vim.keymap.set({'n', 'x'}, '<leader>fw', require('telescope.builtin').grep_string,         { desc = '[f]ind [w]ord' })
-vim.keymap.set('n', '<leader>/', function()
+end, '[f]ind [F]iles current file dir')
+keymap_set({'n', 'x'}, '<leader>fw', require('telescope.builtin').grep_string,         '[f]ind [w]ord')
+keymap_set('n', '<leader>/', function()
     require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
         winblend = 10,
         previewer = false,
     })
-end, { desc = 'Fuzzily search in current buffer' })
-vim.keymap.set('n', '<leader>f/', function()
+end, 'Fuzzily search in current buffer')
+keymap_set('n', '<leader>f/', function()
     require('telescope.builtin').live_grep {
         grep_open_files = true,
         prompt_title = 'Live Grep in Open Files',
     }
-end, { desc = '[F]ind Open Files' })
+end, '[f]ind Open Files')
 
 -- Debugger ===================================================================
 
@@ -878,7 +800,7 @@ vim.api.nvim_create_autocmd("User", {
     pattern = "TermdebugStartPre",
     callback = function()
         for _, k in ipairs(termdebug_keys) do
-            vim.keymap.set(k[1], k[2], k[3], { desc = k[4] })
+            keymap_set(k[1], k[2], k[3], k[4])
         end
         current_debug_edit_file=vim.api.nvim_buf_get_name(0)
         vim.cmd.tabnew()
@@ -934,7 +856,7 @@ require('mini.diff').setup({
         goto_last = ']H',
     },
 })
-vim.keymap.set('n', '<leader>gd', MiniDiff.toggle_overlay, { desc = "[g]it [d]iff" })
+vim.api.nvim_create_user_command("DiffInline", MiniDiff.toggle_overlay, {})
 
 -- Git Manager
 require("diffview").setup({ use_icons = false, })
