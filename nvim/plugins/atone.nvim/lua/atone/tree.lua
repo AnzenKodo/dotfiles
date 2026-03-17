@@ -1,0 +1,313 @@
+local api, fn = vim.api, vim.fn
+local config = require("atone.config")
+local time_ago = require("atone.utils").time_ago
+
+--- get the character at column `col` (1-based index)
+---@param line string
+---@param col integer
+---@return string
+local function get_char(line, col)
+    return fn.strcharpart(line, col - 1, 1)
+end
+
+--- change the char of str in pos index.
+---@param str string
+---@param pos integer
+---@param ch string
+local function set_char_at(str, pos, ch)
+    local len = fn.strchars(str)
+    if pos > len then
+        return str .. string.rep(" ", pos - len - 1) .. ch
+    else
+        return fn.strcharpart(str, 0, pos - 1) .. ch .. fn.strcharpart(str, pos)
+    end
+end
+
+---@class AtoneNode
+---@field seq integer
+---@field time integer
+---@field depth integer
+---@field parent integer
+---@field children integer[]
+---@field child integer
+---@field fork boolean?
+
+local M = {
+    ---@type AtoneNode[]
+    nodes = {}, -- { seq: node }
+    lines = {},
+    total = 1,
+    last_seq = 0,
+    cur_seq = 0,
+}
+
+local seqs -- { id: seq }
+local ids -- { seq: id }
+function M.id_2seq(id)
+    return seqs[id]
+end
+function M.seq_2id(seq)
+    return ids[seq]
+end
+
+function M.change_branch_depth(node_seq, new_depth_baseline)
+    local depth_difference = new_depth_baseline - M.nodes[node_seq].depth
+    local queue = { node_seq }
+    local head, tail = 1, 1
+    while head <= tail do
+        local node = M.nodes[queue[head]]
+        node.depth = node.depth + depth_difference
+        local children = node.children
+        for i = 1, #children do
+            tail = tail + 1
+            queue[tail] = children[i]
+        end
+        head = head + 1
+    end
+end
+
+function M.convert(buf)
+    local undotree = fn.undotree(buf)
+
+    -- initiate
+    M.nodes = {}
+    M.nodes[0] = {
+        seq = 0,
+        depth = 1,
+        -- child is a descendant with the same depth as the node.
+        child = nil,
+        children = {},
+    }
+    M.cur_seq = undotree.seq_cur
+    M.last_seq = undotree.seq_last
+    if M.last_seq == 0 then
+        return M.nodes
+    end
+
+    local earliest_seq = undotree.entries[1].seq
+    local function flatten(rawtree, parent)
+        for _, raw_node in ipairs(rawtree) do
+            ---@diagnostic disable-next-line: missing-fields
+            M.nodes[raw_node.seq] = {
+                seq = raw_node.seq,
+                time = raw_node.time,
+                parent = parent, -- 0 means the root node
+                children = {},
+            }
+            if raw_node.alt then
+                flatten(raw_node.alt, parent)
+            end
+            parent = raw_node.seq
+            if raw_node.seq < earliest_seq then
+                earliest_seq = raw_node.seq
+            end
+        end
+    end
+    flatten(undotree.entries, 0)
+
+    -- set the depth: the depth of each branch depth = the depth of its root node's parent node plus 1
+    -- determine the main branch with a depth of 1
+    do
+        local seq = undotree.seq_last
+        repeat
+            local node = M.nodes[seq]
+            node.depth = 1
+            seq = node.parent
+        until seq == 0
+    end
+    -- fill in depths for other branches
+    for seq = M.last_seq - 1, earliest_seq, -1 do
+        if M.nodes[seq] and not M.nodes[seq].depth then
+            local path = {}
+            local sub_seq = seq
+            local sub_node = M.nodes[sub_seq]
+            repeat
+                path[#path + 1] = sub_seq
+                sub_seq = sub_node.parent
+                sub_node = M.nodes[sub_seq]
+            until sub_node.depth
+            for _, i in ipairs(path) do
+                M.nodes[i].depth = sub_node.depth + 1
+            end
+        end
+    end
+
+    for seq = M.last_seq, earliest_seq, -1 do
+        local node = M.nodes[seq]
+        if node then
+            local parent_node = M.nodes[node.parent]
+            parent_node.children[#parent_node.children + 1] = seq
+            if node.depth == parent_node.depth then
+                parent_node.child = seq
+            end
+        end
+    end
+
+    -- adjust the depth
+    for seq = M.last_seq, earliest_seq + 1, -1 do
+        local node = M.nodes[seq]
+        if not node then
+            goto continue
+        end
+        if node.depth ~= 1 and seq ~= node.parent + 1 and not node.fork then
+            for sub_seq = seq - 1, node.parent + 1, -1 do
+                local sub_node = M.nodes[sub_seq]
+                if not sub_node then
+                    goto continue
+                end
+                local sub_node_parent = M.nodes[sub_node.parent]
+                if
+                    sub_node.depth == node.depth
+                    and sub_node.depth ~= sub_node_parent.depth
+                    and (sub_node.parent ~= node.parent or seq > M.nodes[node.parent].child)
+                then
+                    if sub_seq < sub_node_parent.child then
+                        sub_node.fork = true
+                    end
+                    M.change_branch_depth(sub_seq, sub_node.depth + 1)
+                end
+                ::continue::
+            end
+        end
+        ::continue::
+    end
+
+    return M.nodes
+end
+
+-- we should reverse the table: put the node with greater id in the smaller index
+--      seq  id  index                                                --      seq  id  index
+-- @    [4]   5    1                                                  -- @    [4]   5    1
+-- |               2                                                  -- | o  [3]   4    2
+-- | o  [3]   4    3                                                  -- o |  [2]   3    3
+-- | |             4                                                  -- o/   [1]   2    4
+-- | o  [2]   3    5                                                  -- o    [0]   1    5
+-- | |             6
+-- o |  [1]   2    7  <- a node
+-- |/              8  <- line after this node
+-- o    [0]   1    9
+function M.render()
+    M.lines = {}
+    local max_depth = 1
+    seqs = { 0 }
+    -- the order number of node. Root node's id is 1
+    local id = 1
+    -- total of nodes (including root)
+    local total = 1
+    while id <= total do
+        local seq = seqs[id]
+        local node = M.nodes[seq]
+        if node.depth > max_depth then
+            max_depth = node.depth
+        end
+        local children = node.children
+        for i = 1, #children do
+            total = total + 1
+            seqs[total] = children[i]
+        end
+        id = id + 1
+    end
+    table.sort(seqs)
+
+    ids = {}
+    id = 1
+    while id <= total do
+        ids[seqs[id]] = id
+        id = id + 1
+    end
+
+    M.total = total
+
+    local compact = config.opts.ui.compact
+    if compact then
+        M.lines[total] = "●"
+    else
+        M.lines[2 * total - 1] = "●"
+    end
+    id = 2
+    while id <= total do
+        local seq = seqs[id]
+        local node = M.nodes[seq]
+        local depth = node.depth
+        local parent_depth = M.nodes[node.parent].depth
+        local node_lnum = compact and total - id + 1 or (total - id) * 2 + 1
+        if depth == 1 then
+            M.lines[node_lnum] = "●"
+        else
+            M.lines[node_lnum] = "│" .. (" "):rep(node.depth * 2 - 3) .. "●"
+        end
+        if not compact then
+            M.lines[node_lnum + 1] = "│" -- line after this node
+        end
+        if not node.fork and depth ~= 1 then
+            local lnum_is_drawing = node_lnum + 1
+            local parent_index = compact and total - M.seq_2id(node.parent) + 1 or (total - M.seq_2id(node.parent)) * 2 + 1 -- index of parent node
+            while lnum_is_drawing < parent_index and get_char(M.lines[lnum_is_drawing], depth * 2 - 1) ~= "●" do
+                if get_char(M.lines[lnum_is_drawing], depth * 2 - 1) ~= "├" then
+                    M.lines[lnum_is_drawing] = set_char_at(M.lines[lnum_is_drawing], depth * 2 - 1, "│")
+                end
+                lnum_is_drawing = lnum_is_drawing + 1
+            end
+            if depth ~= parent_depth then
+                if not compact or get_char(M.lines[lnum_is_drawing], depth * 2 - 1) == "●" then
+                    lnum_is_drawing = lnum_is_drawing - 1
+                end
+                if get_char(M.lines[lnum_is_drawing], depth * 2) == "─" then
+                    --  ●
+                    --  │
+                    --  │ ●
+                    -- ─┴─╯
+                    --  ^
+                    M.lines[lnum_is_drawing] = set_char_at(M.lines[lnum_is_drawing], depth * 2 - 1, "┴")
+                else
+                    -- condition check for compact style graph
+                    -- ●              ●
+                    -- │ ●            ├─●
+                    -- ├─╯    ->      ├─●
+                    -- │ ●            │ ●
+                    -- ●─╯            ●─╯
+                    if not compact or get_char(M.lines[lnum_is_drawing], depth * 2 - 1) ~= "●" then
+                        M.lines[lnum_is_drawing] = set_char_at(M.lines[lnum_is_drawing], depth * 2 - 1, "╯")
+                    end
+                end
+                for pos = parent_depth * 2, depth * 2 - 2 do
+                    if get_char(M.lines[lnum_is_drawing], pos) == " " then
+                        M.lines[lnum_is_drawing] = set_char_at(M.lines[lnum_is_drawing], pos, "─")
+                    elseif get_char(M.lines[lnum_is_drawing], pos) == "╯" then
+                        M.lines[lnum_is_drawing] = set_char_at(M.lines[lnum_is_drawing], pos, "┴")
+                    end
+                end
+                if get_char(M.lines[lnum_is_drawing], parent_depth * 2 - 1) ~= "●" then
+                    M.lines[lnum_is_drawing] = set_char_at(M.lines[lnum_is_drawing], parent_depth * 2 - 1, "├")
+                end
+            end
+        elseif node.fork then
+            M.lines[node_lnum] = set_char_at(M.lines[node_lnum], parent_depth * 2 - 1, "├")
+            for i = parent_depth * 2, depth * 2 - 2 do
+                M.lines[node_lnum] = set_char_at(M.lines[node_lnum], i, "─")
+            end
+        end
+
+        id = id + 1
+    end
+
+    -- TODO: use extmarks
+    do
+        for i = 1, total do
+            local lnum = compact and total - i + 1 or (total - i) * 2 + 1
+            local seq = M.id_2seq(i)
+            local node = M.nodes[seq]
+            local time
+            if node.time then
+                time = time_ago(node.time)
+            else
+                time = "Original"
+            end
+            M.lines[lnum] = set_char_at(M.lines[lnum], max_depth * 2 + 4, "[" .. seq .. "] " .. time)
+        end
+    end
+
+    return M.lines
+end
+
+return M
