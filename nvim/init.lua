@@ -274,14 +274,9 @@ vim.api.nvim_create_user_command("Bd",  function() vim.cmd("bn | bd#") end,     
 vim.o.omnifunc = "syntaxcomplete#Compete"
 vim.opt.completeopt:append { "menuone", "preview", "noselect" }
 vim.o.complete = ".,w,b,u,U"
-keymap_set("i", "<A-n>", "<C-x><C-p>", "Completion from all sources.")
-keymap_set("i", "<A-o>", "<C-x><C-o>", "[o]mni-completion")
-keymap_set("i", "<A-b>", "<C-x><C-n>", "[b]uffer completion")
-keymap_set("i", "<A-i>", "<C-x><C-i>", "[i]nclude file completion")
-keymap_set("i", "<A-d>", "<C-x><C-k>", "[d]ictionary completion")
 keymap_set("i", "<A-f>", "<C-x><C-f>", "[f]ilename completion")
+keymap_set("i", "<A-s>", "<C-x><C-s>", "[s]pell completion")
 keymap_set("i", "<A-l>", "<C-x><C-l>", "[l]ine completion")
-keymap_set("i", "<A-e>", "<C-e>",      "[e]nd completion")
 keymap_set("i", "<Tab>",   'pumvisible() ? "\\<C-n>" : "\\<Tab>"',   "Next completion item (or normal Tab if no menu)",           { expr = true })
 keymap_set("i", "<S-Tab>", 'pumvisible() ? "\\<C-p>" : "\\<S-Tab>"', "Previous completion item (or normal Shift+Tab if no menu)", { expr = true })
 
