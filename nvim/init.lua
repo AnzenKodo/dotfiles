@@ -265,8 +265,8 @@ vim.api.nvim_create_autocmd("BufReadPost", {
 
 keymap_set("n", "[b", "<cmd>bprevious<cr>",    "Prev Buffer")
 keymap_set("n", "]b", "<cmd>bnext<cr>",        "Next Buffer")
-vim.api.nvim_create_user_command("Bda", function() vim.cmd("%bdelete|edit #|bdelete #") end, {})
-vim.api.nvim_create_user_command("Bd",  function() vim.cmd("bn | bd#") end, {})
+vim.api.nvim_create_user_command("Bda", function() vim.cmd("%bdelete | edit # | bdelete #") end, { desc = "Close all other buffers, keep only current" })
+vim.api.nvim_create_user_command("Bd",  function() vim.cmd("bn | bd#") end,                      { desc = "Close previous buffer and move to next" })
 
 -- Autocomplete
 -- ============================================================================
@@ -454,13 +454,13 @@ require("guess-indent").setup()
 
 -- Multicursor
 require("multicursor-nvim").setup()
-keymap_set({"n", "x"}, "<C-k>",           function() require("multicursor-nvim").lineAddCursor(-1) end)
-keymap_set({"n", "x"}, "<C-j>",           function() require("multicursor-nvim").lineAddCursor(1) end)
-keymap_set({"n", "x"}, "<C-d>",           function() require("multicursor-nvim").matchAddCursor(1) end)
-keymap_set({"n", "x"}, "<C-S-d>",         function() require("multicursor-nvim").matchAddCursor(-1) end)
-keymap_set("n",        "<c-leftmouse>",   require("multicursor-nvim").handleMouse)
-keymap_set("n",        "<c-leftdrag>",    require("multicursor-nvim").handleMouseDrag)
-keymap_set("n",        "<c-leftrelease>", require("multicursor-nvim").handleMouseRelease)
+keymap_set({"n", "x"}, "<C-k>", function() require("multicursor-nvim").lineAddCursor(-1) end,    "Add cursor ↑")
+keymap_set({"n", "x"}, "<C-j>", function() require("multicursor-nvim").lineAddCursor(1) end,     "Add cursor ↓")
+keymap_set({"n", "x"}, "<C-d>", function() require("multicursor-nvim").matchAddCursor(1) end,    "Add cursor to next match")
+keymap_set({"n", "x"}, "<C-S-d>", function() require("multicursor-nvim").matchAddCursor(-1) end, "Add cursor to prev match")
+keymap_set("n", "<c-leftmouse>",   require("multicursor-nvim").handleMouse,        "Multi-cursor click")
+keymap_set("n", "<c-leftdrag>",    require("multicursor-nvim").handleMouseDrag,    "Multi-cursor drag")
+keymap_set("n", "<c-leftrelease>", require("multicursor-nvim").handleMouseRelease, "Multi-cursor release")
 require("multicursor-nvim").addKeymapLayer(function(layer_set)
     layer_set({"n", "x"}, "<C-s>",  function() require("multicursor-nvim").matchSkipCursor(1) end)
     layer_set({"n", "x"}, "<C-S-s>", function() require("multicursor-nvim").matchSkipCursor(-1) end)
