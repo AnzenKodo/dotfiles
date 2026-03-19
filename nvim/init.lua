@@ -274,6 +274,8 @@ vim.api.nvim_create_user_command("Bd",  function() vim.cmd("bn | bd#") end,     
 vim.o.omnifunc = "syntaxcomplete#Compete"
 vim.opt.completeopt:append { "menuone", "preview", "noselect" }
 vim.o.complete = ".,w,b,u,U"
+keymap_set("i", "<A-n>", "<C-n>",      "Completion from sources specified in the 'complete'")
+keymap_set("i", "<A-b>", "<C-x><C-n>", "[b]uffer completion'")
 keymap_set("i", "<A-f>", "<C-x><C-f>", "[f]ilename completion")
 keymap_set("i", "<A-s>", "<C-x><C-s>", "[s]pell completion")
 keymap_set("i", "<A-l>", "<C-x><C-l>", "[l]ine completion")
