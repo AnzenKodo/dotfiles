@@ -1,6 +1,6 @@
 {
 	"$schema" : "https://aka.ms/winget-packages.schema.2.0.json",
-	"CreationDate" : "2026-03-04T17:34:43.140-00:00",
+	"CreationDate" : "2026-03-23T09:24:22.510-00:00",
 	"Sources" : 
 	[
 		{
@@ -64,7 +64,7 @@
 				},
 				{
 					"PackageIdentifier" : "Microsoft.Edge",
-					"Version" : "145.0.3800.82"
+					"Version" : "146.0.3856.72"
 				},
 				{
 					"PackageIdentifier" : "OBSProject.OBSStudio",
@@ -100,7 +100,7 @@
 				},
 				{
 					"PackageIdentifier" : "Brave.Brave",
-					"Version" : "145.1.87.191"
+					"Version" : "146.1.88.134"
 				},
 				{
 					"PackageIdentifier" : "BrechtSanders.WinLibs.POSIX.MSVCRT",
@@ -144,7 +144,7 @@
 				},
 				{
 					"PackageIdentifier" : "ZedIndustries.Zed.Preview",
-					"Version" : "0.226.4-pre"
+					"Version" : "0.228.0-pre"
 				},
 				{
 					"PackageIdentifier" : "Python.Python.3.9",
@@ -152,11 +152,11 @@
 				},
 				{
 					"PackageIdentifier" : "Microsoft.Teams",
-					"Version" : "26015.1706.4351.4392"
+					"Version" : "26032.208.4399.5"
 				},
 				{
 					"PackageIdentifier" : "Microsoft.AppInstaller",
-					"Version" : "1.27.460.0"
+					"Version" : "1.28.220.0"
 				},
 				{
 					"PackageIdentifier" : "Microsoft.UI.Xaml.2.7",
@@ -184,7 +184,7 @@
 			[
 				{
 					"PackageIdentifier" : "9PNKDR50694P",
-					"Version" : "25.3.5.0"
+					"Version" : "26.0.0.0"
 				}
 			],
 			"SourceDetails" : 
@@ -196,5 +196,5 @@
 			}
 		}
 	],
-	"WinGetVersion" : "1.12.460"
+	"WinGetVersion" : "1.28.220"
 }
