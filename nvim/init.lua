@@ -413,6 +413,7 @@ end
 
 vim.cmd("packadd justify")
 vim.cmd("packadd nvim.difftool")
+vim.cmd("packadd nvim.undotree")
 
 -- Load External Plugins ======================================================
 
@@ -567,10 +568,6 @@ miniclue.setup({
 
 -- Session Manager ============================================================
 require("auto-session").setup()
-
--- Undo History ===============================================================
-require("atone").setup()
-vim.api.nvim_create_user_command("UndoTree", ":Atone toggle", {})
 
 -- Better Quickfix ============================================================
 require("quicker").setup()
