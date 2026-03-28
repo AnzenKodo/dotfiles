@@ -40,8 +40,7 @@ export XDG_VIDEOS_DIR="$HOME/Videos"
 
 # Application Variables ========================================================
 
-# export PAGER="bat"
-export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+export MANPAGER='nvim +Man!'
 export GNUPGHOME="$XDG_DATA_HOME"/gnupg
 export CALCHISTFILE="$XDG_CACHE_HOME"/calc_history
 

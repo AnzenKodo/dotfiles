@@ -29,6 +29,8 @@ export JAVA_HOME="$HOME/Code/Tools/jdk-24.0.1"
 # Alias
 #===============================================================================
 
+alias clip="xclip"
+
 # Power Management =============================================================
 
 alias poweroff="xfce4-session-logout"
