@@ -1,6 +1,6 @@
 {
 	"$schema" : "https://aka.ms/winget-packages.schema.2.0.json",
-	"CreationDate" : "2026-03-23T09:24:22.510-00:00",
+	"CreationDate" : "2026-03-30T13:00:05.530-00:00",
 	"Sources" : 
 	[
 		{
@@ -29,6 +29,10 @@
 				{
 					"PackageIdentifier" : "Oracle.JavaRuntimeEnvironment",
 					"Version" : "8.0.1510.12"
+				},
+				{
+					"PackageIdentifier" : "Meld.Meld",
+					"Version" : "3.22.2"
 				},
 				{
 					"PackageIdentifier" : "JohnMacFarlane.Pandoc",
@@ -64,7 +68,7 @@
 				},
 				{
 					"PackageIdentifier" : "Microsoft.Edge",
-					"Version" : "146.0.3856.72"
+					"Version" : "146.0.3856.84"
 				},
 				{
 					"PackageIdentifier" : "OBSProject.OBSStudio",
@@ -100,7 +104,7 @@
 				},
 				{
 					"PackageIdentifier" : "Brave.Brave",
-					"Version" : "146.1.88.134"
+					"Version" : "146.1.88.136"
 				},
 				{
 					"PackageIdentifier" : "BrechtSanders.WinLibs.POSIX.MSVCRT",
@@ -144,7 +148,7 @@
 				},
 				{
 					"PackageIdentifier" : "ZedIndustries.Zed.Preview",
-					"Version" : "0.228.0-pre"
+					"Version" : "0.230.0-pre"
 				},
 				{
 					"PackageIdentifier" : "Python.Python.3.9",
@@ -152,7 +156,7 @@
 				},
 				{
 					"PackageIdentifier" : "Microsoft.Teams",
-					"Version" : "26032.208.4399.5"
+					"Version" : "26043.2016.4478.2773"
 				},
 				{
 					"PackageIdentifier" : "Microsoft.AppInstaller",
@@ -184,7 +188,7 @@
 			[
 				{
 					"PackageIdentifier" : "9PNKDR50694P",
-					"Version" : "26.0.0.0"
+					"Version" : "26.0.1.0"
 				}
 			],
 			"SourceDetails" : 
