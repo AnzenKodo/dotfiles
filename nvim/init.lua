@@ -603,20 +603,20 @@ keymap_set("n", "<leader>m3", function() harpoon:list():select(3) end,          
 keymap_set("n", "<leader>m4", function() harpoon:list():select(4) end,                     "[m]ark goto [4]'th file")
 
 -- Code Mark
-require("fusen").setup({
-    keymaps = {},
-    telescope = {
-        keymaps = {
-            delete_mark_insert = "<C-x>",  -- Custom key for insert mode
-            delete_mark_normal = "dd",     -- Custom key for normal mode
-        },
-    },
-})
-keymap_set("n", "<leader>me", ":FusenAddMark<CR>",          "[m]ark add and [e]dit code")
-keymap_set("n", "<leader>md", ":FusenClearMark<CR>",        "[m]ark delete code")
-keymap_set("n", "<leader>mn", ":FusenNext<CR>",             "[m]ark goto [n]ext code")
-keymap_set("n", "<leader>mN", ":FusenPrev<CR>",             "[m]ark goto [p]rev code")
-keymap_set("n", "<leader>mc", ":Telescope fusen marks<CR>", "[m]ark [c]ode menu")
+-- require("fusen").setup({
+--     keymaps = {},
+--     telescope = {
+--         keymaps = {
+--             delete_mark_insert = "<C-x>",  -- Custom key for insert mode
+--             delete_mark_normal = "dd",     -- Custom key for normal mode
+--         },
+--     },
+-- })
+-- keymap_set("n", "<leader>me", ":FusenAddMark<CR>",          "[m]ark add and [e]dit code")
+-- keymap_set("n", "<leader>md", ":FusenClearMark<CR>",        "[m]ark delete code")
+-- keymap_set("n", "<leader>mn", ":FusenNext<CR>",             "[m]ark goto [n]ext code")
+-- keymap_set("n", "<leader>mN", ":FusenPrev<CR>",             "[m]ark goto [p]rev code")
+-- keymap_set("n", "<leader>mc", ":Telescope fusen marks<CR>", "[m]ark [c]ode menu")
 
 -- File Manager ===============================================================
 function _G.get_oil_winbar()
