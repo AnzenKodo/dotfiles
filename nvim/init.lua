@@ -609,21 +609,17 @@ keymap_set("n", "<leader>m2", function() harpoon:list():select(2) end,          
 keymap_set("n", "<leader>m3", function() harpoon:list():select(3) end,                     "[m]ark goto [3]'rd file")
 keymap_set("n", "<leader>m4", function() harpoon:list():select(4) end,                     "[m]ark goto [4]'th file")
 
--- Code Mark
--- require("fusen").setup({
---     keymaps = {},
---     telescope = {
---         keymaps = {
---             delete_mark_insert = "<C-x>",  -- Custom key for insert mode
---             delete_mark_normal = "dd",     -- Custom key for normal mode
---         },
---     },
--- })
--- keymap_set("n", "<leader>me", ":FusenAddMark<CR>",          "[m]ark add and [e]dit code")
--- keymap_set("n", "<leader>md", ":FusenClearMark<CR>",        "[m]ark delete code")
--- keymap_set("n", "<leader>mn", ":FusenNext<CR>",             "[m]ark goto [n]ext code")
--- keymap_set("n", "<leader>mN", ":FusenPrev<CR>",             "[m]ark goto [p]rev code")
--- keymap_set("n", "<leader>mc", ":Telescope fusen marks<CR>", "[m]ark [c]ode menu")
+-- Code Marks
+require('bookmarks').setup({
+    on_attach = function(bufnr)
+        local bm = require "bookmarks"
+        local map = vim.keymap.set
+        keymap_set("n","<leader>mm", bm.bookmark_toggle, "[m]ark code [m]ark")
+        keymap_set("n","<leader>mi", bm.bookmark_ann,    "[m]ark code annotat[i]on")
+    end
+})
+require('telescope').load_extension('bookmarks')
+keymap_set("n","<leader>mc", require('telescope').extensions.bookmarks.list,    "[m]ark [c]ode menu")
 
 -- File Manager ===============================================================
 function _G.get_oil_winbar()
