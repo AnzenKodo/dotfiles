@@ -231,6 +231,10 @@ keymap_set("i", "<Esc>", "<Space><BS><Esc>", "Exit insert mode (keep cursor posi
 vim.api.nvim_create_autocmd({ "BufWritePre" }, {
     pattern = { "*" },
     callback = function()
+        local dir = vim.fn.expand("%:p:h")
+        if dir:match("NeoBullion") then
+            return
+        end
         local save_cursor = vim.fn.getpos(".")
         pcall(function()
             vim.cmd([[%s/\S\zs\s\+$//e]])
