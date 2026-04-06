@@ -108,6 +108,9 @@ keymap_set("i", "<A-k>", "<esc><cmd>m .-2<cr>==gi",                             
 keymap_set("v", "<A-j>", ":<C-u>execute \"'<,'>move '>+\" . v:count1<cr>gv=gv",       "Move Line Down")
 keymap_set("v", "<A-k>", ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<cr>gv=gv", "Move Line Up")
 
+keymap_set("n", "<A-[>", function() vim.fn.search("^\\s\\+$", "bW") end, "Prev filled whitespace line")
+keymap_set("n", "<A-]>", function() vim.fn.search("^\\s\\+$", "W") end,  "Next filled whitespace line")
+
 -- Paste
 keymap_set("n", "<leader>ep", ":iput<CR>", "[e]dit [p]aste");
 keymap_set("x", "P", function() vim.cmd("normal! p") end, "[P]uts before cursor")

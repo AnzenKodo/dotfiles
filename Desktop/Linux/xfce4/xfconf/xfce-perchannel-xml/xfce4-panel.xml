@@ -114,6 +114,7 @@
       <property name="menu-is-primary" type="bool" value="false"/>
       <property name="hide-new-items" type="bool" value="false"/>
       <property name="known-items" type="array">
+        <value type="string" value="steam"/>
         <value type="string" value="vlc"/>
         <value type="string" value="blueman"/>
         <value type="string" value="obs"/>
