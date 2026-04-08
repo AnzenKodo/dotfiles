@@ -8,6 +8,7 @@ local input = require("neogit.lib.input")
 local notification = require("neogit.lib.notification")
 local util = require("neogit.lib.util")
 local config = require("neogit.config")
+local jump = require("neogit.lib.jump")
 
 local FuzzyFinderBuffer = require("neogit.buffers.fuzzy_finder")
 
@@ -38,21 +39,22 @@ local function cleanup_items(items)
   end
 
   for _, item in ipairs(items) do
-    logger.trace("[cleanup_items()] Cleaning " .. vim.inspect(item.name))
-    assert(item.name, "cleanup_items() - item must have a name")
+    local path = item.absolute_path or item.name
+    logger.debug("[cleanup_items()] Cleaning " .. vim.inspect(path))
+    assert(path, "cleanup_items() - item must have a name")
 
-    local bufnr = fn.bufnr(item.name)
+    local bufnr = fn.bufnr(path)
     if bufnr > 0 then
       api.nvim_buf_delete(bufnr, { force = false })
     end
 
-    fn.delete(fn.fnameescape(item.name))
+    fn.delete(fn.fnameescape(path))
   end
 end
 
 ---@param self StatusBuffer
 ---@param item StatusItem
----@return table|nil
+---@return integer[]|nil
 local function translate_cursor_location(self, item)
   if rawget(item, "diff") then
     local line = self.buffer:cursor_line()
@@ -60,15 +62,7 @@ local function translate_cursor_location(self, item)
     for _, hunk in ipairs(item.diff.hunks) do
       if line >= hunk.first and line <= hunk.last then
         local offset = line - hunk.first
-        local row = hunk.disk_from + offset - 1
-
-        for i = 1, offset do
-          -- If the line is a deletion, we need to adjust the row
-          if string.sub(hunk.lines[i], 1, 1) == "-" then
-            row = row - 1
-          end
-        end
-
+        local row = jump.adjust_row(hunk.disk_from, offset, hunk.lines, "-")
         return { row, 0 }
       end
     end
@@ -76,22 +70,13 @@ local function translate_cursor_location(self, item)
 end
 
 local function open(type, path, cursor)
-  local command = ("silent! %s %s | %s"):format(type, fn.fnameescape(path), cursor and cursor[1] or "1")
-
-  logger.debug("[Status - Open] '" .. command .. "'")
-
-  vim.cmd(command)
-
-  command = "redraw! | norm! zz"
-
-  logger.debug("[Status - Open] '" .. command .. "'")
-
-  vim.cmd(command)
+  jump.open(type, path, cursor, "[Status - Open]")
 end
 
 local M = {}
 
 ---@param self StatusBuffer
+---@return fun(): nil
 M.v_discard = function(self)
   return a.void(function()
     local selection = self.buffer.ui:get_selection()
@@ -196,9 +181,9 @@ M.v_discard = function(self)
       end
 
       if #staged_files_modified > 0 then
-        local paths = git.index.reset(util.map(staged_files_modified, function(item)
+        local paths = util.map(staged_files_modified, function(item)
           return item.escaped_path
-        end))
+        end)
         git.index.reset(paths)
         git.index.checkout(paths)
       end
@@ -210,12 +195,13 @@ M.v_discard = function(self)
         end
       end
 
-      self:dispatch_refresh({ update_diff = invalidated_diffs }, "v_discard")
+      self:dispatch_refresh({ update_diffs = invalidated_diffs }, "v_discard")
     end
   end)
 end
 
 ---@param self StatusBuffer
+---@return fun(): nil
 M.v_stage = function(self)
   return a.void(function()
     local selection = self.buffer.ui:get_selection()
@@ -272,6 +258,7 @@ M.v_stage = function(self)
 end
 
 ---@param self StatusBuffer
+---@return fun(): nil
 M.v_unstage = function(self)
   return a.void(function()
     local selection = self.buffer.ui:get_selection()
@@ -317,6 +304,7 @@ M.v_unstage = function(self)
 end
 
 ---@param self StatusBuffer
+---@return fun(): nil
 M.v_branch_popup = function(self)
   return popups.open("branch", function(p)
     p { commits = self.buffer.ui:get_commits_in_selection() }
@@ -324,6 +312,7 @@ M.v_branch_popup = function(self)
 end
 
 ---@param self StatusBuffer
+---@return fun(): nil
 M.v_cherry_pick_popup = function(self)
   return popups.open("cherry_pick", function(p)
     p { commits = self.buffer.ui:get_commits_in_selection() }
@@ -331,6 +320,7 @@ M.v_cherry_pick_popup = function(self)
 end
 
 ---@param self StatusBuffer
+---@return fun(): nil
 M.v_commit_popup = function(self)
   return popups.open("commit", function(p)
     local commits = self.buffer.ui:get_commits_in_selection()
@@ -341,6 +331,7 @@ M.v_commit_popup = function(self)
 end
 
 ---@param self StatusBuffer
+---@return fun(): nil
 M.v_merge_popup = function(self)
   return popups.open("merge", function(p)
     local commits = self.buffer.ui:get_commits_in_selection()
@@ -351,6 +342,7 @@ M.v_merge_popup = function(self)
 end
 
 ---@param self StatusBuffer
+---@return fun(): nil
 M.v_push_popup = function(self)
   return popups.open("push", function(p)
     local commits = self.buffer.ui:get_commits_in_selection()
@@ -361,6 +353,7 @@ M.v_push_popup = function(self)
 end
 
 ---@param self StatusBuffer
+---@return fun(): nil
 M.v_rebase_popup = function(self)
   return popups.open("rebase", function(p)
     local commits = self.buffer.ui:get_commits_in_selection()
@@ -371,6 +364,7 @@ M.v_rebase_popup = function(self)
 end
 
 ---@param self StatusBuffer
+---@return fun(): nil
 M.v_revert_popup = function(self)
   return popups.open("revert", function(p)
     p { commits = self.buffer.ui:get_commits_in_selection() }
@@ -378,6 +372,7 @@ M.v_revert_popup = function(self)
 end
 
 ---@param self StatusBuffer
+---@return fun(): nil
 M.v_reset_popup = function(self)
   return popups.open("reset", function(p)
     local commits = self.buffer.ui:get_commits_in_selection()
@@ -388,6 +383,7 @@ M.v_reset_popup = function(self)
 end
 
 ---@param self StatusBuffer
+---@return fun(): nil
 M.v_tag_popup = function(self)
   return popups.open("tag", function(p)
     local commits = self.buffer.ui:get_commits_in_selection()
@@ -398,6 +394,7 @@ M.v_tag_popup = function(self)
 end
 
 ---@param self StatusBuffer
+---@return fun(): nil
 M.v_stash_popup = function(self)
   return popups.open("stash", function(p)
     local stash = self.buffer.ui:get_yankable_under_cursor()
@@ -406,6 +403,7 @@ M.v_stash_popup = function(self)
 end
 
 ---@param self StatusBuffer
+---@return fun(): nil
 M.v_diff_popup = function(self)
   return popups.open("diff", function(p)
     local section = self.buffer.ui:get_selection().section
@@ -415,6 +413,7 @@ M.v_diff_popup = function(self)
 end
 
 ---@param self StatusBuffer
+---@return fun(): nil
 M.v_ignore_popup = function(self)
   return popups.open("ignore", function(p)
     p { paths = self.buffer.ui:get_filepaths_in_selection(), worktree_root = git.repo.worktree_root }
@@ -422,6 +421,7 @@ M.v_ignore_popup = function(self)
 end
 
 ---@param self StatusBuffer
+---@return fun(): nil
 M.v_bisect_popup = function(self)
   return popups.open("bisect", function(p)
     p { commits = self.buffer.ui:get_commits_in_selection() }
@@ -429,36 +429,51 @@ M.v_bisect_popup = function(self)
 end
 
 ---@param _self StatusBuffer
+---@return fun(): nil
 M.v_remote_popup = function(_self)
   return popups.open("remote")
 end
 
 ---@param _self StatusBuffer
+---@return fun(): nil
 M.v_fetch_popup = function(_self)
   return popups.open("fetch")
 end
 
 ---@param _self StatusBuffer
+---@return fun(): nil
 M.v_pull_popup = function(_self)
   return popups.open("pull")
 end
 
 ---@param _self StatusBuffer
+---@return fun(): nil
 M.v_help_popup = function(_self)
   return popups.open("help")
 end
 
 ---@param _self StatusBuffer
+---@return fun(): nil
 M.v_log_popup = function(_self)
   return popups.open("log")
 end
 
+---@param self StatusBuffer
+---@return fun(): nil
+M.v_margin_popup = function(self)
+  return popups.open("margin", function(p)
+    p { buffer = self }
+  end)
+end
+
 ---@param _self StatusBuffer
+---@return fun(): nil
 M.v_worktree_popup = function(_self)
   return popups.open("worktree")
 end
 
 ---@param self StatusBuffer
+---@return fun(): nil
 M.n_down = function(self)
   return function()
     if vim.v.count > 0 then
@@ -474,6 +489,7 @@ M.n_down = function(self)
 end
 
 ---@param self StatusBuffer
+---@return fun(): nil
 M.n_up = function(self)
   return function()
     if vim.v.count > 0 then
@@ -489,6 +505,7 @@ M.n_up = function(self)
 end
 
 ---@param self StatusBuffer
+---@return fun(): nil
 M.n_toggle = function(self)
   return function()
     local fold = self.buffer.ui:get_fold_under_cursor()
@@ -508,6 +525,7 @@ M.n_toggle = function(self)
 end
 
 ---@param self StatusBuffer
+---@return fun(): nil
 M.n_open_fold = function(self)
   return function()
     local fold = self.buffer.ui:get_fold_under_cursor()
@@ -527,6 +545,7 @@ M.n_open_fold = function(self)
 end
 
 ---@param self StatusBuffer
+---@return fun(): nil
 M.n_close_fold = function(self)
   return function()
     local fold = self.buffer.ui:get_fold_under_cursor()
@@ -542,11 +561,13 @@ M.n_close_fold = function(self)
 end
 
 ---@param self StatusBuffer
+---@return fun(): nil
 M.n_close = function(self)
   return require("neogit.lib.ui.helpers").close_topmost(self)
 end
 
 ---@param self StatusBuffer
+---@return fun(): nil
 M.n_open_or_scroll_down = function(self)
   return function()
     local commit = self.buffer.ui:get_commit_under_cursor()
@@ -557,6 +578,7 @@ M.n_open_or_scroll_down = function(self)
 end
 
 ---@param self StatusBuffer
+---@return fun(): nil
 M.n_open_or_scroll_up = function(self)
   return function()
     local commit = self.buffer.ui:get_commit_under_cursor()
@@ -567,6 +589,7 @@ M.n_open_or_scroll_up = function(self)
 end
 
 ---@param self StatusBuffer
+---@return fun(): nil
 M.n_refresh_buffer = function(self)
   return a.void(function()
     self:dispatch_refresh({ update_diffs = { "*:*" } }, "n_refresh_buffer")
@@ -574,6 +597,7 @@ M.n_refresh_buffer = function(self)
 end
 
 ---@param self StatusBuffer
+---@return fun(): nil
 M.n_depth1 = function(self)
   return function()
     local section = self.buffer.ui:get_current_section()
@@ -592,6 +616,7 @@ M.n_depth1 = function(self)
 end
 
 ---@param self StatusBuffer
+---@return fun(): nil
 M.n_depth2 = function(self)
   return function()
     local section = self.buffer.ui:get_current_section()
@@ -619,6 +644,7 @@ M.n_depth2 = function(self)
 end
 
 ---@param self StatusBuffer
+---@return fun(): nil
 M.n_depth3 = function(self)
   return function()
     local section = self.buffer.ui:get_current_section()
@@ -648,6 +674,7 @@ M.n_depth3 = function(self)
 end
 
 ---@param self StatusBuffer
+---@return fun(): nil
 M.n_depth4 = function(self)
   return function()
     local section = self.buffer.ui:get_current_section()
@@ -674,6 +701,7 @@ M.n_depth4 = function(self)
 end
 
 ---@param _self StatusBuffer
+---@return fun(): nil
 M.n_command_history = function(_self)
   return a.void(function()
     require("neogit.buffers.git_command_history"):new():show()
@@ -681,6 +709,7 @@ M.n_command_history = function(_self)
 end
 
 ---@param _self StatusBuffer
+---@return fun(): nil
 M.n_show_refs = function(_self)
   return a.void(function()
     require("neogit.buffers.refs_view").new(git.refs.list_parsed(), git.repo.worktree_root):open()
@@ -688,6 +717,7 @@ M.n_show_refs = function(_self)
 end
 
 ---@param self StatusBuffer
+---@return fun(): nil
 M.n_yank_selected = function(self)
   return function()
     local yank = self.buffer.ui:get_yankable_under_cursor()
@@ -706,6 +736,7 @@ M.n_yank_selected = function(self)
 end
 
 ---@param self StatusBuffer
+---@return fun(): nil
 M.n_discard = function(self)
   return a.void(function()
     git.index.update()
@@ -939,6 +970,7 @@ M.n_discard = function(self)
 end
 
 ---@param self StatusBuffer
+---@return fun(): nil
 M.n_go_to_next_hunk_header = function(self)
   return function()
     local c = self.buffer.ui:get_component_under_cursor(function(c)
@@ -970,6 +1002,7 @@ M.n_go_to_next_hunk_header = function(self)
 end
 
 ---@param self StatusBuffer
+---@return fun(): nil
 M.n_go_to_previous_hunk_header = function(self)
   return function()
     local function previous_hunk_header(self, line)
@@ -996,6 +1029,7 @@ M.n_go_to_previous_hunk_header = function(self)
 end
 
 ---@param _self StatusBuffer
+---@return fun(): nil
 M.n_init_repo = function(_self)
   return function()
     git.init.init_repo()
@@ -1003,6 +1037,7 @@ M.n_init_repo = function(_self)
 end
 
 ---@param self StatusBuffer
+---@return fun(): nil
 M.n_rename = function(self)
   return a.void(function()
     local selection = self.buffer.ui:get_selection()
@@ -1038,6 +1073,7 @@ M.n_rename = function(self)
 end
 
 ---@param self StatusBuffer
+---@return fun(): nil
 M.n_untrack = function(self)
   return a.void(function()
     local selection = self.buffer.ui:get_selection()
@@ -1068,6 +1104,7 @@ M.n_untrack = function(self)
 end
 
 ---@param self StatusBuffer
+---@return fun(): nil
 M.v_untrack = function(self)
   return a.void(function()
     local selection = self.buffer.ui:get_selection()
@@ -1095,6 +1132,7 @@ M.v_untrack = function(self)
 end
 
 ---@param self StatusBuffer
+---@return fun(): nil
 M.n_stage = function(self)
   return a.void(function()
     local stagable = self.buffer.ui:get_hunk_or_filename_under_cursor()
@@ -1107,8 +1145,11 @@ M.n_stage = function(self)
       end
 
       if selection.item and selection.item.mode == "UU" then
-        if config.check_integration("diffview") then
-          require("neogit.integrations.diffview").open("conflict", selection.item.name, {
+        local diff_viewer = config.get_diff_viewer()
+        if diff_viewer and git.merge.is_conflicted(selection.item.escaped_path) then
+          local integration = diff_viewer == "codediff" and require("neogit.integrations.codediff")
+            or require("neogit.integrations.diffview")
+          integration.open("conflict", selection.item.name, {
             on_close = {
               handle = self.buffer.handle,
               fn = function()
@@ -1128,6 +1169,9 @@ M.n_stage = function(self)
           end
           return
         end
+      elseif selection.item and section.options.section == "untracked" then
+        git.index.add { selection.item.name }
+        self:dispatch_refresh({ update_diffs = { "*:" .. selection.item.name } }, "n_stage")
       elseif stagable.hunk then
         local item = self.buffer.ui:get_item_under_cursor()
         assert(item, "Item cannot be nil")
@@ -1135,14 +1179,9 @@ M.n_stage = function(self)
         local patch = git.index.generate_patch(stagable.hunk)
         git.index.apply(patch, { cached = true })
         self:dispatch_refresh({ update_diffs = { "*:" .. item.name } }, "n_stage")
-      elseif stagable.filename then
-        if section.options.section == "unstaged" then
-          git.status.stage { stagable.filename }
-          self:dispatch_refresh({ update_diffs = { "*:" .. stagable.filename } }, "n_stage")
-        elseif section.options.section == "untracked" then
-          git.index.add { stagable.filename }
-          self:dispatch_refresh({ update_diffs = { "*:" .. stagable.filename } }, "n_stage")
-        end
+      elseif stagable.filename and section.options.section == "unstaged" then
+        git.status.stage { stagable.filename }
+        self:dispatch_refresh({ update_diffs = { "*:" .. stagable.filename } }, "n_stage")
       end
     elseif section then
       if section.options.section == "untracked" then
@@ -1150,8 +1189,11 @@ M.n_stage = function(self)
         self:dispatch_refresh({ update_diffs = { "untracked:*" } }, "n_stage")
       elseif section.options.section == "unstaged" then
         if git.status.any_unmerged() then
-          if config.check_integration("diffview") then
-            require("neogit.integrations.diffview").open("conflict", nil, {
+          local diff_viewer = config.get_diff_viewer()
+          if diff_viewer then
+            local integration = diff_viewer == "codediff" and require("neogit.integrations.codediff")
+              or require("neogit.integrations.diffview")
+            integration.open("conflict", nil, {
               on_close = {
                 handle = self.buffer.handle,
                 fn = function()
@@ -1177,6 +1219,7 @@ M.n_stage = function(self)
 end
 
 ---@param self StatusBuffer
+---@return fun(): nil
 M.n_stage_all = function(self)
   return a.void(function()
     git.status.stage_all()
@@ -1185,6 +1228,7 @@ M.n_stage_all = function(self)
 end
 
 ---@param self StatusBuffer
+---@return fun(): nil
 M.n_stage_unstaged = function(self)
   return a.void(function()
     git.status.stage_modified()
@@ -1193,9 +1237,11 @@ M.n_stage_unstaged = function(self)
 end
 
 ---@param self StatusBuffer
+---@return fun(): nil
 M.n_unstage = function(self)
   return a.void(function()
     local unstagable = self.buffer.ui:get_hunk_or_filename_under_cursor()
+    local selection = self.buffer.ui:get_selection()
 
     local section = self.buffer.ui:get_current_section()
     if section and section.options.section ~= "staged" then
@@ -1203,7 +1249,10 @@ M.n_unstage = function(self)
     end
 
     if unstagable then
-      if unstagable.hunk then
+      if selection.item and selection.item.mode == "N" then
+        git.status.unstage { selection.item.name }
+        self:dispatch_refresh({ update_diffs = { "*:" .. selection.item.name } }, "n_unstage")
+      elseif unstagable.hunk then
         local item = self.buffer.ui:get_item_under_cursor()
         assert(item, "Item cannot be nil")
         local patch = git.index.generate_patch(
@@ -1225,6 +1274,7 @@ M.n_unstage = function(self)
 end
 
 ---@param self StatusBuffer
+---@return fun(): nil
 M.n_unstage_staged = function(self)
   return a.void(function()
     git.status.unstage_all()
@@ -1232,13 +1282,32 @@ M.n_unstage_staged = function(self)
   end)
 end
 
+---Opens neogit on the parent repo if if we are in a submodule
 ---@param self StatusBuffer
+M.n_goto_parent_repo = function(self)
+  return function()
+    local parent = self:parent_repo()
+    if parent then
+      self:close()
+      require("neogit").open { cwd = parent }
+    end
+  end
+end
+
+---@param self StatusBuffer
+---@return fun(): nil
 M.n_goto_file = function(self)
   return function()
     local item = self.buffer.ui:get_item_under_cursor()
 
     -- Goto FILE
     if item and item.absolute_path then
+      if self:has_submodule(item.absolute_path) then
+        self:close()
+        require("neogit").open { cwd = item.absolute_path }
+        return
+      end
+
       local cursor = translate_cursor_location(self, item)
       self:close()
       vim.schedule_wrap(open)("edit", item.absolute_path, cursor)
@@ -1254,6 +1323,7 @@ M.n_goto_file = function(self)
 end
 
 ---@param self StatusBuffer
+---@return fun(): nil
 M.n_tab_open = function(self)
   return function()
     local item = self.buffer.ui:get_item_under_cursor()
@@ -1265,6 +1335,7 @@ M.n_tab_open = function(self)
 end
 
 ---@param self StatusBuffer
+---@return fun(): nil
 M.n_split_open = function(self)
   return function()
     local item = self.buffer.ui:get_item_under_cursor()
@@ -1276,6 +1347,7 @@ M.n_split_open = function(self)
 end
 
 ---@param self StatusBuffer
+---@return fun(): nil
 M.n_vertical_split_open = function(self)
   return function()
     local item = self.buffer.ui:get_item_under_cursor()
@@ -1287,6 +1359,7 @@ M.n_vertical_split_open = function(self)
 end
 
 ---@param self StatusBuffer
+---@return fun(): nil
 M.n_branch_popup = function(self)
   return popups.open("branch", function(p)
     p { commits = { self.buffer.ui:get_commit_under_cursor() } }
@@ -1294,6 +1367,7 @@ M.n_branch_popup = function(self)
 end
 
 ---@param self StatusBuffer
+---@return fun(): nil
 M.n_bisect_popup = function(self)
   return popups.open("bisect", function(p)
     p { commits = { self.buffer.ui:get_commit_under_cursor() } }
@@ -1301,6 +1375,7 @@ M.n_bisect_popup = function(self)
 end
 
 ---@param self StatusBuffer
+---@return fun(): nil
 M.n_cherry_pick_popup = function(self)
   return popups.open("cherry_pick", function(p)
     p { commits = { self.buffer.ui:get_commit_under_cursor() } }
@@ -1308,6 +1383,7 @@ M.n_cherry_pick_popup = function(self)
 end
 
 ---@param self StatusBuffer
+---@return fun(): nil
 M.n_commit_popup = function(self)
   return popups.open("commit", function(p)
     p { commit = self.buffer.ui:get_commit_under_cursor() }
@@ -1315,6 +1391,7 @@ M.n_commit_popup = function(self)
 end
 
 ---@param self StatusBuffer
+---@return fun(): nil
 M.n_merge_popup = function(self)
   return popups.open("merge", function(p)
     p { commit = self.buffer.ui:get_commit_under_cursor() }
@@ -1322,6 +1399,7 @@ M.n_merge_popup = function(self)
 end
 
 ---@param self StatusBuffer
+---@return fun(): nil
 M.n_push_popup = function(self)
   return popups.open("push", function(p)
     p { commit = self.buffer.ui:get_commit_under_cursor() }
@@ -1329,6 +1407,7 @@ M.n_push_popup = function(self)
 end
 
 ---@param self StatusBuffer
+---@return fun(): nil
 M.n_rebase_popup = function(self)
   return popups.open("rebase", function(p)
     p { commit = self.buffer.ui:get_commit_under_cursor() }
@@ -1336,6 +1415,7 @@ M.n_rebase_popup = function(self)
 end
 
 ---@param self StatusBuffer
+---@return fun(): nil
 M.n_revert_popup = function(self)
   return popups.open("revert", function(p)
     p { commits = { self.buffer.ui:get_commit_under_cursor() } }
@@ -1343,6 +1423,7 @@ M.n_revert_popup = function(self)
 end
 
 ---@param self StatusBuffer
+---@return fun(): nil
 M.n_reset_popup = function(self)
   return popups.open("reset", function(p)
     p { commit = self.buffer.ui:get_commit_under_cursor() }
@@ -1350,6 +1431,7 @@ M.n_reset_popup = function(self)
 end
 
 ---@param self StatusBuffer
+---@return fun(): nil
 M.n_tag_popup = function(self)
   return popups.open("tag", function(p)
     p { commit = self.buffer.ui:get_commit_under_cursor() }
@@ -1357,6 +1439,7 @@ M.n_tag_popup = function(self)
 end
 
 ---@param self StatusBuffer
+---@return fun(): nil
 M.n_stash_popup = function(self)
   return popups.open("stash", function(p)
     local stash = self.buffer.ui:get_yankable_under_cursor()
@@ -1365,6 +1448,7 @@ M.n_stash_popup = function(self)
 end
 
 ---@param self StatusBuffer
+---@return fun(): nil
 M.n_diff_popup = function(self)
   return popups.open("diff", function(p)
     local section = self.buffer.ui:get_selection().section
@@ -1377,6 +1461,7 @@ M.n_diff_popup = function(self)
 end
 
 ---@param self StatusBuffer
+---@return fun(): nil
 M.n_ignore_popup = function(self)
   return popups.open("ignore", function(p)
     local path = self.buffer.ui:get_hunk_or_filename_under_cursor()
@@ -1388,6 +1473,7 @@ M.n_ignore_popup = function(self)
 end
 
 ---@param self StatusBuffer
+---@return fun(): nil
 M.n_help_popup = function(self)
   return popups.open("help", function(p)
     -- Since any other popup can be launched from help, build an ENV for any of them.
@@ -1415,6 +1501,7 @@ M.n_help_popup = function(self)
       bisect = { commits = commits },
       reset = { commit = commit },
       tag = { commit = commit },
+      margin = { buffer = self },
       stash = { name = stash and stash:match("^stash@{%d+}") },
       diff = {
         section = { name = section_name },
@@ -1434,49 +1521,73 @@ M.n_help_popup = function(self)
 end
 
 ---@param _self StatusBuffer
+---@return fun(): nil
 M.n_remote_popup = function(_self)
   return popups.open("remote")
 end
 
 ---@param _self StatusBuffer
+---@return fun(): nil
 M.n_fetch_popup = function(_self)
   return popups.open("fetch")
 end
 
 ---@param _self StatusBuffer
+---@return fun(): nil
 M.n_pull_popup = function(_self)
   return popups.open("pull")
 end
 
 ---@param _self StatusBuffer
+---@return fun(): nil
 M.n_log_popup = function(_self)
   return popups.open("log")
 end
 
+---@param self StatusBuffer
+---@return fun(): nil
+M.n_margin_popup = function(self)
+  return popups.open("margin", function(p)
+    p { buffer = self }
+  end)
+end
+
 ---@param _self StatusBuffer
+---@return fun(): nil
 M.n_worktree_popup = function(_self)
   return popups.open("worktree")
 end
 
----@param _self StatusBuffer
-M.n_open_tree = function(_self)
+---@param self StatusBuffer
+---@return fun(): nil
+M.n_open_tree = function(self)
   return a.void(function()
-    local template = "https://${host}/${owner}/${repository}/tree/${branch_name}"
-
-    local upstream = git.branch.upstream_remote()
-    if not upstream then
+    if not vim.ui.open then
+      notification.warn("Requires Neovim >= 0.10")
       return
     end
 
-    local url = git.remote.get_url(upstream)[1]
-    local format_values = git.remote.parse(url)
-    format_values["branch_name"] = git.branch.current()
+    local commit = self.buffer.ui:get_commit_under_cursor()
+    local branch = git.branch.current()
+    local url
 
-    vim.ui.open(util.format(template, format_values))
+    if commit then
+      url = git.remote.commit_url(commit)
+    elseif branch then
+      url = git.remote.tree_url(branch)
+    end
+
+    if url then
+      notification.info(("Opening %q in your browser."):format(url))
+      vim.ui.open(url)
+    else
+      notification.warn("Couldn't determine commit URL to open")
+    end
   end)
 end
 
 ---@param self StatusBuffer|nil
+---@return fun(): nil
 M.n_command = function(self)
   local process = require("neogit.process")
   local runner = require("neogit.runner")
@@ -1518,6 +1629,7 @@ M.n_command = function(self)
 end
 
 ---@param self StatusBuffer
+---@return fun(): nil
 M.n_next_section = function(self)
   return function()
     local section = self.buffer.ui:get_current_section()
@@ -1531,6 +1643,7 @@ M.n_next_section = function(self)
 end
 
 ---@param self StatusBuffer
+---@return fun(): nil
 M.n_prev_section = function(self)
   return function()
     local section = self.buffer.ui:get_current_section()
@@ -1544,6 +1657,113 @@ M.n_prev_section = function(self)
 
     self.buffer:win_exec("norm! gg")
   end
+end
+
+---@param self StatusBuffer
+---@return fun(): nil
+M.n_reverse = function(self)
+  return a.void(function()
+    git.index.update()
+
+    local selection = self.buffer.ui:get_selection()
+    if not selection.section then
+      return
+    end
+
+    local section = selection.section.name
+
+    if section == "untracked" then
+      notification.warn("Cannot reverse untracked changes")
+      return
+    end
+
+    if section == "unstaged" then
+      notification.warn("Cannot reverse unstaged changes")
+      return
+    end
+
+    if section ~= "staged" then
+      return
+    end
+
+    local message, action
+    local refresh = {}
+
+    if selection.item and selection.item.first == fn.line(".") then -- Reverse File
+      message = ("Reverse %q?"):format(selection.item.name)
+      action = function()
+        for _, hunk in ipairs(selection.item.diff and selection.item.diff.hunks or {}) do
+          local patch = git.index.generate_patch(hunk, { reverse = true })
+          git.index.apply(patch, { reverse = true })
+        end
+      end
+      refresh = { update_diffs = { "staged:" .. selection.item.name } }
+    elseif selection.item then -- Reverse Hunk
+      local hunk =
+        self.buffer.ui:item_hunks(selection.item, selection.first_line, selection.last_line, false)[1]
+      message = "Reverse hunk?"
+      action = function()
+        local patch = git.index.generate_patch(hunk, { reverse = true })
+        git.index.apply(patch, { reverse = true })
+      end
+      refresh = { update_diffs = { "staged:" .. selection.item.name } }
+    else -- Reverse Section
+      message = ("Reverse %s files?"):format(#selection.section.items)
+      action = function()
+        for _, item in ipairs(selection.section.items) do
+          for _, hunk in ipairs(item.diff and item.diff.hunks or {}) do
+            local patch = git.index.generate_patch(hunk, { reverse = true })
+            git.index.apply(patch, { reverse = true })
+          end
+        end
+      end
+      refresh = { update_diffs = { "staged:*" } }
+    end
+
+    if action and input.get_permission(message) then
+      action()
+      self:dispatch_refresh(refresh, "n_reverse")
+    end
+  end)
+end
+
+---@param self StatusBuffer
+---@return fun(): nil
+M.v_reverse = function(self)
+  return a.void(function()
+    local selection = self.buffer.ui:get_selection()
+
+    local patches = {}
+    local invalidated_diffs = {}
+
+    for _, section in ipairs(selection.sections) do
+      if section.name == "untracked" or section.name == "unstaged" then
+        notification.warn("Cannot reverse untracked or unstaged changes")
+        return
+      end
+
+      if section.name == "staged" then
+        for _, item in ipairs(section.items) do
+          local hunks = self.buffer.ui:item_hunks(item, selection.first_line, selection.last_line, true)
+          table.insert(invalidated_diffs, "*:" .. item.name)
+
+          for _, hunk in ipairs(hunks) do
+            table.insert(
+              patches,
+              git.index.generate_patch(hunk, { from = hunk.from, to = hunk.to, reverse = true })
+            )
+          end
+        end
+      end
+    end
+
+    if #patches > 0 and input.get_permission("Reverse selection?") then
+      for _, patch in ipairs(patches) do
+        git.index.apply(patch, { reverse = true })
+      end
+      self:dispatch_refresh({ update_diffs = invalidated_diffs }, "v_reverse")
+    end
+  end)
 end
 
 return M
