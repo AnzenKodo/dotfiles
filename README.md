@@ -8,6 +8,7 @@ My programs config files.
 
 - Desktop:
     - ![Desktop Homescreen Screenshots](./screenshots/Desktop-Homescreen.png)
+    - ![Desktop Homescreen with Applications Screenshots](./screenshots/Desktop-Homescreen-with-Applications.png)
 - Phone
     - ![Phone Homescreen Screenshot](./screenshots/Phone-Homescreen.jpeg)
     - ![Phone Lockscreen Screenshot](./screenshots/Phone-Lockscreen.jpeg)

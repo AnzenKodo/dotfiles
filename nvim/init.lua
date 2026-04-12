@@ -610,16 +610,16 @@ keymap_set("n", "<leader>m3", function() harpoon:list():select(3) end,          
 keymap_set("n", "<leader>m4", function() harpoon:list():select(4) end,                     "[m]ark goto [4]'th file")
 
 -- Code Marks
-require('bookmarks').setup({
-    on_attach = function(bufnr)
-        local bm = require "bookmarks"
-        local map = vim.keymap.set
-        keymap_set("n","<leader>mm", bm.bookmark_toggle, "[m]ark code [m]ark")
-        keymap_set("n","<leader>mi", bm.bookmark_ann,    "[m]ark code annotat[i]on")
-    end
-})
-require('telescope').load_extension('bookmarks')
-keymap_set("n","<leader>mc", require('telescope').extensions.bookmarks.list,    "[m]ark [c]ode menu")
+-- require('bookmarks').setup({
+--     on_attach = function(bufnr)
+--         local bm = require "bookmarks"
+--         local map = vim.keymap.set
+--         keymap_set("n","<leader>mm", bm.bookmark_toggle, "[m]ark code [m]ark")
+--         keymap_set("n","<leader>mi", bm.bookmark_ann,    "[m]ark code annotat[i]on")
+--     end
+-- })
+-- require('telescope').load_extension('bookmarks')
+-- keymap_set("n","<leader>mc", require('telescope').extensions.bookmarks.list,    "[m]ark [c]ode menu")
 
 -- File Manager ===============================================================
 function _G.get_oil_winbar()
