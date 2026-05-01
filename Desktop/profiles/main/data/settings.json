@@ -52,4 +52,7 @@
         }
     ],
     "github.copilot.nextEditSuggestions.enabled": true,
+    "extensions.ignoreRecommendations": true,
+    "workbench.activityBar.location": "bottom",
+    "window.customTitleBarVisibility": "auto",
 }
