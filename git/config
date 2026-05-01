@@ -13,3 +13,5 @@
     autoSetupRemote = true
 [credential "https://git-codecommit.ap-south-1.amazonaws.com"]
 	provider = generic
+[credential "https://code.dgtlgrove.com"]
+	provider = generic

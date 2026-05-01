@@ -874,6 +874,7 @@ require("mini.diff").setup({
         goto_last = "]H",
     },
 })
+keymap_set("n", "<leader>gi", MiniDiff.toggle_overlay, "[g]it [i]nline diff")
 vim.api.nvim_create_user_command("DiffInline", MiniDiff.toggle_overlay, {})
 
 -- Git Manager
