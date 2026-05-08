@@ -1,5 +1,7 @@
 disabled: []
 enabled:
+  - id: bvisness.metadesk-vscode
+    uuid: 0cf08c8f-ba79-4a08-a6d2-fbf96727287c
   - id: jdinhlife.gruvbox
     uuid: c6d564c4-ca8c-45ba-abf6-c85f2d1468d8
   - id: ms-vscode.cpptools

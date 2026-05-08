@@ -34,6 +34,7 @@ vim.o.exrc = true
 vim.o.backspace = "indent,eol,start"
 vim.o.mouse = "a"
 vim.o.fileformats = "unix,dos,mac"
+vim.opt.autowriteall = true
 
 -- Split
 vim.o.splitright = true
@@ -720,11 +721,6 @@ require("oil-git-status").setup()
 keymap_set("n", "<leader>-", "<CMD>Oil<CR>", "Open parent directory")
 
 -- Fuzzy Finder ===============================================================
--- vim.opt.runtimepath:append(plugin_path .. "/telescope-fzf-native.nvim")
--- build = "make",
--- cond = function()
---     return vim.fn.executable "make" == 1
--- end,
 require("telescope").setup {
     defaults = {
         mappings = {

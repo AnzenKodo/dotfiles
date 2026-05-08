@@ -1,6 +1,6 @@
 {
 	"$schema" : "https://aka.ms/winget-packages.schema.2.0.json",
-	"CreationDate" : "2026-05-02T01:32:01.805-00:00",
+	"CreationDate" : "2026-05-08T10:23:47.083-00:00",
 	"Sources" : 
 	[
 		{
@@ -87,6 +87,10 @@
 					"Version" : "14.40.33810.0"
 				},
 				{
+					"PackageIdentifier" : "PuTTY.PuTTY",
+					"Version" : "0.83.0.0"
+				},
+				{
 					"PackageIdentifier" : "Microsoft.DotNet.DesktopRuntime.8",
 					"Version" : "8.0.24"
 				},
@@ -100,7 +104,7 @@
 				},
 				{
 					"PackageIdentifier" : "Brave.Brave",
-					"Version" : "147.1.89.145"
+					"Version" : "148.1.90.121"
 				},
 				{
 					"PackageIdentifier" : "BrechtSanders.WinLibs.POSIX.MSVCRT",
@@ -155,6 +159,10 @@
 					"Version" : "1.28.240.0"
 				},
 				{
+					"PackageIdentifier" : "Microsoft.DotNet.Native.Runtime",
+					"Version" : "2.2.28604.0"
+				},
+				{
 					"PackageIdentifier" : "Microsoft.UI.Xaml.2.7",
 					"Version" : "7.2409.9001.0"
 				},
@@ -180,7 +188,7 @@
 				},
 				{
 					"PackageIdentifier" : "Microsoft.WindowsAppRuntime.1.8",
-					"Version" : "> 1.8.6"
+					"Version" : "8000.836.2153.0"
 				}
 			],
 			"SourceDetails" : 
