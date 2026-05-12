@@ -502,6 +502,15 @@ require("lualine").setup({
             }
         }
     },
+    inactive_sections = {
+        lualine_c = {
+            {
+                "filename",
+                path = 1, -- Show absolute path
+                file_status = true, -- Show file status
+            }
+        }
+    },
     options = { theme = "gruvbox-material" },
 })
 

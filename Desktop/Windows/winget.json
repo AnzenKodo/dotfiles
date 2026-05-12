@@ -1,6 +1,6 @@
 {
 	"$schema" : "https://aka.ms/winget-packages.schema.2.0.json",
-	"CreationDate" : "2026-05-11T10:34:11.937-00:00",
+	"CreationDate" : "2026-05-12T08:56:45.801-00:00",
 	"Sources" : 
 	[
 		{
@@ -15,8 +15,8 @@
 					"Version" : "2.50.1"
 				},
 				{
-					"PackageIdentifier" : "JetBrains.IntelliJIDEA.Community",
-					"Version" : "2025.2"
+					"PackageIdentifier" : "JetBrains.IntelliJIDEA.Ultimate.EAP",
+					"Version" : "262.4852.50"
 				},
 				{
 					"PackageIdentifier" : "VideoLAN.VLC",
