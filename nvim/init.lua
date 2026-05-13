@@ -518,7 +518,7 @@ require("lualine").setup({
 require("indentmini").setup()
 
 -- Wildcard
-require("wilder").setup({ modes = {":", "/", "?"} })
+require('mini.cmdline').setup()
 
 -- Editing ====================================================================
 
@@ -598,6 +598,44 @@ require("mini.surround").setup({
 })
 require("mini.ai").setup()
 
+-- Macro ======================================================================
+require("macrothis").setup()
+vim.api.nvim_create_user_command("Macro", function(opts)
+    local subcmd = opts.args ~= "" and opts.args or "find_saved"
+    local actions = {
+        delete   = function() require('macrothis').delete() end,
+        edit     = function() require('macrothis').edit() end,
+        load     = function() require('macrothis').load() end,
+        rename   = function() require('macrothis').rename() end,
+        quickfix = function() require('macrothis').quickfix() end,
+        run      = function() require('macrothis').run() end,
+        save     = function() require('macrothis').save() end,
+        register = function() require('macrothis').register() end,
+        copy_register_printable = function() require('macrothis').copy_register_printable() end,
+        copy_macro_printable    = function() require('macrothis').copy_macro_printable() end,
+        find_saved = function() require('telescope').extensions.macrothis.macrothis() end,
+    }
+    local fn = actions[subcmd]
+    if fn then
+        fn()
+    else
+        vim.notify("Macro: unknown subcommand '" .. subcmd .. "'", vim.log.levels.ERROR)
+    end
+end, {
+    nargs = "?",
+    complete = function(arglead)
+        local subcommands = {
+            "delete", "edit", "load", "rename", "quickfix",
+            "run", "save", "register",
+            "copy_register_printable", "copy_macro_printable",
+        }
+        return vim.tbl_filter(function(s)
+            return s:find("^" .. arglead)
+        end, subcommands)
+    end,
+    desc = "Macro commands",
+})
+
 -- Keymap Helper ==============================================================
 local miniclue = require("mini.clue")
 miniclue.setup({
@@ -622,14 +660,14 @@ miniclue.setup({
         miniclue.gen_clues.registers(),
         miniclue.gen_clues.windows(),
         miniclue.gen_clues.z(),
-        { mode = "n", keys = "<Leader>f",  desc = "[f]ind" },
-        { mode = "n", keys = "<Leader>e",  desc = "[e]dit" },
-        { mode = "n", keys = "<Leader>m",  desc = "[m]ark" },
-        { mode = "n", keys = "<Leader>s",  desc = "[s]urround" },
-        { mode = "n", keys = "<Leader>w",  desc = "[w]indow" },
-        { mode = "n", keys = "<Leader>g",  desc = "[g]it" },
-        { mode = "n", keys = "<Leader>d",  desc = "[d]ebugger" },
-        { mode = "n", keys = "<Leader>dg", desc = "[d]ebugger [g]oto" },
+        { mode = "n", keys = "<leader>f",  desc = "[f]ind" },
+        { mode = "n", keys = "<leader>e",  desc = "[e]dit" },
+        { mode = "n", keys = "<leader>m",  desc = "[m]ark" },
+        { mode = "n", keys = "<leader>s",  desc = "[s]urround" },
+        { mode = "n", keys = "<leader>w",  desc = "[w]indow" },
+        { mode = "n", keys = "<leader>g",  desc = "[g]it" },
+        { mode = "n", keys = "<leader>d",  desc = "[d]ebugger" },
+        { mode = "n", keys = "<leader>dg", desc = "[d]ebugger [g]oto" },
     },
     window = {
         -- Floating window config
@@ -671,14 +709,31 @@ require("quicker").setup({
 
 -- Mark Management ============================================================
 -- Files Marks
-local harpoon = require("harpoon")
-harpoon:setup()
-keymap_set("n", "<leader>mf", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end, "[m]ark [f]iles menu")
-keymap_set("n", "<leader>ma", function() harpoon:list():add() end,                         "[m]ark [a]dd file")
-keymap_set("n", "<leader>m1", function() harpoon:list():select(1) end,                     "[m]ark goto [1]'st file")
-keymap_set("n", "<leader>m2", function() harpoon:list():select(2) end,                     "[m]ark goto [2]'nd file")
-keymap_set("n", "<leader>m3", function() harpoon:list():select(3) end,                     "[m]ark goto [3]'rd file")
-keymap_set("n", "<leader>m4", function() harpoon:list():select(4) end,                     "[m]ark goto [4]'th file")
+
+require('mini.visits').setup()
+local make_select_path = function(select_global, recency_weight)
+  local visits = require('mini.visits')
+  local sort = visits.gen_sort.default({ recency_weight = recency_weight })
+  local select_opts = { sort = sort }
+  return function()
+    local cwd = select_global and '' or vim.fn.getcwd()
+    visits.select_path(cwd, select_opts)
+  end
+end
+
+local map = function(lhs, desc, ...)
+  vim.keymap.set('n', lhs, make_select_path(...), { desc = desc })
+end
+
+keymap_set("n", "<leader>fm", make_select_path(false, 1), "[f]ind [m]ark files")
+keymap_set("n", "<leader>fl", MiniVisits.select_label,    "[f]ind [l]abeled mark files")
+
+vim.api.nvim_create_user_command("MarkAddLabel", function(opts)
+    MiniVisits.add_label(opts.args)
+end, { nargs = 1 })
+vim.api.nvim_create_user_command("MarkRemoveLabel", function(opts)
+    MiniVisits.remove_label(opts.args)
+end, { nargs = 1 })
 
 -- Code Marks
 -- require('bookmarks').setup({

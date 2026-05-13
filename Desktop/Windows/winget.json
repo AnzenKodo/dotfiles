@@ -1,6 +1,6 @@
 {
 	"$schema" : "https://aka.ms/winget-packages.schema.2.0.json",
-	"CreationDate" : "2026-05-12T08:56:45.801-00:00",
+	"CreationDate" : "2026-05-13T07:03:21.528-00:00",
 	"Sources" : 
 	[
 		{
@@ -144,7 +144,7 @@
 				},
 				{
 					"PackageIdentifier" : "ZedIndustries.Zed.Preview",
-					"Version" : "1.1.2-pre"
+					"Version" : "1.2.2-pre"
 				},
 				{
 					"PackageIdentifier" : "Python.Python.3.9",
@@ -152,7 +152,7 @@
 				},
 				{
 					"PackageIdentifier" : "Microsoft.Teams",
-					"Version" : "26072.521.4595.7966"
+					"Version" : "26093.415.4620.1935"
 				},
 				{
 					"PackageIdentifier" : "Microsoft.AppInstaller",
