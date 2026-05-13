@@ -1,0 +1,210 @@
+==============================================================================
+------------------------------------------------------------------------------
+                                                                *macrothis.nvim*
+Macrothis.nvim is a plugin for saving and loading registers/macros
+
+Usage ~
+Using Lazy plugin manager
+{
+    "desdic/macrothis.nvim",
+    opts = {},
+    keys = {
+        {
+            "<Leader>kks",
+            function()
+                require('macrothis').save()
+            end,
+            desc = "save register/macro"
+        },
+        {
+            "<Leader>kkl",
+            function()
+                require('macrothis').load()
+            end,
+            desc = "load register/macro"
+        },
+        {
+            "<Leader>kkd",
+            function()
+                require('macrothis').delete()
+            end,
+            desc = "delete register/macro"
+        },
+        {
+            "<Leader>kkq",
+            function()
+                require('macrothis').quickfix()
+            end,
+            desc = "run on quickfix list"
+        },
+        {
+            "<Leader>kkr",
+            function()
+                require('macrothis').run()
+            end,
+            desc = "run macro"
+        },
+        {
+            "<Leader>kkx",
+            function()
+                require('macrothis').register()
+            end,
+            desc = "edit register"
+        },
+        {
+            "<Leader>kkp",
+            function()
+                require('macrothis').copy_register_printable()
+            end,
+            desc = "copy register as printable"
+        },
+        {
+            "<Leader>kkm",
+            function()
+                require('macrothis').copy_macro_printable()
+            end,
+            desc = "copy macro as printable"
+        }
+    }
+},
+
+------------------------------------------------------------------------------
+                                                              *macrothis.save()*
+                               `macrothis.save`()
+Save a macro/register
+
+Usage ~
+`require('macrothis').save()`
+
+------------------------------------------------------------------------------
+                                                              *macrothis.load()*
+                               `macrothis.load`()
+Load a macro/register
+
+Usage ~
+`require('macrothis').load()`
+
+------------------------------------------------------------------------------
+                                                            *macrothis.delete()*
+                              `macrothis.delete`()
+Delete a macro/register
+
+Usage ~
+`require('macrothis').delete()`
+
+------------------------------------------------------------------------------
+                                                               *macrothis.run()*
+                               `macrothis.run`()
+Run macro
+
+Usage ~
+`require('macrothis').run()`
+
+------------------------------------------------------------------------------
+                                                          *macrothis.quickfix()*
+                             `macrothis.quickfix`()
+Run macro on all in quickfix list
+
+Usage ~
+`require('macrothis').quickfix()`
+
+------------------------------------------------------------------------------
+                                                              *macrothis.edit()*
+                               `macrothis.edit`()
+Edit macro
+
+Usage ~
+`require('macrothis').edit()`
+
+------------------------------------------------------------------------------
+                                                            *macrothis.rename()*
+                              `macrothis.rename`()
+Rename macro
+
+Usage ~
+`require('macrothis').rename()`
+
+------------------------------------------------------------------------------
+                                                          *macrothis.register()*
+                             `macrothis.register`()
+Modify register
+
+Usage ~
+require('macrothis').register()
+
+------------------------------------------------------------------------------
+                                           *macrothis.copy_register_printable()*
+                     `macrothis.copy_register_printable`()
+Copy register as printable
+
+Usage ~
+require('macrothis').copy_register_printable()
+
+------------------------------------------------------------------------------
+                                              *macrothis.copy_macro_printable()*
+                       `macrothis.copy_macro_printable`()
+Copy macro as printable
+
+Usage ~
+require('macrothis').copy_macro_printable()
+
+------------------------------------------------------------------------------
+                                                                       *default*
+                                   `default`
+Default options
+>lua
+  local default = {
+      datafile = vim.fn.stdpath("data") .. "/macrothis.json",
+      registers = generate_register_list(),
+      run_register = "z", -- content of register z is replaced when running/editing a macro
+      editor = { -- Edit window
+          width = 100,
+          height = 2,
+          style = "minimal",
+          border = "rounded",
+      },
+      clipboard_register = '"',
+      default_register = "", -- Use this register when loading a macro (will never prompt for register if set)
+  }
+<
+
+==============================================================================
+------------------------------------------------------------------------------
+                                                             *default_telescope*
+                              `default_telescope`
+Default telescope options
+>lua
+  local default_telescope = {
+      mappings = {
+          load = "<CR>",
+          save = "<C-s>",
+          delete = "<C-d>",
+          run = "<C-r>",
+          rename = "<C-n>",
+          edit = "<C-e>",
+          quickfix = "<C-q>",
+          register = "<C-x>",
+          copy_macro = "<C-c>",
+          help = "<C-h>",
+      },
+      sorter = sorters.get_generic_fuzzy_sorter,
+      items_display = {
+          separator = " ",
+          hl_chars = { ["["] = "TelescopeBorder", ["]"] = "TelescopeBorder" },
+          items = {
+              { width = 50 },
+              { remaining = true },
+          },
+      },
+      register_display = {
+          separator = " ",
+          hl_chars = { ["["] = "TelescopeBorder", ["]"] = "TelescopeBorder" },
+          items = {
+              { width = 4 },
+              { remaining = true },
+          },
+      },
+  }
+<
+
+ vim:tw=78:ts=8:noet:ft=help:norl:
