@@ -403,9 +403,9 @@ vim.api.nvim_create_autocmd("BufEnter", {
 
 vim.api.nvim_create_autocmd("BufWritePost", {
     group = vim.api.nvim_create_augroup("AutoMake", { clear = true }),
-    pattern = "*",
+    pattern = "*.c",
     callback = function()
-        if  vim.fn.filereadable("build.c") == 1 then
+        if vim.fn.filereadable("build.c") == 1 then
             vim.cmd("Make")
         end
     end,

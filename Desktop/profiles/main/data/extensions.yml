@@ -1,12 +1,12 @@
 disabled: []
 enabled:
-  - id: bvisness.metadesk-vscode
-    uuid: 0cf08c8f-ba79-4a08-a6d2-fbf96727287c
   - id: jdinhlife.gruvbox
     uuid: c6d564c4-ca8c-45ba-abf6-c85f2d1468d8
+    version: 1.29.1
   - id: ms-vscode.cpptools
     uuid: 690b692e-e8a9-493f-b802-8089d50ac1b2
   - id: ms-vscode.hexeditor
     uuid: cc7d2112-5178-4472-8e0e-25dced95e7f0
+    version: 1.11.1
   - id: zokugun.cron-tasks
     uuid: b7bbbbd5-7a39-4312-87aa-ef6a41de67fb
