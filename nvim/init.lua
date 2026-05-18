@@ -710,30 +710,15 @@ require("quicker").setup({
 -- Mark Management ============================================================
 -- Files Marks
 
-require('mini.visits').setup()
-local make_select_path = function(select_global, recency_weight)
-  local visits = require('mini.visits')
-  local sort = visits.gen_sort.default({ recency_weight = recency_weight })
-  local select_opts = { sort = sort }
-  return function()
-    local cwd = select_global and '' or vim.fn.getcwd()
-    visits.select_path(cwd, select_opts)
-  end
-end
+local harpoon = require("harpoon")
+harpoon:setup()
+keymap_set("n", "<leader>mf", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end, "[m]ark [f]iles menu")
+keymap_set("n", "<leader>ma", function() harpoon:list():add() end,                         "[m]ark [a]dd file")
+keymap_set("n", "<leader>m1", function() harpoon:list():select(1) end,                     "[m]ark goto [1]'st file")
+keymap_set("n", "<leader>m2", function() harpoon:list():select(2) end,                     "[m]ark goto [2]'nd file")
+keymap_set("n", "<leader>m3", function() harpoon:list():select(3) end,                     "[m]ark goto [3]'rd file")
+keymap_set("n", "<leader>m4", function() harpoon:list():select(4) end,                     "[m]ark goto [4]'th file")
 
-local map = function(lhs, desc, ...)
-  vim.keymap.set('n', lhs, make_select_path(...), { desc = desc })
-end
-
-keymap_set("n", "<leader>fm", make_select_path(false, 1), "[f]ind [m]ark files")
-keymap_set("n", "<leader>fl", MiniVisits.select_label,    "[f]ind [l]abeled mark files")
-
-vim.api.nvim_create_user_command("MarkAddLabel", function(opts)
-    MiniVisits.add_label(opts.args)
-end, { nargs = 1 })
-vim.api.nvim_create_user_command("MarkRemoveLabel", function(opts)
-    MiniVisits.remove_label(opts.args)
-end, { nargs = 1 })
 
 -- Code Marks
 -- require('bookmarks').setup({
