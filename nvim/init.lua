@@ -318,15 +318,20 @@ end, "Open in current file directory")
 -- ============================================================================
 
 vim.api.nvim_create_user_command("Make", function(opts)
-    vim.cmd('wall') -- Save files first
+    vim.cmd("wall")
     local lines = {}
 
-    local cmd = vim.o.makeprg
+    -- Respect $* placeholder in makeprg (e.g. "make $*"), fall back to appending
+    local cmd
     if opts.args ~= "" then
-        cmd = cmd .. " " .. opts.args
+        local expanded = vim.o.makeprg:gsub("%$%*", opts.args)
+        cmd = expanded ~= vim.o.makeprg and expanded or (vim.o.makeprg .. " " .. opts.args)
+    else
+        cmd = vim.o.makeprg:gsub("%$%*", "")
     end
-    
-    vim.fn.jobstart(cmd, {
+
+    -- Run via shell so makeprg strings like "cargo build 2>&1" work correctly
+    vim.fn.jobstart({ vim.o.shell, vim.o.shellcmdflag, cmd }, {
         stdout_buffered = true,
         stderr_buffered = true,
         on_stdout = function(_, data)
@@ -336,20 +341,20 @@ vim.api.nvim_create_user_command("Make", function(opts)
             if data then vim.list_extend(lines, data) end
         end,
         on_exit = function(_, exit_code)
-            -- Fill quickfix list with the results
-            vim.fn.setqflist({}, ' ', {
-                title = 'Make',
-                lines = lines,
-                efm = vim.o.errorformat
-            })
-            -- Trigger the hook
-            vim.api.nvim_exec_autocmds("QuickfixCmdPost", { pattern = "make" })
-            if exit_code ~= 0 then
-                print("Build failed with code " .. exit_code)
-            end
+            vim.schedule(function()
+                vim.fn.setqflist({}, " ", {
+                    title = "Make",
+                    lines = lines,
+                    efm = vim.o.errorformat,
+                })
+                vim.api.nvim_exec_autocmds("QuickfixCmdPost", { pattern = "make" })
+            end)
         end,
     })
-end, { desc = "Morden `make`" })
+end, {
+    desc = "Modern `make`",
+    nargs = "*",
+})
 
 local severity_map = {
     E = vim.diagnostic.severity.ERROR,
@@ -401,9 +406,9 @@ vim.api.nvim_create_autocmd("BufEnter", {
     end,
 })
 
+local autogroup_auto_make = vim.api.nvim_create_augroup("AutoMake", { clear = true })
 vim.api.nvim_create_autocmd("BufWritePost", {
-    group = vim.api.nvim_create_augroup("AutoMake", { clear = true }),
-    pattern = "*.c",
+    group = autogroup_auto_make,
     callback = function()
         if vim.fn.filereadable("build.c") == 1 then
             vim.cmd("Make")

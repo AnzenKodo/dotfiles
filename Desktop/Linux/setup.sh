@@ -12,7 +12,6 @@ sudo xbps-remove firefox
 
 sudo xbps-install xtools git \
 xfce4-clipman-plugin xclip \ # Clipboard
-xfce4-screenshooter \ # Screenshort
 zip unzip xarchiver thunar-archive-plugin \ # Archive
 lightdm-gtk-greeter-settings \ # Display Manager
 noto-fonts-emoji noto-fonts-ttf-extra noto-fonts-cjk \ # Fonts
@@ -38,6 +37,7 @@ ln -sfv ~/Dotfiles/Desktop/wezterm.lua     $XDG_CONFIG_HOME/wezterm/wezterm.lua
 ln -sfv ~/Dotfiles/Desktop/activitywatch   $XDG_CONFIG_HOME
 ln -sfv ~/Drive/Dotfiles/Desktop/keepassxc $XDG_CONFIG_HOME
 ln -sfv ~/Dotfiles/Desktop/Linux/xfce4     $XDG_CONFIG_HOME
+ln -sfv ~/Dotfiles/Desktop/flameshot       $XDG_CONFIG_HOME
 ln -sfv ~/Applications/Mime/mimeapps.list  $XDG_CONFIG_HOME
 ln -sfv ~/Dotfiles/Desktop/gf2_config.ini  $XDG_CONFIG_HOME
 
