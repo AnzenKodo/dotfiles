@@ -1,6 +1,6 @@
 {
 	"$schema" : "https://aka.ms/winget-packages.schema.2.0.json",
-	"CreationDate" : "2026-05-18T23:34:05.133-00:00",
+	"CreationDate" : "2026-05-20T09:46:22.035-00:00",
 	"Sources" : 
 	[
 		{
@@ -23,8 +23,16 @@
 					"Version" : "3.0.23"
 				},
 				{
+					"PackageIdentifier" : "TeamViewer.TeamViewer",
+					"Version" : "15.76.6.0"
+				},
+				{
 					"PackageIdentifier" : "Oracle.JavaRuntimeEnvironment",
 					"Version" : "8.0.1510.12"
+				},
+				{
+					"PackageIdentifier" : "TheDocumentFoundation.LibreOffice",
+					"Version" : "26.2.3.2"
 				},
 				{
 					"PackageIdentifier" : "JohnMacFarlane.Pandoc",
@@ -55,16 +63,8 @@
 					"Version" : "20240203-110809-5046fc22"
 				},
 				{
-					"PackageIdentifier" : "Microsoft.OpenJDK.17",
-					"Version" : "17.0.16.8"
-				},
-				{
 					"PackageIdentifier" : "Neovim.Neovim",
 					"Version" : "0.12.0"
-				},
-				{
-					"PackageIdentifier" : "TheDocumentFoundation.LibreOffice.PreRelease",
-					"Version" : "26.2.0.0.beta1"
 				},
 				{
 					"PackageIdentifier" : "Microsoft.Edge",
