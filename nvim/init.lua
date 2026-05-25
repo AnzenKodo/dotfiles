@@ -36,6 +36,10 @@ vim.o.mouse = "a"
 vim.o.fileformats = "unix,dos,mac"
 vim.opt.autowriteall = true
 
+-- Title
+vim.opt.title = true
+vim.opt.titlestring = "%{fnamemodify(getcwd(), ':t')} - Nvim"
+
 -- Split
 vim.o.splitright = true
 vim.o.splitbelow = true
@@ -313,6 +317,24 @@ keymap_set({"i", "n"}, "<M-`>", function()
     local dir = vim.fn.expand("%:p:h")
     open_split_terminal(dir)
 end, "Open in current file directory")
+
+vim.api.nvim_create_autocmd("TermOpen", {
+    pattern = "*",
+    callback = function()
+        vim.opt_local.bufhidden = "delete"
+    end,
+})
+
+vim.api.nvim_create_autocmd("TermClose", {
+    pattern = "*",
+    callback = function(event)
+        vim.schedule(function()
+            if vim.api.nvim_buf_is_valid(event.buf) then
+                pcall(vim.cmd, "bdelete! " .. event.buf)
+            end
+        end)
+    end,
+})
 
 -- Make
 -- ============================================================================
@@ -1001,3 +1023,43 @@ end
 require("visimatch").setup({
     chars_lower_limit = 2,
 })
+
+-- AI
+-- ============================================================================
+vim.api.nvim_create_user_command("AiOpen",  function()
+    local target_win = vim.api.nvim_get_current_win()
+    local prev_buf = vim.api.nvim_win_get_buf(target_win)
+    vim.cmd('startinsert')
+    vim.cmd("terminal antigravity --continue")
+    local term_buf = vim.api.nvim_get_current_buf()
+    vim.api.nvim_create_autocmd("TermClose", {
+        buffer = term_buf,
+        once = true,
+        callback = function()
+            if vim.api.nvim_buf_is_valid(prev_buf) and vim.api.nvim_win_is_valid(target_win) then
+                vim.api.nvim_win_set_buf(target_win, prev_buf)
+            end
+        end,
+    })
+end, { desc = "Open AI Window" });
+
+-- 99
+vim.opt.runtimepath:append(plugin_path .. "/Manual/99")
+local AntigravityProvider = setmetatable({}, { __index = require("99.providers").BaseProvider })
+function AntigravityProvider._build_command(_, query, context)
+    return {
+        "antigravity",
+        "--print",
+        query,
+    }
+end
+function AntigravityProvider._get_provider_name()
+    return "Antigravity"
+end
+require("99").setup({
+    provider = AntigravityProvider,
+    tmp_dir = vim.fn.expand('~') .. "/.gemini/antigravity-cli/tmp",
+})
+keymap_set("x", "<leader>ai", require("99").visual, "[a]i do the thing")
+vim.api.nvim_create_user_command("AiSearch", require("99").search, { desc = "AI Search" });
+vim.api.nvim_create_user_command("AiStop", require("99").stop_all_requests, { desc = "Stop AI" });

@@ -30,4 +30,5 @@
     "editor.formatOnSave": false,
     "window.titleBarStyle": "custom",
     "window.commandCenter": true,
+    "geminicodeassist.project": "personal-69",
 }

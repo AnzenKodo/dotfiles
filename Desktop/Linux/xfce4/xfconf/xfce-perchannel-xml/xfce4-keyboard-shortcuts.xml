@@ -65,6 +65,7 @@
       <property name="&lt;Super&gt;c" type="string" value="gpick -s"/>
       <property name="&lt;Super&gt;a" type="string" value="xdotool mousemove 1900 10 click 1 mousemove restore"/>
       <property name="Print" type="string" value="/home/ramen/Applications/flameshot-start.sh"/>
+      <property name="&lt;Super&gt;l" type="string" value="xfce4-session-logout --suspend"/>
     </property>
   </property>
   <property name="xfwm4" type="empty">
