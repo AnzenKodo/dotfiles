@@ -11,6 +11,6 @@ source ~/Dotfiles/bash/unix.sh
 backup()
 {
     cd ~/Dotfiles
-    push "Backup from Android Phone"
+    git_push_all "Backup from Android Phone"
     cd -
 }

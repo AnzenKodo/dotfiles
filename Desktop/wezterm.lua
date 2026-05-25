@@ -17,7 +17,7 @@ if is_windows() then
     config.keys = {
         { key = '`', mods = 'CTRL', action = wezterm.action.SendString '†' }
     }
-    config.default_prog = { 'bash.exe' }
+    config.default_prog = { 'C:\\Program Files\\Git\\bin\\bash.exe' }
 end
 
 config.ssh_domains = {

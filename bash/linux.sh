@@ -58,7 +58,7 @@ ctags-system()
 backup()
 {
     cd ~/Dotfiles
-    push "Backup from Linux Desktop"
+    git_push_all "Backup from Linux Desktop"
     cd -
 }
 

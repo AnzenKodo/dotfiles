@@ -35,6 +35,7 @@ vim.o.backspace = "indent,eol,start"
 vim.o.mouse = "a"
 vim.o.fileformats = "unix,dos,mac"
 vim.opt.autowriteall = true
+vim.g.loaded_python3_provider = 0
 
 -- Title
 vim.opt.title = true
@@ -62,7 +63,7 @@ vim.o.smartcase = true     -- Case sensitive if uppercase
 vim.o.inccommand = "split"
 
 vim.o.list = true
-vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣", eol = " ", trail="." }
+vim.opt.listchars = { leadmultispace = "│   ", tab = "» ", trail = "·", nbsp = "␣", eol = " ", trail="." }
 
 -- Useless Settings
 vim.o.swapfile = false
@@ -384,68 +385,68 @@ local severity_map = {
     I = vim.diagnostic.severity.INFO,
     N = vim.diagnostic.severity.HINT,
 }
-vim.api.nvim_create_autocmd("QuickfixCmdPost", {
-    pattern = "make",
-    callback = function()
-        local ns = vim.api.nvim_create_namespace("make_diagnostics")
-        local qflist = vim.fn.getqflist()
-        local diagnostics = {}
-        for _, entry in ipairs(qflist) do
-            -- Only process entries with a valid buffer and line number
-            if entry.bufnr ~= 0 and entry.lnum > 0 then
-                local type = entry.type:upper()
-                local severity = severity_map[type] or vim.diagnostic.severity.ERROR
-                local d = {
-                    bufnr = entry.bufnr,
-                    lnum = entry.lnum - 1, -- Quickfix is 1-indexed, diagnostics are 0-indexed
-                    col = entry.col > 0 and entry.col - 1 or 0,
-                    severity = severity,
-                    message = entry.text,
-                    source = "make",
-                }
-                -- Group diagnostics by buffer
-                if not diagnostics[entry.bufnr] then
-                    diagnostics[entry.bufnr] = {}
-                end
-                table.insert(diagnostics[entry.bufnr], d)
-            end
-        end
-        -- Clear old diagnostics and set new ones
-        vim.diagnostic.reset(ns)
-        for bufnr, diags in pairs(diagnostics) do
-            vim.diagnostic.set(ns, bufnr, diags)
-        end
-    end,
-})
-
-vim.api.nvim_create_autocmd("BufEnter", {
-    callback = function()
-        -- Ant Build
-        if vim.fn.filereadable("build.xml") == 1 then
-            vim.opt.makeprg="ant compile"
-            vim.opt.errorformat="%A\\ %#[javac]\\ %f:%l:\\ error:\\ %m,%-Z\\ %#[javac]\\ %p^,%-C%.%#,%-G%.%#BUILD\\ FAILED%.%#,%-GTotal\\ time:\\ %.%#"
-        end
-    end,
-})
-
-local autogroup_auto_make = vim.api.nvim_create_augroup("AutoMake", { clear = true })
-vim.api.nvim_create_autocmd("BufWritePost", {
-    group = autogroup_auto_make,
-    callback = function()
-        if vim.fn.filereadable("build.c") == 1 then
-            vim.cmd("Make")
-        end
-    end,
-})
-
--- Open quickfix in full width
-vim.api.nvim_create_autocmd("FileType", {
-    group = vim.api.nvim_create_augroup("QuickFix", { clear = true }),
-    pattern = "qf",
-    callback = function()
-        vim.cmd("wincmd J")
-    end,
-})
+-- vim.api.nvim_create_autocmd("QuickfixCmdPost", {
+--     pattern = "make",
+--     callback = function()
+--         local ns = vim.api.nvim_create_namespace("make_diagnostics")
+--         local qflist = vim.fn.getqflist()
+--         local diagnostics = {}
+--         for _, entry in ipairs(qflist) do
+--             -- Only process entries with a valid buffer and line number
+--             if entry.bufnr ~= 0 and entry.lnum > 0 then
+--                 local type = entry.type:upper()
+--                 local severity = severity_map[type] or vim.diagnostic.severity.ERROR
+--                 local d = {
+--                     bufnr = entry.bufnr,
+--                     lnum = entry.lnum - 1, -- Quickfix is 1-indexed, diagnostics are 0-indexed
+--                     col = entry.col > 0 and entry.col - 1 or 0,
+--                     severity = severity,
+--                     message = entry.text,
+--                     source = "make",
+--                 }
+--                 -- Group diagnostics by buffer
+--                 if not diagnostics[entry.bufnr] then
+--                     diagnostics[entry.bufnr] = {}
+--                 end
+--                 table.insert(diagnostics[entry.bufnr], d)
+--             end
+--         end
+--         -- Clear old diagnostics and set new ones
+--         vim.diagnostic.reset(ns)
+--         for bufnr, diags in pairs(diagnostics) do
+--             vim.diagnostic.set(ns, bufnr, diags)
+--         end
+--     end,
+-- })
+--
+-- vim.api.nvim_create_autocmd("BufEnter", {
+--     callback = function()
+--         -- Ant Build
+--         if vim.fn.filereadable("build.xml") == 1 then
+--             vim.opt.makeprg="ant compile"
+--             vim.opt.errorformat="%A\\ %#[javac]\\ %f:%l:\\ error:\\ %m,%-Z\\ %#[javac]\\ %p^,%-C%.%#,%-G%.%#BUILD\\ FAILED%.%#,%-GTotal\\ time:\\ %.%#"
+--         end
+--     end,
+-- })
+--
+-- local autogroup_auto_make = vim.api.nvim_create_augroup("AutoMake", { clear = true })
+-- vim.api.nvim_create_autocmd("BufWritePost", {
+--     group = autogroup_auto_make,
+--     callback = function()
+--         if vim.fn.filereadable("build.c") == 1 then
+--             vim.cmd("Make")
+--         end
+--     end,
+-- })
+--
+-- -- Open quickfix in full width
+-- vim.api.nvim_create_autocmd("FileType", {
+--     group = vim.api.nvim_create_augroup("QuickFix", { clear = true }),
+--     pattern = "qf",
+--     callback = function()
+--         vim.cmd("wincmd J")
+--     end,
+-- })
 
 -- Theme
 -- ============================================================================
@@ -516,6 +517,9 @@ vim.cmd("packadd nvim.undotree")
 local plugin_path = vim.fn.stdpath("config") .. "/plugins"
 vim.opt.runtimepath:append(plugin_path .. "/*")
 
+-- Session Manager ============================================================
+require("auto-session").setup()
+
 -- Theme ======================================================================
 
 -- Status Line
@@ -542,7 +546,7 @@ require("lualine").setup({
 })
 
 -- Indent
-require("indentmini").setup()
+-- require("indentmini").setup()
 
 -- Wildcard
 require('mini.cmdline').setup()
@@ -708,9 +712,6 @@ miniclue.setup({
         scroll_up = "<C-u>",
     },
 })
-
--- Session Manager ============================================================
-require("auto-session").setup()
 
 -- Better Quickfix ============================================================
 require("quicker").setup()

@@ -108,7 +108,7 @@ len()
     echo ${#str}
 }
 
-push()
+git_push_all()
 {
     git add .
     git commit -m "$1"
