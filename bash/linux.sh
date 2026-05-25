@@ -60,6 +60,11 @@ backup()
     cd ~/Dotfiles
     git_push_all "Backup from Linux Desktop"
     cd -
+    rclone sync ~/Drive/Notes Personal:Notes -v
+    cd ~/Code/website
+    echo $RANDOM > ~/Code/website/site_checksum.txt
+    git_push_all "Updated Notes"
+    cd -
 }
 
 alias rsync_git="rsync --filter='dir-merge,- .gitignore' --delete"
