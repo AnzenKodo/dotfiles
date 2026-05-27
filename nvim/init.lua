@@ -1031,7 +1031,7 @@ vim.api.nvim_create_user_command("AiOpen",  function()
     local target_win = vim.api.nvim_get_current_win()
     local prev_buf = vim.api.nvim_win_get_buf(target_win)
     vim.cmd('startinsert')
-    vim.cmd("terminal antigravity --continue")
+    vim.cmd("terminal agy --continue")
     local term_buf = vim.api.nvim_get_current_buf()
     vim.api.nvim_create_autocmd("TermClose", {
         buffer = term_buf,
@@ -1049,7 +1049,7 @@ vim.opt.runtimepath:append(plugin_path .. "/Manual/99")
 local AntigravityProvider = setmetatable({}, { __index = require("99.providers").BaseProvider })
 function AntigravityProvider._build_command(_, query, context)
     return {
-        "antigravity",
+        "agy",
         "--print",
         query,
     }

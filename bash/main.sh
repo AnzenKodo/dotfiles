@@ -81,7 +81,7 @@ alias yt="yt-dlp --ffmpeg-location ~/Applications/ffmpeg/ -S ext"
 alias yta="yt-dlp --ffmpeg-location ~/Applications/ffmpeg/ --extract-audio --audio-format"
 alias tldr="tldr -c"
 alias rclone="rclone --config=$HOME/Drive/Dotfiles/rclone.conf"
-alias ai="antigravity --sandbox --prompt"
+alias ai="agy --sandbox --prompt"
 
 alias todo="$EDITOR ~/Drive/Notes/Online/Todo.md"
 alias feed="$EDITOR ~/Drive/Notes/Feed.md"

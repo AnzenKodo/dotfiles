@@ -1,6 +1,6 @@
 {
 	"$schema" : "https://aka.ms/winget-packages.schema.2.0.json",
-	"CreationDate" : "2026-05-25T10:36:45.404-00:00",
+	"CreationDate" : "2026-05-27T16:33:45.373-00:00",
 	"Sources" : 
 	[
 		{
@@ -17,10 +17,6 @@
 				{
 					"PackageIdentifier" : "KeeWeb.KeeWeb",
 					"Version" : "1.18.7"
-				},
-				{
-					"PackageIdentifier" : "Notepad++.Notepad++",
-					"Version" : "8.5.2"
 				},
 				{
 					"PackageIdentifier" : "RARLab.WinRAR",
@@ -59,6 +55,10 @@
 					"Version" : "17.7.2.1"
 				},
 				{
+					"PackageIdentifier" : "EclipseAdoptium.Temurin.26.JRE",
+					"Version" : "26.0.1.8"
+				},
+				{
 					"PackageIdentifier" : "Microsoft.SQLServer.OLEDBDriver",
 					"Version" : "18.5.0.0"
 				},
@@ -77,14 +77,6 @@
 				{
 					"PackageIdentifier" : "wez.wezterm.nightly",
 					"Version" : "20260331-040028-577474d8"
-				},
-				{
-					"PackageIdentifier" : "PuTTY.PuTTY",
-					"Version" : "0.81.0.0"
-				},
-				{
-					"PackageIdentifier" : "Microsoft.VisualStudio.2019.BuildTools",
-					"Version" : "16.11.29"
 				},
 				{
 					"PackageIdentifier" : "Microsoft.Edge",
@@ -115,12 +107,20 @@
 					"Version" : "12.0.30501.0"
 				},
 				{
+					"PackageIdentifier" : "Brave.Brave",
+					"Version" : "148.1.90.124"
+				},
+				{
 					"PackageIdentifier" : "Brave.Brave.Beta",
-					"Version" : "148.1.91.156"
+					"Version" : "148.1.91.162"
+				},
+				{
+					"PackageIdentifier" : "EclipseFoundation.Eclipse.Java",
+					"Version" : "2026-03"
 				},
 				{
 					"PackageIdentifier" : "Microsoft.OneDrive",
-					"Version" : "26.084.0504.0004"
+					"Version" : "26.084.0504.0007"
 				},
 				{
 					"PackageIdentifier" : "Obsidian.Obsidian",
