@@ -487,7 +487,7 @@ vim.api.nvim_create_autocmd("BufEnter", {
 -- ============================================================================
 
 if vim.g.neovide then
-    vim.o.guifont = "Consolas:h12"
+    -- vim.o.guifont = "Consolas:h12"
     keymap_set({ "n", "v" }, "<C-=>",   ":lua vim.g.neovide_scale_factor = vim.g.neovide_scale_factor + 0.1<CR>", "Neovide: Increase font size")
     keymap_set({ "n", "v" }, "<C-->",   ":lua vim.g.neovide_scale_factor = vim.g.neovide_scale_factor - 0.1<CR>", "Neovide: Decrease font size")
     keymap_set({ "n", "v" }, "<C-0>",   ":lua vim.g.neovide_scale_factor = 1<CR>",                                "Neovide: Reset font size to default")
