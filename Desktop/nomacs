@@ -1,43 +1,38 @@
 [General]
 firstTime=false
-windowGeometry=@Rect(452 297 986 686)
+windowGeometry=@Rect(436 197 986 686)
 windowMaximized=false
-windowState=@ByteArray(\0\0\0\xff\0\0\0\0\xfd\0\0\0\0\0\0\x3\xda\0\0\x2x\0\0\0\x4\0\0\0\x4\0\0\0\b\0\0\0\b\xfc\0\0\0\x1\0\0\0\x2\0\0\0\x1\0\0\0\x16\0\x45\0\x64\0i\0t\0T\0o\0o\0l\0\x42\0\x61\0r\x1\0\0\0\0\xff\xff\xff\xff\0\0\0\0\0\0\0\0)
+windowState=@ByteArray(\0\0\0\xff\0\0\0\0\xfd\0\0\0\0\0\0\x3\xda\0\0\x2v\0\0\0\x4\0\0\0\x4\0\0\0\b\0\0\0\b\xfc\0\0\0\x1\0\0\0\x2\0\0\0\x1\0\0\0\x16\0\x45\0\x64\0i\0t\0T\0o\0o\0l\0\x42\0\x61\0r\x1\0\0\0\0\xff\xff\xff\xff\0\0\0\0\0\0\0\0)
 
 [AppSettings]
-appMode=0
-closeOnEsc=true
 defaultJpgQuality=97
 firstTime.nomacs.3=false
-
-[CustomPluginShortcuts]
-Composite%20Image=Composite Image
-Crop%20to%20Metadata=Crop to Metadata
-Crop%20to%20Page=Crop to Page
-Draw%20to%20Page=Draw to Page
-Fake%20Miniatures=Fake Miniatures
-Image%20Transform=Image Transform
-Paint%20on%20Image=Paint on Image
-
-[DisplaySettings]
-animateWidgets=false
-bgColorNoMacsRGBA=4281479730
-bgColorWidgetRGBA=2852126720
-fgColorNoMacsRGBA=4293980400
-fontColorRGBA=4292730333
-highlightColorRGBA=4278216379
-iconColorRGBA=4293980400
-stylePlugin=fusion
-themeName312=System.css
+appMode=0
 
 [DkAppManager]
-Apps\1\appName=&File Manager
-Apps\1\appPath=OpenDir
-Apps\1\objectName=OpenDir
-Apps\2\appName=&Default Application
-Apps\2\appPath=OpenFile
-Apps\2\objectName=OpenFile
-Apps\size=2
+Apps\1\appName=&IrfanView
+Apps\1\appPath=C:/Program Files/IrfanView/i_view64.exe
+Apps\1\objectName=IrfanViewAction
+Apps\2\appName=&Explorer
+Apps\2\appPath=C:/Windows/explorer.exe
+Apps\2\objectName=ExplorerAction
+Apps\3\appName=&Default Application
+Apps\3\appPath=OpenFile
+Apps\3\objectName=OpenFile
+Apps\size=3
+
+[DisplaySettings]
+highlightColorRGBA=4278225151
+bgColorWidgetRGBA=2281701376
+bgColorNoMacsRGBA=4294506744
+fgColorNoMacsRGBA=4281545523
+iconColorRGBA=4281545523
+stylePlugin=Fusion
+
+[SynchronizeSettings]
+checkForUpdates=true
+disableUpdateInteraction=false
+lastUpdateCheck=@Variant(\0\0\0\xe\0%\x8d\xfd)
 
 [DkFilePreview]
 windowPosition=1
@@ -48,17 +43,9 @@ numColumns=-1
 windowPosition=3
 
 [GlobalSettings]
-recentFiles=/home/ramen/Pictures/Screenshots/2026-05-19_00-38.png, /home/ramen/Pictures/Screenshots/2026-05-19_00-39.png, /home/ramen/Pictures/Screenshots/2026-05-19_00-39_1.png, /home/ramen/Pictures/Screenshots/2026-05-19_00-52.png
-recentFolders=/home/ramen/Pictures/Screenshots
-showBgImage=false
-
-[Page%20Extraction%20Plugin]
-Method=0
-
-[SynchronizeSettings]
-checkForUpdates=false
-disableUpdateInteraction=false
+recentFolders=C:/Users/aman.v/Downloads
+recentFiles=C:/Users/aman.v/Downloads/photo-1541185934-01b600ea069c.jpg, C:/Users/aman.v/Downloads/Starship-reentry.jpg, C:/Users/aman.v/Downloads/daniel-leone-g30P1zcOzXo-unsplash.jpg
 
 [zooming]
-useLevels=false
 zoomLevels="0.0001,0.001,0.01,0.05,0.1,0.125,0.166,0.25,0.333,0.5,0.66,1,1.5,2,3,4,5,6,7,8,12,16,32,64,128"
+useLevels=false
