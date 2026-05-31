@@ -41,6 +41,10 @@ ln -sfv ~/Dotfiles/Desktop/flameshot       $XDG_CONFIG_HOME
 ln -sfv ~/Applications/Mime/mimeapps.list  $XDG_CONFIG_HOME
 ln -sfv ~/Dotfiles/Desktop/gf2_config.ini  $XDG_CONFIG_HOME
 
+ln -sfv ~/Applications/vmenu/scripts/vmenu_emoji    ~/Applications/scripts/
+ln -sfv ~/Applications/vmenu/scripts/vmenu_kaomoji  ~/Applications/scripts/
+ln -sfv ~/Applications/vmenu/scripts/vmenu_symbols  ~/Applications/scripts/
+
 sudo rm /usr/local/bin
 sudo ln -srf $USR_APPLICATIONS_DIR/bin /usr/local/bin
 

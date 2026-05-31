@@ -341,7 +341,13 @@ vim.api.nvim_create_autocmd("TermClose", {
 -- ============================================================================
 
 vim.api.nvim_create_user_command("Make", function(opts)
-    vim.cmd("wall")
+    for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
+        if vim.api.nvim_buf_is_loaded(bufnr) and vim.bo[bufnr].modified and vim.bo[bufnr].buftype == "" and vim.api.nvim_buf_get_name(bufnr) ~= "" then
+            pcall(vim.api.nvim_buf_call, bufnr, function()
+                vim.cmd("update")
+            end)
+        end
+    end
     local lines = {}
 
     -- Respect $* placeholder in makeprg (e.g. "make $*"), fall back to appending
@@ -385,68 +391,68 @@ local severity_map = {
     I = vim.diagnostic.severity.INFO,
     N = vim.diagnostic.severity.HINT,
 }
--- vim.api.nvim_create_autocmd("QuickfixCmdPost", {
---     pattern = "make",
---     callback = function()
---         local ns = vim.api.nvim_create_namespace("make_diagnostics")
---         local qflist = vim.fn.getqflist()
---         local diagnostics = {}
---         for _, entry in ipairs(qflist) do
---             -- Only process entries with a valid buffer and line number
---             if entry.bufnr ~= 0 and entry.lnum > 0 then
---                 local type = entry.type:upper()
---                 local severity = severity_map[type] or vim.diagnostic.severity.ERROR
---                 local d = {
---                     bufnr = entry.bufnr,
---                     lnum = entry.lnum - 1, -- Quickfix is 1-indexed, diagnostics are 0-indexed
---                     col = entry.col > 0 and entry.col - 1 or 0,
---                     severity = severity,
---                     message = entry.text,
---                     source = "make",
---                 }
---                 -- Group diagnostics by buffer
---                 if not diagnostics[entry.bufnr] then
---                     diagnostics[entry.bufnr] = {}
---                 end
---                 table.insert(diagnostics[entry.bufnr], d)
---             end
---         end
---         -- Clear old diagnostics and set new ones
---         vim.diagnostic.reset(ns)
---         for bufnr, diags in pairs(diagnostics) do
---             vim.diagnostic.set(ns, bufnr, diags)
---         end
---     end,
--- })
---
--- vim.api.nvim_create_autocmd("BufEnter", {
---     callback = function()
---         -- Ant Build
---         if vim.fn.filereadable("build.xml") == 1 then
---             vim.opt.makeprg="ant compile"
---             vim.opt.errorformat="%A\\ %#[javac]\\ %f:%l:\\ error:\\ %m,%-Z\\ %#[javac]\\ %p^,%-C%.%#,%-G%.%#BUILD\\ FAILED%.%#,%-GTotal\\ time:\\ %.%#"
---         end
---     end,
--- })
---
--- local autogroup_auto_make = vim.api.nvim_create_augroup("AutoMake", { clear = true })
--- vim.api.nvim_create_autocmd("BufWritePost", {
---     group = autogroup_auto_make,
---     callback = function()
---         if vim.fn.filereadable("build.c") == 1 then
---             vim.cmd("Make")
---         end
---     end,
--- })
---
--- -- Open quickfix in full width
--- vim.api.nvim_create_autocmd("FileType", {
---     group = vim.api.nvim_create_augroup("QuickFix", { clear = true }),
---     pattern = "qf",
---     callback = function()
---         vim.cmd("wincmd J")
---     end,
--- })
+vim.api.nvim_create_autocmd("QuickfixCmdPost", {
+    pattern = "make",
+    callback = function()
+        local ns = vim.api.nvim_create_namespace("make_diagnostics")
+        local qflist = vim.fn.getqflist()
+        local diagnostics = {}
+        for _, entry in ipairs(qflist) do
+            -- Only process entries with a valid buffer and line number
+            if entry.bufnr ~= 0 and entry.lnum > 0 then
+                local type = entry.type:upper()
+                local severity = severity_map[type] or vim.diagnostic.severity.ERROR
+                local d = {
+                    bufnr = entry.bufnr,
+                    lnum = entry.lnum - 1, -- Quickfix is 1-indexed, diagnostics are 0-indexed
+                    col = entry.col > 0 and entry.col - 1 or 0,
+                    severity = severity,
+                    message = entry.text,
+                    source = "make",
+                }
+                -- Group diagnostics by buffer
+                if not diagnostics[entry.bufnr] then
+                    diagnostics[entry.bufnr] = {}
+                end
+                table.insert(diagnostics[entry.bufnr], d)
+            end
+        end
+        -- Clear old diagnostics and set new ones
+        vim.diagnostic.reset(ns)
+        for bufnr, diags in pairs(diagnostics) do
+            vim.diagnostic.set(ns, bufnr, diags)
+        end
+    end,
+})
+
+vim.api.nvim_create_autocmd("BufEnter", {
+    callback = function()
+        -- Ant Build
+        if vim.fn.filereadable("build.xml") == 1 then
+            vim.opt.makeprg="ant compile"
+            vim.opt.errorformat="%A\\ %#[javac]\\ %f:%l:\\ error:\\ %m,%-Z\\ %#[javac]\\ %p^,%-C%.%#,%-G%.%#BUILD\\ FAILED%.%#,%-GTotal\\ time:\\ %.%#"
+        end
+    end,
+})
+
+local autogroup_auto_make = vim.api.nvim_create_augroup("AutoMake", { clear = true })
+vim.api.nvim_create_autocmd("BufWritePost", {
+    group = autogroup_auto_make,
+    callback = function()
+        if vim.fn.filereadable("build.c") == 1 then
+            vim.cmd("Make")
+        end
+    end,
+})
+
+-- Open quickfix in full width
+vim.api.nvim_create_autocmd("FileType", {
+    group = vim.api.nvim_create_augroup("QuickFix", { clear = true }),
+    pattern = "qf",
+    callback = function()
+        vim.cmd("wincmd J")
+    end,
+})
 
 -- Theme
 -- ============================================================================

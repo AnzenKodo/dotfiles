@@ -10,7 +10,7 @@ fi
 # Path =========================================================================
 
 export PATH="$HOME/Applications/AppImages:$HOME/Applications/bin"\
-":$HOME/Code/Miniapps/bin:$HOME/Code/Tools/bin"\
+":$HOME/Applications/Scripts:$HOME/Code/Tools/bin"\
 ":$XDG_DATA_HOME/python/bin:$CARGO_HOME/bin"\
 ":$PATH"
 
