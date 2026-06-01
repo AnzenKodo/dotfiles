@@ -1,13 +1,27 @@
 local wezterm = require 'wezterm'
 local config = {}
+local action = wezterm.action
+
+-- Options
+--=============================================================================
 
 config.color_scheme = 'Gruvbox dark, soft (base16)'
 config.hide_tab_bar_if_only_one_tab = true
+config.tab_bar_at_bottom = true
 config.window_padding = { left = 0, right = 0, top = 0, bottom = 0 }
 config.automatically_reload_config = true
+
+-- Keybindings
+--=============================================================================
+
 config.keys = {
     { key = 'F11', mods = 'NONE', action = wezterm.action.ToggleFullScreen },
+    { key = 't',   mods = 'CTRL', action = action.SpawnTab 'CurrentPaneDomain' },
+    { key = 'w',   mods = 'CTRL', action = action.CloseCurrentTab { confirm = true } },
 }
+
+-- For Windows OS
+--=============================================================================
 
 local function is_windows()
     return wezterm.target_triple:find('windows') ~= nil
@@ -19,15 +33,6 @@ if is_windows() then
     }
     config.default_prog = { 'C:\\Program Files\\Git\\bin\\bash.exe' }
 end
-
-config.ssh_domains = {
-    {
-        name = 'server',
-        remote_address = '34.71.170.37',
-        username = 'Gangnam',
-        multiplexing = 'WezTerm',  -- or "None" for plain SSH
-    },
-}
 
 return config
 

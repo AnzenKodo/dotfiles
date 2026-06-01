@@ -1,0 +1,66 @@
+{
+	"reload_style_on_change": true,
+    "layer": "top",
+    "position": "top",
+    "height": 10,
+    "spacing": 0,
+    "modules-left": ["hyprland/workspaces", "hyprland/window"],
+    "modules-center": [],
+    "modules-right": ["tray", "backlight", "custom/bar", "pulseaudio", "custom/bar", "network", "custom/bar", "battery", "clock"],
+    "hyprland/workspaces": {
+        "disable-scroll": true,
+        "all-outputs": true,
+        "format": "{name}"
+    },
+    
+    "hyprland/window": {
+        "format": "{title}",
+        "max-length": 100
+    },
+
+    "clock": {
+        "format": "{:%d %b %Y (%a) / %I:%M %p}",
+        "tooltip-format": "{calendar}"
+    },
+    
+    "tray": {
+        "icon-size": 18,
+        "spacing": 10,
+        "show-passive-items": true
+    },
+    "backlight": {
+        "device": "intel_backlight",
+        "format": "󰃠 {percent}%"
+    },
+    "battery": {
+        "states": {
+            "warning": 30,
+            "critical": 15
+        },
+        "format": "󱊢 {capacity}%",
+        "format-charging": "󰂄 {capacity}%",
+        "format-plugged": "󰁹 {capacity}%",
+        "format-alt": "󱧥 {time}"
+    },
+
+    "network": {
+        "format-wifi": "󰖩 {essid} ({signalStrength}%)",
+        "format-ethernet": "󰈁 {ipaddr}/{cidr}",
+        "format-disconnected": "",
+        "tooltip-format": "{ifname} via {gwaddr}"
+    },
+
+    "pulseaudio": {
+        "format": "󰕾 {volume}%",
+        "format-bluetooth": "󰂰 {volume}%",
+        "format-muted": "󰝟",
+        "scroll-step": 5,
+        "on-click": "pavucontrol"
+    },
+    
+    "custom/bar": {
+        "format": " | ",
+        "interval": "once",
+        "tooltip": false
+    }
+}

@@ -5,16 +5,14 @@ sudo ln -s /etc/sv/dbus /var/service/
 
 # Without updating many thing in void stops wroking slowly (eg. Network Manager)
 sudo xbps-install -Su
-# Enables repo for 32bits packages
-sudo xbps-install -S void-repo-multilib
 
 sudo xbps-remove firefox
 
 sudo xbps-install xtools git \
 xfce4-clipman-plugin xclip \ # Clipboard
-zip unzip xarchiver thunar-archive-plugin \ # Archive
+xarchiver thunar-archive-plugin \ # Archive
 lightdm-gtk-greeter-settings \ # Display Manager
-noto-fonts-emoji noto-fonts-ttf-extra noto-fonts-cjk \ # Fonts
+nerd-fonts-symbols-ttf noto-fonts-emoji noto-fonts-ttf-extra noto-fonts-cjk \ # Fonts
 playerctl # Media Controller
 calc \ # Calculator
 evince # Pdf Viewer

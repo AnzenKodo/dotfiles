@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=appmenu
+Comment=App launcher
+Exec=/home/ramen/Code/Scripts/appmenu -W 150 -fs 13 -bw 1 -x 1740
+Icon=org.xfce.panel.whiskermenu
+Path=
+Terminal=false
+StartupNotify=false

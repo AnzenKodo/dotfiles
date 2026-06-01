@@ -69,8 +69,6 @@ alias grep="rg"
 alias diff="bat --style=plain -d"
 alias top="btm --battery --enable_cache_memory --network_use_bytes --network_use_binary_prefix --process_memory_as_value --show_table_scroll_position"
 alias xclip="xclip -selection clipboard"
-alias zip="zip -r"
-alias tar="tar -v"
 alias tree="tree --color --dirsfirst"
 
 alias refresh="source ~/.bashrc"
@@ -114,38 +112,6 @@ git_push_all()
     git commit -m "$1"
     git pull
     git push
-}
-
-pastebin()
-{
-    local url='https://paste.c-net.org/'
-    if (( $# )); then
-        local file
-        for file; do
-            curl -s \
-                --data-binary @"$file" \
-                --header "X-FileName: ${file##*/}" \
-                "$url"
-        done
-    else
-        curl -s --data-binary @- "$url"
-    fi
-}
-
-compress-mp4()
-{
-    echo ffmpeg -i "$1" -vcodec h264 -acodec mp2 "$2"
-    ffmpeg -i "$1" -vcodec h264 -acodec mp2 "$2"
-}
-
-download-music()
-{
-    yta $1 --embed-thumbnail --embed-metadata \
-    --parse-metadata "title:%(title)s" \
-    --parse-metadata "uploader:%(artist)s" \
-    --parse-metadata "playlist_title:%(album)s" \
-    --parse-metadata "playlist_index:%(track_number)s" \
-    --output "%(artist)s - %(title)s.%(ext)s" "$2"
 }
 
 setup_git_id()

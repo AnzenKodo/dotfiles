@@ -37,7 +37,6 @@
       </property>
       <property name="&lt;Alt&gt;Print" type="string" value="xfce4-screenshooter -w"/>
       <property name="XF86WWW" type="string" value="exo-open --launch WebBrowser"/>
-      <property name="XF86Mail" type="string" value="exo-open --launch MailReader"/>
       <property name="&lt;Alt&gt;F3" type="string" value="xfce4-appfinder">
         <property name="startup-notify" type="bool" value="true"/>
       </property>
@@ -50,7 +49,6 @@
       <property name="&lt;Alt&gt;F1" type="string" value="xfce4-popup-applicationsmenu"/>
       <property name="&lt;Super&gt;p" type="string" value="xfce4-display-settings --minimal"/>
       <property name="&lt;Primary&gt;&lt;Shift&gt;Escape" type="string" value="xfce4-taskmanager"/>
-      <property name="&lt;Super&gt;e" type="string" value="thunar"/>
       <property name="&lt;Primary&gt;&lt;Alt&gt;Escape" type="string" value="xkill"/>
       <property name="HomePage" type="string" value="exo-open --launch WebBrowser"/>
       <property name="XF86Display" type="string" value="xfce4-display-settings --minimal"/>
@@ -58,14 +56,16 @@
       <property name="&lt;Super&gt;Print" type="string" value="xfce4-screenshooter -f"/>
       <property name="&lt;Super&gt;v" type="string" value="xfce4-popup-clipman"/>
       <property name="&lt;Shift&gt;&lt;Super&gt;p" type="string" value="/home/ramen/Applications/AppImages/keepassxc"/>
-      <property name="&lt;Super&gt;r" type="string" value="/home/ramen/Applications/menu"/>
       <property name="&lt;Super&gt;AudioRaiseVolume" type="string" value="playerctl next"/>
       <property name="&lt;Super&gt;AudioLowerVolume" type="string" value="playerctl play-pause"/>
       <property name="&lt;Super&gt;AudioMute" type="string" value="playerctl previous"/>
       <property name="&lt;Super&gt;c" type="string" value="gpick -s"/>
-      <property name="&lt;Super&gt;a" type="string" value="xdotool mousemove 1900 10 click 1 mousemove restore"/>
       <property name="&lt;Super&gt;l" type="string" value="xfce4-session-logout --suspend"/>
-      <property name="Print" type="string" value="/home/ramen/Applications/Scripts/flameshot-start.sh"/>
+      <property name="&lt;Super&gt;period" type="string" value="/home/ramen/Code/Scripts/emoji"/>
+      <property name="Print" type="string" value="/home/ramen/Code/Scripts/flameshot-start.sh"/>
+      <property name="&lt;Alt&gt;&lt;Super&gt;period" type="string" value="/home/ramen/Code/Scripts/kaomoji"/>
+      <property name="&lt;Primary&gt;&lt;Super&gt;period" type="string" value="/home/ramen/Code/Scripts/symbols"/>
+      <property name="&lt;Super&gt;space" type="string" value="/home/ramen/Code/Scripts/appmenu -- -c -W 200"/>
     </property>
   </property>
   <property name="xfwm4" type="empty">
