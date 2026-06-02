@@ -1,26 +1,22 @@
 {
 	"$schema" : "https://aka.ms/winget-packages.schema.2.0.json",
-	"CreationDate" : "2026-05-27T16:33:45.373-00:00",
-	"Sources" :
+	"CreationDate" : "2026-06-02T08:02:20.509-00:00",
+	"Sources" : 
 	[
 		{
-			"Packages" :
+			"Packages" : 
 			[
 				{
 					"PackageIdentifier" : "7zip.7zip",
-					"Version" : "23.01"
+					"Version" : "25.00"
 				},
 				{
-					"PackageIdentifier" : "JetBrains.IntelliJIDEA.EAP",
-					"Version" : "262.6228.19"
+					"PackageIdentifier" : "Git.Git",
+					"Version" : "2.50.1"
 				},
 				{
-					"PackageIdentifier" : "KeeWeb.KeeWeb",
-					"Version" : "1.18.7"
-				},
-				{
-					"PackageIdentifier" : "RARLab.WinRAR",
-					"Version" : "7.01.0"
+					"PackageIdentifier" : "VideoLAN.VLC",
+					"Version" : "3.0.23"
 				},
 				{
 					"PackageIdentifier" : "TeamViewer.TeamViewer",
@@ -31,32 +27,24 @@
 					"Version" : "8.0.1510.12"
 				},
 				{
-					"PackageIdentifier" : "Microsoft.Azure.CosmosEmulator",
-					"Version" : "2.14.16"
+					"PackageIdentifier" : "TheDocumentFoundation.LibreOffice",
+					"Version" : "26.2.3.2"
 				},
 				{
-					"PackageIdentifier" : "Oracle.MySQLWorkbench",
-					"Version" : "8.0.32"
+					"PackageIdentifier" : "nomacs.nomacs.Beta",
+					"Version" : "3.22.1"
 				},
 				{
-					"PackageIdentifier" : "Neovim.Neovim",
-					"Version" : "0.12.2"
-				},
-				{
-					"PackageIdentifier" : "Microsoft.Azure.FunctionsCoreTools",
-					"Version" : "3.0.5373"
-				},
-				{
-					"PackageIdentifier" : "Microsoft.Azure.DataStudio",
-					"Version" : "1.28.0"
+					"PackageIdentifier" : "Qalculate.Qalculate",
+					"Version" : "5.10.0"
 				},
 				{
 					"PackageIdentifier" : "Microsoft.msodbcsql.17",
 					"Version" : "17.7.2.1"
 				},
 				{
-					"PackageIdentifier" : "EclipseAdoptium.Temurin.26.JRE",
-					"Version" : "26.0.1.8"
+					"PackageIdentifier" : "Flameshot.Flameshot",
+					"Version" : "13.3.0"
 				},
 				{
 					"PackageIdentifier" : "Microsoft.SQLServer.OLEDBDriver",
@@ -67,36 +55,36 @@
 					"Version" : "11.4.7462.6"
 				},
 				{
-					"PackageIdentifier" : "Oracle.MySQLShell",
-					"Version" : "8.0.32"
+					"PackageIdentifier" : "GoLang.Go",
+					"Version" : "1.25.0"
 				},
 				{
-					"PackageIdentifier" : "TheDocumentFoundation.LibreOffice",
-					"Version" : "7.5.2.2"
+					"PackageIdentifier" : "wez.wezterm",
+					"Version" : "20240203-110809-5046fc22"
 				},
 				{
-					"PackageIdentifier" : "wez.wezterm.nightly",
-					"Version" : "20260331-040028-577474d8"
+					"PackageIdentifier" : "Neovim.Neovim",
+					"Version" : "0.12.0"
 				},
 				{
 					"PackageIdentifier" : "Microsoft.Edge",
-					"Version" : "148.0.3967.83"
+					"Version" : "148.0.3967.96"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.WindowsApplicationDriver",
+					"Version" : "1.2.99.0"
 				},
 				{
 					"PackageIdentifier" : "Microsoft.VCRedist.2015+.x86",
-					"Version" : "14.36.32532.0"
-				},
-				{
-					"PackageIdentifier" : "Microsoft.WindowsSDK.10.0.19041",
-					"Version" : "10.0.19041.685"
+					"Version" : "14.40.33810.0"
 				},
 				{
 					"PackageIdentifier" : "Microsoft.VCRedist.2015+.x64",
-					"Version" : "14.36.32532.0"
+					"Version" : "14.40.33810.0"
 				},
 				{
-					"PackageIdentifier" : "DucFabulous.UltraViewer",
-					"Version" : "6.6.87"
+					"PackageIdentifier" : "Microsoft.DotNet.DesktopRuntime.8",
+					"Version" : "8.0.24"
 				},
 				{
 					"PackageIdentifier" : "Microsoft.SQLServerManagementStudio",
@@ -108,27 +96,39 @@
 				},
 				{
 					"PackageIdentifier" : "Brave.Brave",
-					"Version" : "148.1.90.124"
+					"Version" : "148.1.90.128"
 				},
 				{
-					"PackageIdentifier" : "Brave.Brave.Beta",
-					"Version" : "148.1.91.162"
+					"PackageIdentifier" : "BrechtSanders.WinLibs.POSIX.MSVCRT",
+					"Version" : "15.2.0-13.0.0-r1"
 				},
 				{
 					"PackageIdentifier" : "EclipseFoundation.Eclipse.Java",
-					"Version" : "2026-03"
+					"Version" : "2025.06"
+				},
+				{
+					"PackageIdentifier" : "Voidstar.FilePilot",
+					"Version" : "0.7.0"
+				},
+				{
+					"PackageIdentifier" : "JernejSimoncic.Wget",
+					"Version" : "1.21.4"
+				},
+				{
+					"PackageIdentifier" : "MartinStorsjo.LLVM-MinGW.MSVCRT",
+					"Version" : "20.1.8-20250709"
 				},
 				{
 					"PackageIdentifier" : "Microsoft.OneDrive",
-					"Version" : "26.084.0504.0007"
+					"Version" : "26.078.0426.0002"
+				},
+				{
+					"PackageIdentifier" : "UniversalCtags.Ctags",
+					"Version" : "6.1.0"
 				},
 				{
 					"PackageIdentifier" : "Obsidian.Obsidian",
-					"Version" : "1.12.7"
-				},
-				{
-					"PackageIdentifier" : "Python.Python.3.14",
-					"Version" : "< 3.14.0"
+					"Version" : "1.10.6"
 				},
 				{
 					"PackageIdentifier" : "Microsoft.VisualStudioCode.Insiders",
@@ -136,11 +136,15 @@
 				},
 				{
 					"PackageIdentifier" : "ActivityWatch.ActivityWatch",
-					"Version" : "0.14.0b1"
+					"Version" : "0.13.2"
+				},
+				{
+					"PackageIdentifier" : "Python.Python.3.9",
+					"Version" : "3.9.13"
 				},
 				{
 					"PackageIdentifier" : "Microsoft.Teams",
-					"Version" : "26106.1911.4707.3286"
+					"Version" : "26120.3106.4722.3411"
 				},
 				{
 					"PackageIdentifier" : "Microsoft.AppInstaller",
@@ -151,16 +155,12 @@
 					"Version" : "2.2.28604.0"
 				},
 				{
-					"PackageIdentifier" : "Microsoft.UI.Xaml.2.5",
-					"Version" : "2.52012.2002.0"
-				},
-				{
 					"PackageIdentifier" : "Microsoft.UI.Xaml.2.7",
 					"Version" : "7.2409.9001.0"
 				},
 				{
 					"PackageIdentifier" : "Microsoft.UI.Xaml.2.8",
-					"Version" : "8.2511.26001.0"
+					"Version" : "8.2501.31001.0"
 				},
 				{
 					"PackageIdentifier" : "Microsoft.VCLibs.Desktop.14",
@@ -171,8 +171,8 @@
 					"Version" : "14.0.33519.0"
 				},
 				{
-					"PackageIdentifier" : "Microsoft.WindowsAppRuntime.1.6",
-					"Version" : "1.6.9"
+					"PackageIdentifier" : "Microsoft.WindowsAppRuntime.1.5",
+					"Version" : "> 1.5.8"
 				},
 				{
 					"PackageIdentifier" : "Microsoft.WindowsAppRuntime.1.7",
@@ -183,7 +183,7 @@
 					"Version" : "8000.859.21.0"
 				}
 			],
-			"SourceDetails" :
+			"SourceDetails" : 
 			{
 				"Argument" : "https://cdn.winget.microsoft.com/cache",
 				"Identifier" : "Microsoft.Winget.Source_8wekyb3d8bbwe",
