@@ -24,10 +24,10 @@ alias suspend='ask_and_run rundll32.exe powrprof.dll,SetSuspendState 0,1,0'
 #===============================================================================
 
 function backup {
-    winget export --include-versions -o $HOME/Dotfiles/Desktop/Windows/winget.json
-    cd ~/Dotfiles
-    git_push_all "Backup from Windows Desktop"
-    cd -
-    $HOME/AppData/Local/Microsoft/OneDrive/OneDrive.exe
+    winget export --include-versions -o C:\Users\aman.v\Drive-Company\Dotfiles\winget.json
+    git -C ~/Dotfiles add .
+    git -C ~/Dotfiles commit -m "Backup from Windows Desktop"
+    git -C ~/Dotfiles push
+    $HOME/AppData/Local/Microsoft/OneDrive/OneDrive.exe &
 }
 

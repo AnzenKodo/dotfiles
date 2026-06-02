@@ -442,6 +442,9 @@ vim.api.nvim_create_autocmd("BufWritePost", {
         if vim.fn.filereadable("build.c") == 1 then
             vim.cmd("Make")
         end
+        if vim.fn.filereadable("build.xml") == 1 then
+            vim.cmd("Make")
+        end
     end,
 })
 
