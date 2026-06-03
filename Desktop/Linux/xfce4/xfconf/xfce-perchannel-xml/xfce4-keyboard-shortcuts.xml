@@ -65,7 +65,7 @@
       <property name="Print" type="string" value="/home/ramen/Code/Scripts/flameshot-start.sh"/>
       <property name="&lt;Alt&gt;&lt;Super&gt;period" type="string" value="/home/ramen/Code/Scripts/kaomoji"/>
       <property name="&lt;Primary&gt;&lt;Super&gt;period" type="string" value="/home/ramen/Code/Scripts/symbols"/>
-      <property name="&lt;Super&gt;space" type="string" value="/home/ramen/Code/Scripts/appmenu -- -c -W 200"/>
+      <property name="&lt;Super&gt;r" type="string" value="/home/ramen/Code/Scripts/appmenu -- -c -W 200"/>
     </property>
   </property>
   <property name="xfwm4" type="empty">
