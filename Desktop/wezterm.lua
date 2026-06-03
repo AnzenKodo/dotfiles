@@ -28,9 +28,11 @@ local function is_windows()
 end
 if is_windows() then
     config.font_size = 10.0
-    config.keys = {
-        { key = '`', mods = 'CTRL', action = wezterm.action.SendString '†' }
-    }
+    table.insert(config.keys, {
+        key = '`',
+        mods = 'CTRL',
+        action = action.SendString '†'
+    })
     config.default_prog = { 'C:\\Program Files\\Git\\bin\\bash.exe' }
 end
 

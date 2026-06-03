@@ -496,7 +496,7 @@ vim.api.nvim_create_autocmd("BufEnter", {
 -- ============================================================================
 
 if vim.g.neovide then
-    -- vim.o.guifont = "Consolas:h12"
+    vim.o.guifont = "0xProto,Consolas:h10"
     keymap_set({ "n", "v" }, "<C-=>",   ":lua vim.g.neovide_scale_factor = vim.g.neovide_scale_factor + 0.1<CR>", "Neovide: Increase font size")
     keymap_set({ "n", "v" }, "<C-->",   ":lua vim.g.neovide_scale_factor = vim.g.neovide_scale_factor - 0.1<CR>", "Neovide: Decrease font size")
     keymap_set({ "n", "v" }, "<C-0>",   ":lua vim.g.neovide_scale_factor = 1<CR>",                                "Neovide: Reset font size to default")
@@ -504,7 +504,7 @@ if vim.g.neovide then
     keymap_set("v",          "<C-S-v>", '"+P',         "Paste from system clipboard (replace selection)")
     keymap_set("i",          "<C-S-v>", '<ESC>l"+Pli', "Paste from system clipboard in insert mode")
     keymap_set("c",          "<C-S-v>", "<C-R>+",      "Paste from system clipboard in command-line mode")
-    local neovide_fullscreen = true
+    local neovide_fullscreen = false
     keymap_set({"n", "i", "t", "x"}, "<F11>", function()
         neovide_fullscreen = not neovide_fullscreen
         vim.g.neovide_fullscreen = neovide_fullscreen
@@ -527,7 +527,9 @@ local plugin_path = vim.fn.stdpath("config") .. "/plugins"
 vim.opt.runtimepath:append(plugin_path .. "/*")
 
 -- Session Manager ============================================================
-require("auto-session").setup()
+require("auto-session").setup({
+    cwd_change_handling = true,
+})
 
 -- Theme ======================================================================
 
@@ -554,9 +556,6 @@ require("lualine").setup({
     options = { theme = "gruvbox-material" },
 })
 
--- Indent
--- require("indentmini").setup()
-
 -- Wildcard
 require('mini.cmdline').setup()
 
@@ -564,9 +563,6 @@ require('mini.cmdline').setup()
 
 -- Undo
 require("select-undo").setup()
-
--- Smart Auto Indent
-require("guess-indent").setup()
 
 -- Multicursor
 require("multicursor-nvim").setup()
@@ -756,19 +752,6 @@ keymap_set("n", "<leader>m2", function() harpoon:list():select(2) end,          
 keymap_set("n", "<leader>m3", function() harpoon:list():select(3) end,                     "[m]ark goto [3]'rd file")
 keymap_set("n", "<leader>m4", function() harpoon:list():select(4) end,                     "[m]ark goto [4]'th file")
 
-
--- Code Marks
--- require('bookmarks').setup({
---     on_attach = function(bufnr)
---         local bm = require "bookmarks"
---         local map = vim.keymap.set
---         keymap_set("n","<leader>mm", bm.bookmark_toggle, "[m]ark code [m]ark")
---         keymap_set("n","<leader>mi", bm.bookmark_ann,    "[m]ark code annotat[i]on")
---     end
--- })
--- require('telescope').load_extension('bookmarks')
--- keymap_set("n","<leader>mc", require('telescope').extensions.bookmarks.list,    "[m]ark [c]ode menu")
-
 -- File Manager ===============================================================
 function _G.get_oil_winbar()
     local bufnr = vim.api.nvim_win_get_buf(vim.g.statusline_winid)
@@ -916,12 +899,12 @@ end, "[f]ind Open Files")
 -- Debugger ===================================================================
 
 vim.api.nvim_create_autocmd("CmdlineEnter", {
-  callback = function()
-    local cmd = vim.fn.getcmdline()
-    if vim.fn.exists(":Termdebug") == 0 then
-        vim.cmd("packadd termdebug")
-    end
-end,
+    callback = function()
+        local cmd = vim.fn.getcmdline()
+        if vim.fn.exists(":Termdebug") == 0 then
+            vim.cmd("packadd termdebug")
+        end
+    end,
 })
 
 vim.g.termdebug_config = {

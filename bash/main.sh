@@ -3,6 +3,14 @@
 
 # Prompt =======================================================================
 
+# function print_osc7() {
+#     local win_path
+#     win_path="$(cygpath -m "$PWD")"
+#
+#     # OSC 7 requires a hostname; default to localhost if empty
+#     printf '\033]7;file://%s/%s\033\\' "${HOSTNAME:-localhost}" "$win_path"
+# }
+
 PS1='\n\[\e[38;2;251;73;52m\]\h\[\e[0m\]@\[\e[38;2;250;189;47m\]\u\[\e[0m\]:\[\e[38;2;125;174;163m\]\w\[\e[38;2;184;187;38m\]${PS1_CMD1}\n\[\e[0m\]\\$ '
 PROMPT_COMMAND='PS1_CMD1=$(__git_ps1 " (%s)");history -a'
 
@@ -32,7 +40,6 @@ export PASSWORD_MANAGER="keepassxc"
 #===============================================================================
 
 eval "$(zoxide init bash)"
-eval "$(fzf --bash)"
 export FZF_DEFAULT_OPTS="
   --bind 'tab:down'
   --bind 'shift-tab:up'
@@ -80,6 +87,7 @@ alias yta="yt-dlp --ffmpeg-location ~/Applications/ffmpeg/ --extract-audio --aud
 alias tldr="tldr -c"
 alias rclone="rclone --config=$HOME/Drive/Dotfiles/rclone.conf"
 alias ai="agy --sandbox --prompt"
+alias neogit='nvim -c "autocmd VimEnter * Neogit"'
 
 alias todo="$EDITOR ~/Drive/Notes/Online/Todo.md"
 alias feed="$EDITOR ~/Drive/Notes/Feed.md"
