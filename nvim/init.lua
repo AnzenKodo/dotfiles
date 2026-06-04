@@ -272,7 +272,6 @@ vim.api.nvim_create_autocmd("BufReadPost", {
   end,
 })
 
-
 -- Buffers
 -- ============================================================================
 
@@ -1013,9 +1012,6 @@ require("neogit").setup({
 if not is_termux() then
     vim.opt.runtimepath:append(plugin_path .. "/Manual/aw-watcher-vim")
 end
-require("visimatch").setup({
-    chars_lower_limit = 2,
-})
 
 -- AI
 -- ============================================================================

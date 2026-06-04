@@ -66,6 +66,7 @@
       <property name="&lt;Alt&gt;&lt;Super&gt;period" type="string" value="/home/ramen/Code/Scripts/kaomoji"/>
       <property name="&lt;Primary&gt;&lt;Super&gt;period" type="string" value="/home/ramen/Code/Scripts/symbols"/>
       <property name="&lt;Super&gt;r" type="string" value="/home/ramen/Code/Scripts/appmenu -- -c -W 200"/>
+      <property name="&lt;Super&gt;e" type="string" value="exo-open --launch FileManager"/>
     </property>
   </property>
   <property name="xfwm4" type="empty">

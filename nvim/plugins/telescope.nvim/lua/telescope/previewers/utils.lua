@@ -1,3 +1,5 @@
+local api = vim.api
+
 local ts_utils = require "telescope.utils"
 local strings = require "plenary.strings"
 local conf = require("telescope.config").values
@@ -5,14 +7,12 @@ local conf = require("telescope.config").values
 local Job = require "plenary.job"
 local Path = require "plenary.path"
 
-local telescope_utils = require "telescope.utils"
-
 local utils = {}
 
 local detect_from_shebang = function(p)
   local s = p:readbyterange(0, 256)
   if s then
-    local lines = telescope_utils.split_lines(s)
+    local lines = ts_utils.split_lines(s)
     return vim.filetype.match { contents = lines }
   end
 end
@@ -26,7 +26,7 @@ end
 local detect_from_modeline = function(p)
   local s = p:readbyterange(-256, 256)
   if s then
-    local lines = telescope_utils.split_lines(s)
+    local lines = ts_utils.split_lines(s)
     local idx = lines[#lines] ~= "" and #lines or #lines - 1
     if idx >= 1 then
       return parse_modeline(lines[idx])
@@ -87,13 +87,13 @@ utils.job_maker = function(cmd, bufnr, opts)
       cwd = opts.cwd,
       writer = writer,
       on_exit = vim.schedule_wrap(function(j)
-        if not vim.api.nvim_buf_is_valid(bufnr) then
+        if not api.nvim_buf_is_valid(bufnr) then
           return
         end
         if opts.mode == "append" then
-          vim.api.nvim_buf_set_lines(bufnr, -1, -1, false, j:result())
+          api.nvim_buf_set_lines(bufnr, -1, -1, false, j:result())
         elseif opts.mode == "insert" then
-          vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, j:result())
+          api.nvim_buf_set_lines(bufnr, 0, -1, false, j:result())
         end
         if opts.callback then
           opts.callback(bufnr, j:result())
@@ -113,8 +113,8 @@ end
 
 --- Attach default highlighter which will choose between regex and ts
 utils.highlighter = function(bufnr, ft, opts)
-  opts = vim.F.if_nil(opts, {})
-  opts.preview = vim.F.if_nil(opts.preview, {})
+  opts = ts_utils.if_nil(opts, {})
+  opts.preview = ts_utils.if_nil(opts.preview, {})
   opts.preview.treesitter = (function()
     if type(opts.preview) == "table" and opts.preview.treesitter then
       return opts.preview.treesitter
@@ -142,7 +142,7 @@ utils.highlighter = function(bufnr, ft, opts)
       return false
     end
 
-    if vim.tbl_contains(vim.F.if_nil(opts.preview.treesitter.disable, {}), ft) then
+    if vim.tbl_contains(ts_utils.if_nil(opts.preview.treesitter.disable, {}), ft) then
       return false
     end
 
@@ -161,7 +161,7 @@ end
 --- Attach regex highlighter
 utils.regex_highlighter = function(bufnr, ft)
   if has_filetype(ft) then
-    return pcall(vim.api.nvim_buf_set_option, bufnr, "syntax", ft)
+    return pcall(api.nvim_set_option_value, "syntax", ft, { buf = bufnr })
   end
   return false
 end
@@ -169,8 +169,8 @@ end
 -- Attach ts highlighter
 utils.ts_highlighter = function(bufnr, ft)
   if has_filetype(ft) then
-    local lang = vim.treesitter.language.get_lang(ft) or ft
-    if lang and ts_utils.has_ts_parser(lang) then
+    local lang = vim.treesitter.language.get_lang(ft)
+    if lang and vim.treesitter.language.add(lang) then
       return vim.treesitter.start(bufnr, lang)
     end
   end
@@ -178,17 +178,17 @@ utils.ts_highlighter = function(bufnr, ft)
 end
 
 utils.set_preview_message = function(bufnr, winid, message, fillchar)
-  fillchar = vim.F.if_nil(fillchar, "╱")
-  local height = vim.api.nvim_win_get_height(winid)
-  local width = vim.api.nvim_win_get_width(winid)
-  vim.api.nvim_buf_set_lines(
+  fillchar = ts_utils.if_nil(fillchar, "╱")
+  local height = api.nvim_win_get_height(winid)
+  local width = api.nvim_win_get_width(winid)
+  api.nvim_buf_set_lines(
     bufnr,
     0,
     -1,
     false,
     ts_utils.repeated_table(height, table.concat(ts_utils.repeated_table(width, fillchar), ""))
   )
-  local anon_ns = vim.api.nvim_create_namespace ""
+  local anon_ns = api.nvim_create_namespace ""
   local padding = table.concat(ts_utils.repeated_table(#message + 4, " "), "")
   local formatted_message = "  " .. message .. "  "
   -- Populate lines table based on height
@@ -204,17 +204,11 @@ utils.set_preview_message = function(bufnr, winid, message, fillchar)
       end
     end
   end
-  vim.api.nvim_buf_set_extmark(
-    bufnr,
-    anon_ns,
-    0,
-    0,
-    { end_line = height, hl_group = "TelescopePreviewMessageFillchar" }
-  )
+  api.nvim_buf_set_extmark(bufnr, anon_ns, 0, 0, { end_line = height, hl_group = "TelescopePreviewMessageFillchar" })
   local col = math.floor((width - strings.strdisplaywidth(formatted_message)) / 2)
   for i, line in ipairs(lines) do
     local line_pos = math.floor(height / 2) - 2 + i
-    vim.api.nvim_buf_set_extmark(
+    api.nvim_buf_set_extmark(
       bufnr,
       anon_ns,
       math.max(line_pos, 0),
@@ -239,6 +233,52 @@ utils.binary_mime_type = function(mime_type)
     return false
   end
   return true
+end
+
+local CHECK_TIME_INTERVAL = 200
+
+--- Split a string into lines, checking every `CHECK_TIME_INTERVAL` characters
+--- whether to timeout.
+---
+--- Roughly 4-5x faster than using `vim.gsplit` and checking timeout between each line.
+--- The latter approach is also more prone to exceeding timeout if a file has huge lines.
+---@param s string file content to split into lines
+---@param opts {start_time: number, preview: { timeout: number }, file_encoding: string?}
+---@return string[]?
+function utils.timed_split_lines(s, opts)
+  local lines = {}
+  local line_start = 1
+  local timeout = opts.preview.timeout or math.huge
+
+  for i = 1, #s do
+    local ch = s:byte(i)
+    if ch == 10 then
+      local line
+      if s:byte(i - 1) ~= 13 then
+        line = s:sub(line_start, i - 1)
+      else
+        line = s:sub(line_start, i - 2)
+      end
+      line_start = i + 1
+      table.insert(lines, opts.file_encoding and vim.iconv(line, opts.file_encoding, "utf8") or line)
+    end
+
+    if i % CHECK_TIME_INTERVAL == 0 then
+      local diff_time = (vim.uv.hrtime() - opts.start_time) / 1e6
+      if diff_time > timeout then
+        return
+      end
+    end
+  end
+
+  -- Only append the tail when it is non-empty.
+  -- neovim treats \n and \r\n as "line terminators" instead of "line separator"
+  local tail = s:sub(line_start)
+  if tail ~= "" then
+    table.insert(lines, opts.file_encoding and vim.iconv(tail, opts.file_encoding, "utf8") or tail)
+  end
+
+  return lines
 end
 
 return utils

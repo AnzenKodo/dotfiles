@@ -46,7 +46,7 @@ local sorting_comparator = function(opts)
     end,
   }
 
-  local sort_by = vim.F.if_nil(opts.sort_by, "buffer")
+  local sort_by = utils.if_nil(opts.sort_by, "buffer")
   return comparators[sort_by]
 end
 
@@ -61,7 +61,7 @@ local convert_diagnostic_type = function(severities, severity)
 end
 
 local diagnostics_to_tbl = function(opts)
-  opts = vim.F.if_nil(opts, {})
+  opts = utils.if_nil(opts, {})
   local items = {}
   local severities = vim.diagnostic.severity
 
@@ -91,7 +91,7 @@ local diagnostics_to_tbl = function(opts)
     end
   end
 
-  opts.root_dir = opts.root_dir == true and vim.loop.cwd() or opts.root_dir
+  opts.root_dir = opts.root_dir == true and vim.uv.cwd() or opts.root_dir
 
   local bufnr_name_map = {}
   local filter_diag = function(diagnostic)
@@ -101,7 +101,7 @@ local diagnostics_to_tbl = function(opts)
 
     local root_dir_test = not opts.root_dir
       or string.sub(bufnr_name_map[diagnostic.bufnr], 1, #opts.root_dir) == opts.root_dir
-    local listed_test = not opts.no_unlisted or vim.api.nvim_buf_get_option(diagnostic.bufnr, "buflisted")
+    local listed_test = not opts.no_unlisted or vim.bo[diagnostic.bufnr].buflisted
 
     return root_dir_test and listed_test
   end
@@ -136,7 +136,25 @@ diagnostics.get = function(opts)
     opts.bufnr = tonumber(opts.bufnr)
   end
   if opts.bufnr ~= nil then
-    opts.path_display = vim.F.if_nil(opts.path_display, "hidden")
+    opts.path_display = utils.if_nil(opts.path_display, "hidden")
+  end
+
+  -- call `workspace/diagnostic` request and wait for response before proceeding
+  if opts.workspace and next(vim.lsp.get_clients { method = "workspace/diagnostic" }) then
+    local got_response = false
+    vim.api.nvim_create_autocmd("LspRequest", {
+      callback = function(ev)
+        local request = ev.data.request
+        if request.method == "workspace/diagnostic" and request.type == "complete" then
+          got_response = true
+          return got_response
+        end
+      end,
+    })
+    vim.lsp.buf.workspace_diagnostics()
+    vim.wait(1000, function()
+      return got_response
+    end)
   end
 
   local locations = diagnostics_to_tbl(opts)

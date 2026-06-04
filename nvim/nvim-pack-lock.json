@@ -1,0 +1,12 @@
+{
+  "plugins": {
+    "neoscroll.nvim": {
+      "rev": "f957373912e88579e26fdaea4735450ff2ef5c9c",
+      "src": "https://github.com/karb94/neoscroll.nvim"
+    },
+    "smear-cursor.nvim": {
+      "rev": "abfa5835920b1d76c0e24e1465a618ad914be90a",
+      "src": "https://github.com/sphamba/smear-cursor.nvim"
+    }
+  }
+}
