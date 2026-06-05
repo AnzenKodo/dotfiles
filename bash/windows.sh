@@ -5,6 +5,8 @@ last_dir_state_path="$HOME/AppData/last-dir.txt"
 bash_state_path=$HOME/AppData/bash
 source ~/Dotfiles/bash/main.sh
 
+export GIT_PS1_SHOWDIRTYSTATE=false
+
 # Source Files
 #===============================================================================
 

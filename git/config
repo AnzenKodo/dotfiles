@@ -1,6 +1,9 @@
 [core]
 	autocrlf = false
 	editor = focus
+	fscache = true
+	untrackedCache = true
+	preloadindex = true
 [credential "helperselector"]
 	selected = manager
 [init]
