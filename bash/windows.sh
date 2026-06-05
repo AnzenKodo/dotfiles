@@ -30,6 +30,5 @@ function backup {
     git -C ~/Dotfiles add .
     git -C ~/Dotfiles commit -m "Backup from Windows Desktop"
     git -C ~/Dotfiles push
-    $HOME/AppData/Local/Microsoft/OneDrive/OneDrive.exe &
 }
 
