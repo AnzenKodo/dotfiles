@@ -77,6 +77,7 @@ alias diff="bat --style=plain -d"
 alias top="btm --battery --enable_cache_memory --network_use_bytes --network_use_binary_prefix --process_memory_as_value --show_table_scroll_position"
 alias xclip="xclip -selection clipboard"
 alias tree="tree --color --dirsfirst"
+alias fd="fd --hidden --exclude .stversions --exclude .stfolder"
 
 alias refresh="source ~/.bashrc"
 alias dir_size="du -sh -- * | sort -hr"
