@@ -57,14 +57,18 @@ ctags-system()
 
 backup()
 {
-    cd ~/Dotfiles
-    git_push_all "Backup from Linux Desktop"
-    cd -
+    git -C ~/Dotfiles pull
+    git -C ~/Dotfiles add .
+    git -C ~/Dotfiles commit -m "Backup from Windows Desktop"
+    git -C ~/Dotfiles push
+    
     rclone sync ~/Drive/Notes Personal:Notes -v
-    cd ~/Code/website
+    
     echo $RANDOM > ~/Code/website/site_checksum.txt
-    git_push_all "Updated Notes"
-    cd -
+    git -C ~/Code/website pull
+    git -C ~/Code/website add .
+    git -C ~/Code/website commit -m "Backup from Windows Desktop"
+    git -C ~/Code/website push
 }
 
 alias rsync_git="rsync --filter='dir-merge,- .gitignore' --delete"

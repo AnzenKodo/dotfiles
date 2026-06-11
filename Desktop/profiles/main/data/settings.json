@@ -22,7 +22,6 @@
     "workbench.secondarySideBar.showLabels": false,
     "debug.onTaskErrors": "debugAnyway",
     "chat.commandCenter.enabled": false,
-    "workbench.experimental.share.enabled": false,
     "workbench.secondarySideBar.defaultVisibility": "hidden",
     "extensions.ignoreRecommendations": true,
     "workbench.activityBar.location": "bottom",
@@ -30,5 +29,6 @@
     "editor.formatOnSave": false,
     "window.titleBarStyle": "custom",
     "window.commandCenter": true,
-    "geminicodeassist.project": "personal-69",
+    "editor.fontFamily": "CommitMono",
+    "chat.titleBar.signIn.enabled": false,
 }

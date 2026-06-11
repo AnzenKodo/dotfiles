@@ -1,6 +1,6 @@
 [core]
 	autocrlf = false
-	editor = focus
+	editor = nvim
 	fscache = true
 	untrackedCache = true
 	preloadindex = true

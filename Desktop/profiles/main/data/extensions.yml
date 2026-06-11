@@ -1,3 +1,6 @@
+builtin:
+  disabled:
+    - GitHub.copilot-chat
 disabled: []
 enabled:
   - id: jdinhlife.gruvbox

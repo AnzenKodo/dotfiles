@@ -121,6 +121,16 @@ keymap_set("n", "<A-]>", function() vim.fn.search("^\\s\\+$", "W") end,  "Next f
 keymap_set("n", "<leader>ep", ":iput<CR>", "[e]dit [p]aste");
 keymap_set("x", "P", function() vim.cmd("normal! p") end, "[P]uts before cursor")
 keymap_set("x", "p", function() vim.cmd("normal! P") end, "[p]uts after cursor")
+keymap_set("n", "<A-[>", function()
+    if vim.fn.search("^\\s*$", "bW") == 0 then
+        vim.cmd("normal! gg")
+    end
+end, "Prev blank line or start of file")
+keymap_set("n", "<A-]>", function()
+    if vim.fn.search("^\\s*$", "W") == 0 then
+        vim.cmd("normal! G")
+    end
+end, "Next blank line or end of file")
 
 -- Split
 keymap_set("n", "<leader>wv", "<C-w>v", "[w]indow [v]ertical")

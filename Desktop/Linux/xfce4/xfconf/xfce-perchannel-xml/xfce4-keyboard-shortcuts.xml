@@ -55,7 +55,6 @@
       <property name="override" type="bool" value="true"/>
       <property name="&lt;Super&gt;Print" type="string" value="xfce4-screenshooter -f"/>
       <property name="&lt;Super&gt;v" type="string" value="xfce4-popup-clipman"/>
-      <property name="&lt;Shift&gt;&lt;Super&gt;p" type="string" value="/home/ramen/Applications/AppImages/keepassxc"/>
       <property name="&lt;Super&gt;AudioRaiseVolume" type="string" value="playerctl next"/>
       <property name="&lt;Super&gt;AudioLowerVolume" type="string" value="playerctl play-pause"/>
       <property name="&lt;Super&gt;AudioMute" type="string" value="playerctl previous"/>

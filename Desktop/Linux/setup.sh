@@ -15,7 +15,8 @@ lightdm-gtk-greeter-settings \ # Display Manager
 nerd-fonts-symbols-ttf noto-fonts-emoji noto-fonts-ttf-extra noto-fonts-cjk \ # Fonts
 playerctl # Media Controller
 calc \ # Calculator
-evince # Pdf Viewer
+evince \ # Pdf Viewer
+redshift-gtk # Blue Light filter
 
 ln -sfv ~/Dotfiles/bash/linux.sh $HOME/.bashrc
 
@@ -33,11 +34,13 @@ ln -sfv ~/Applications/Mime/icons $XDG_DATA_HOME/icons
 mkdir $XDG_CONFIG_HOME/wezterm
 ln -sfv ~/Dotfiles/Desktop/wezterm.lua     $XDG_CONFIG_HOME/wezterm/wezterm.lua
 ln -sfv ~/Dotfiles/Desktop/activitywatch   $XDG_CONFIG_HOME
-ln -sfv ~/Drive/Dotfiles/Desktop/keepassxc $XDG_CONFIG_HOME
 ln -sfv ~/Dotfiles/Desktop/Linux/xfce4     $XDG_CONFIG_HOME
 ln -sfv ~/Dotfiles/Desktop/flameshot       $XDG_CONFIG_HOME
 ln -sfv ~/Applications/Mime/mimeapps.list  $XDG_CONFIG_HOME
 ln -sfv ~/Dotfiles/Desktop/gf2_config.ini  $XDG_CONFIG_HOME
+
+ln -sfv ~/Drive/Dotfiles/Desktop/keepassxc     $XDG_CONFIG_HOME
+ln -sfv ~/Drive/Dotfiles/Desktop/redshift.conf $XDG_CONFIG_HOME/redshift.conf
 
 ln -sfv ~/Applications/vmenu/scripts/vmenu_emoji    ~/Applications/scripts/
 ln -sfv ~/Applications/vmenu/scripts/vmenu_kaomoji  ~/Applications/scripts/

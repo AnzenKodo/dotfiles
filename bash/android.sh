@@ -10,7 +10,8 @@ source ~/Dotfiles/bash/unix.sh
 
 backup()
 {
-    cd ~/Dotfiles
-    git_push_all "Backup from Android Phone"
-    cd -
+    git -C ~/Dotfiles pull
+    git -C ~/Dotfiles add .
+    git -C ~/Dotfiles commit -m "Backup from Windows Desktop"
+    git -C ~/Dotfiles push
 }

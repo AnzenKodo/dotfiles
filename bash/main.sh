@@ -115,14 +115,6 @@ len()
     echo ${#str}
 }
 
-git_push_all()
-{
-    git add .
-    git commit -m "$1"
-    git pull
-    git push
-}
-
 setup_git_id()
 {
     git config --local user.email "50282743+AnzenKodo@users.noreply.github.com"
