@@ -21,7 +21,6 @@
     },
     "workbench.secondarySideBar.showLabels": false,
     "debug.onTaskErrors": "debugAnyway",
-    "chat.commandCenter.enabled": false,
     "workbench.secondarySideBar.defaultVisibility": "hidden",
     "extensions.ignoreRecommendations": true,
     "workbench.activityBar.location": "bottom",
