@@ -60,7 +60,7 @@ vim.o.softtabstop = 4
 -- Search and Replace
 vim.o.ignorecase = true    -- Not case sensitive
 vim.o.smartcase = true     -- Case sensitive if uppercase
-vim.o.inccommand = "split"
+vim.o.inccommand = "nosplit"
 
 vim.o.list = true
 vim.opt.listchars = { leadmultispace = "│   ", tab = "» ", trail = "·", nbsp = "␣", eol = " ", trail="." }
@@ -480,6 +480,7 @@ vim.api.nvim_create_autocmd("BufEnter", {
         vim.api.nvim_set_hl(0, "String",            { fg = color_table.green_light })
         vim.api.nvim_set_hl(0, "Comment",           { fg = color_table.green_dark })
         vim.api.nvim_set_hl(0, "Type",              { fg = color_table.blue })
+        vim.api.nvim_set_hl(0, "Constant",          { fg = color_table.blue })
         vim.api.nvim_set_hl(0, "Function",          { fg = color_table.pink })
         vim.api.nvim_set_hl(0, "PreProc",           { fg = color_table.orange })
         -- Markdown
