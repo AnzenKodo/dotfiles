@@ -30,4 +30,5 @@
     "window.commandCenter": true,
     "editor.fontFamily": "CommitMono",
     "chat.titleBar.signIn.enabled": false,
+    "pasteImage.path": "${currentFileDir}/assets",
 }
