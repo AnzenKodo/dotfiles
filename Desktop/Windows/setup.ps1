@@ -1,4 +1,5 @@
-New-Item -ItemType SymbolicLink -Path "$HOME\AppData\Local\nvim" -Target "$HOME\Dotfiles\nvim"
+New-Item -ItemType SymbolicLink -Path "$HOME\AppData\Local\nvim" -Target "$HOME\Dotfiles\vim"
+New-Item -ItemType SymbolicLink -Path "$HOME\.ideavimrc" -Target "$HOME\Dotfiles\vim\idea.vim"
 New-Item -ItemType SymbolicLink -Path "$HOME\AppData\Roaming\flameshot" -Target "$HOME\Dotfiles\Desktop\flameshot"
 New-Item -ItemType SymbolicLink -Path "$HOME\.gitconfig" -Target "$HOME\Dotfiles\git\config"
 New-Item -ItemType SymbolicLink -Path "$HOME\.bashrc" -Target "$HOME\Dotfiles\bash\windows.sh"

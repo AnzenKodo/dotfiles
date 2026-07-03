@@ -1,0 +1,53 @@
+" Settings
+" =============================================================================
+
+" Leader
+let mapleader = " "
+let maplocalleader = " "
+
+" Basic settings
+set number
+set norelativenumber
+set wrap
+set colorcolumn=80
+set cursorline
+set scrolloff=999
+set sidescrolloff=50
+set ignorecase
+set smartcase
+set incsearch
+set hlsearch
+set list
+set listchars=tab:»\ ,trail:.,nbsp:␣
+set clipboard^=unnamed,unnamedplus
+
+" Tabs
+set tabstop=4
+set shiftwidth=4
+set expandtab
+set softtabstop=4
+
+" Keymaps
+" ============================================================================
+
+" Clear search highlight
+nnoremap <Esc> :nohlsearch<CR>
+
+" Save file
+nnoremap <C-s> :w<CR>
+inoremap <C-s> <Esc>:w<CR>
+vnoremap <C-s> <Esc>:w<CR>
+
+" Windows
+nnoremap <leader>wv <C-w>v
+nnoremap <leader>wo <C-w>s
+nnoremap <leader>wl <C-w>l
+nnoremap <leader>wh <C-w>h
+nnoremap <leader>wj <C-w>j
+nnoremap <leader>wk <C-w>k
+nnoremap <leader>w> <C-w>>
+nnoremap <leader>w< <C-w><
+nnoremap <leader>wx <C-w>x
+nnoremap <leader>ws <C-w>w
+nnoremap <leader>wn <C-w>n
+nnoremap <leader>w= <C-w>=

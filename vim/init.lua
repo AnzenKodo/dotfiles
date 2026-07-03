@@ -15,20 +15,13 @@ local color_table = {
     pink        = "#D3869B"
 }
 
+vim.cmd("source " .. vim.fn.stdpath("config") .. "/vimrc")
+
 -- Settings
 -- ============================================================================
 
-vim.g.mapleader = " "
-vim.g.maplocalleader = " "
-
-vim.o.nu = true
-vim.o.relativenumber = false
-vim.o.wrap = true
-vim.o.colorcolumn = "80"
-vim.o.cursorline = true
 vim.o.confirm = true
 vim.o.updatetime = 50
-vim.o.confirm = true
 vim.o.sessionoptions="blank,buffers,curdir,folds,help,tabpages,winsize,winpos,localoptions"
 vim.o.exrc = true
 vim.o.backspace = "indent,eol,start"
@@ -36,6 +29,7 @@ vim.o.mouse = "a"
 vim.o.fileformats = "unix,dos,mac"
 vim.opt.autowriteall = true
 vim.g.loaded_python3_provider = 0
+vim.o.undofile = true
 
 -- Title
 vim.opt.title = true
@@ -45,12 +39,6 @@ vim.opt.titlestring = "%{fnamemodify(getcwd(), ':t')} - Nvim"
 vim.o.splitright = true
 vim.o.splitbelow = true
 
--- Scroll
-vim.o.scrolloff = 10        -- Number of screen lines keep above and below the cursor.
-vim.o.scrolloff = 999       -- Keep cursor centered vertically
-vim.o.sidescrolloff = 50    -- Keep cursor centered horizontally
-vim.o.undofile = true       -- Undo
-
 -- Tabs
 vim.o.tabstop = 4      -- Number of spaces a tab counts for
 vim.o.shiftwidth = 4   -- Spaces for each (auto)indent step
@@ -58,12 +46,7 @@ vim.o.expandtab = true -- Convert tabs to spaces
 vim.o.softtabstop = 4
 
 -- Search and Replace
-vim.o.ignorecase = true    -- Not case sensitive
-vim.o.smartcase = true     -- Case sensitive if uppercase
 vim.o.inccommand = "nosplit"
-
-vim.o.list = true
-vim.opt.listchars = { leadmultispace = "│   ", tab = "» ", trail = "·", nbsp = "␣", eol = " ", trail="." }
 
 -- Useless Settings
 vim.o.swapfile = false
@@ -102,10 +85,8 @@ local function keymap_set(mode, map, func, desc, opt_override)
     vim.keymap.set(mode, map, func, opt)
 end
 
-keymap_set("n", "<Esc>", "<cmd>nohlsearch<CR>", "Clear Search Highlight")
 keymap_set("t", "<Esc>", "<C-\\><C-n>",    "Exit terminal mode")
 keymap_set("n", "L", vim.diagnostic.open_float, "Show Diagnostic")
-keymap_set({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", "Save File")
 
 keymap_set("n", "<A-j>", "<cmd>execute 'move .+' . v:count1<cr>==",                   "Move Line Down")
 keymap_set("n", "<A-k>", "<cmd>execute 'move .-' . (v:count1 + 1)<cr>==",             "Move Line Up")
@@ -131,21 +112,6 @@ keymap_set("n", "<A-]>", function()
         vim.cmd("normal! G")
     end
 end, "Next blank line or end of file")
-
--- Split
-keymap_set("n", "<leader>wv", "<C-w>v", "[w]indow [v]ertical")
-keymap_set("n", "<leader>wo", "<C-w>s", "[w]indow H[o]rizontal")
-keymap_set("n", "<leader>wl", "<C-w>l", "[w]indow goto [l]eft")
-keymap_set("n", "<leader>wh", "<C-w>h", "[w]indow goto [l]ight")
-keymap_set("n", "<leader>wj", "<C-w>j", "[w]indow goto [d]own")
-keymap_set("n", "<leader>wk", "<C-w>k", "[w]indow goto [u]p")
-keymap_set("n", "<leader>w>", "<C-w>>", "[w]indow increase [>] width")
-keymap_set("n", "<leader>w<", "<C-w>>", "[w]indow decrease [<] width")
-keymap_set("n", "<leader>wx", "<C-w>x", "[w]indow [x]wap sides")
-keymap_set("n", "<leader>ws", "<C-w>w", "[w]indow [s]witch")
-keymap_set("n", "<leader>wn", "<C-w>n", "[w]indow [n]ew")
-keymap_set("n", "<leader>w=", "<C-w>=", "[w]indow [=]Equal")
-keymap_set("n", "<leader>wr", "<cmd>e #<cr>", "[w]indow [r]otate")
 
 local toggle_state = false
 keymap_set("n", "<leader>w/", function()
@@ -1021,7 +987,9 @@ require("neogit").setup({
 
 -- Time Tracker ===============================================================
 if not is_termux() then
-    vim.opt.runtimepath:append(plugin_path .. "/Manual/aw-watcher-vim")
+    if vim.fn.executable("aw-qt") == 1 then
+        vim.opt.runtimepath:append(plugin_path .. "/Manual/aw-watcher-vim")
+    end
 end
 
 -- AI

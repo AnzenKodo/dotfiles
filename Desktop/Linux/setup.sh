@@ -23,7 +23,7 @@ ln -sfv ~/Dotfiles/bash/linux.sh $HOME/.bashrc
 mkdir $XDG_CACHE_HOME/X11
 
 ln -sfv ~/Dotfiles/tmux             $XDG_CONFIG_HOME
-ln -sfv ~/Dotfiles/nvim             $XDG_CONFIG_HOME
+ln -sfv ~/Dotfiles/vim              $XDG_CONFIG_HOME/nvim
 ln -srf ~/Dotfiles/git              $XDG_CONFIG_HOME
 ln -sfv ~/Dotfiles/fonts            $XDG_DATA_HOME
 
