@@ -1,25 +1,5 @@
-<<<<<<< HEAD:vim/init.lua
-local color_table = {
-    bg          = "#32302F",
-    bg_unfocus  = "#282828",
-    bg_light    = "#504945",
-    bg_lighter  = "#3C3836",
-    bg_lighter2 = "#45403D",
-    fg          = "#D4BE98",
-    fg_dark     = "#A89984",
-    green_light = "#A9B665",
-    green_dark  = "#89B482",
-    red         = "#EA6962",
-    yellow      = "#D8A657",
-    orange      = "#d08c3d",
-    blue        = "#7DAEA3",
-    pink        = "#D3869B"
-}
-
 vim.cmd("source " .. vim.fn.stdpath("config") .. "/vimrc")
 
-=======
->>>>>>> f80a9ce (Backup from Linux Desktop):nvim/init.lua
 -- Settings
 --=============================================================================
 
