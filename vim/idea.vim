@@ -16,6 +16,9 @@ set highlightedyank
 set matchit
 set vim-paragraph-motion
 set ReplaceWithRegister
+set which-key
+set notimeout
+set timeoutlen=5000
 
 " Keymaps
 " ============================================================================
@@ -95,6 +98,17 @@ nmap <C-`> <Action>(ActivateTerminalToolWindow)
 imap <C-`> <Esc><Action>(ActivateTerminalToolWindow)
 
 " Multiple cursors
-nmap <C-d> <Action>(SelectNextOccurrence)
+map <C-j> <Action>(EditorCloneCaretBelow)
+map <C-k> <Action>(EditorCloneCaretAbove)
+nmap <C-e> <Action>(EditorEscape)
+imap <C-e> <Action>(EditorEscape)
+vmap <C-e> <Action>(EditorEscape)
+nmap <A-d> <Action>(SelectNextOccurrence)
+xmap <A-d> <Action>(SelectNextOccurrence)
 nmap <C-S-d> <Action>(UnselectPreviousOccurrence)
 nmap <A-n> <Action>(SelectNextOccurrence)
+"nmap <C-d> <Plug>NextWholeOccurrence
+"xmap <C-d> <Plug>NextWholeOccurrence
+
+autocmd BufWritePost * action CompileDirty
+map <F1> :action CompileDirty<CR>
