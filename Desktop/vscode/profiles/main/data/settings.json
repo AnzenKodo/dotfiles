@@ -30,5 +30,11 @@
     "window.commandCenter": true,
     "editor.fontFamily": "CommitMono",
     "chat.titleBar.signIn.enabled": false,
+<<<<<<< HEAD
     "pasteImage.path": "${currentFileDir}/assets",
+=======
+    "window.autoDetectColorScheme": true,
+    "workbench.preferredDarkColorTheme": "Gruvbox Dark Soft",
+    "workbench.preferredLightColorTheme": "Gruvbox Light Soft",
+>>>>>>> f80a9ce (Backup from Linux Desktop)
 }

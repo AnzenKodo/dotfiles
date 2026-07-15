@@ -6,13 +6,16 @@
   </property>
   <property name="window" type="empty">
     <property name="maximized" type="bool" value="true"/>
-    <property name="width" type="int" value="760"/>
-    <property name="height" type="int" value="420"/>
+    <property name="width" type="int" value="1889"/>
+    <property name="height" type="int" value="1256"/>
   </property>
   <property name="audio" type="empty">
-    <property name="volume" type="int" value="50"/>
+    <property name="volume" type="int" value="80"/>
   </property>
   <property name="folders" type="empty">
-    <property name="last-used-media" type="string" value="/home/ramen/.local/share/Steam/steamapps/music/Half-Life Soundtrack/FLAC"/>
+    <property name="last-used-media" type="string" value="/home/ramen/Music/Steam/Blasphemous - OST"/>
+  </property>
+  <property name="parole" type="empty">
+    <property name="plugins" type="string" value="parole-notify.so;tray-icon.so;parole-mpris2.so"/>
   </property>
 </channel>

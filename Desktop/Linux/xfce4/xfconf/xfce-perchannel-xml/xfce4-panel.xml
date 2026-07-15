@@ -20,6 +20,7 @@
         <value type="int" value="17"/>
         <value type="int" value="5"/>
         <value type="int" value="11"/>
+        <value type="int" value="13"/>
         <value type="int" value="6"/>
         <value type="int" value="7"/>
         <value type="int" value="8"/>
@@ -32,6 +33,13 @@
       <property name="length-adjust" type="bool" value="true"/>
       <property name="enter-opacity" type="uint" value="100"/>
       <property name="leave-opacity" type="uint" value="100"/>
+      <property name="background-style" type="uint" value="1"/>
+      <property name="background-rgba" type="array">
+        <value type="double" value="0.23529411764705882"/>
+        <value type="double" value="0.2196078431372549"/>
+        <value type="double" value="0.21176470588235294"/>
+        <value type="double" value="1"/>
+      </property>
     </property>
   </property>
   <property name="plugins" type="empty">
@@ -60,6 +68,7 @@
     <property name="plugin-6" type="string" value="systray">
       <property name="square-icons" type="bool" value="false"/>
       <property name="known-legacy-items" type="array">
+        <value type="string" value="parole"/>
         <value type="string" value="redshift-gtk"/>
         <value type="string" value="wi-fi network connection “netgear” active: netgear (59%)"/>
         <value type="string" value="wi-fi network connection “netgear” active: netgear (78%)"/>
@@ -161,7 +170,7 @@
     <property name="plugin-14" type="string" value="notification-plugin"/>
     <property name="plugin-17" type="string" value="pulseaudio">
       <property name="enable-keyboard-shortcuts" type="bool" value="true"/>
-      <property name="known-players" type="string" value="Brave;obsidian;vlc"/>
+      <property name="known-players" type="string" value="Brave;obsidian;parole;vlc"/>
     </property>
     <property name="clipman" type="empty">
       <property name="settings" type="empty">
@@ -181,6 +190,14 @@
       <property name="items" type="array">
         <value type="string" value="17803406701.desktop"/>
       </property>
+    </property>
+    <property name="plugin-13" type="string" value="genmon">
+      <property name="command" type="string" value="/home/ramen/Code/Scripts/xfce4-night-mode.sh"/>
+      <property name="use-label" type="bool" value="false"/>
+      <property name="text" type="string" value=""/>
+      <property name="update-period" type="int" value="300000"/>
+      <property name="enable-single-row" type="bool" value="false"/>
+      <property name="font" type="string" value="IBM Plex Sans Medium 12"/>
     </property>
   </property>
 </channel>

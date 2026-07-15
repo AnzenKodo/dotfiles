@@ -1,3 +1,4 @@
+<<<<<<< HEAD:vim/init.lua
 local color_table = {
     bg          = "#32302F",
     bg_unfocus  = "#282828",
@@ -17,8 +18,10 @@ local color_table = {
 
 vim.cmd("source " .. vim.fn.stdpath("config") .. "/vimrc")
 
+=======
+>>>>>>> f80a9ce (Backup from Linux Desktop):nvim/init.lua
 -- Settings
--- ============================================================================
+--=============================================================================
 
 vim.o.confirm = true
 vim.o.updatetime = 50
@@ -64,7 +67,7 @@ vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold", "CursorHo
 })
 
 -- Clipboard
--- ============================================================================
+--=============================================================================
 
 local function is_termux()
     return vim.env.TERMUX_VERSION ~= nil
@@ -75,7 +78,7 @@ vim.schedule(function()
 end)
 
 -- Keybindings
--- ============================================================================
+--=============================================================================
 
 local function keymap_set(mode, map, func, desc, opt_override)
     local opt = { desc = desc, noremap = true, silent = true }
@@ -208,7 +211,7 @@ keymap_set("x", "N", "'nN'[v:searchforward]",      "Prev Search Result", { expr 
 keymap_set("o", "N", "'nN'[v:searchforward]",      "Prev Search Result", { expr = true })
 
 -- Autocommands
--- ============================================================================
+--=============================================================================
 
 -- Better whitespace handling
 keymap_set("i", "<CR>", "<Space><BS><CR>",   "Enter new line (keep cursor at start of line)")
@@ -249,7 +252,7 @@ vim.api.nvim_create_autocmd("BufReadPost", {
 })
 
 -- Buffers
--- ============================================================================
+--=============================================================================
 
 keymap_set("n", "[b", "<cmd>bprevious<cr>",    "Prev Buffer")
 keymap_set("n", "]b", "<cmd>bnext<cr>",        "Next Buffer")
@@ -257,7 +260,7 @@ vim.api.nvim_create_user_command("Bda", function() vim.cmd("%bdelete | edit # | 
 vim.api.nvim_create_user_command("Bd",  function() vim.cmd("bn | bd#") end,                      { desc = "Close previous buffer and move to next" })
 
 -- Autocomplete
--- ============================================================================
+--=============================================================================
 
 vim.o.omnifunc = "syntaxcomplete#Compete"
 vim.opt.completeopt:append { "menuone", "preview", "noselect" }
@@ -271,7 +274,7 @@ keymap_set("i", "<Tab>",   'pumvisible() ? "\\<C-n>" : "\\<Tab>"',   "Next compl
 keymap_set("i", "<S-Tab>", 'pumvisible() ? "\\<C-p>" : "\\<S-Tab>"', "Previous completion item (or normal Shift+Tab if no menu)", { expr = true })
 
 -- Terminal
--- ============================================================================
+--=============================================================================
 
 local function open_split_terminal(dir)
     vim.cmd.new()
@@ -313,7 +316,7 @@ vim.api.nvim_create_autocmd("TermClose", {
 })
 
 -- Make
--- ============================================================================
+--=============================================================================
 
 vim.api.nvim_create_user_command("Make", function(opts)
     for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
@@ -432,44 +435,10 @@ vim.api.nvim_create_autocmd("FileType", {
     end,
 })
 
--- Theme
--- ============================================================================
-vim.api.nvim_create_autocmd("BufEnter", {
-    callback = function()
-        vim.treesitter.stop()
-        local links = { "Constant", "Identifier", "Operator", "Special" }
-        for _, group in ipairs(links) do
-            vim.api.nvim_set_hl(0, group, { fg = color_table.fg })
-        end
-        -- Code
-        vim.api.nvim_set_hl(0, "Statement",         { fg = color_table.pink })
-        vim.api.nvim_set_hl(0, "String",            { fg = color_table.green_light })
-        vim.api.nvim_set_hl(0, "Comment",           { fg = color_table.green_dark })
-        vim.api.nvim_set_hl(0, "Type",              { fg = color_table.blue })
-        vim.api.nvim_set_hl(0, "Constant",          { fg = color_table.blue })
-        vim.api.nvim_set_hl(0, "Function",          { fg = color_table.pink })
-        vim.api.nvim_set_hl(0, "PreProc",           { fg = color_table.orange })
-        -- Markdown
-        vim.api.nvim_set_hl(0, "Title",             { fg = color_table.pink })
-        vim.api.nvim_set_hl(0, "Delimiter",         { fg = color_table.pink })
-        -- Editor
-        vim.api.nvim_set_hl(0, "Normal",            { bg = color_table.bg, fg = color_table.fg})
-        vim.api.nvim_set_hl(0, "NormalNC",          { bg = color_table.bg_unfocus })
-        vim.api.nvim_set_hl(0, "LineNr",            { fg = color_table.fg_dark })
-        vim.api.nvim_set_hl(0, "Todo",              { fg = color_table.red, bold = true })
-        vim.api.nvim_set_hl(0, "CursorLine",        { bg = color_table.bg_lighter })
-        vim.api.nvim_set_hl(0, "Visual",            { bg = color_table.bg_light })
-        vim.api.nvim_set_hl(0, "WinSeparator",      { fg = color_table.bg_unfocus, bg = color_table.bg_unfocus })
-        vim.api.nvim_set_hl(0, "ColorColumn",       { bg = color_table.bg_lighter })
-        vim.api.nvim_set_hl(0, "IndentLineCurrent", { fg = color_table.fg_dark })
-        vim.api.nvim_set_hl(0, "IndentLine",        { fg = color_table.bg_light })
-        vim.api.nvim_set_hl(0, "commentNote",       { fg = color_table.yellow, bold = true })
-        vim.cmd([[syntax keyword commentNote NOTE containedin=.*Comment.*]])
-    end,
-})
+keymap_set("n", "<F1>", "<CMD>BuildRun<CR>", "Build Run")
 
 -- Neovim Gui
--- ============================================================================
+--=============================================================================
 
 if vim.g.neovide then
     vim.o.guifont = "CommitMono,Consolas:h10"
@@ -489,7 +458,7 @@ if vim.g.neovide then
 end
 
 -- Plugins
--- ============================================================================
+--=============================================================================
 
 -- Load Built-in Plugins ======================================================
 
@@ -508,6 +477,31 @@ require("auto-session").setup({
 })
 
 -- Theme ======================================================================
+-- Colorscheme
+vim.g.gruvbox_material_enable_italic = true
+vim.g.gruvbox_material_background = 'dark'
+vim.cmd.colorscheme('gruvbox-material')
+
+local function set_color()
+    vim.api.nvim_set_hl(0, "Comment", { fg = vim.o.background == "dark" and "#B8BB26" or "#79740E" })
+    vim.api.nvim_set_hl(0, "NoteKeyword", { bg = vim.o.background == "dark" and "#D8A657" or "#B47109", fg = vim.o.background == "dark" and "#3C3836" or "#F2E5BC", bold = true })
+end
+set_color()
+
+-- Auto switch light/dark modes
+require("darkman").setup({
+    change_background = true,
+    send_user_event = true,
+})
+vim.api.nvim_create_autocmd("OptionSet", {
+    pattern = "background",
+    callback = set_color,
+})
+vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
+  callback = function()
+    vim.fn.matchadd("NoteKeyword", [[\<NOTE\>]])
+  end,
+})
 
 -- Status Line
 require("lualine").setup({
@@ -566,7 +560,7 @@ require("multicursor-nvim").addKeymapLayer(function(layer_set)
         end
     end)
 end)
-vim.api.nvim_set_hl(0, "MultiCursorCursor", { fg = color_table.bg_lighter, bg = color_table.fg_dark })
+-- vim.api.nvim_set_hl(0, "MultiCursorCursor", { fg = color_table.bg_lighter, bg = color_table.fg_dark })
 
 -- Bracket Split and Join
 require("mini.splitjoin").setup({
@@ -593,6 +587,9 @@ keymap_set("o",               "<leader>eR", function() require("flash").remote()
 keymap_set({ "n", "o", "x" }, "w", "<cmd>lua require('spider').motion('w')<CR>", "Next sub[w]ord")
 keymap_set({ "n", "o", "x" }, "e", "<cmd>lua require('spider').motion('e')<CR>", "[e]nd of next subword")
 keymap_set({ "n", "o", "x" }, "b", "<cmd>lua require('spider').motion('b')<CR>", "[b]ack subword")
+keymap_set({ "n", "o", "x" }, "<M-w>", "w", "Next [w]ord")
+keymap_set({ "n", "o", "x" }, "<M-e>", "e", "[e]nd of next word")
+keymap_set({ "n", "o", "x" }, "<M-b>", "b", "[b]ack word")
 
 -- Surround
 require("mini.surround").setup({

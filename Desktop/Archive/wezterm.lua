@@ -5,7 +5,6 @@ local action = wezterm.action
 -- Options
 --=============================================================================
 
-config.color_scheme = 'Gruvbox dark, soft (base16)'
 config.hide_tab_bar_if_only_one_tab = true
 config.tab_bar_at_bottom = true
 config.window_padding = { left = 0, right = 0, top = 0, bottom = 0 }
@@ -31,6 +30,45 @@ for i = 1, 9 do
         action = wezterm.action.ActivateTab(i - 1),
     })
 end
+
+-- Theme
+--=============================================================================
+
+local function scheme_for_appearance(appearance)
+    if appearance:find 'Dark' then
+        return 'Gruvbox dark, soft (base16)'
+    else
+        return 'Gruvbox light, soft (base16)'
+    end
+end
+
+-- Re-evaluate on every config reload
+local function get_xfce_appearance()
+    local success, stdout, stderr = wezterm.run_child_process {
+        'xfconf-query', '-c', 'xsettings', '-p', '/Net/ThemeName'
+    }
+    if success then
+        local theme = stdout:gsub('%s+', '')  -- trim whitespace
+        if theme:lower():find('dark') then
+            return 'Dark'
+        else
+            return 'Light'
+        end
+    end
+    return 'Light'  -- fallback
+end
+
+config.color_scheme = scheme_for_appearance(wezterm.gui.get_appearance())
+
+wezterm.on('window-config-reloaded', function(window, pane)
+    local appearance = get_xfce_appearance()
+    local scheme = scheme_for_appearance(appearance)
+    local overrides = window:get_config_overrides() or {}
+    if overrides.color_scheme ~= scheme then
+        overrides.color_scheme = scheme
+        window:set_config_overrides(overrides)
+    end
+end)
 
 -- For Windows OS
 --=============================================================================
