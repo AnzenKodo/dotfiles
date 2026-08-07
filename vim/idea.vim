@@ -110,5 +110,5 @@ nmap <A-n> <Action>(SelectNextOccurrence)
 "nmap <C-d> <Plug>NextWholeOccurrence
 "xmap <C-d> <Plug>NextWholeOccurrence
 
-autocmd BufWritePost * action CompileDirty
+" autocmd BufWritePost * action CompileDirty
 map <F1> :action CompileDirty<CR>
