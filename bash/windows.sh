@@ -10,7 +10,7 @@ export GIT_PS1_SHOWDIRTYSTATE=false
 # Source Files
 #===============================================================================
 
-eval "$(trash completions bash)"
+# eval "$(trash completions bash)"
 
 # Alias
 #===============================================================================

@@ -12,7 +12,10 @@
 # }
 
 PS1='\n\[\e[31m\]\h\[\e[0m\]@\[\e[33m\]\u\[\e[0m\]:\[\e[36m\]\w\[\e[32m\]${PS1_CMD1}\n\[\e[0m\]\\$ '
-PROMPT_COMMAND='PS1_CMD1=$(__git_ps1 " (%s)");history -a'
+
+if [[ "$OSTYPE" != "msys" && "$OSTYPE" != "cygwin" && "$OSTYPE" != "win32" ]]; then
+    PROMPT_COMMAND='PS1_CMD1=$(__git_ps1 " (%s)");history -a'
+fi
 
 # History ======================================================================
 
@@ -123,6 +126,7 @@ setup_git_id()
 
 # Bind
 #===============================================================================
+
 if [[ -t 0 && -t 1 && "$-" == *i* ]]; then
     bind '"\x08":backward-kill-word'
     bind 'set completion-ignore-case on'

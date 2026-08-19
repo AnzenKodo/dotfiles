@@ -256,6 +256,12 @@ keymap_set("i", "<S-Tab>", 'pumvisible() ? "\\<C-p>" : "\\<S-Tab>"', "Previous c
 -- Terminal
 --=============================================================================
 
+if (vim.fn.has("win32") == 1 or vim.fn.has("win64") == 1) then
+    vim.o.shell = 'C:\\Program Files\\Git\\usr\\bin\\bash.exe'
+    vim.o.shellcmdflag = "-c"
+    vim.o.shellxquote = ""
+end
+
 local function open_split_terminal(dir)
     vim.cmd.new()
     if not dir then
@@ -267,11 +273,7 @@ local function open_split_terminal(dir)
     vim.cmd.startinsert()
 end
 
-if (vim.fn.has("win32") == 1 or vim.fn.has("win64") == 1) and not vim.g.neovide then
-    keymap_set({"i", "n"}, "†", open_split_terminal, "Open Split Termainl")
-else
-    keymap_set({"i", "n"}, "<C-`>", open_split_terminal, "Open Split Termainl")
-end
+keymap_set({"i", "n"}, "<C-`>", open_split_terminal, "Open Split Termainl")
 keymap_set({"i", "n"}, "<M-`>", function()
     local dir = vim.fn.expand("%:p:h")
     open_split_terminal(dir)
@@ -469,14 +471,17 @@ end
 set_color()
 
 -- Auto switch light/dark modes
-require("darkman").setup({
+if (vim.fn.has("win32") == 0 or vim.fn.has("win64") == 0) then
+  require("darkman").setup({
     change_background = true,
     send_user_event = true,
-})
-vim.api.nvim_create_autocmd("OptionSet", {
+  })
+
+  vim.api.nvim_create_autocmd("OptionSet", {
     pattern = "background",
     callback = set_color,
-})
+  })
+end
 vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
   callback = function()
     vim.fn.matchadd("NoteKeyword", [[\<NOTE\>]])
