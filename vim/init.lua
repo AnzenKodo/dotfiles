@@ -257,7 +257,7 @@ keymap_set("i", "<S-Tab>", 'pumvisible() ? "\\<C-p>" : "\\<S-Tab>"', "Previous c
 --=============================================================================
 
 if (vim.fn.has("win32") == 1 or vim.fn.has("win64") == 1) then
-    vim.o.shell = 'C:\\Program Files\\Git\\usr\\bin\\bash.exe'
+    vim.o.shell = '"C:\\Program Files\\Git\\usr\\bin\\bash.exe"'
     vim.o.shellcmdflag = "-c"
     vim.o.shellxquote = ""
 end
