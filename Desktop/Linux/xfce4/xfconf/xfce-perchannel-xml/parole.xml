@@ -6,16 +6,22 @@
   </property>
   <property name="window" type="empty">
     <property name="maximized" type="bool" value="true"/>
-    <property name="width" type="int" value="1889"/>
+    <property name="width" type="int" value="1890"/>
     <property name="height" type="int" value="1256"/>
   </property>
   <property name="audio" type="empty">
     <property name="volume" type="int" value="80"/>
   </property>
   <property name="folders" type="empty">
-    <property name="last-used-media" type="string" value="/home/ramen/Music/Steam/Blasphemous - OST"/>
+    <property name="last-used-media" type="string" value="/home/ramen/Code/cmono/assets/audio"/>
   </property>
   <property name="parole" type="empty">
     <property name="plugins" type="string" value="parole-notify.so;tray-icon.so;parole-mpris2.so"/>
+  </property>
+  <property name="plugins" type="empty">
+    <property name="tray" type="empty">
+      <property name="remember-quit-action" type="bool" value="true"/>
+      <property name="minimize-to-tray" type="bool" value="false"/>
+    </property>
   </property>
 </channel>

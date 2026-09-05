@@ -385,15 +385,15 @@ vim.api.nvim_create_autocmd("QuickfixCmdPost", {
     end,
 })
 
-vim.api.nvim_create_autocmd("BufEnter", {
-    callback = function()
-        -- Ant Build
-        if vim.fn.filereadable("build.xml") == 1 then
-            vim.opt.makeprg="ant compile"
-            vim.opt.errorformat="%A\\ %#[javac]\\ %f:%l:\\ error:\\ %m,%-Z\\ %#[javac]\\ %p^,%-C%.%#,%-G%.%#BUILD\\ FAILED%.%#,%-GTotal\\ time:\\ %.%#"
-        end
-    end,
-})
+
+-- Build Command
+if vim.fn.filereadable("build.c") == 1 then
+    vim.opt.makeprg="cc build.c && ./a.out build-run"
+end
+if vim.fn.filereadable("build.xml") == 1 then
+    vim.opt.makeprg="ant compile"
+    vim.opt.errorformat="%A\\ %#[javac]\\ %f:%l:\\ error:\\ %m,%-Z\\ %#[javac]\\ %p^,%-C%.%#,%-G%.%#BUILD\\ FAILED%.%#,%-GTotal\\ time:\\ %.%#"
+end
 
 local autogroup_auto_make = vim.api.nvim_create_augroup("AutoMake", { clear = true })
 vim.api.nvim_create_autocmd("BufWritePost", {
@@ -417,7 +417,7 @@ vim.api.nvim_create_autocmd("FileType", {
     end,
 })
 
-keymap_set("n", "<F1>", "<CMD>BuildRun<CR>", "Build Run")
+keymap_set("n", "<F5>", "<CMD>make<CR>", "Make", { noremap = false })
 
 -- Neovim Gui
 --=============================================================================

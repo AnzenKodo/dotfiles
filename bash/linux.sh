@@ -91,3 +91,6 @@ tserver()
     fi
     tmux new-session -A -s "$session_name"
 }
+
+# opencode
+export PATH=/home/ramen/.opencode/bin:$PATH
