@@ -1,15 +1,15 @@
 source ~/Dotfiles/vim/vimrc
 
-set noexpandtab
+" set noexpandtab
 set ideajoin              " J uses IDE's smarter join
 set clipboard+=unnamed,unnamedplus
-set listchars=tab:»\ ,trail:.,nbsp:␣
+" set listchars=tab:»\ ,trail:.,nbsp:␣
 
 " Plugins (bundled IdeaVim emulations)
 " ============================================================================
 set surround                " mini.surround -> ys / ds / cs (see remaps below)
 set commentary              " gc / gcc comment toggling (bonus, wasn't in nvim config)
-set easymotion               " flash.nvim -> <leader>ef style jump-to-char
+" set easymotion               " flash.nvim -> <leader>ef style jump-to-char
 set NERDTree                " optional project drawer, closest thing to oil.nvim
 set argtextobj
 set highlightedyank
@@ -111,4 +111,4 @@ nmap <A-n> <Action>(SelectNextOccurrence)
 "xmap <C-d> <Plug>NextWholeOccurrence
 
 " autocmd BufWritePost * action CompileDirty
-map <F1> :action CompileDirty<CR>
+map <F5> :action CompileDirty<CR>
