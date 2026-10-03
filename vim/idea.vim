@@ -1,5 +1,6 @@
 source ~/Dotfiles/vim/vimrc
 
+let maplocalleader = " "
 " set noexpandtab
 set ideajoin              " J uses IDE's smarter join
 set clipboard+=unnamed,unnamedplus
@@ -59,11 +60,11 @@ nmap <leader>ba <Action>(CloseAllEditorsButActive)
 " Find / navigate
 nmap <leader>ff <Action>(GotoFile)
 nmap <leader>fg <Action>(FindInPath)
+xmap <leader>fg <Action>(FindInPath)
 nmap <leader>fb <Action>(Switcher)
 nmap <leader>fo <Action>(RecentFiles)
 nmap <leader>fk <Action>(GotoAction)
 nmap <leader>fc <Action>(FileStructurePopup)
-nmap <leader>/ <Action>(Find)
 
 " Marks / bookmarks
 nmap <leader>ma <Action>(ToggleBookmark)
@@ -111,4 +112,7 @@ nmap <A-n> <Action>(SelectNextOccurrence)
 "xmap <C-d> <Plug>NextWholeOccurrence
 
 " autocmd BufWritePost * action CompileDirty
-map <F5> :action CompileDirty<CR>
+nmap ]d <Action>(GotoNextError)
+nmap [d <Action>(GotoPreviousError)
+map  <F5> <Action>(CompileDirty)
+nmap <F2> <Action>(RenameElement)
