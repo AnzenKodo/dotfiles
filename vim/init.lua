@@ -12,6 +12,9 @@ vim.o.mouse = "a"
 vim.o.fileformats = "unix,dos,mac"
 vim.opt.autowriteall = true
 vim.g.loaded_python3_provider = 0
+vim.g.loaded_node_provider = 0
+vim.g.loaded_ruby_provider = 0
+vim.g.loaded_perl_provider = 0
 vim.o.undofile = true
 
 -- Title
@@ -439,6 +442,139 @@ if vim.g.neovide then
     end, "Full Screen")
 end
 
+-- Session
+--=============================================================================
+
+local session_dir = vim.fs.joinpath(vim.fn.stdpath("state"), "sessions")
+vim.fn.mkdir(session_dir, "p")
+
+local auto_save_enabled = true
+
+---Generate a safe session filename from a directory path
+---@param dir? string
+---@return string
+local function get_session_file(dir)
+    local target = vim.fs.normalize(dir or vim.uv.cwd() or "")
+    -- Use '+' instead of '%' because '%' is Vim's special character for current file
+    local encoded = target:gsub("[\\/:]", "+") .. ".vim"
+    return vim.fs.joinpath(session_dir, encoded)
+end
+
+---Check if current Neovim state has real file buffers worth saving
+---@return boolean
+local function should_save()
+    if vim.o.diff then return false end
+    local ft = vim.bo.filetype
+    if ft == "gitcommit" or ft == "gitrebase" then return false end
+
+    for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+        if vim.api.nvim_buf_is_valid(buf) and vim.bo[buf].buflisted then
+            local name = vim.api.nvim_buf_get_name(buf)
+            local bt = vim.bo[buf].buftype
+            if name ~= "" and bt == "" and not name:match("COMMIT_EDITMSG$") and not name:match("git%-rebase%-todo$") then
+                return true
+            end
+        end
+    end
+    return false
+end
+
+---Save session for given directory (defaults to cwd)
+---@param dir? string
+local function save_session(dir)
+    if not auto_save_enabled then return end
+    if not should_save() then return end
+    local file = get_session_file(dir)
+    pcall(vim.cmd, "%argdelete")
+    vim.cmd("mksession! " .. vim.fn.fnameescape(file))
+end
+
+---Restore session for given directory (defaults to cwd)
+---@param dir? string
+---@return boolean
+local function restore_session(dir)
+    local file = get_session_file(dir)
+    if vim.uv.fs_stat(file) then
+        vim.cmd("silent! source " .. vim.fn.fnameescape(file))
+        return true
+    end
+    return false
+end
+
+-- Autocommand Group
+local group = vim.api.nvim_create_augroup("AutoSession", { clear = true })
+
+-- Auto-restore on startup
+vim.api.nvim_create_autocmd("VimEnter", {
+    group = group,
+    nested = true,
+    callback = function()
+        auto_save_enabled = true
+        -- Skip if piped from stdin
+        if vim.v.stdin == 1 or vim.g.started_with_stdin then
+            return
+        end
+        local argv = vim.fn.argv()
+        -- Auto-restore if launched with no args or with a single directory argument (e.g. `nvim .`)
+        if #argv == 0 then
+            restore_session()
+        elseif #argv == 1 and vim.fn.isdirectory(argv[1]) == 1 then
+            local target_dir = vim.fs.normalize(vim.fn.fnamemodify(argv[1], ":p"))
+            restore_session(target_dir)
+        end
+    end,
+})
+
+-- Auto-save on exit
+vim.api.nvim_create_autocmd("VimLeavePre", {
+    group = group,
+    callback = function()
+        save_session()
+    end,
+})
+
+-- Handle directory changes (:cd, :tcd)
+vim.api.nvim_create_autocmd("DirChanged", {
+    group = group,
+    callback = function(ev)
+        save_session(vim.v.event.old_dir)
+        auto_save_enabled = true
+        restore_session(ev.file)
+    end,
+})
+
+-- Convenient User Commands
+vim.api.nvim_create_user_command("SessionSave", function()
+    auto_save_enabled = true
+    save_session()
+    vim.notify("Session saved for " .. vim.uv.cwd(), vim.log.levels.INFO)
+end, { desc = "Save current directory session" })
+
+vim.api.nvim_create_user_command("SessionRestore", function()
+    auto_save_enabled = true
+    if restore_session() then
+        vim.notify("Session restored for " .. vim.uv.cwd(), vim.log.levels.INFO)
+    else
+        vim.notify("No session found for " .. vim.uv.cwd(), vim.log.levels.WARN)
+    end
+end, { desc = "Restore current directory session" })
+
+vim.api.nvim_create_user_command("SessionDelete", function()
+    auto_save_enabled = false
+    vim.v.this_session = ""
+    local file = get_session_file()
+    if vim.uv.fs_stat(file) then
+        local ok, err = vim.uv.fs_unlink(file)
+        if ok then
+            vim.notify("Session deleted (auto-save disabled) for " .. vim.uv.cwd(), vim.log.levels.INFO)
+        else
+            vim.notify("Failed to delete session: " .. tostring(err), vim.log.levels.ERROR)
+        end
+    else
+        vim.notify("No session found for " .. vim.uv.cwd(), vim.log.levels.WARN)
+    end
+end, { desc = "Delete current directory session" })
+
 -- Plugins
 --=============================================================================
 
@@ -453,20 +589,20 @@ vim.cmd("packadd nvim.undotree")
 local plugin_path = vim.fn.stdpath("config") .. "/plugins"
 vim.opt.runtimepath:append(plugin_path .. "/*")
 
--- Session Manager ============================================================
-require("auto-session").setup({
-    cwd_change_handling = true,
-})
-
 -- Theme ======================================================================
 -- Colorscheme
+vim.o.termguicolors = true
 vim.g.gruvbox_material_enable_italic = true
 vim.g.gruvbox_material_background = 'dark'
+vim.g.gruvbox_material_background = 'soft'
+vim.g.gruvbox_material_better_performance = 1
 vim.cmd.colorscheme('gruvbox-material')
 
 local function set_color()
-    vim.api.nvim_set_hl(0, "Comment", { fg = vim.o.background == "dark" and "#B8BB26" or "#79740E" })
-    vim.api.nvim_set_hl(0, "NoteKeyword", { bg = vim.o.background == "dark" and "#D8A657" or "#B47109", fg = vim.o.background == "dark" and "#3C3836" or "#F2E5BC", bold = true })
+    vim.api.nvim_set_hl(0, "Comment",      { fg = vim.o.background == "dark" and "#B8BB26" or "#79740E" })
+    vim.api.nvim_set_hl(0, "NoteKeyword",  { bg = vim.o.background == "dark" and "#D8A657" or "#B47109", fg = vim.o.background == "dark" and "#3C3836" or "#F2E5BC", bold = true })
+    vim.api.nvim_set_hl(0, "LineNr",       { fg = "#928374" })
+    vim.api.nvim_set_hl(0, "CursorLineNr", { fg = vim.o.background == "dark" and "#BDAE93" or "#7C6F64", bold = true })
 end
 set_color()
 
@@ -519,34 +655,6 @@ require('mini.cmdline').setup()
 -- Undo
 require("select-undo").setup()
 
--- Multicursor
-require("multicursor-nvim").setup()
-keymap_set({"n", "x"}, "<C-k>", function() require("multicursor-nvim").lineAddCursor(-1) end,    "Add cursor ↑")
-keymap_set({"n", "x"}, "<C-j>", function() require("multicursor-nvim").lineAddCursor(1) end,     "Add cursor ↓")
-keymap_set({"n", "x"}, "<C-d>", function() require("multicursor-nvim").matchAddCursor(1) end,    "Add cursor to next match")
-keymap_set({"n", "x"}, "<C-S-d>", function() require("multicursor-nvim").matchAddCursor(-1) end, "Add cursor to prev match")
-keymap_set("n", "<c-leftmouse>",   require("multicursor-nvim").handleMouse,        "Multi-cursor click")
-keymap_set("n", "<c-leftdrag>",    require("multicursor-nvim").handleMouseDrag,    "Multi-cursor drag")
-keymap_set("n", "<c-leftrelease>", require("multicursor-nvim").handleMouseRelease, "Multi-cursor release")
-require("multicursor-nvim").addKeymapLayer(function(layer_set)
-    layer_set({"n", "x"}, "<C-s>",  function() require("multicursor-nvim").matchSkipCursor(1) end)
-    layer_set({"n", "x"}, "<C-S-s>", function() require("multicursor-nvim").matchSkipCursor(-1) end)
-    -- Select a different cursor as the main one.
-    layer_set({"n", "x"}, "<up>",   require("multicursor-nvim").prevCursor)
-    layer_set({"n", "x"}, "<down>", require("multicursor-nvim").nextCursor)
-    -- Delete the main cursor.
-    layer_set({"n", "x"}, "<leader>x", require("multicursor-nvim").deleteCursor)
-    -- Enable and clear cursors using escape.
-    layer_set("n", "<esc>", function()
-        if not require("multicursor-nvim").cursorsEnabled() then
-            require("multicursor-nvim").enableCursors()
-        else
-            require("multicursor-nvim").clearCursors()
-        end
-    end)
-end)
--- vim.api.nvim_set_hl(0, "MultiCursorCursor", { fg = color_table.bg_lighter, bg = color_table.fg_dark })
-
 -- Bracket Split and Join
 require("mini.splitjoin").setup({
     mappings = {
@@ -555,18 +663,9 @@ require("mini.splitjoin").setup({
 })
 
 -- Better "f", "t", "F", "T"
-require("flash").setup({
-  modes = {
-    char = {
-      -- jump_labels = true
-    }
-  }
-})
-keymap_set({ "n", "x", "o" }, "<leader>ef", function() require("flash").jump() end,              "[e]dit [f]lash")
-keymap_set({ "n", "x", "o" }, "<leader>eF", function() require("flash").treesitter() end,        "[e]dit [F]lashback")
-keymap_set({ "o", "x" },      "<leader>er", function() require("flash").treesitter_search() end, "Treesitter Search")
-keymap_set("o",               "<leader>eR", function() require("flash").remote() end,            "Remote Flash")
--- keymap_set({ "c" },           "<c-s>",  function() require("flash").toggle() end,            "Toggle Flash Search")
+require("mini.jump").setup()
+keymap_set({ "n", "x", "o" }, "<leader>ef", function() require("mini.jump").smart_jump() end,     "[e]dit [f]orward jump")
+keymap_set({ "n", "x", "o" }, "<leader>eF", function() require("mini.jump").smart_jump(true) end, "[e]dit [F]orward jump backward")
 
 -- Better "w", "e" and "b"
 keymap_set({ "n", "o", "x" }, "w", "<cmd>lua require('spider').motion('w')<CR>", "Next sub[w]ord")
@@ -607,7 +706,7 @@ vim.api.nvim_create_user_command("Macro", function(opts)
         register = function() require('macrothis').register() end,
         copy_register_printable = function() require('macrothis').copy_register_printable() end,
         copy_macro_printable    = function() require('macrothis').copy_macro_printable() end,
-        find_saved = function() require('telescope').extensions.macrothis.macrothis() end,
+        find_saved = function() require('macrothis').load() end,
     }
     local fn = actions[subcmd]
     if fn then
@@ -752,7 +851,7 @@ require("oil").setup({
         ["gx"]  = "actions.open_external",
         ["<leader>fF"]  = {
             function()
-                require("telescope.builtin").find_files({ cwd = require("oil").get_current_dir() })
+                require("mini.pick").builtin.files({}, { source = { cwd = require("oil").get_current_dir() } })
             end,
             mode = "n",
             nowait = true,
@@ -760,7 +859,7 @@ require("oil").setup({
         },
         ["<leader>fG"]  = {
             function()
-                require("telescope.builtin").live_grep({ cwd = require("oil").get_current_dir() })
+                require("mini.pick").builtin.grep_live({}, { source = { cwd = require("oil").get_current_dir() } })
             end,
             mode = "n",
             nowait = true,
@@ -809,140 +908,129 @@ require("oil-git-status").setup()
 keymap_set("n", "<leader>-", "<CMD>Oil<CR>", "Open parent directory")
 
 -- Fuzzy Finder ===============================================================
-require("telescope").setup {
-    defaults = {
-        mappings = {
-            i = {
-                ["<C-S-v>"] = { "<C-r>+", type = "command" },
-            },
-        },
+local MiniPick = require("mini.pick")
+local MiniExtra = require("mini.extra")
+
+local paste_clipboard = function()
+    local reg = vim.fn.getreg("+") or ""
+    local text = reg:gsub("[\n\t]", " ")
+    local query = MiniPick.get_picker_query() or {}
+    for _, ch in ipairs(vim.fn.split(text, [[\zs]])) do
+        table.insert(query, ch)
+    end
+    MiniPick.set_picker_query(query)
+end
+
+MiniPick.setup({
+    mappings = {
+        paste_clipboard = { char = "<C-S-v>", func = paste_clipboard },
     },
-    extensions = {
-        ["ui-select"] = {
-            require("telescope.themes").get_dropdown(),
+})
+MiniExtra.setup()
+
+local function grep_word()
+    local mode = vim.fn.mode()
+    local pattern
+    if mode == "v" or mode == "V" or mode == "\22" then
+        local _, ls, cs = unpack(vim.fn.getpos("'<"))
+        local _, le, ce = unpack(vim.fn.getpos("'>"))
+        local lines = vim.api.nvim_buf_get_text(0, ls - 1, cs - 1, le - 1, ce, {})
+        pattern = table.concat(lines, "\n")
+    else
+        pattern = vim.fn.expand("<cword>")
+    end
+    if pattern and pattern ~= "" then
+        MiniPick.builtin.grep({ pattern = pattern })
+    end
+end
+
+local function pick_tags(only_current_file)
+    local curfile = vim.fn.expand("%:p")
+    local raw_tags = vim.fn.taglist(".*")
+    if not raw_tags or #raw_tags == 0 then
+        vim.notify("No tags found", vim.log.levels.WARN)
+        return
+    end
+    local items = {}
+    for _, tag in ipairs(raw_tags) do
+        local f = vim.fn.fnamemodify(tag.filename, ":p")
+        if not only_current_file or f == curfile then
+            local desc = string.format("%s\t%s\t%s", tag.name, tag.filename, tag.cmd or "")
+            table.insert(items, {
+                text = desc,
+                path = f,
+                tag = tag,
+            })
+        end
+    end
+    if #items == 0 then
+        vim.notify(only_current_file and "No tags found for current buffer" or "No tags found", vim.log.levels.WARN)
+        return
+    end
+    local title = only_current_file and "Current Buffer Tags" or "Tags"
+    MiniPick.start({
+        source = {
+            items = items,
+            name = title,
+            choose = function(item)
+                if not item or not item.tag then return end
+                vim.cmd.edit(item.tag.filename)
+                local cmd = item.tag.cmd
+                if cmd then
+                    if cmd:match("^%d+$") then
+                        vim.api.nvim_win_set_cursor(0, { tonumber(cmd), 0 })
+                    else
+                        local clean = cmd:gsub("^%^", ""):gsub("%$$", "")
+                        clean = clean:gsub([[^/]], ""):gsub([[/$]], "")
+                        vim.fn.search(clean)
+                    end
+                end
+            end,
+            preview = function(buf_id, item)
+                if not item or not item.tag then return end
+                MiniPick.default_preview(buf_id, item)
+                local cmd = item.tag.cmd
+                if cmd then
+                    vim.api.nvim_buf_call(buf_id, function()
+                        if cmd:match("^%d+$") then
+                            vim.api.nvim_win_set_cursor(0, { tonumber(cmd), 0 })
+                        else
+                            local clean = cmd:gsub("^%^", ""):gsub("%$$", "")
+                            clean = clean:gsub([[^/]], ""):gsub([[/$]], "")
+                            vim.fn.search(clean)
+                        end
+                    end)
+                end
+            end,
         },
-    },
-}
--- Enable Telescope extensions if they are installed
-pcall(require("telescope").load_extension, "fzf")
-pcall(require("telescope").load_extension, "ui-select")
+    })
+end
+
+MiniPick.registry.tags = function() pick_tags(false) end
+MiniPick.registry.current_buffer_tags = function() pick_tags(true) end
+MiniPick.registry.macrothis = function() require("macrothis").load() end
+
 -- Keymaps
-keymap_set("n", "<leader>fk", require("telescope.builtin").keymaps,             "[f]ind [k]eymaps")
-keymap_set("n", "<leader>ff", require("telescope.builtin").find_files,          "[f]ind [f]iles")
-keymap_set("n", "<leader>fg", require("telescope.builtin").live_grep,           "[f]ind [g]rep")
-keymap_set("n", "<leader>ft", require("telescope.builtin").tags,                "[f]ind [t]ags")
-keymap_set("n", "<leader>fc", require("telescope.builtin").current_buffer_tags, "[f]ind [c]urrent tags")
-keymap_set("n", "<leader>fo", require("telescope.builtin").oldfiles,            "[f]ind [o]ldfiles")
-keymap_set("n", "<leader>fb", require("telescope.builtin").buffers,             "[f]ind [b]uffers")
+keymap_set("n", "<leader>fk", MiniExtra.pickers.keymaps,                        "[f]ind [k]eymaps")
+keymap_set("n", "<leader>ff", MiniPick.builtin.files,                           "[f]ind [f]iles")
+keymap_set("n", "<leader>fg", MiniPick.builtin.grep_live,                       "[f]ind [g]rep")
+keymap_set("n", "<leader>ft", function() pick_tags(false) end,                  "[f]ind [t]ags")
+keymap_set("n", "<leader>fc", function() pick_tags(true) end,                   "[f]ind [c]urrent tags")
+keymap_set("n", "<leader>fo", MiniExtra.pickers.oldfiles,                       "[f]ind [o]ldfiles")
+keymap_set("n", "<leader>fb", MiniPick.builtin.buffers,                          "[f]ind [b]uffers")
 keymap_set("n", "<leader>fG", function()
-    require("telescope.builtin").live_grep({ cwd = "%:p:h" })
+    MiniPick.builtin.grep_live({}, { source = { cwd = vim.fn.expand("%:p:h") } })
 end, "[f]ind [G]rep current file dir")
 keymap_set("n", "<leader>fF", function()
-    require("telescope.builtin").find_files({ cwd = "%:p:h" })
+    MiniPick.builtin.files({}, { source = { cwd = vim.fn.expand("%:p:h") } })
 end, "[f]ind [F]iles current file dir")
-keymap_set({"n", "x"}, "<leader>fw", require("telescope.builtin").grep_string,         "[f]ind [w]ord")
+keymap_set({"n", "x"}, "<leader>fw", grep_word,                                  "[f]ind [w]ord")
 keymap_set("n", "<leader>/", function()
-    require("telescope.builtin").current_buffer_fuzzy_find(require("telescope.themes").get_dropdown {
-        winblend = 10,
-        previewer = false,
-    })
+    MiniExtra.pickers.buf_lines({ scope = "current" })
 end, "Fuzzily search in current buffer")
 keymap_set("n", "<leader>f/", function()
-    require("telescope.builtin").live_grep {
-        grep_open_files = true,
-        prompt_title = "Live Grep in Open Files",
-    }
+    MiniExtra.pickers.buf_lines({ scope = "all" })
 end, "[f]ind Open Files")
-
--- Debugger ===================================================================
-
-vim.api.nvim_create_autocmd("CmdlineEnter", {
-    callback = function()
-        local cmd = vim.fn.getcmdline()
-        if vim.fn.exists(":Termdebug") == 0 then
-            vim.cmd("packadd termdebug")
-        end
-    end,
-})
-
-vim.g.termdebug_config = {
-    disasm_window = true,
-    variables_window = true,
-    wide = 10,
-    disasm_window = 15,
-    variables_window = 15,
-    command = {
-        "gdb", "-nx",
-        "-ex", "set breakpoint pending on",
-        "-ex", "set disassembly-flavor intel",
-        "-ex", "set confirm off",
-        "-ex", "set print pretty on",
-    }
-}
-local termdebug_keys = {
-    { "n", "<leader>dr",  ":call TermDebugSendCommand('run')<CR>",      "[d]ebugger [r]un" },
-    { "n", "<leader>dc",  ":call TermDebugSendCommand('continue')<CR>", "[d]ebugger [c]ontinue" },
-    { "n", "<leader>de",  ":call TermDebugSendCommand('exit')<CR>",     "[d]ebugger [e]xit" },
-    { "n", "<leader>dk",  ":call TermDebugSendCommand('kill')<CR>",     "[d]ebugger [k]ill" },
-    { "n", "<leader>db",  ":Break<CR>",                                 "[d]ebugger [b]reakpoint" },
-    { "n", "<leader>du",  ":Clear<CR>",                                 "[d]ebugger [u]nbreakpoint" },
-    { "n", "<leader>dt",  ":Tbreak<CR>",                                "[d]ebugger [t]reak" },
-    { "n", "<leader>dc",  ":Continue<CR>",                              "[d]ebugger [c]ontinue" },
-    { "n", "<leader>dgg", ":Gdb<CR>",                                   "[d]ebugger [g]oto [g]db" },
-    { "n", "<leader>dgp", ":Program<CR>",                               "[d]ebugger [g]oto [p]rogram" },
-    { "n", "<leader>dgs", ":Source<CR>",                                "[d]ebugger [g]oto [s]ource" },
-    { "n", "<leader>dga", ":Asm<CR>",                                   "[d]ebugger [g]oto [a]ssembly" },
-    { "n", "<leader>dgl", ":Var<CR>",                                   "[d]ebugger [g]oto [l]ocal watchlist" },
-    { "n", "<F1>",        ":Over<CR>",                                  "Debugger Next" },
-    { "n", "<F2>",        ":Step<CR>",                                  "Debugger Step" },
-    { "n", "=",           ":Up<CR>",                                    "Debugger go Up frame" },
-}
-local current_debug_edit_file=""
-vim.api.nvim_create_autocmd("User", {
-    pattern = "TermdebugStartPre",
-    callback = function()
-        for _, k in ipairs(termdebug_keys) do
-            keymap_set(k[1], k[2], k[3], k[4])
-        end
-        current_debug_edit_file=vim.api.nvim_buf_get_name(0)
-        vim.cmd.tabnew()
-    end,
-})
-vim.api.nvim_create_autocmd("User", {
-    pattern = "TermdebugStartPost",
-    callback = function()
-        vim.cmd("Gdb")
-        vim.cmd("wincmd K")
-        vim.cmd("Source")
-        vim.cmd.edit(current_debug_edit_file)
-        vim.cmd("wincmd K")
-        vim.cmd.resize(30)
-        vim.cmd("Program")
-        vim.cmd.resize(15)
-        vim.cmd("Asm")
-        vim.cmd.resize(6)
-        vim.cmd("Source")
-    end,
-})
-vim.api.nvim_create_autocmd("User", {
-    pattern = "TermdebugStopPre",
-    callback = function()
-        vim.cmd("Source")
-        current_debug_edit_file=vim.api.nvim_buf_get_name(0)
-        vim.cmd("Gdb")
-        vim.cmd("Bd")
-    end,
-})
-vim.api.nvim_create_autocmd("User", {
-    pattern = "TermdebugStopPost",
-    callback = function()
-        for _, k in ipairs(termdebug_keys) do
-            pcall(vim.keymap.del, k[1], k[2])
-        end
-        vim.cmd.tabclose()
-        vim.cmd.edit(current_debug_edit_file)
-    end,
-})
 
 -- Git ========================================================================
 -- Git Hunk
@@ -992,24 +1080,3 @@ vim.api.nvim_create_user_command("AiOpen",  function()
         end,
     })
 end, { desc = "Open AI Window" });
-
--- 99
-vim.opt.runtimepath:append(plugin_path .. "/Manual/99")
-local AntigravityProvider = setmetatable({}, { __index = require("99.providers").BaseProvider })
-function AntigravityProvider._build_command(_, query, context)
-    return {
-        "agy",
-        "--print",
-        query,
-    }
-end
-function AntigravityProvider._get_provider_name()
-    return "Antigravity"
-end
-require("99").setup({
-    provider = AntigravityProvider,
-    tmp_dir = vim.fn.expand('~') .. "/.gemini/antigravity-cli/tmp",
-})
-keymap_set("x", "<leader>ai", require("99").visual, "[a]i do the thing")
-vim.api.nvim_create_user_command("AiSearch", require("99").search, { desc = "AI Search" });
-vim.api.nvim_create_user_command("AiStop", require("99").stop_all_requests, { desc = "Stop AI" });
