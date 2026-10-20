@@ -82,6 +82,8 @@ alias xclip="xclip -selection clipboard"
 alias tree="tree --color --dirsfirst"
 alias fd="fd --hidden --exclude .stversions --exclude .stfolder"
 
+alias vim="nvim"
+alias vi="nvim"
 alias refresh="source ~/.bashrc"
 alias dir_size="du -sh -- * | sort -hr"
 alias icat="kitten icat"

@@ -39,6 +39,7 @@ ln -sfv ~/Dotfiles/Desktop/flameshot       $XDG_CONFIG_HOME
 ln -sfv ~/Applications/Mime/mimeapps.list  $XDG_CONFIG_HOME
 ln -sfv ~/Dotfiles/Desktop/gf2_config.ini  $XDG_CONFIG_HOME
 ln -sfv ~/Dotfiles/Desktop/kitty           $XDG_CONFIG_HOME
+ln -sfv ~/Dotfiles/Desktop/raddbg/         $XDG_CONFIG_HOME
 
 ln -sfv ~/Drive/Dotfiles/Desktop/keepassxc     $XDG_CONFIG_HOME
 ln -sfv ~/Drive/Dotfiles/Desktop/redshift.conf $XDG_CONFIG_HOME/redshift.conf

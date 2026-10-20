@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 source ~/Dotfiles/vim/vimrc
 
 let maplocalleader = " "
@@ -232,4 +231,3 @@ nmap <A-n> <Action>(SelectNextOccurrence)
 
 " autocmd BufWritePost * action CompileDirty
 map <F1> :action CompileDirty<CR>
->>>>>>> 290c08f (Backup from Linux Desktop: modernize Neovim configuration)

@@ -71,7 +71,6 @@ local function keymap_set(mode, map, func, desc, opt_override)
     vim.keymap.set(mode, map, func, opt)
 end
 
-keymap_set("t", "<Esc>", "<C-\\><C-n>",    "Exit terminal mode")
 keymap_set("n", "L", vim.diagnostic.open_float, "Show Diagnostic")
 
 keymap_set("n", "<A-j>", "<cmd>execute 'move .+' . v:count1<cr>==",                   "Move Line Down")
@@ -217,9 +216,9 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
 -- Highlight when yanking (copying) text
 vim.api.nvim_create_autocmd("TextYankPost", {
     desc = "Highlight when yanking (copying) text",
-    group = vim.api.nvim_create_augroup("kickstart-highlight-yank", { clear = true }),
+    group = vim.api.nvim_create_augroup('highlight-yank', { clear = true }),
     callback = function()
-        vim.hl.on_yank()
+        vim.hl.hl_op({ higroup = 'IncSearch', timeout = 150 })
     end,
 })
 
@@ -239,7 +238,14 @@ vim.api.nvim_create_autocmd("BufReadPost", {
 
 keymap_set("n", "[b", "<cmd>bprevious<cr>",    "Prev Buffer")
 keymap_set("n", "]b", "<cmd>bnext<cr>",        "Next Buffer")
-vim.api.nvim_create_user_command("Bda", function() vim.cmd("%bdelete | edit # | bdelete #") end, { desc = "Close all other buffers, keep only current" })
+vim.api.nvim_create_user_command("Bda", function()
+    local cur = vim.api.nvim_get_current_buf()
+    for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+        if buf ~= cur and vim.api.nvim_buf_is_valid(buf) and vim.bo[buf].buflisted then
+            pcall(vim.cmd, "bdelete " .. buf)
+        end
+    end
+end, { desc = "Close all other buffers, keep only current" })
 vim.api.nvim_create_user_command("Bd",  function() vim.cmd("bn | bd#") end,                      { desc = "Close previous buffer and move to next" })
 
 -- Autocomplete
@@ -258,6 +264,9 @@ keymap_set("i", "<S-Tab>", 'pumvisible() ? "\\<C-p>" : "\\<S-Tab>"', "Previous c
 
 -- Terminal
 --=============================================================================
+
+keymap_set("t", "<Esc>", "<C-\\><C-n>", "Exit terminal mode")
+keymap_set("t", "<C-Esc>", "<Esc>",       "Send Esc key event")
 
 if (vim.fn.has("win32") == 1 or vim.fn.has("win64") == 1) then
     vim.o.shell = 'bash.exe'
@@ -422,11 +431,80 @@ vim.api.nvim_create_autocmd("FileType", {
 
 keymap_set("n", "<F5>", "<CMD>make<CR>", "Make", { noremap = false })
 
+-- Debugger
+--=============================================================================
+
+local function get_current_file_line_col()
+    local file = vim.fn.expand("%:p")
+    local line = vim.fn.line(".")
+    local col  = vim.fn.col(".")
+    local result = string.format("%s:%d:%d", file, line, col)
+    return result
+end
+
+local function debugger_run(func_name, expr)
+    local cmd = { "raddbg", "--ipc", func_name }
+    if type(expr) == "function" then
+        table.insert(cmd, expr())
+    elseif expr ~= nil then
+        table.insert(cmd, expr)
+    end
+
+    local job = vim.fn.jobstart(cmd, {
+        on_exit = function(_, code)
+            if code ~= 0 and code ~= 143 then
+                vim.schedule(function()
+                    vim.notify("raddbg IPC failed (is raddbg running?)", vim.log.levels.WARN)
+                end)
+            end
+        end,
+    })
+
+    vim.defer_fn(function()
+        -- jobwait returns -1 if still running after 0ms
+        if job > 0 and vim.fn.jobwait({ job }, 0)[1] == -1 then
+            vim.fn.jobstop(job)
+            vim.notify("raddbg IPC timed out (stale listener? see ss -ltnp | grep 7423)", vim.log.levels.WARN)
+        end
+    end, 2000)
+end
+
+keymap_set("n", "<leader>dg", function() debugger_run("find_code_location", get_current_file_line_col) end, "[d]ebuger [g]oto current file location", { noremap = true })
+keymap_set("n", "<leader>dt", function() debugger_run("toggle_breakpoint", get_current_file_line_col) end,  "[d]ebuger [t]oggle breakpoint",          { noremap = true })
+keymap_set("n", "<leader>ds", function() debugger_run("launch_and_run") end,                                "[d]ebugger [s]tart program",             { noremap = true })
+keymap_set("n", "<leader>dl", function() debugger_run("run_to_line", get_current_file_line_col) end,        "[d]ebugger run to [l]ine",               { noremap = true })
+keymap_set("n", "<leader>dw", function()
+    debugger_run("toggle_watch_expr", function() return vim.fn.expand("<cword>") end)
+end,  "[d]ebugger [w]atch word", { noremap = true })
+keymap_set("v", "<leader>dw", function()
+    debugger_run("toggle_watch_expr", function()
+        vim.cmd('noautocmd normal! "zy')
+        return (vim.fn.getreg("z"):gsub("\n", " "))
+    end)
+end, "[d]ebugger [w]atch selection", { noremap = true })
+keymap_set("n", "<leader>do", function()
+    local exe = vim.fn.expand("$HOME/Applications/bin/raddbg")
+    if vim.fn.executable(exe) ~= 1 then
+        vim.notify("raddbg not found or not executable: " .. exe, vim.log.levels.ERROR)
+        return
+    else
+        debugger_run("find_code_location", get_current_file_line_col)
+    end
+    vim.fn.jobstart({ exe, "--project:project.raddbg" }, {
+        detach = true, -- keep running after Neovim exits
+    })
+end, "[d]ebugger [o]pen", { noremap = true })
+
+-- keymap_set("n", "c", "continue",          "[d]ebugger [c]ontinue program")
+-- keymap_set("n", "k", "kill",              "[d]ebugger [s]top program")
+-- keymap_set("n", "r", "restart",           "[d]ebugger [r]estart program")
+-- keymap_set("n", "d", "go_to_disassembly", "[d]ebugger goto [d]isassembly", get_current_file_line_col)
+
 -- Neovim Gui
 --=============================================================================
 
 if vim.g.neovide then
-    vim.o.guifont = "CommitMono,Consolas:h10"
+    vim.o.guifont = "CommitMono,Consolas:h12"
     keymap_set({ "n", "v" }, "<C-=>",   ":lua vim.g.neovide_scale_factor = vim.g.neovide_scale_factor + 0.1<CR>", "Neovide: Increase font size")
     keymap_set({ "n", "v" }, "<C-->",   ":lua vim.g.neovide_scale_factor = vim.g.neovide_scale_factor - 0.1<CR>", "Neovide: Decrease font size")
     keymap_set({ "n", "v" }, "<C-0>",   ":lua vim.g.neovide_scale_factor = 1<CR>",                                "Neovide: Reset font size to default")
@@ -441,139 +519,6 @@ if vim.g.neovide then
         vim.notify("Full Screen")
     end, "Full Screen")
 end
-
--- Session
---=============================================================================
-
-local session_dir = vim.fs.joinpath(vim.fn.stdpath("state"), "sessions")
-vim.fn.mkdir(session_dir, "p")
-
-local auto_save_enabled = true
-
----Generate a safe session filename from a directory path
----@param dir? string
----@return string
-local function get_session_file(dir)
-    local target = vim.fs.normalize(dir or vim.uv.cwd() or "")
-    -- Use '+' instead of '%' because '%' is Vim's special character for current file
-    local encoded = target:gsub("[\\/:]", "+") .. ".vim"
-    return vim.fs.joinpath(session_dir, encoded)
-end
-
----Check if current Neovim state has real file buffers worth saving
----@return boolean
-local function should_save()
-    if vim.o.diff then return false end
-    local ft = vim.bo.filetype
-    if ft == "gitcommit" or ft == "gitrebase" then return false end
-
-    for _, buf in ipairs(vim.api.nvim_list_bufs()) do
-        if vim.api.nvim_buf_is_valid(buf) and vim.bo[buf].buflisted then
-            local name = vim.api.nvim_buf_get_name(buf)
-            local bt = vim.bo[buf].buftype
-            if name ~= "" and bt == "" and not name:match("COMMIT_EDITMSG$") and not name:match("git%-rebase%-todo$") then
-                return true
-            end
-        end
-    end
-    return false
-end
-
----Save session for given directory (defaults to cwd)
----@param dir? string
-local function save_session(dir)
-    if not auto_save_enabled then return end
-    if not should_save() then return end
-    local file = get_session_file(dir)
-    pcall(vim.cmd, "%argdelete")
-    vim.cmd("mksession! " .. vim.fn.fnameescape(file))
-end
-
----Restore session for given directory (defaults to cwd)
----@param dir? string
----@return boolean
-local function restore_session(dir)
-    local file = get_session_file(dir)
-    if vim.uv.fs_stat(file) then
-        vim.cmd("silent! source " .. vim.fn.fnameescape(file))
-        return true
-    end
-    return false
-end
-
--- Autocommand Group
-local group = vim.api.nvim_create_augroup("AutoSession", { clear = true })
-
--- Auto-restore on startup
-vim.api.nvim_create_autocmd("VimEnter", {
-    group = group,
-    nested = true,
-    callback = function()
-        auto_save_enabled = true
-        -- Skip if piped from stdin
-        if vim.v.stdin == 1 or vim.g.started_with_stdin then
-            return
-        end
-        local argv = vim.fn.argv()
-        -- Auto-restore if launched with no args or with a single directory argument (e.g. `nvim .`)
-        if #argv == 0 then
-            restore_session()
-        elseif #argv == 1 and vim.fn.isdirectory(argv[1]) == 1 then
-            local target_dir = vim.fs.normalize(vim.fn.fnamemodify(argv[1], ":p"))
-            restore_session(target_dir)
-        end
-    end,
-})
-
--- Auto-save on exit
-vim.api.nvim_create_autocmd("VimLeavePre", {
-    group = group,
-    callback = function()
-        save_session()
-    end,
-})
-
--- Handle directory changes (:cd, :tcd)
-vim.api.nvim_create_autocmd("DirChanged", {
-    group = group,
-    callback = function(ev)
-        save_session(vim.v.event.old_dir)
-        auto_save_enabled = true
-        restore_session(ev.file)
-    end,
-})
-
--- Convenient User Commands
-vim.api.nvim_create_user_command("SessionSave", function()
-    auto_save_enabled = true
-    save_session()
-    vim.notify("Session saved for " .. vim.uv.cwd(), vim.log.levels.INFO)
-end, { desc = "Save current directory session" })
-
-vim.api.nvim_create_user_command("SessionRestore", function()
-    auto_save_enabled = true
-    if restore_session() then
-        vim.notify("Session restored for " .. vim.uv.cwd(), vim.log.levels.INFO)
-    else
-        vim.notify("No session found for " .. vim.uv.cwd(), vim.log.levels.WARN)
-    end
-end, { desc = "Restore current directory session" })
-
-vim.api.nvim_create_user_command("SessionDelete", function()
-    auto_save_enabled = false
-    vim.v.this_session = ""
-    local file = get_session_file()
-    if vim.uv.fs_stat(file) then
-        local ok, err = vim.uv.fs_unlink(file)
-        if ok then
-            vim.notify("Session deleted (auto-save disabled) for " .. vim.uv.cwd(), vim.log.levels.INFO)
-        else
-            vim.notify("Failed to delete session: " .. tostring(err), vim.log.levels.ERROR)
-        end
-    else
-        vim.notify("No session found for " .. vim.uv.cwd(), vim.log.levels.WARN)
-    end
-end, { desc = "Delete current directory session" })
 
 -- Plugins
 --=============================================================================
@@ -593,12 +538,18 @@ vim.opt.runtimepath:append(plugin_path .. "/*")
 -- Colorscheme
 vim.o.termguicolors = true
 vim.g.gruvbox_material_enable_italic = true
-vim.g.gruvbox_material_background = 'dark'
-vim.g.gruvbox_material_background = 'soft'
 vim.g.gruvbox_material_better_performance = 1
-vim.cmd.colorscheme('gruvbox-material')
 
 local function set_color()
+    if vim.o.background == "dark" then
+        vim.g.gruvbox_material_background = 'soft'
+        vim.g.gruvbox_material_foreground = 'material'
+        vim.cmd.colorscheme('gruvbox-material')
+    else
+        vim.g.gruvbox_material_background = 'hard'
+        vim.g.gruvbox_material_foreground = 'original'
+        vim.cmd.colorscheme('gruvbox-material')
+    end
     vim.api.nvim_set_hl(0, "Comment",      { fg = vim.o.background == "dark" and "#B8BB26" or "#79740E" })
     vim.api.nvim_set_hl(0, "NoteKeyword",  { bg = vim.o.background == "dark" and "#D8A657" or "#B47109", fg = vim.o.background == "dark" and "#3C3836" or "#F2E5BC", bold = true })
     vim.api.nvim_set_hl(0, "LineNr",       { fg = "#928374" })
@@ -663,7 +614,12 @@ require("mini.splitjoin").setup({
 })
 
 -- Better "f", "t", "F", "T"
-require("mini.jump").setup()
+require("mini.jump").setup({
+    delay = {
+        highlight = 0,
+    },
+    silent = true,
+})
 keymap_set({ "n", "x", "o" }, "<leader>ef", function() require("mini.jump").smart_jump() end,     "[e]dit [f]orward jump")
 keymap_set({ "n", "x", "o" }, "<leader>eF", function() require("mini.jump").smart_jump(true) end, "[e]dit [F]orward jump backward")
 
@@ -690,6 +646,11 @@ require("mini.surround").setup({
     highlight_duration = 1000,
 })
 require("mini.ai").setup()
+
+-- Session Manager ============================================================
+require("auto-session").setup({
+    cwd_change_handling = true,
+})
 
 -- Macro ======================================================================
 require("macrothis").setup()
@@ -800,14 +761,14 @@ require("quicker").setup({
 -- Mark Management ============================================================
 -- Files Marks
 
-local harpoon = require("harpoon")
-harpoon:setup()
-keymap_set("n", "<leader>mf", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end, "[m]ark [f]iles menu")
-keymap_set("n", "<leader>ma", function() harpoon:list():add() end,                         "[m]ark [a]dd file")
-keymap_set("n", "<leader>m1", function() harpoon:list():select(1) end,                     "[m]ark goto [1]'st file")
-keymap_set("n", "<leader>m2", function() harpoon:list():select(2) end,                     "[m]ark goto [2]'nd file")
-keymap_set("n", "<leader>m3", function() harpoon:list():select(3) end,                     "[m]ark goto [3]'rd file")
-keymap_set("n", "<leader>m4", function() harpoon:list():select(4) end,                     "[m]ark goto [4]'th file")
+-- local harpoon = require("harpoon")
+-- harpoon:setup()
+-- keymap_set("n", "<leader>mf", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end, "[m]ark [f]iles menu")
+-- keymap_set("n", "<leader>ma", function() harpoon:list():add() end,                         "[m]ark [a]dd file")
+-- keymap_set("n", "<leader>m1", function() harpoon:list():select(1) end,                     "[m]ark goto [1]'st file")
+-- keymap_set("n", "<leader>m2", function() harpoon:list():select(2) end,                     "[m]ark goto [2]'nd file")
+-- keymap_set("n", "<leader>m3", function() harpoon:list():select(3) end,                     "[m]ark goto [3]'rd file")
+-- keymap_set("n", "<leader>m4", function() harpoon:list():select(4) end,                     "[m]ark goto [4]'th file")
 
 -- File Manager ===============================================================
 function _G.get_oil_winbar()
@@ -1006,11 +967,41 @@ local function pick_tags(only_current_file)
     })
 end
 
+local function pick_sessions()
+    local detected = require("mini.sessions").detected
+    local items = {}
+    for name, data in pairs(detected) do
+        local display = name:gsub("%%", "/")
+        table.insert(items, {
+            text = display,
+            name = name,
+            modify_time = data.modify_time or 0,
+        })
+    end
+    table.sort(items, function(a, b) return a.modify_time > b.modify_time end)
+    if #items == 0 then
+        vim.notify("No sessions found", vim.log.levels.WARN)
+        return
+    end
+    MiniPick.start({
+        source = {
+            items = items,
+            name = "Sessions",
+            choose = function(item)
+                if not item or not item.name then return end
+                vim.cmd("SessionRestore " .. item.name)
+            end,
+        },
+    })
+end
+
 MiniPick.registry.tags = function() pick_tags(false) end
 MiniPick.registry.current_buffer_tags = function() pick_tags(true) end
 MiniPick.registry.macrothis = function() require("macrothis").load() end
+MiniPick.registry.sessions = pick_sessions
 
 -- Keymaps
+keymap_set("n", "<leader>fs", pick_sessions,                                   "[f]ind [s]essions")
 keymap_set("n", "<leader>fk", MiniExtra.pickers.keymaps,                        "[f]ind [k]eymaps")
 keymap_set("n", "<leader>ff", MiniPick.builtin.files,                           "[f]ind [f]iles")
 keymap_set("n", "<leader>fg", MiniPick.builtin.grep_live,                       "[f]ind [g]rep")
