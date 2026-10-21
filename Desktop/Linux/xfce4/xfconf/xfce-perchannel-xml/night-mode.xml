@@ -18,5 +18,5 @@
     <property name="WindowManagerTheme" type="string" value="Default"/>
     <property name="UserScript" type="string" value=""/>
   </property>
-  <property name="active" type="string" value="night"/>
+  <property name="active" type="string" value="day"/>
 </channel>
