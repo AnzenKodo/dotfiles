@@ -12,6 +12,9 @@ vim.o.mouse = "a"
 vim.o.fileformats = "unix,dos,mac"
 vim.opt.autowriteall = true
 vim.g.loaded_python3_provider = 0
+vim.g.loaded_node_provider = 0
+vim.g.loaded_ruby_provider = 0
+vim.g.loaded_perl_provider = 0
 vim.o.undofile = true
 
 -- Title
@@ -68,7 +71,6 @@ local function keymap_set(mode, map, func, desc, opt_override)
     vim.keymap.set(mode, map, func, opt)
 end
 
-keymap_set("t", "<Esc>", "<C-\\><C-n>",    "Exit terminal mode")
 keymap_set("n", "L", vim.diagnostic.open_float, "Show Diagnostic")
 
 keymap_set("n", "<A-j>", "<cmd>execute 'move .+' . v:count1<cr>==",                   "Move Line Down")
@@ -212,9 +214,9 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
 -- Highlight when yanking (copying) text
 vim.api.nvim_create_autocmd("TextYankPost", {
     desc = "Highlight when yanking (copying) text",
-    group = vim.api.nvim_create_augroup("kickstart-highlight-yank", { clear = true }),
+    group = vim.api.nvim_create_augroup('highlight-yank', { clear = true }),
     callback = function()
-        vim.hl.on_yank()
+        vim.hl.hl_op({ higroup = 'IncSearch', timeout = 150 })
     end,
 })
 
@@ -234,7 +236,14 @@ vim.api.nvim_create_autocmd("BufReadPost", {
 
 keymap_set("n", "[b", "<cmd>bprevious<cr>",    "Prev Buffer")
 keymap_set("n", "]b", "<cmd>bnext<cr>",        "Next Buffer")
-vim.api.nvim_create_user_command("Bda", function() vim.cmd("%bdelete | edit # | bdelete #") end, { desc = "Close all other buffers, keep only current" })
+vim.api.nvim_create_user_command("Bda", function()
+    local cur = vim.api.nvim_get_current_buf()
+    for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+        if buf ~= cur and vim.api.nvim_buf_is_valid(buf) and vim.bo[buf].buflisted then
+            pcall(vim.cmd, "bdelete " .. buf)
+        end
+    end
+end, { desc = "Close all other buffers, keep only current" })
 vim.api.nvim_create_user_command("Bd",  function() vim.cmd("bn | bd#") end,                      { desc = "Close previous buffer and move to next" })
 
 -- Autocomplete
@@ -253,6 +262,9 @@ keymap_set("i", "<S-Tab>", 'pumvisible() ? "\\<C-p>" : "\\<S-Tab>"', "Previous c
 
 -- Terminal
 --=============================================================================
+
+keymap_set("t", "<Esc>", "<C-\\><C-n>", "Exit terminal mode")
+keymap_set("t", "<C-Esc>", "<Esc>",       "Send Esc key event")
 
 if (vim.fn.has("win32") == 1 or vim.fn.has("win64") == 1) then
     vim.o.shell = 'bash.exe'
@@ -417,11 +429,80 @@ vim.api.nvim_create_autocmd("FileType", {
 
 keymap_set("n", "<F5>", "<CMD>make<CR>", "Make", { noremap = false })
 
+-- Debugger
+--=============================================================================
+
+local function get_current_file_line_col()
+    local file = vim.fn.expand("%:p")
+    local line = vim.fn.line(".")
+    local col  = vim.fn.col(".")
+    local result = string.format("%s:%d:%d", file, line, col)
+    return result
+end
+
+local function debugger_run(func_name, expr)
+    local cmd = { "raddbg", "--ipc", func_name }
+    if type(expr) == "function" then
+        table.insert(cmd, expr())
+    elseif expr ~= nil then
+        table.insert(cmd, expr)
+    end
+
+    local job = vim.fn.jobstart(cmd, {
+        on_exit = function(_, code)
+            if code ~= 0 and code ~= 143 then
+                vim.schedule(function()
+                    vim.notify("raddbg IPC failed (is raddbg running?)", vim.log.levels.WARN)
+                end)
+            end
+        end,
+    })
+
+    vim.defer_fn(function()
+        -- jobwait returns -1 if still running after 0ms
+        if job > 0 and vim.fn.jobwait({ job }, 0)[1] == -1 then
+            vim.fn.jobstop(job)
+            vim.notify("raddbg IPC timed out (stale listener? see ss -ltnp | grep 7423)", vim.log.levels.WARN)
+        end
+    end, 2000)
+end
+
+keymap_set("n", "<leader>dg", function() debugger_run("find_code_location", get_current_file_line_col) end, "[d]ebuger [g]oto current file location", { noremap = true })
+keymap_set("n", "<leader>dt", function() debugger_run("toggle_breakpoint", get_current_file_line_col) end,  "[d]ebuger [t]oggle breakpoint",          { noremap = true })
+keymap_set("n", "<leader>ds", function() debugger_run("launch_and_run") end,                                "[d]ebugger [s]tart program",             { noremap = true })
+keymap_set("n", "<leader>dl", function() debugger_run("run_to_line", get_current_file_line_col) end,        "[d]ebugger run to [l]ine",               { noremap = true })
+keymap_set("n", "<leader>dw", function()
+    debugger_run("toggle_watch_expr", function() return vim.fn.expand("<cword>") end)
+end,  "[d]ebugger [w]atch word", { noremap = true })
+keymap_set("v", "<leader>dw", function()
+    debugger_run("toggle_watch_expr", function()
+        vim.cmd('noautocmd normal! "zy')
+        return (vim.fn.getreg("z"):gsub("\n", " "))
+    end)
+end, "[d]ebugger [w]atch selection", { noremap = true })
+keymap_set("n", "<leader>do", function()
+    local exe = vim.fn.expand("$HOME/Applications/bin/raddbg")
+    if vim.fn.executable(exe) ~= 1 then
+        vim.notify("raddbg not found or not executable: " .. exe, vim.log.levels.ERROR)
+        return
+    else
+        debugger_run("find_code_location", get_current_file_line_col)
+    end
+    vim.fn.jobstart({ exe, "--project:project.raddbg" }, {
+        detach = true, -- keep running after Neovim exits
+    })
+end, "[d]ebugger [o]pen", { noremap = true })
+
+-- keymap_set("n", "c", "continue",          "[d]ebugger [c]ontinue program")
+-- keymap_set("n", "k", "kill",              "[d]ebugger [s]top program")
+-- keymap_set("n", "r", "restart",           "[d]ebugger [r]estart program")
+-- keymap_set("n", "d", "go_to_disassembly", "[d]ebugger goto [d]isassembly", get_current_file_line_col)
+
 -- Neovim Gui
 --=============================================================================
 
 if vim.g.neovide then
-    vim.o.guifont = "CommitMono,Consolas:h10"
+    vim.o.guifont = "CommitMono,Consolas:h12"
     keymap_set({ "n", "v" }, "<C-=>",   ":lua vim.g.neovide_scale_factor = vim.g.neovide_scale_factor + 0.1<CR>", "Neovide: Increase font size")
     keymap_set({ "n", "v" }, "<C-->",   ":lua vim.g.neovide_scale_factor = vim.g.neovide_scale_factor - 0.1<CR>", "Neovide: Decrease font size")
     keymap_set({ "n", "v" }, "<C-0>",   ":lua vim.g.neovide_scale_factor = 1<CR>",                                "Neovide: Reset font size to default")
@@ -451,20 +532,26 @@ vim.cmd("packadd nvim.undotree")
 local plugin_path = vim.fn.stdpath("config") .. "/plugins"
 vim.opt.runtimepath:append(plugin_path .. "/*")
 
--- Session Manager ============================================================
-require("auto-session").setup({
-    cwd_change_handling = true,
-})
-
 -- Theme ======================================================================
 -- Colorscheme
+vim.o.termguicolors = true
 vim.g.gruvbox_material_enable_italic = true
-vim.g.gruvbox_material_background = 'dark'
-vim.cmd.colorscheme('gruvbox-material')
+vim.g.gruvbox_material_better_performance = 1
 
 local function set_color()
-    vim.api.nvim_set_hl(0, "Comment", { fg = vim.o.background == "dark" and "#B8BB26" or "#79740E" })
-    vim.api.nvim_set_hl(0, "NoteKeyword", { bg = vim.o.background == "dark" and "#D8A657" or "#B47109", fg = vim.o.background == "dark" and "#3C3836" or "#F2E5BC", bold = true })
+    if vim.o.background == "dark" then
+        vim.g.gruvbox_material_background = 'soft'
+        vim.g.gruvbox_material_foreground = 'material'
+        vim.cmd.colorscheme('gruvbox-material')
+    else
+        vim.g.gruvbox_material_background = 'hard'
+        vim.g.gruvbox_material_foreground = 'original'
+        vim.cmd.colorscheme('gruvbox-material')
+    end
+    vim.api.nvim_set_hl(0, "Comment",      { fg = vim.o.background == "dark" and "#B8BB26" or "#79740E" })
+    vim.api.nvim_set_hl(0, "NoteKeyword",  { bg = vim.o.background == "dark" and "#D8A657" or "#B47109", fg = vim.o.background == "dark" and "#3C3836" or "#F2E5BC", bold = true })
+    vim.api.nvim_set_hl(0, "LineNr",       { fg = "#928374" })
+    vim.api.nvim_set_hl(0, "CursorLineNr", { fg = vim.o.background == "dark" and "#BDAE93" or "#7C6F64", bold = true })
 end
 set_color()
 
@@ -517,34 +604,6 @@ require('mini.cmdline').setup()
 -- Undo
 require("select-undo").setup()
 
--- Multicursor
-require("multicursor-nvim").setup()
-keymap_set({"n", "x"}, "<C-k>", function() require("multicursor-nvim").lineAddCursor(-1) end,    "Add cursor ↑")
-keymap_set({"n", "x"}, "<C-j>", function() require("multicursor-nvim").lineAddCursor(1) end,     "Add cursor ↓")
-keymap_set({"n", "x"}, "<C-d>", function() require("multicursor-nvim").matchAddCursor(1) end,    "Add cursor to next match")
-keymap_set({"n", "x"}, "<C-S-d>", function() require("multicursor-nvim").matchAddCursor(-1) end, "Add cursor to prev match")
-keymap_set("n", "<c-leftmouse>",   require("multicursor-nvim").handleMouse,        "Multi-cursor click")
-keymap_set("n", "<c-leftdrag>",    require("multicursor-nvim").handleMouseDrag,    "Multi-cursor drag")
-keymap_set("n", "<c-leftrelease>", require("multicursor-nvim").handleMouseRelease, "Multi-cursor release")
-require("multicursor-nvim").addKeymapLayer(function(layer_set)
-    layer_set({"n", "x"}, "<C-s>",  function() require("multicursor-nvim").matchSkipCursor(1) end)
-    layer_set({"n", "x"}, "<C-S-s>", function() require("multicursor-nvim").matchSkipCursor(-1) end)
-    -- Select a different cursor as the main one.
-    layer_set({"n", "x"}, "<up>",   require("multicursor-nvim").prevCursor)
-    layer_set({"n", "x"}, "<down>", require("multicursor-nvim").nextCursor)
-    -- Delete the main cursor.
-    layer_set({"n", "x"}, "<leader>x", require("multicursor-nvim").deleteCursor)
-    -- Enable and clear cursors using escape.
-    layer_set("n", "<esc>", function()
-        if not require("multicursor-nvim").cursorsEnabled() then
-            require("multicursor-nvim").enableCursors()
-        else
-            require("multicursor-nvim").clearCursors()
-        end
-    end)
-end)
--- vim.api.nvim_set_hl(0, "MultiCursorCursor", { fg = color_table.bg_lighter, bg = color_table.fg_dark })
-
 -- Bracket Split and Join
 require("mini.splitjoin").setup({
     mappings = {
@@ -553,18 +612,14 @@ require("mini.splitjoin").setup({
 })
 
 -- Better "f", "t", "F", "T"
-require("flash").setup({
-  modes = {
-    char = {
-      -- jump_labels = true
-    }
-  }
+require("mini.jump").setup({
+    delay = {
+        highlight = 0,
+    },
+    silent = true,
 })
-keymap_set({ "n", "x", "o" }, "<leader>ef", function() require("flash").jump() end,              "[e]dit [f]lash")
-keymap_set({ "n", "x", "o" }, "<leader>eF", function() require("flash").treesitter() end,        "[e]dit [F]lashback")
-keymap_set({ "o", "x" },      "<leader>er", function() require("flash").treesitter_search() end, "Treesitter Search")
-keymap_set("o",               "<leader>eR", function() require("flash").remote() end,            "Remote Flash")
--- keymap_set({ "c" },           "<c-s>",  function() require("flash").toggle() end,            "Toggle Flash Search")
+keymap_set({ "n", "x", "o" }, "<leader>ef", function() require("mini.jump").smart_jump() end,     "[e]dit [f]orward jump")
+keymap_set({ "n", "x", "o" }, "<leader>eF", function() require("mini.jump").smart_jump(true) end, "[e]dit [F]orward jump backward")
 
 -- Better "w", "e" and "b"
 keymap_set({ "n", "o", "x" }, "w", "<cmd>lua require('spider').motion('w')<CR>", "Next sub[w]ord")
@@ -590,6 +645,11 @@ require("mini.surround").setup({
 })
 require("mini.ai").setup()
 
+-- Session Manager ============================================================
+require("auto-session").setup({
+    cwd_change_handling = true,
+})
+
 -- Macro ======================================================================
 require("macrothis").setup()
 vim.api.nvim_create_user_command("Macro", function(opts)
@@ -605,7 +665,7 @@ vim.api.nvim_create_user_command("Macro", function(opts)
         register = function() require('macrothis').register() end,
         copy_register_printable = function() require('macrothis').copy_register_printable() end,
         copy_macro_printable    = function() require('macrothis').copy_macro_printable() end,
-        find_saved = function() require('telescope').extensions.macrothis.macrothis() end,
+        find_saved = function() require('macrothis').load() end,
     }
     local fn = actions[subcmd]
     if fn then
@@ -699,14 +759,14 @@ require("quicker").setup({
 -- Mark Management ============================================================
 -- Files Marks
 
-local harpoon = require("harpoon")
-harpoon:setup()
-keymap_set("n", "<leader>mf", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end, "[m]ark [f]iles menu")
-keymap_set("n", "<leader>ma", function() harpoon:list():add() end,                         "[m]ark [a]dd file")
-keymap_set("n", "<leader>m1", function() harpoon:list():select(1) end,                     "[m]ark goto [1]'st file")
-keymap_set("n", "<leader>m2", function() harpoon:list():select(2) end,                     "[m]ark goto [2]'nd file")
-keymap_set("n", "<leader>m3", function() harpoon:list():select(3) end,                     "[m]ark goto [3]'rd file")
-keymap_set("n", "<leader>m4", function() harpoon:list():select(4) end,                     "[m]ark goto [4]'th file")
+-- local harpoon = require("harpoon")
+-- harpoon:setup()
+-- keymap_set("n", "<leader>mf", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end, "[m]ark [f]iles menu")
+-- keymap_set("n", "<leader>ma", function() harpoon:list():add() end,                         "[m]ark [a]dd file")
+-- keymap_set("n", "<leader>m1", function() harpoon:list():select(1) end,                     "[m]ark goto [1]'st file")
+-- keymap_set("n", "<leader>m2", function() harpoon:list():select(2) end,                     "[m]ark goto [2]'nd file")
+-- keymap_set("n", "<leader>m3", function() harpoon:list():select(3) end,                     "[m]ark goto [3]'rd file")
+-- keymap_set("n", "<leader>m4", function() harpoon:list():select(4) end,                     "[m]ark goto [4]'th file")
 
 -- File Manager ===============================================================
 function _G.get_oil_winbar()
@@ -750,7 +810,7 @@ require("oil").setup({
         ["gx"]  = "actions.open_external",
         ["<leader>fF"]  = {
             function()
-                require("telescope.builtin").find_files({ cwd = require("oil").get_current_dir() })
+                require("mini.pick").builtin.files({}, { source = { cwd = require("oil").get_current_dir() } })
             end,
             mode = "n",
             nowait = true,
@@ -758,7 +818,7 @@ require("oil").setup({
         },
         ["<leader>fG"]  = {
             function()
-                require("telescope.builtin").live_grep({ cwd = require("oil").get_current_dir() })
+                require("mini.pick").builtin.grep_live({}, { source = { cwd = require("oil").get_current_dir() } })
             end,
             mode = "n",
             nowait = true,
@@ -807,140 +867,159 @@ require("oil-git-status").setup()
 keymap_set("n", "<leader>-", "<CMD>Oil<CR>", "Open parent directory")
 
 -- Fuzzy Finder ===============================================================
-require("telescope").setup {
-    defaults = {
-        mappings = {
-            i = {
-                ["<C-S-v>"] = { "<C-r>+", type = "command" },
-            },
-        },
+local MiniPick = require("mini.pick")
+local MiniExtra = require("mini.extra")
+
+local paste_clipboard = function()
+    local reg = vim.fn.getreg("+") or ""
+    local text = reg:gsub("[\n\t]", " ")
+    local query = MiniPick.get_picker_query() or {}
+    for _, ch in ipairs(vim.fn.split(text, [[\zs]])) do
+        table.insert(query, ch)
+    end
+    MiniPick.set_picker_query(query)
+end
+
+MiniPick.setup({
+    mappings = {
+        paste_clipboard = { char = "<C-S-v>", func = paste_clipboard },
     },
-    extensions = {
-        ["ui-select"] = {
-            require("telescope.themes").get_dropdown(),
+})
+MiniExtra.setup()
+
+local function grep_word()
+    local mode = vim.fn.mode()
+    local pattern
+    if mode == "v" or mode == "V" or mode == "\22" then
+        local _, ls, cs = unpack(vim.fn.getpos("'<"))
+        local _, le, ce = unpack(vim.fn.getpos("'>"))
+        local lines = vim.api.nvim_buf_get_text(0, ls - 1, cs - 1, le - 1, ce, {})
+        pattern = table.concat(lines, "\n")
+    else
+        pattern = vim.fn.expand("<cword>")
+    end
+    if pattern and pattern ~= "" then
+        MiniPick.builtin.grep({ pattern = pattern })
+    end
+end
+
+local function pick_tags(only_current_file)
+    local curfile = vim.fn.expand("%:p")
+    local raw_tags = vim.fn.taglist(".*")
+    if not raw_tags or #raw_tags == 0 then
+        vim.notify("No tags found", vim.log.levels.WARN)
+        return
+    end
+    local items = {}
+    for _, tag in ipairs(raw_tags) do
+        local f = vim.fn.fnamemodify(tag.filename, ":p")
+        if not only_current_file or f == curfile then
+            local desc = string.format("%s\t%s\t%s", tag.name, tag.filename, tag.cmd or "")
+            table.insert(items, {
+                text = desc,
+                path = f,
+                tag = tag,
+            })
+        end
+    end
+    if #items == 0 then
+        vim.notify(only_current_file and "No tags found for current buffer" or "No tags found", vim.log.levels.WARN)
+        return
+    end
+    local title = only_current_file and "Current Buffer Tags" or "Tags"
+    MiniPick.start({
+        source = {
+            items = items,
+            name = title,
+            choose = function(item)
+                if not item or not item.tag then return end
+                vim.cmd.edit(item.tag.filename)
+                local cmd = item.tag.cmd
+                if cmd then
+                    if cmd:match("^%d+$") then
+                        vim.api.nvim_win_set_cursor(0, { tonumber(cmd), 0 })
+                    else
+                        local clean = cmd:gsub("^%^", ""):gsub("%$$", "")
+                        clean = clean:gsub([[^/]], ""):gsub([[/$]], "")
+                        vim.fn.search(clean)
+                    end
+                end
+            end,
+            preview = function(buf_id, item)
+                if not item or not item.tag then return end
+                MiniPick.default_preview(buf_id, item)
+                local cmd = item.tag.cmd
+                if cmd then
+                    vim.api.nvim_buf_call(buf_id, function()
+                        if cmd:match("^%d+$") then
+                            vim.api.nvim_win_set_cursor(0, { tonumber(cmd), 0 })
+                        else
+                            local clean = cmd:gsub("^%^", ""):gsub("%$$", "")
+                            clean = clean:gsub([[^/]], ""):gsub([[/$]], "")
+                            vim.fn.search(clean)
+                        end
+                    end)
+                end
+            end,
         },
-    },
-}
--- Enable Telescope extensions if they are installed
-pcall(require("telescope").load_extension, "fzf")
-pcall(require("telescope").load_extension, "ui-select")
+    })
+end
+
+local function pick_sessions()
+    local detected = require("mini.sessions").detected
+    local items = {}
+    for name, data in pairs(detected) do
+        local display = name:gsub("%%", "/")
+        table.insert(items, {
+            text = display,
+            name = name,
+            modify_time = data.modify_time or 0,
+        })
+    end
+    table.sort(items, function(a, b) return a.modify_time > b.modify_time end)
+    if #items == 0 then
+        vim.notify("No sessions found", vim.log.levels.WARN)
+        return
+    end
+    MiniPick.start({
+        source = {
+            items = items,
+            name = "Sessions",
+            choose = function(item)
+                if not item or not item.name then return end
+                vim.cmd("SessionRestore " .. item.name)
+            end,
+        },
+    })
+end
+
+MiniPick.registry.tags = function() pick_tags(false) end
+MiniPick.registry.current_buffer_tags = function() pick_tags(true) end
+MiniPick.registry.macrothis = function() require("macrothis").load() end
+MiniPick.registry.sessions = pick_sessions
+
 -- Keymaps
-keymap_set("n", "<leader>fk", require("telescope.builtin").keymaps,             "[f]ind [k]eymaps")
-keymap_set("n", "<leader>ff", require("telescope.builtin").find_files,          "[f]ind [f]iles")
-keymap_set("n", "<leader>fg", require("telescope.builtin").live_grep,           "[f]ind [g]rep")
-keymap_set("n", "<leader>ft", require("telescope.builtin").tags,                "[f]ind [t]ags")
-keymap_set("n", "<leader>fc", require("telescope.builtin").current_buffer_tags, "[f]ind [c]urrent tags")
-keymap_set("n", "<leader>fo", require("telescope.builtin").oldfiles,            "[f]ind [o]ldfiles")
-keymap_set("n", "<leader>fb", require("telescope.builtin").buffers,             "[f]ind [b]uffers")
+keymap_set("n", "<leader>fs", pick_sessions,                                   "[f]ind [s]essions")
+keymap_set("n", "<leader>fk", MiniExtra.pickers.keymaps,                        "[f]ind [k]eymaps")
+keymap_set("n", "<leader>ff", MiniPick.builtin.files,                           "[f]ind [f]iles")
+keymap_set("n", "<leader>fg", MiniPick.builtin.grep_live,                       "[f]ind [g]rep")
+keymap_set("n", "<leader>ft", function() pick_tags(false) end,                  "[f]ind [t]ags")
+keymap_set("n", "<leader>fc", function() pick_tags(true) end,                   "[f]ind [c]urrent tags")
+keymap_set("n", "<leader>fo", MiniExtra.pickers.oldfiles,                       "[f]ind [o]ldfiles")
+keymap_set("n", "<leader>fb", MiniPick.builtin.buffers,                          "[f]ind [b]uffers")
 keymap_set("n", "<leader>fG", function()
-    require("telescope.builtin").live_grep({ cwd = "%:p:h" })
+    MiniPick.builtin.grep_live({}, { source = { cwd = vim.fn.expand("%:p:h") } })
 end, "[f]ind [G]rep current file dir")
 keymap_set("n", "<leader>fF", function()
-    require("telescope.builtin").find_files({ cwd = "%:p:h" })
+    MiniPick.builtin.files({}, { source = { cwd = vim.fn.expand("%:p:h") } })
 end, "[f]ind [F]iles current file dir")
-keymap_set({"n", "x"}, "<leader>fw", require("telescope.builtin").grep_string,         "[f]ind [w]ord")
+keymap_set({"n", "x"}, "<leader>fw", grep_word,                                  "[f]ind [w]ord")
 keymap_set("n", "<leader>/", function()
-    require("telescope.builtin").current_buffer_fuzzy_find(require("telescope.themes").get_dropdown {
-        winblend = 10,
-        previewer = false,
-    })
+    MiniExtra.pickers.buf_lines({ scope = "current" })
 end, "Fuzzily search in current buffer")
 keymap_set("n", "<leader>f/", function()
-    require("telescope.builtin").live_grep {
-        grep_open_files = true,
-        prompt_title = "Live Grep in Open Files",
-    }
+    MiniExtra.pickers.buf_lines({ scope = "all" })
 end, "[f]ind Open Files")
-
--- Debugger ===================================================================
-
-vim.api.nvim_create_autocmd("CmdlineEnter", {
-    callback = function()
-        local cmd = vim.fn.getcmdline()
-        if vim.fn.exists(":Termdebug") == 0 then
-            vim.cmd("packadd termdebug")
-        end
-    end,
-})
-
-vim.g.termdebug_config = {
-    disasm_window = true,
-    variables_window = true,
-    wide = 10,
-    disasm_window = 15,
-    variables_window = 15,
-    command = {
-        "gdb", "-nx",
-        "-ex", "set breakpoint pending on",
-        "-ex", "set disassembly-flavor intel",
-        "-ex", "set confirm off",
-        "-ex", "set print pretty on",
-    }
-}
-local termdebug_keys = {
-    { "n", "<leader>dr",  ":call TermDebugSendCommand('run')<CR>",      "[d]ebugger [r]un" },
-    { "n", "<leader>dc",  ":call TermDebugSendCommand('continue')<CR>", "[d]ebugger [c]ontinue" },
-    { "n", "<leader>de",  ":call TermDebugSendCommand('exit')<CR>",     "[d]ebugger [e]xit" },
-    { "n", "<leader>dk",  ":call TermDebugSendCommand('kill')<CR>",     "[d]ebugger [k]ill" },
-    { "n", "<leader>db",  ":Break<CR>",                                 "[d]ebugger [b]reakpoint" },
-    { "n", "<leader>du",  ":Clear<CR>",                                 "[d]ebugger [u]nbreakpoint" },
-    { "n", "<leader>dt",  ":Tbreak<CR>",                                "[d]ebugger [t]reak" },
-    { "n", "<leader>dc",  ":Continue<CR>",                              "[d]ebugger [c]ontinue" },
-    { "n", "<leader>dgg", ":Gdb<CR>",                                   "[d]ebugger [g]oto [g]db" },
-    { "n", "<leader>dgp", ":Program<CR>",                               "[d]ebugger [g]oto [p]rogram" },
-    { "n", "<leader>dgs", ":Source<CR>",                                "[d]ebugger [g]oto [s]ource" },
-    { "n", "<leader>dga", ":Asm<CR>",                                   "[d]ebugger [g]oto [a]ssembly" },
-    { "n", "<leader>dgl", ":Var<CR>",                                   "[d]ebugger [g]oto [l]ocal watchlist" },
-    { "n", "<F1>",        ":Over<CR>",                                  "Debugger Next" },
-    { "n", "<F2>",        ":Step<CR>",                                  "Debugger Step" },
-    { "n", "=",           ":Up<CR>",                                    "Debugger go Up frame" },
-}
-local current_debug_edit_file=""
-vim.api.nvim_create_autocmd("User", {
-    pattern = "TermdebugStartPre",
-    callback = function()
-        for _, k in ipairs(termdebug_keys) do
-            keymap_set(k[1], k[2], k[3], k[4])
-        end
-        current_debug_edit_file=vim.api.nvim_buf_get_name(0)
-        vim.cmd.tabnew()
-    end,
-})
-vim.api.nvim_create_autocmd("User", {
-    pattern = "TermdebugStartPost",
-    callback = function()
-        vim.cmd("Gdb")
-        vim.cmd("wincmd K")
-        vim.cmd("Source")
-        vim.cmd.edit(current_debug_edit_file)
-        vim.cmd("wincmd K")
-        vim.cmd.resize(30)
-        vim.cmd("Program")
-        vim.cmd.resize(15)
-        vim.cmd("Asm")
-        vim.cmd.resize(6)
-        vim.cmd("Source")
-    end,
-})
-vim.api.nvim_create_autocmd("User", {
-    pattern = "TermdebugStopPre",
-    callback = function()
-        vim.cmd("Source")
-        current_debug_edit_file=vim.api.nvim_buf_get_name(0)
-        vim.cmd("Gdb")
-        vim.cmd("Bd")
-    end,
-})
-vim.api.nvim_create_autocmd("User", {
-    pattern = "TermdebugStopPost",
-    callback = function()
-        for _, k in ipairs(termdebug_keys) do
-            pcall(vim.keymap.del, k[1], k[2])
-        end
-        vim.cmd.tabclose()
-        vim.cmd.edit(current_debug_edit_file)
-    end,
-})
 
 -- Git ========================================================================
 -- Git Hunk
@@ -990,24 +1069,3 @@ vim.api.nvim_create_user_command("AiOpen",  function()
         end,
     })
 end, { desc = "Open AI Window" });
-
--- 99
-vim.opt.runtimepath:append(plugin_path .. "/Manual/99")
-local AntigravityProvider = setmetatable({}, { __index = require("99.providers").BaseProvider })
-function AntigravityProvider._build_command(_, query, context)
-    return {
-        "agy",
-        "--print",
-        query,
-    }
-end
-function AntigravityProvider._get_provider_name()
-    return "Antigravity"
-end
-require("99").setup({
-    provider = AntigravityProvider,
-    tmp_dir = vim.fn.expand('~') .. "/.gemini/antigravity-cli/tmp",
-})
-keymap_set("x", "<leader>ai", require("99").visual, "[a]i do the thing")
-vim.api.nvim_create_user_command("AiSearch", require("99").search, { desc = "AI Search" });
-vim.api.nvim_create_user_command("AiStop", require("99").stop_all_requests, { desc = "Stop AI" });

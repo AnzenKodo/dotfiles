@@ -109,9 +109,7 @@ nmap <C-S-d> <Action>(UnselectPreviousOccurrence)
 
 nmap ]d <Action>(GotoNextError)
 nmap [d <Action>(GotoPreviousError)
-
 " autocmd BufWritePost * action CompileDirty
 map  <F5> <Action>(CompileDirty)
 nmap <F2> <Action>(RenameElement)
-
 nmap <C-S-p> <Action>(GotoAction)

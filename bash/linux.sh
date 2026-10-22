@@ -8,6 +8,7 @@ source ~/Dotfiles/bash/unix.sh
 # Path =========================================================================
 
 export PATH="$HOME/Code/Tools/LLVM-22.1.0-Linux-X64/bin"\
+":$HOME/Applications/activitywatch"\
 ":$PATH"
 
 # Set Variables
@@ -91,6 +92,3 @@ tserver()
     fi
     tmux new-session -A -s "$session_name"
 }
-
-# opencode
-export PATH=/home/ramen/.opencode/bin:$PATH
