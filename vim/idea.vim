@@ -63,7 +63,6 @@ nmap <leader>fg <Action>(FindInPath)
 xmap <leader>fg <Action>(FindInPath)
 nmap <leader>fb <Action>(Switcher)
 nmap <leader>fo <Action>(RecentFiles)
-nmap <leader>fk <Action>(GotoAction)
 nmap <leader>fc <Action>(FileStructurePopup)
 
 " Marks / bookmarks
@@ -107,12 +106,12 @@ vmap <C-e> <Action>(EditorEscape)
 nmap <A-d> <Action>(SelectNextOccurrence)
 xmap <A-d> <Action>(SelectNextOccurrence)
 nmap <C-S-d> <Action>(UnselectPreviousOccurrence)
-nmap <A-n> <Action>(SelectNextOccurrence)
-"nmap <C-d> <Plug>NextWholeOccurrence
-"xmap <C-d> <Plug>NextWholeOccurrence
 
-" autocmd BufWritePost * action CompileDirty
 nmap ]d <Action>(GotoNextError)
 nmap [d <Action>(GotoPreviousError)
+
+" autocmd BufWritePost * action CompileDirty
 map  <F5> <Action>(CompileDirty)
 nmap <F2> <Action>(RenameElement)
+
+nmap <C-S-p> <Action>(GotoAction)

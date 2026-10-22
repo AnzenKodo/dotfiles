@@ -38,6 +38,11 @@ nnoremap <C-s> :w<CR>
 inoremap <C-s> <Esc>:w<CR>
 vnoremap <C-s> <Esc>:w<CR>
 
+" Paste (do not overwrite default register on visual paste)
+xnoremap p P
+xnoremap P p
+
+
 " Windows
 nnoremap <leader>wv <C-w>v
 nnoremap <leader>wo <C-w>s
