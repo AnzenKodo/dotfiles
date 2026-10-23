@@ -73,30 +73,8 @@ end
 
 keymap_set("n", "L", vim.diagnostic.open_float, "Show Diagnostic")
 
-keymap_set("n", "<A-j>", "<cmd>execute 'move .+' . v:count1<cr>==",                   "Move Line Down")
-keymap_set("n", "<A-k>", "<cmd>execute 'move .-' . (v:count1 + 1)<cr>==",             "Move Line Up")
-keymap_set("i", "<A-j>", "<esc><cmd>m .+1<cr>==gi",                                   "Move Line Down")
-keymap_set("i", "<A-k>", "<esc><cmd>m .-2<cr>==gi",                                   "Move Line Up")
-keymap_set("v", "<A-j>", ":<C-u>execute \"'<,'>move '>+\" . v:count1<cr>gv=gv",       "Move Line Down")
-keymap_set("v", "<A-k>", ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<cr>gv=gv", "Move Line Up")
-
-keymap_set("n", "<A-[>", function() vim.fn.search("^\\s\\+$", "bW") end, "Prev filled whitespace line")
-keymap_set("n", "<A-]>", function() vim.fn.search("^\\s\\+$", "W") end,  "Next filled whitespace line")
-
--- Paste
-keymap_set("n", "<leader>ep", ":iput<CR>", "[e]dit [p]aste");
-keymap_set("x", "P", function() vim.cmd("normal! p") end, "[P]uts before cursor")
-keymap_set("x", "p", function() vim.cmd("normal! P") end, "[p]uts after cursor")
-keymap_set("n", "<A-[>", function()
-    if vim.fn.search("^\\s*$", "bW") == 0 then
-        vim.cmd("normal! gg")
-    end
-end, "Prev blank line or start of file")
-keymap_set("n", "<A-]>", function()
-    if vim.fn.search("^\\s*$", "W") == 0 then
-        vim.cmd("normal! G")
-    end
-end, "Next blank line or end of file")
+-- Window
+--=============================================================================
 
 local toggle_state = false
 keymap_set("n", "<leader>w/", function()
@@ -110,6 +88,7 @@ keymap_set("n", "<leader>w/", function()
         vim.cmd("wincmd =")
     end
 end, "[w]indow Toggle")
+
 keymap_set("n", "<leader>wd", function()
     local current_win = vim.api.nvim_get_current_win()
     local current_buf = vim.api.nvim_get_current_buf()
@@ -184,20 +163,10 @@ keymap_set({"n", "v"}, "<leader>wf", function()
     end
 end, "[w]indow goto [f]ile")
 
--- Better Search Next
-keymap_set("n", "n", "'Nn'[v:searchforward].'zv'", "[n]ext Search Result", { expr = true })
-keymap_set("x", "n", "'Nn'[v:searchforward]",      "[n]ext Search Result", { expr = true })
-keymap_set("o", "n", "'Nn'[v:searchforward]",      "[n]ext Search Result", { expr = true })
-keymap_set("n", "N", "'nN'[v:searchforward].'zv'", "Prev Search Result", { expr = true })
-keymap_set("x", "N", "'nN'[v:searchforward]",      "Prev Search Result", { expr = true })
-keymap_set("o", "N", "'nN'[v:searchforward]",      "Prev Search Result", { expr = true })
-
 -- Autocommands
 --=============================================================================
 
--- Better whitespace handling
-keymap_set("i", "<CR>", "<Space><BS><CR>",   "Enter new line (keep cursor at start of line)")
-keymap_set("i", "<Esc>", "<Space><BS><Esc>", "Exit insert mode (keep cursor position unchanged)")
+-- Trim whitespace
 vim.api.nvim_create_autocmd({ "BufWritePre" }, {
     pattern = { "*" },
     callback = function()
@@ -236,8 +205,6 @@ vim.api.nvim_create_autocmd("BufReadPost", {
 -- Buffers
 --=============================================================================
 
-keymap_set("n", "[b", "<cmd>bprevious<cr>",    "Prev Buffer")
-keymap_set("n", "]b", "<cmd>bnext<cr>",        "Next Buffer")
 vim.api.nvim_create_user_command("Bda", function()
     local cur = vim.api.nvim_get_current_buf()
     for _, buf in ipairs(vim.api.nvim_list_bufs()) do
@@ -246,7 +213,9 @@ vim.api.nvim_create_user_command("Bda", function()
         end
     end
 end, { desc = "Close all other buffers, keep only current" })
-vim.api.nvim_create_user_command("Bd",  function() vim.cmd("bn | bd#") end,                      { desc = "Close previous buffer and move to next" })
+vim.api.nvim_create_user_command("Bd",  function()
+    vim.cmd("bn | bd#")
+end, { desc = "Close previous buffer and move to next" })
 
 -- Autocomplete
 --=============================================================================
@@ -321,7 +290,7 @@ vim.api.nvim_create_user_command("Make", function(opts)
         end
     end
     local lines = {}
-
+    
     -- Respect $* placeholder in makeprg (e.g. "make $*"), fall back to appending
     local cmd
     if opts.args ~= "" then
@@ -330,7 +299,7 @@ vim.api.nvim_create_user_command("Make", function(opts)
     else
         cmd = vim.o.makeprg:gsub("%$%*", "")
     end
-
+    
     -- Run via shell so makeprg strings like "cargo build 2>&1" work correctly
     vim.fn.jobstart({ vim.o.shell, vim.o.shellcmdflag, cmd }, {
         stdout_buffered = true,
@@ -449,7 +418,7 @@ local function debugger_run(func_name, expr)
     elseif expr ~= nil then
         table.insert(cmd, expr)
     end
-
+    
     local job = vim.fn.jobstart(cmd, {
         on_exit = function(_, code)
             if code ~= 0 and code ~= 143 then
@@ -459,7 +428,7 @@ local function debugger_run(func_name, expr)
             end
         end,
     })
-
+    
     vim.defer_fn(function()
         -- jobwait returns -1 if still running after 0ms
         if job > 0 and vim.fn.jobwait({ job }, 0)[1] == -1 then
@@ -549,6 +518,10 @@ local function set_color()
         vim.g.gruvbox_material_background = 'hard'
         vim.g.gruvbox_material_foreground = 'original'
         vim.cmd.colorscheme('gruvbox-material')
+    end
+    if not vim.g.neovide then
+        vim.api.nvim_set_hl(0, 'Normal',       { bg = 'NONE', ctermbg = 'NONE' })
+        vim.api.nvim_set_hl(0, 'NormalNC',     { bg = 'NONE', ctermbg = 'NONE' })
     end
     vim.api.nvim_set_hl(0, "Comment",      { fg = vim.o.background == "dark" and "#B8BB26" or "#79740E" })
     vim.api.nvim_set_hl(0, "NoteKeyword",  { bg = vim.o.background == "dark" and "#D8A657" or "#B47109", fg = vim.o.background == "dark" and "#3C3836" or "#F2E5BC", bold = true })
@@ -653,7 +626,9 @@ require("auto-session").setup({
 })
 
 -- Macro ======================================================================
-require("macrothis").setup()
+require("macrothis").setup({
+    datafile = vim.fn.stdpath("config") .. "/macrothis.json",
+})
 vim.api.nvim_create_user_command("Macro", function(opts)
     local subcmd = opts.args ~= "" and opts.args or "find_saved"
     local actions = {
@@ -716,12 +691,12 @@ miniclue.setup({
         miniclue.gen_clues.z(),
         { mode = "n", keys = "<leader>f",  desc = "[f]ind" },
         { mode = "n", keys = "<leader>e",  desc = "[e]dit" },
-        { mode = "n", keys = "<leader>m",  desc = "[m]ark" },
+        { mode = "n", keys = "<leader>b",  desc = "[b]ookmark" },
         { mode = "n", keys = "<leader>s",  desc = "[s]urround" },
         { mode = "n", keys = "<leader>w",  desc = "[w]indow" },
         { mode = "n", keys = "<leader>g",  desc = "[g]it" },
         { mode = "n", keys = "<leader>d",  desc = "[d]ebugger" },
-        { mode = "n", keys = "<leader>dg", desc = "[d]ebugger [g]oto" },
+        { mode = "n", keys = "<leader>t",  desc = "[t]ab" },
     },
     window = {
         -- Floating window config
@@ -735,6 +710,33 @@ miniclue.setup({
         scroll_up = "<C-u>",
     },
 })
+
+require('mini.clue').set_mapping_desc('n', '<Leader>wv', '[w]indow [v]ertical split')
+require('mini.clue').set_mapping_desc('n', '<Leader>wo', '[w]indow [o]pen horizontal split')
+require('mini.clue').set_mapping_desc('n', '<Leader>wl', '[w]indow focus [l]eft')
+require('mini.clue').set_mapping_desc('n', '<Leader>wh', '[w]indow focus right')
+require('mini.clue').set_mapping_desc('n', '<Leader>wj', '[w]indow focus down')
+require('mini.clue').set_mapping_desc('n', '<Leader>wk', '[w]indow focus up')
+require('mini.clue').set_mapping_desc('n', '<Leader>w>', '[w]indow grow width')
+require('mini.clue').set_mapping_desc('n', '<Leader>w<', '[w]indow shrink width')
+require('mini.clue').set_mapping_desc('n', '<Leader>wx', '[w]indow e[x]change')
+require('mini.clue').set_mapping_desc('n', '<Leader>ws', '[w]indow [s]witch')
+require('mini.clue').set_mapping_desc('n', '<Leader>wn', '[w]indow [n]ew')
+require('mini.clue').set_mapping_desc('n', '<Leader>w=', '[w]indow equalize')
+
+require('mini.clue').set_mapping_desc('n', '<Leader>tn', '[t]ab [n]ew')
+require('mini.clue').set_mapping_desc('n', '<Leader>tc', '[t]ab [c]lose')
+require('mini.clue').set_mapping_desc('n', '<Leader>to', '[t]ab [o]only this')
+require('mini.clue').set_mapping_desc('n', '<Leader>tl', '[t]ab next')
+require('mini.clue').set_mapping_desc('n', '<Leader>th', '[t]ab previous')
+require('mini.clue').set_mapping_desc('n', '<Leader>t^', '[t]ab [f]irst')
+require('mini.clue').set_mapping_desc('n', '<Leader>t$', '[t]ab [l]ast')
+require('mini.clue').set_mapping_desc('n', '<Leader>t>', '[t]ab move right')
+require('mini.clue').set_mapping_desc('n', '<Leader>t<', '[t]ab move left')
+require('mini.clue').set_mapping_desc('n', '<Leader>ts', '[t]ab [s]plit to new tab')
+for i = 1, 9 do
+  require('mini.clue').set_mapping_desc('n', '<Leader>t'.. i, 'go to [t]ab ['.. i..']')
+end
 
 -- Better Quickfix ============================================================
 require("quicker").setup()
@@ -757,18 +759,6 @@ require("quicker").setup({
     },
   },
 })
-
--- Mark Management ============================================================
--- Files Marks
-
--- local harpoon = require("harpoon")
--- harpoon:setup()
--- keymap_set("n", "<leader>mf", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end, "[m]ark [f]iles menu")
--- keymap_set("n", "<leader>ma", function() harpoon:list():add() end,                         "[m]ark [a]dd file")
--- keymap_set("n", "<leader>m1", function() harpoon:list():select(1) end,                     "[m]ark goto [1]'st file")
--- keymap_set("n", "<leader>m2", function() harpoon:list():select(2) end,                     "[m]ark goto [2]'nd file")
--- keymap_set("n", "<leader>m3", function() harpoon:list():select(3) end,                     "[m]ark goto [3]'rd file")
--- keymap_set("n", "<leader>m4", function() harpoon:list():select(4) end,                     "[m]ark goto [4]'th file")
 
 -- File Manager ===============================================================
 function _G.get_oil_winbar()
@@ -889,139 +879,107 @@ MiniPick.setup({
 })
 MiniExtra.setup()
 
-local function grep_word()
-    local mode = vim.fn.mode()
-    local pattern
-    if mode == "v" or mode == "V" or mode == "\22" then
-        local _, ls, cs = unpack(vim.fn.getpos("'<"))
-        local _, le, ce = unpack(vim.fn.getpos("'>"))
-        local lines = vim.api.nvim_buf_get_text(0, ls - 1, cs - 1, le - 1, ce, {})
-        pattern = table.concat(lines, "\n")
-    else
-        pattern = vim.fn.expand("<cword>")
-    end
-    if pattern and pattern ~= "" then
-        MiniPick.builtin.grep({ pattern = pattern })
-    end
-end
-
-local function pick_tags(only_current_file)
-    local curfile = vim.fn.expand("%:p")
-    local raw_tags = vim.fn.taglist(".*")
-    if not raw_tags or #raw_tags == 0 then
-        vim.notify("No tags found", vim.log.levels.WARN)
-        return
-    end
-    local items = {}
-    for _, tag in ipairs(raw_tags) do
-        local f = vim.fn.fnamemodify(tag.filename, ":p")
-        if not only_current_file or f == curfile then
-            local desc = string.format("%s\t%s\t%s", tag.name, tag.filename, tag.cmd or "")
-            table.insert(items, {
-                text = desc,
-                path = f,
-                tag = tag,
-            })
-        end
-    end
-    if #items == 0 then
-        vim.notify(only_current_file and "No tags found for current buffer" or "No tags found", vim.log.levels.WARN)
-        return
-    end
-    local title = only_current_file and "Current Buffer Tags" or "Tags"
-    MiniPick.start({
-        source = {
-            items = items,
-            name = title,
-            choose = function(item)
-                if not item or not item.tag then return end
-                vim.cmd.edit(item.tag.filename)
-                local cmd = item.tag.cmd
-                if cmd then
-                    if cmd:match("^%d+$") then
-                        vim.api.nvim_win_set_cursor(0, { tonumber(cmd), 0 })
-                    else
-                        local clean = cmd:gsub("^%^", ""):gsub("%$$", "")
-                        clean = clean:gsub([[^/]], ""):gsub([[/$]], "")
-                        vim.fn.search(clean)
-                    end
-                end
-            end,
-            preview = function(buf_id, item)
-                if not item or not item.tag then return end
-                MiniPick.default_preview(buf_id, item)
-                local cmd = item.tag.cmd
-                if cmd then
-                    vim.api.nvim_buf_call(buf_id, function()
-                        if cmd:match("^%d+$") then
-                            vim.api.nvim_win_set_cursor(0, { tonumber(cmd), 0 })
-                        else
-                            local clean = cmd:gsub("^%^", ""):gsub("%$$", "")
-                            clean = clean:gsub([[^/]], ""):gsub([[/$]], "")
-                            vim.fn.search(clean)
-                        end
-                    end)
-                end
-            end,
-        },
-    })
-end
-
-local function pick_sessions()
-    local detected = require("mini.sessions").detected
-    local items = {}
-    for name, data in pairs(detected) do
-        local display = name:gsub("%%", "/")
-        table.insert(items, {
-            text = display,
-            name = name,
-            modify_time = data.modify_time or 0,
-        })
-    end
-    table.sort(items, function(a, b) return a.modify_time > b.modify_time end)
-    if #items == 0 then
-        vim.notify("No sessions found", vim.log.levels.WARN)
-        return
-    end
-    MiniPick.start({
-        source = {
-            items = items,
-            name = "Sessions",
-            choose = function(item)
-                if not item or not item.name then return end
-                vim.cmd("SessionRestore " .. item.name)
-            end,
-        },
-    })
-end
-
-MiniPick.registry.tags = function() pick_tags(false) end
-MiniPick.registry.current_buffer_tags = function() pick_tags(true) end
 MiniPick.registry.macrothis = function() require("macrothis").load() end
-MiniPick.registry.sessions = pick_sessions
 
 -- Keymaps
-keymap_set("n", "<leader>fs", pick_sessions,                                   "[f]ind [s]essions")
-keymap_set("n", "<leader>fk", MiniExtra.pickers.keymaps,                        "[f]ind [k]eymaps")
-keymap_set("n", "<leader>ff", MiniPick.builtin.files,                           "[f]ind [f]iles")
-keymap_set("n", "<leader>fg", MiniPick.builtin.grep_live,                       "[f]ind [g]rep")
-keymap_set("n", "<leader>ft", function() pick_tags(false) end,                  "[f]ind [t]ags")
-keymap_set("n", "<leader>fc", function() pick_tags(true) end,                   "[f]ind [c]urrent tags")
-keymap_set("n", "<leader>fo", MiniExtra.pickers.oldfiles,                       "[f]ind [o]ldfiles")
-keymap_set("n", "<leader>fb", MiniPick.builtin.buffers,                          "[f]ind [b]uffers")
+keymap_set("n", "<leader>fk", MiniExtra.pickers.keymaps,  "[f]ind [k]eymaps")
+keymap_set("n", "<leader>ff", MiniPick.builtin.files,     "[f]ind [f]iles")
+keymap_set("n", "<leader>fg", MiniPick.builtin.grep_live, "[f]ind [g]rep")
+keymap_set("n", "<leader>fo", MiniExtra.pickers.oldfiles, "[f]ind [o]ldfiles")
+
 keymap_set("n", "<leader>fG", function()
     MiniPick.builtin.grep_live({}, { source = { cwd = vim.fn.expand("%:p:h") } })
 end, "[f]ind [G]rep current file dir")
 keymap_set("n", "<leader>fF", function()
     MiniPick.builtin.files({}, { source = { cwd = vim.fn.expand("%:p:h") } })
 end, "[f]ind [F]iles current file dir")
-keymap_set({"n", "x"}, "<leader>fw", grep_word,                                  "[f]ind [w]ord")
 keymap_set("n", "<leader>/", function()
     MiniExtra.pickers.buf_lines({ scope = "current" })
 end, "Fuzzily search in current buffer")
 keymap_set("n", "<leader>f/", function()
     MiniExtra.pickers.buf_lines({ scope = "all" })
 end, "[f]ind Open Files")
+
+keymap_set({"n", "x"}, "<leader>fw", function()
+    local mode = vim.fn.mode()
+    local pattern
+    -- Visual or Select mode
+    if mode:find('[vV\22sS\19]') then
+        -- Neovim 0.10+ (preferred)
+        if vim.fn.has('nvim-0.10') == 1 then
+            local opts = { type = mode:sub(1, 1):lower() }
+            -- normalize select → visual type
+            if opts.type == 's' then opts.type = 'v' end
+            if opts.type == 'S' then opts.type = 'V' end
+            if opts.type == '\19' then opts.type = '\22' end
+            local ok, region = pcall(vim.fn.getregion, vim.fn.getpos('.'), vim.fn.getpos('v'), opts)
+            if ok and region and #region > 0 then
+                pattern = table.concat(region, '\n')
+            end
+        end
+        -- Fallback for older Neovim / if getregion failed
+        if not pattern or pattern == '' then
+            local save = vim.fn.getreg('"')
+            local save_type = vim.fn.getregtype('"')
+            vim.cmd('normal! y')
+            pattern = vim.fn.getreg('"')
+            vim.fn.setreg('"', save, save_type)
+        end
+    else
+        pattern = vim.fn.expand('<cword>')
+    end
+    pattern = vim.trim(pattern or '')
+    if pattern ~= '' then
+        MiniPick.builtin.grep({ pattern = pattern })
+    end
+end, "[f]ind [w]ord")
+
+keymap_set('n', '<leader>fb', function()
+    MiniPick.builtin.buffers(nil, {
+        mappings = {
+            delete_marked = {
+                char = '<C-d>',
+                func = function()
+                    local matches = MiniPick.get_picker_matches()
+                    if not matches or not matches.marked or #matches.marked == 0 then
+                        return
+                    end
+                    for _, item in ipairs(matches.marked) do
+                        local buf = item.bufnr or item
+                        if type(buf) == 'number' and vim.api.nvim_buf_is_valid(buf) then
+                            pcall(vim.api.nvim_buf_delete, buf, { force = false })
+                        end
+                    end
+                    -- refresh list
+                    MiniPick.builtin.buffers()
+                end,
+            },
+        },
+    })
+end, '[f]ind [b]uffers')
+
+keymap_set('n', '<leader>fm', function()
+    MiniExtra.pickers.marks(nil, {
+        mappings = {
+            delete_marked = {
+                char = '<C-d>',
+                func = function()
+                    local matches = MiniPick.get_picker_matches()
+                    if not matches or not matches.marked or #matches.marked == 0 then
+                        return
+                    end
+                    for _, item in ipairs(matches.marked) do
+                        local mark = item.mark or (tostring(item.text or ''):match('^%s*(%S)'))
+                        if mark then
+                            pcall(vim.cmd, 'delmarks ' .. mark)
+                        end
+                    end
+                    MiniExtra.pickers.marks() -- refresh
+                end,
+            },
+        },
+    })
+end, '[f]ind [m]arks')
 
 -- Git ========================================================================
 -- Git Hunk

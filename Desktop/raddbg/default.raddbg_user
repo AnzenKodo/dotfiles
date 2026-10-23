@@ -29,35 +29,21 @@ window:
     {
       0.25:
       {
+        selected
         watch:
         {
           selected
           expression: ""
+          normal: 0.331035 0.668965
           watch_expression:
           {
-            expression: message
             project: "/home/ramen/Code/Miniapps/project.raddbg"
+            expression: "fs_info.name"
           }
           watch_expression:
           {
             project: "/home/ramen/Code/Miniapps/project.raddbg"
-            expression: line_number
-          }
-          watch_expression:
-          {
-            project: "/home/ramen/Code/Miniapps/project.raddbg"
-            expression: format
-          }
-          normal: 0.050000 0.950000
-          watch_expression:
-          {
-            project: "/home/ramen/Code/Miniapps/project.raddbg"
-            expression: "node->str"
-          }
-          watch_expression:
-          {
-            project: "/home/ramen/Code/Miniapps/project.raddbg"
-            expression: "log_level_string_get(level)"
+            expression: exit_code
           }
         }
         watch: expression: "query:types"
@@ -87,7 +73,6 @@ window:
       }
       0.25:
       {
-        selected
         watch: selected expression: "query:call_stack"
         watch: expression: "query:modules"
       }
@@ -105,12 +90,12 @@ window:
       text:
       {
         selected
-        expression: "file:\"/home/ramen/Code/Miniapps/std/base/base_log.c\".data"
+        expression: "file:\"/home/ramen/Code/Miniapps/build.c\".data"
         auto: 1
         project: "/home/ramen/Code/Miniapps/project.raddbg"
         query: input: ""
-        cursor: 0xa51
-        mark: 0xa51
+        cursor: 0x3aeb
+        mark: 0x3aeb
         cursor_line: 1
         cursor_column: 1
         mark_line: 1
@@ -240,6 +225,7 @@ keybindings:
   { log_marker m ctrl shift alt }
   { toggle_dev_menu d ctrl shift alt }
   { add_target z ctrl }
+  { add_target c ctrl }
 }
 current_path: "/home/ramen/Code/Miniapps"
 file_path_map
@@ -271,17 +257,17 @@ breakpoint:
 {
   project: "/home/ramen/Code/Miniapps/project.raddbg"
   source_location: "../../Code/Miniapps/std/base/base_fmt.c:26:28"
-  hit_count: 0
-}
-breakpoint:
-{
-  project: "/home/ramen/Code/Miniapps/project.raddbg"
-  source_location: "../../Code/Miniapps/std/base/base_log.c:98:28"
   hit_count: 1
 }
 debug_info:
 {
-  path: "/home/ramen/Code/Miniapps/build/play_debug"
-  timestamp: 66228721984212
+  path: "/home/ramen/Code/Miniapps/a.out"
+  timestamp: 66228897536559
   project: "/home/ramen/Code/Miniapps/project.raddbg"
+}
+breakpoint:
+{
+  project: "/home/ramen/Code/Miniapps/project.raddbg"
+  source_location: "../../Code/Miniapps/build.c:493:28"
+  hit_count: 1
 }
