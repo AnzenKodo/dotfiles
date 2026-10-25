@@ -1029,3 +1029,6 @@ vim.api.nvim_create_user_command("AiOpen",  function()
         end,
     })
 end, { desc = "Open AI Window" });
+
+
+require("scrollview").setup({ })

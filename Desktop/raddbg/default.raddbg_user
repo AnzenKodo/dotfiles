@@ -29,7 +29,6 @@ window:
     {
       0.25:
       {
-        selected
         watch:
         {
           selected
@@ -38,18 +37,24 @@ window:
           watch_expression:
           {
             project: "/home/ramen/Code/Miniapps/project.raddbg"
-            expression: "fs_info.name"
+            expression: "info.name"
           }
           watch_expression:
           {
             project: "/home/ramen/Code/Miniapps/project.raddbg"
-            expression: exit_code
+            expression: name
+          }
+          watch_expression:
+          {
+            project: "/home/ramen/Code/Miniapps/project.raddbg"
+            expression: run_program
           }
         }
         watch: expression: "query:types"
       }
       0.25:
       {
+        selected
         watch: selected expression: "query:targets"
         watch: expression: "query:breakpoints"
         watch: expression: "query:threads"
@@ -90,16 +95,11 @@ window:
       text:
       {
         selected
-        expression: "file:\"/home/ramen/Code/Miniapps/build.c\".data"
-        auto: 1
+        expression: "file:\"/home/ramen/Code/Miniapps/src/listen.c\".data"
         project: "/home/ramen/Code/Miniapps/project.raddbg"
         query: input: ""
-        cursor: 0x3aeb
-        mark: 0x3aeb
-        cursor_line: 1
-        cursor_column: 1
-        mark_line: 1
-        mark_column: 1
+        cursor: 0x52e
+        mark: 0x52e
       }
     }
   }
@@ -253,21 +253,9 @@ debug_info:
   project: "/home/ramen/Code/cmono/project.raddbg"
 }
 opaque_backgrounds: 1
-breakpoint:
-{
-  project: "/home/ramen/Code/Miniapps/project.raddbg"
-  source_location: "../../Code/Miniapps/std/base/base_fmt.c:26:28"
-  hit_count: 1
-}
 debug_info:
 {
-  path: "/home/ramen/Code/Miniapps/a.out"
-  timestamp: 66228897536559
+  path: "/home/ramen/Code/Miniapps/build/listen_debug"
+  timestamp: 66229204400492
   project: "/home/ramen/Code/Miniapps/project.raddbg"
-}
-breakpoint:
-{
-  project: "/home/ramen/Code/Miniapps/project.raddbg"
-  source_location: "../../Code/Miniapps/build.c:493:28"
-  hit_count: 1
 }
