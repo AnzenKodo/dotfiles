@@ -58,17 +58,17 @@ ctags-system()
 
 backup()
 {
-    git -C ~/Dotfiles pull
     git -C ~/Dotfiles add .
     git -C ~/Dotfiles commit -m "Backup from Linux Desktop"
+    git -C ~/Dotfiles pull
     git -C ~/Dotfiles push
     
     rclone sync ~/Drive/Notes Personal:Notes -v
     
     echo $RANDOM > ~/Code/website/site_checksum.txt
-    git -C ~/Code/website pull
     git -C ~/Code/website add .
     git -C ~/Code/website commit -m "Updated site_checksum.txt"
+    git -C ~/Code/website pull
     git -C ~/Code/website push
 }
 
