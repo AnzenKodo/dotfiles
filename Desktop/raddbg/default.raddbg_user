@@ -2,13 +2,18 @@
 
 recent_project:
 {
-  path: "../../Code/Miniapps/project.raddbg"
-  name: MiniApps
+  path: "../../Code/cmono/project.raddbg"
+  name: CMono
 }
 recent_project:
 {
-  path: "../../Code/cmono/project.raddbg"
-  name: MIniApps
+  path: "../../Dotfiles/vim/project.raddbg"
+  name: ""
+}
+recent_project:
+{
+  path: "../../Code/Miniapps/project.raddbg"
+  name: MiniApps
 }
 recent_project:
 {
@@ -25,9 +30,9 @@ window:
   size: 1890 1256
   panels:
   {
-    0.322291:
+    0.458172:
     {
-      0.25:
+      0.371575:
       {
         watch:
         {
@@ -49,18 +54,27 @@ window:
             project: "/home/ramen/Code/Miniapps/project.raddbg"
             expression: run_program
           }
+          watch_expression:
+          {
+            project: "/home/ramen/Code/cmono/project.raddbg"
+            expression: "info->arena"
+          }
+          watch_expression:
+          {
+            project: "/home/ramen/Code/cmono/project.raddbg"
+            expression: list
+          }
         }
         watch: expression: "query:types"
       }
-      0.25:
+      0.267980:
       {
-        selected
         watch: selected expression: "query:targets"
         watch: expression: "query:breakpoints"
         watch: expression: "query:threads"
         watch: expression: "query:watch_pins"
       }
-      0.25:
+      0.110445:
       {
         disasm:
         {
@@ -82,8 +96,9 @@ window:
         watch: expression: "query:modules"
       }
     }
-    0.677708:
+    0.541827:
     {
+      selected
       text:
       {
         expression: "file:\"/home/ramen/Code/Miniapps/src/play.c\".data"
@@ -94,12 +109,25 @@ window:
       }
       text:
       {
-        selected
         expression: "file:\"/home/ramen/Code/Miniapps/src/listen.c\".data"
         project: "/home/ramen/Code/Miniapps/project.raddbg"
         query: input: ""
         cursor: 0x52e
         mark: 0x52e
+      }
+      text:
+      {
+        selected
+        expression: "file:\"/home/ramen/Code/cmono/build.c\".data"
+        auto: 1
+        project: "/home/ramen/Code/cmono/project.raddbg"
+        query: input: ""
+        cursor: 0x634e
+        mark: 0x634e
+        cursor_line: 1
+        cursor_column: 1
+        mark_line: 1
+        mark_column: 1
       }
     }
   }
@@ -227,7 +255,7 @@ keybindings:
   { add_target z ctrl }
   { add_target c ctrl }
 }
-current_path: "/home/ramen/Code/Miniapps"
+current_path: "/home/ramen/Code/cmono"
 file_path_map
 auto_download_debug_info: 1
 rounded_corner_amount: 0.000000
@@ -244,13 +272,7 @@ breakpoint:
 {
   project: "/home/ramen/Code/cmono/project.raddbg"
   source_location: "../../Code/Miniapps/src/play.c:11:1"
-  hit_count: 1
-}
-debug_info:
-{
-  path: "/home/ramen/Code/Miniapps/build/play_debug"
-  timestamp: 66228535859306
-  project: "/home/ramen/Code/cmono/project.raddbg"
+  hit_count: 0
 }
 opaque_backgrounds: 1
 debug_info:
@@ -258,4 +280,10 @@ debug_info:
   path: "/home/ramen/Code/Miniapps/build/listen_debug"
   timestamp: 66229204400492
   project: "/home/ramen/Code/Miniapps/project.raddbg"
+}
+debug_info:
+{
+  path: "/home/ramen/Code/cmono/a.out"
+  timestamp: 66229951612102
+  project: "/home/ramen/Code/cmono/project.raddbg"
 }

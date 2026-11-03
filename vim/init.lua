@@ -452,7 +452,7 @@ keymap_set("v", "<leader>dw", function()
     end)
 end, "[d]ebugger [w]atch selection", { noremap = true })
 keymap_set("n", "<leader>do", function()
-    local exe = vim.fn.expand("$HOME/Applications/bin/raddbg")
+    local exe = vim.fn.expand("$HOME/Code/Tools/bin/raddbg")
     if vim.fn.executable(exe) ~= 1 then
         vim.notify("raddbg not found or not executable: " .. exe, vim.log.levels.ERROR)
         return
@@ -1030,5 +1030,6 @@ vim.api.nvim_create_user_command("AiOpen",  function()
     })
 end, { desc = "Open AI Window" });
 
+-- require("supermaven-nvim").setup({})
 
 require("scrollview").setup({ })

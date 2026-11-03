@@ -171,7 +171,7 @@
     <property name="plugin-14" type="string" value="notification-plugin"/>
     <property name="plugin-17" type="string" value="pulseaudio">
       <property name="enable-keyboard-shortcuts" type="bool" value="true"/>
-      <property name="known-players" type="string" value="Brave;obsidian;parole;vlc"/>
+      <property name="known-players" type="string" value="Brave;Brave Origin;obsidian;parole;vlc"/>
     </property>
     <property name="clipman" type="empty">
       <property name="settings" type="empty">
